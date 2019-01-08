@@ -20,9 +20,30 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
+<script>
+    (function () {
+        if ('') {
+            if (prompt('请输入文章密码') !== '') {
+                alert('密码错误！');
+                if (history.length === 1) {
+                    location.replace("http://twifor.github.io"); // 这里替换成你的首页
+                } else {
+                    history.back();
+                }
+            }
+        }
+    })();
+</script>
 
 
 
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
 
 
 
@@ -74,7 +95,7 @@
     root: '/',
     scheme: 'Gemini',
     version: '6.7.0',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
     fancybox: false,
     fastclick: false,
     lazyload: false,
@@ -100,23 +121,23 @@
 <meta name="keywords" content="提高算法,矩阵">
 <meta property="og:type" content="article">
 <meta property="og:title" content="悬线法">
-<meta property="og:url" content="http://yoursite.com/2019/01/08/悬线法/index.html">
+<meta property="og:url" content="http://yoursite.com/2019/01/09/悬线法/index.html">
 <meta property="og:site_name" content="Twifor~Liyh">
 <meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在一个矩阵中找到满足某种性质的最大子矩阵问题是一个很常见的问题，悬线法是求解此类问题的高效算法。现在我们来看这样一题(洛谷 P1169)来认识悬线法。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2019/01/08/悬线法/ph.png">
-<meta property="og:updated_time" content="2019-01-08T14:19:33.419Z">
+<meta property="og:image" content="http://yoursite.com/2019/01/09/悬线法/ph.png">
+<meta property="og:updated_time" content="2019-01-09T14:31:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="悬线法">
 <meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在一个矩阵中找到满足某种性质的最大子矩阵问题是一个很常见的问题，悬线法是求解此类问题的高效算法。现在我们来看这样一题(洛谷 P1169)来认识悬线法。">
-<meta name="twitter:image" content="http://yoursite.com/2019/01/08/悬线法/ph.png">
+<meta name="twitter:image" content="http://yoursite.com/2019/01/09/悬线法/ph.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/01/08/悬线法/">
+  <link rel="canonical" href="http://yoursite.com/2019/01/09/悬线法/">
 
 
 
@@ -342,7 +363,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/08/悬线法/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/09/悬线法/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Twifor">
@@ -385,9 +406,25 @@
                 
               
 
-              <time title="创建时间：2019-01-08 22:19:33" itemprop="dateCreated datePublished" datetime="2019-01-08T22:19:33+08:00">2019-01-08</time>
+              <time title="创建时间：2019-01-09 00:09:09" itemprop="dateCreated datePublished" datetime="2019-01-09T00:09:09+08:00">2019-01-09</time>
             
 
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-01-09 22:31:25" itemprop="dateModified" datetime="2019-01-09T22:31:25+08:00">2019-01-09</time>
+              
             
           </span>
 
@@ -441,11 +478,11 @@
 <h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;国际象棋是世界上最古老的博弈游戏之一，和中国的围棋、象棋以及日本的将棋同享盛名。据说国际象棋起源于易经的思想，棋盘是一个 8×8 大小的黑白相间的方阵，对应八八六十四卦，黑白对应阴阳。而我们的主人公小 Q，正是国际象棋的狂热爱好者。作为一个顶尖高手，他已不满足于普通的棋盘与规则，于是他跟他的好朋友小 W 决定将棋盘扩大以适应他们的新规则。小 Q 找到了一张由 N×M(N，M&lt;=2000)个正方形的格子组成的矩形纸片，每个格子被涂有黑白两种颜色之一。小 Q 想在这种纸中裁减一部分作为新棋盘，当然，他希望这个棋盘尽可能的大。不过小 Q 还没有决定是找一个正方形的棋盘还是一个矩形的棋盘(当然，不管哪种，棋盘必须都黑白相间，即相邻的格子不同色)，所以他希望可以找到最大的正方形棋盘面积和最大的矩形棋盘面积，从而决定哪个更好一些。于是小 Q 找到了即将参加全国信息学竞赛的你，你能帮助他么?</p>
 <h3 id="输入输出格式"><a href="#输入输出格式" class="headerlink" title="输入输出格式"></a>输入输出格式</h3><h3 id="输入格式："><a href="#输入格式：" class="headerlink" title="输入格式："></a>输入格式：</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;包含两个整数 N 和 M ，分别表示矩形纸片的长和宽。接下来的 N 行包含一个 N × M 的 01 矩阵，表示这张矩形纸片的颜色( 0 表示白色， 1 表示黑色)。</p>
 <h3 id="输出格式："><a href="#输出格式：" class="headerlink" title="输出格式："></a>输出格式：</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;包含两行，每行包含一个整数。第一行为可以找到的最大正方形棋盘的面积，第二行为可以找到的最大矩形棋盘的面积(注意正方形和矩形是可以相交或者包含的)。可以看出，本题实质上在求一个矩阵中满足 01 相间排列性质的最大方阵和最大矩阵的面积，可以用悬线法高效解决。</p>
-<p>悬线法思想：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;定义 up(x，y)表示点(x，y)所在的满足性质(本题就是点的值互异)的“最大”矩形的高度 ，left(x，y) 表 示 点 (x，y) 所 在 的 满 足 性 质 的 同 一 个 “ 最 大 ” 矩 形 向 左 延 伸 的 距离，right(x，y)是向右的距离。那么横向延伸距离为 a=right+left-1，纵向即为 b=up，方阵面积为 min(a，b)<sup>2</sup> ，矩阵面积即为 a*b。对“最大”矩形的理解其实是一个较困难的问题。它要求每一个点的“最大”矩形必须继承自其正上方点，所在的矩形并且高度必须加一，也就是说这个点的最大矩形必须是在其正上方点所在点的矩形的子集基础上只作左右延伸得到的。除非正上方的点无法延伸到这个点(本题中即是这两个点同为 1 或同为 0)，这个点所在的矩形才可以完全独立于正上方点所在的矩形而没有交集，否则它们一定有所交集。“最大”即是指在满足这个继承性质的前提下可以得到的最大矩阵，它显然是唯一的。由于这种方法就像一根悬线左右摆动，不断求左右延伸量，来求子矩阵，故名悬线法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;初始化全部点的三个值均为 1，这是第一次初始化。首先认为每一个点所在的最大矩形均为 1，在其所在的一行中更新 left 和 right。这是第二次初始化，这也是完全没有继承上一行矩阵时的值。自上而下从左到右遍历整个矩阵，按照 up，left，right 的定义更新值，算出面积。如果可以更新的话，递推公式为(首行不必更新)：</p>
+<p>悬线法思想：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;定义 up(x，y)表示点(x，y)所在的满足性质(本题就是点的值互异)的<strong>“最大”</strong>矩形的高度 ，left(x，y) 表 示 点 (x，y) 所 在 的 满 足 性 质 的 同 一 个 “ 最 大 ” 矩 形 向 左 延 伸 的 距离，right(x，y)是向右的距离。那么横向延伸距离为 a=right+left-1，纵向即为 b=up，方阵面积为 min(a，b)<sup>2</sup> ，矩阵面积即为 a*b。对“最大”矩形的理解其实是一个较困难的问题。它要求每一个点的“最大”矩形<strong>必须继承自其正上方点</strong>，所在的矩形并且<strong>高度必须加一</strong>，也就是说这个点的最大矩形必须是在其正上方点所在点的矩形的子集基础上只作左右延伸得到的。除非正上方的点无法延伸到这个点(本题中即是这两个点同为 1 或同为 0)，这个点所在的矩形才可以完全独立于正上方点所在的矩形而没有交集，否则它们一定有所交集。“最大”即是指在满足这个继承性质的前提下可以得到的最大矩阵，它显然是唯一的。由于这种方法就像一根悬线左右摆动，不断求左右延伸量，来求子矩阵，故名悬线法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;初始化全部点的三个值均为 1，这是第一次初始化。首先认为每一个点所在的最大矩形均为 1，在其所在的一行中更新 left 和 right。这是第二次初始化，这也是完全没有继承上一行矩阵时的值。自上而下从左到右遍历整个矩阵，按照 up，left，right 的定义更新值，算出面积。如果可以更新的话，递推公式为(首行不必更新)：</p>
 <blockquote>
 <p>up(x，y)=up(x-1，y)+1<br>left(x，y)=min{left(x，y)，left(x-1，y)}<br>right(x，y)=min{right(x，y)，right(x-1，y)}<br>x&gt;=1</p>
 </blockquote>
-<p>下面证明这个思想的正确性，考虑用数学归纳法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先首行是完全满足三个值的定义的。因为作为首行，up 值必须为 1，left 和 right 在第二次初始化中得到的结果本身就是满足定义的。之后的操作中，倘若第 k 行所有点的三个值都满足定义，那么对于一个点(k，i)，若其正下方的点满足性质，可以做延伸，那么点(k+1，i)的 up 值必须是 up(k，i)+1。并且 left 取自己第二次初始化的值和 left(k，i)的较小值是合理的，这是因为前者是点(k+1，i)所在行可以向左延伸的最大距离，而 left(k，i)是点(k，i)所在的矩形向左延伸的最大距离，取较小值才是这个点在继承自上一个矩阵的基础上向左延伸的最大距离。right 同理，均满足定义。如果不能正下方的点不满足性质，无法作延伸也就无法继承，那么这两个矩形独立，这个点的三个值保持初始化状态不变。显然这也是满足定义的。于是递推公式成立。但是为什么仅仅作矩阵的继承操作，在遍历整个矩阵后一定可以找到最优解呢?<br><img src="/2019/01/08/悬线法/ph.png" title="示例"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假设 P(x，y)是实际上的最大的矩形中的某一点：红色矩形为 P 实际所在的最大矩形，黑色矩形是 P 继承正上方的点所在矩形得到的最大矩形。这时黑色矩形的最优性很可能不如红色矩形。但是注意到红色矩形的首行一行中至少有一点 Q(x’，y’)无法继承自其正上方的点，其 up 值便仍为 1，红色矩形向左向右延伸的最大距离也便在 Q 的第二次初始化中确定。Q 正下方的点列要继承 Q 所在的矩形，会将这个矩形的高度层层扩大，于是在 Q 正下方且在红色矩形的末行上的某点 Q’处取到最优解。这便证明了算法的最优性，并且给出了最优解的位置。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里给出本题的示例代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX 2001</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> n, m;</span><br><span class="line"><span class="keyword">int</span> op[MAX][MAX];</span><br><span class="line"><span class="keyword">int</span> l[MAX][MAX], r[MAX][MAX], u[MAX][MAX];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ios::sync_with_stdio(<span class="literal">false</span>);</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; m; j++)<span class="built_in">cin</span> &gt;&gt; op[i][j], l[i][j] = r[i][j] = <span class="number">1</span>, u[i][j] = <span class="number">1</span>;<span class="comment">//初始化</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; m; j++)</span><br><span class="line">            <span class="keyword">if</span> (op[i][j] != op[i][j - <span class="number">1</span>])</span><br><span class="line">                l[i][j] = l[i][j - <span class="number">1</span>]</span><br><span class="line">                          + <span class="number">1</span>;<span class="comment">//一行中更新 left</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = m - <span class="number">2</span>; j &gt;= <span class="number">0</span>; j--)</span><br><span class="line">            <span class="keyword">if</span> (op[i][j] != op[i][j + <span class="number">1</span>])</span><br><span class="line">                r[i][j] = r[i][j</span><br><span class="line">                               + <span class="number">1</span>] + <span class="number">1</span>;<span class="comment">//一行中更新 right</span></span><br><span class="line">    <span class="keyword">int</span> ans1 = <span class="number">0</span>, ans2 = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; m; j++) &#123;</span><br><span class="line">            <span class="keyword">int</span> a, b;</span><br><span class="line">            <span class="keyword">if</span> (i == <span class="number">0</span>) &#123;</span><br><span class="line">                a = r[i][j] + l[i][j] - <span class="number">1</span>;</span><br><span class="line">                b = min(a, u[i][j]);</span><br><span class="line">                ans1 = max(ans1, b * b), ans2 = max(ans2, a * u[i][j]);</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (op[i][j] != op[i - <span class="number">1</span>][j]) &#123;</span><br><span class="line">                u[i][j] = u[i - <span class="number">1</span>][j] + <span class="number">1</span>;</span><br><span class="line">                l[i][j] = min(l[i][j], l[i - <span class="number">1</span>][j]);</span><br><span class="line">                r[i][j] = min(r[i][j], r[i - <span class="number">1</span>][j]);</span><br><span class="line">                a = r[i][j] + l[i][j] - <span class="number">1</span>;</span><br><span class="line">                b = min(a, u[i][j]);</span><br><span class="line">                ans1 = max(ans1, b * b), ans2 = max(ans2, a * u[i][j]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; ans1 &lt;&lt; <span class="built_in">endl</span> &lt;&lt; ans2;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>下面证明这个思想的正确性，考虑用数学归纳法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先首行是完全满足三个值的定义的。因为作为首行，up 值必须为 1，left 和 right 在第二次初始化中得到的结果本身就是满足定义的。之后的操作中，倘若第 k 行所有点的三个值都满足定义，那么对于一个点(k，i)，若其正下方的点满足性质，可以做延伸，那么点(k+1，i)的 up 值必须是 up(k，i)+1。并且 left 取自己第二次初始化的值和 left(k，i)的较小值是合理的，这是因为前者是点(k+1，i)所在行可以向左延伸的最大距离，而 left(k，i)是点(k，i)所在的矩形向左延伸的最大距离，取较小值才是这个点在继承自上一个矩阵的基础上向左延伸的最大距离。right 同理，均满足定义。如果不能正下方的点不满足性质，无法作延伸也就无法继承，那么这两个矩形独立，这个点的三个值保持初始化状态不变。显然这也是满足定义的。于是递推公式成立。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是为什么仅仅作矩阵的继承操作，在遍历整个矩阵后一定可以找到最优解呢?<br><img src="/2019/01/09/悬线法/ph.png" title="示例"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假设 P(x，y)是实际上的最大的矩形中的某一点：红色矩形为 P 实际所在的最大矩形，黑色矩形是 P 继承正上方的点所在矩形得到的最大矩形。这时黑色矩形的最优性很可能不如红色矩形。但是注意到红色矩形的首行一行中至少有一点 Q(x’，y’)无法继承自其正上方的点，其 up 值便仍为 1，红色矩形向左向右延伸的最大距离也便在 Q 的第二次初始化中确定。Q 正下方的点列要继承 Q 所在的矩形，会将这个矩形的高度层层扩大，于是在 Q 正下方且在红色矩形的末行上的某点 Q’处取到最优解。这便证明了算法的最优性，并且给出了最优解的位置。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里给出本题的示例代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX 2001</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> n, m;</span><br><span class="line"><span class="keyword">int</span> op[MAX][MAX];</span><br><span class="line"><span class="keyword">int</span> l[MAX][MAX], r[MAX][MAX], u[MAX][MAX];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ios::sync_with_stdio(<span class="literal">false</span>);</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; m; j++)<span class="built_in">cin</span> &gt;&gt; op[i][j], l[i][j] = r[i][j] = <span class="number">1</span>, u[i][j] = <span class="number">1</span>;<span class="comment">//初始化</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; m; j++)</span><br><span class="line">            <span class="keyword">if</span> (op[i][j] != op[i][j - <span class="number">1</span>])</span><br><span class="line">                l[i][j] = l[i][j - <span class="number">1</span>]</span><br><span class="line">                          + <span class="number">1</span>;<span class="comment">//一行中更新 left</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = m - <span class="number">2</span>; j &gt;= <span class="number">0</span>; j--)</span><br><span class="line">            <span class="keyword">if</span> (op[i][j] != op[i][j + <span class="number">1</span>])</span><br><span class="line">                r[i][j] = r[i][j</span><br><span class="line">                               + <span class="number">1</span>] + <span class="number">1</span>;<span class="comment">//一行中更新 right</span></span><br><span class="line">    <span class="keyword">int</span> ans1 = <span class="number">0</span>, ans2 = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; m; j++) &#123;</span><br><span class="line">            <span class="keyword">int</span> a, b;</span><br><span class="line">            <span class="keyword">if</span> (i == <span class="number">0</span>) &#123;</span><br><span class="line">                a = r[i][j] + l[i][j] - <span class="number">1</span>;</span><br><span class="line">                b = min(a, u[i][j]);</span><br><span class="line">                ans1 = max(ans1, b * b), ans2 = max(ans2, a * u[i][j]);</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (op[i][j] != op[i - <span class="number">1</span>][j]) &#123;</span><br><span class="line">                u[i][j] = u[i - <span class="number">1</span>][j] + <span class="number">1</span>;</span><br><span class="line">                l[i][j] = min(l[i][j], l[i - <span class="number">1</span>][j]);</span><br><span class="line">                r[i][j] = min(r[i][j], r[i - <span class="number">1</span>][j]);</span><br><span class="line">                a = r[i][j] + l[i][j] - <span class="number">1</span>;</span><br><span class="line">                b = min(a, u[i][j]);</span><br><span class="line">                ans1 = max(ans1, b * b), ans2 = max(ans2, a * u[i][j]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; ans1 &lt;&lt; <span class="built_in">endl</span> &lt;&lt; ans2;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -676,6 +713,8 @@
       <div class="back-to-top">
         <i class="fa fa-arrow-up"></i>
         
+          <span id="scrollpercent"><span>0</span>%</span>
+        
       </div>
     
 
@@ -790,6 +829,13 @@
   
 
   
+  
+
+  
+  
+
+  
+
 
   
 
