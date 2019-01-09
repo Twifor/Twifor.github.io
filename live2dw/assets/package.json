@@ -1,0 +1,77 @@
+{
+  "_args": [
+    [
+      "live2d-widget-model-koharu",
+      "/home/liyh/blog"
+    ]
+  ],
+  "_from": "live2d-widget-model-koharu@latest",
+  "_id": "live2d-widget-model-koharu@1.0.5",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/live2d-widget-model-koharu",
+  "_nodeVersion": "8.4.0",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/live2d-widget-model-koharu_1.0.5_1518094208887_0.5528993994268645"
+  },
+  "_npmUser": {
+    "email": "xiazeyu_2011@126.com",
+    "name": "xiazeyu"
+  },
+  "_npmVersion": "5.5.1",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "live2d-widget-model-koharu",
+    "raw": "live2d-widget-model-koharu",
+    "rawSpec": "",
+    "scope": null,
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/live2d-widget-model-koharu/-/live2d-widget-model-koharu-1.0.5.tgz",
+  "_shasum": "6525e2c495af40b074d91c31499d4a71711cfccc",
+  "_shrinkwrap": null,
+  "_spec": "live2d-widget-model-koharu",
+  "_where": "/home/liyh/blog",
+  "bugs": {
+    "url": "https://github.com/xiazeyu/live2d-widget-models/issues"
+  },
+  "dependencies": {},
+  "description": "koharu live2d model for live2d-widget.js",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "fileCount": 15,
+    "integrity": "sha512-tziYYbBvkLFbYmizb6Sij4rF1Vmne9ZJwwD8dljt3QPeWxYBjxuQspzLrFOjMtvCSeE5dncNG7qdnTUb5nD2DQ==",
+    "shasum": "6525e2c495af40b074d91c31499d4a71711cfccc",
+    "tarball": "https://registry.npmjs.org/live2d-widget-model-koharu/-/live2d-widget-model-koharu-1.0.5.tgz",
+    "unpackedSize": 585970
+  },
+  "homepage": "https://github.com/xiazeyu/live2d-widget-models#readme",
+  "license": "GPL-2.0",
+  "maintainers": [
+    {
+      "name": "cn_eyhn",
+      "email": "cneyhn@gmail.com"
+    },
+    {
+      "name": "xiazeyu",
+      "email": "xiazeyu_2011@126.com"
+    }
+  ],
+  "name": "live2d-widget-model-koharu",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xiazeyu/live2d-widget-models.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.0.5"
+}
