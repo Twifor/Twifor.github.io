@@ -126,7 +126,7 @@
 <meta property="og:description" content="难度：省选/NOI- 题目背景&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;还记得 NOIP 2012 提高组 Day1 的国王游戏吗？时光飞逝，光阴荏苒，两年过去了。国王游戏早已过时，如今已被皇后游戏取代，请你来解决类似于国王游戏的另一个问题。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/2019/01/09/洛谷P2123-皇后游戏/ph.png">
-<meta property="og:updated_time" content="2019-01-09T05:00:32.053Z">
+<meta property="og:updated_time" content="2019-01-09T09:58:34.192Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[洛谷P2123]皇后游戏">
 <meta name="twitter:description" content="难度：省选/NOI- 题目背景&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;还记得 NOIP 2012 提高组 Day1 的国王游戏吗？时光飞逝，光阴荏苒，两年过去了。国王游戏早已过时，如今已被皇后游戏取代，请你来解决类似于国王游戏的另一个问题。">
@@ -367,7 +367,7 @@
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Twifor">
-      <meta itemprop="description" content="人生寂寞如雪啊~">
+      <meta itemprop="description" content="一个打OI的弱鸡">
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
@@ -423,7 +423,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-09 13:00:32" itemprop="dateModified" datetime="2019-01-09T13:00:32+08:00">2019-01-09</time>
+                <time title="修改时间：2019-01-09 17:58:34" itemprop="dateModified" datetime="2019-01-09T17:58:34+08:00">2019-01-09</time>
               
             
           </span>
@@ -449,6 +449,16 @@
           
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/09/洛谷P2123-皇后游戏/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/01/09/洛谷P2123-皇后游戏/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
@@ -550,7 +560,10 @@
 <li>第二种:a<sub>i</sub>=b<sub>i</sub>且a<sub>j</sub>=b<sub>j</sub>。a与b都是不变的，③式显然成立。</li>
 <li>第三种:a<sub>i</sub>&gt;b<sub>i</sub>且a<sub>j</sub>&gt;b<sub>j</sub>，此时必有b<sub>j</sub>&lt;=b<sub>i</sub>，也就是说b是降序的。</li>
 <li>第四种:a<sub>i</sub>&lt;b<sub>i</sub>且a<sub>j</sub>&gt;b<sub>j</sub>，③式显然成立。</li>
-<li>当然还有第五种:a<sub>i</sub>&gt;b<sub>i</sub>且a<sub>j</sub>&lt;b<sub>j</sub>，此时③式显然不成立<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们先将I组(a&lt;b)的元素前置，然后跟上II组(a=b)的元素，最后跟上III组(a&gt;b)的元素。在I组中按照a升序排列，在III组中按b降序排列。可以证明这是一种可行且可传递的排序方法。我们可以证明它没有逆序，任取两个元素X，Y(Y在X后)，可以归结为以下六种情况来判别P(X，Y)的成立与否:</li>
+<li>当然还有第五种:a<sub>i</sub>&gt;b<sub>i</sub>且a<sub>j</sub>&lt;b<sub>j</sub>，此时③式显然不成立</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们先将I组(a&lt;b)的元素前置，然后跟上II组(a=b)的元素，最后跟上III组(a&gt;b)的元素。在I组中按照a升序排列，在III组中按b降序排列。可以证明这是一种可行且可传递的排序方法。我们可以证明它没有逆序，任取两个元素X，Y(Y在X后)，可以归结为以下六种情况来判别P(X，Y)的成立与否:</p>
+<ul>
 <li>X，Y都来自I:符合第一种情况，成立。</li>
 <li>X来自I，Y来自II:显然成立</li>
 <li>X来自I，Y来自III:符合第四种，成立。</li>
@@ -607,6 +620,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2019/01/09/分解质因数/" rel="prev" title="分解质因数">
+                分解质因数 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -626,6 +643,10 @@
 
           </div>
           
+
+  
+    <div class="comments" id="comments">
+    </div>
 
   
 
@@ -665,7 +686,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
               <p class="site-author-name" itemprop="name">Twifor</p>
-              <p class="site-description motion-element" itemprop="description">人生寂寞如雪啊~</p>
+              <p class="site-description motion-element" itemprop="description">一个打OI的弱鸡</p>
           </div>
 
           
@@ -675,7 +696,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">26</span>
+                    <span class="site-state-item-count">33</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -743,7 +764,27 @@
                     
                       
                     
-                    <span class="site-state-item-count">20</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">30</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -939,6 +980,35 @@
   
 
 
+
+
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function (item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '2aSxA7Naxmi6lgfgVU1ulgcS-gzGzoHsz',
+    appKey: '6G9RDaS7lVtgyGKw8AxxkLyi',
+    placeholder: '写下评论吧~',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
 
 
 
