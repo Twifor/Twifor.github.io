@@ -117,27 +117,25 @@
 
 
 
-  <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在一个矩阵中找到满足某种性质的最大子矩阵问题是一个很常见的问题，悬线法是求解此类问题的高效算法。现在我们来看这样一题(洛谷 P1169)来认识悬线法。">
-<meta name="keywords" content="提高算法,矩阵">
+  <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;这一篇文章谈谈动态规划(Dynamic Programming， DP)。本材料中大量地出现动态规划类题目，这里做一个总结。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;动态规划是一种解决多阶段决策问题的高效算法设计思路，它的本质是分治思想。对于一个问题">
+<meta name="keywords" content="提高算法,动态规划">
 <meta property="og:type" content="article">
-<meta property="og:title" content="悬线法">
-<meta property="og:url" content="https://twifor.github.io/2019/01/09/悬线法/index.html">
+<meta property="og:title" content="动态规划与状态设计">
+<meta property="og:url" content="https://twifor.github.io/2019/01/10/动态规划与状态设计/index.html">
 <meta property="og:site_name" content="Twifor~Liyh">
-<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在一个矩阵中找到满足某种性质的最大子矩阵问题是一个很常见的问题，悬线法是求解此类问题的高效算法。现在我们来看这样一题(洛谷 P1169)来认识悬线法。">
+<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;这一篇文章谈谈动态规划(Dynamic Programming， DP)。本材料中大量地出现动态规划类题目，这里做一个总结。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;动态规划是一种解决多阶段决策问题的高效算法设计思路，它的本质是分治思想。对于一个问题">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://twifor.github.io/2019/01/09/悬线法/ph.png">
-<meta property="og:updated_time" content="2019-01-09T14:31:25.000Z">
+<meta property="og:updated_time" content="2019-01-10T08:38:12.441Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="悬线法">
-<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在一个矩阵中找到满足某种性质的最大子矩阵问题是一个很常见的问题，悬线法是求解此类问题的高效算法。现在我们来看这样一题(洛谷 P1169)来认识悬线法。">
-<meta name="twitter:image" content="https://twifor.github.io/2019/01/09/悬线法/ph.png">
+<meta name="twitter:title" content="动态规划与状态设计">
+<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;这一篇文章谈谈动态规划(Dynamic Programming， DP)。本材料中大量地出现动态规划类题目，这里做一个总结。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;动态规划是一种解决多阶段决策问题的高效算法设计思路，它的本质是分治思想。对于一个问题">
 
 
 
 
 
 
-  <link rel="canonical" href="https://twifor.github.io/2019/01/09/悬线法/">
+  <link rel="canonical" href="https://twifor.github.io/2019/01/10/动态规划与状态设计/">
 
 
 
@@ -147,7 +145,7 @@
   };
 </script>
 
-  <title>悬线法 | Twifor~Liyh</title>
+  <title>动态规划与状态设计 | Twifor~Liyh</title>
   
 
 
@@ -363,7 +361,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://twifor.github.io/2019/01/09/悬线法/">
+    <link itemprop="mainEntityOfPage" href="https://twifor.github.io/2019/01/10/动态规划与状态设计/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Twifor">
@@ -380,7 +378,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">悬线法
+          <h1 class="post-title" itemprop="name headline">动态规划与状态设计
 
               
             
@@ -406,7 +404,7 @@
                 
               
 
-              <time title="创建时间：2019-01-09 00:09:09" itemprop="dateCreated datePublished" datetime="2019-01-09T00:09:09+08:00">2019-01-09</time>
+              <time title="创建时间：2019-01-10 16:23:36" itemprop="dateCreated datePublished" datetime="2019-01-10T16:23:36+08:00">2019-01-10</time>
             
 
             
@@ -423,7 +421,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-09 22:31:25" itemprop="dateModified" datetime="2019-01-09T22:31:25+08:00">2019-01-09</time>
+                <time title="修改时间：2019-01-10 16:38:12" itemprop="dateModified" datetime="2019-01-10T16:38:12+08:00">2019-01-10</time>
               
             
           </span>
@@ -455,8 +453,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/01/09/悬线法/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/01/09/悬线法/" itemprop="commentCount"></span>
+                <a href="/2019/01/10/动态规划与状态设计/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/01/10/动态规划与状态设计/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -484,15 +482,72 @@
       
 
       
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在一个矩阵中找到满足某种性质的最大子矩阵问题是一个很常见的问题，悬线法是求解此类问题的高效算法。现在我们来看这样一题(洛谷 P1169)来认识悬线法。<br><a id="more"></a></p>
-<h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;国际象棋是世界上最古老的博弈游戏之一，和中国的围棋、象棋以及日本的将棋同享盛名。据说国际象棋起源于易经的思想，棋盘是一个 8×8 大小的黑白相间的方阵，对应八八六十四卦，黑白对应阴阳。而我们的主人公小 Q，正是国际象棋的狂热爱好者。作为一个顶尖高手，他已不满足于普通的棋盘与规则，于是他跟他的好朋友小 W 决定将棋盘扩大以适应他们的新规则。小 Q 找到了一张由 N×M(N，M&lt;=2000)个正方形的格子组成的矩形纸片，每个格子被涂有黑白两种颜色之一。小 Q 想在这种纸中裁减一部分作为新棋盘，当然，他希望这个棋盘尽可能的大。不过小 Q 还没有决定是找一个正方形的棋盘还是一个矩形的棋盘(当然，不管哪种，棋盘必须都黑白相间，即相邻的格子不同色)，所以他希望可以找到最大的正方形棋盘面积和最大的矩形棋盘面积，从而决定哪个更好一些。于是小 Q 找到了即将参加全国信息学竞赛的你，你能帮助他么?</p>
-<h3 id="输入输出格式"><a href="#输入输出格式" class="headerlink" title="输入输出格式"></a>输入输出格式</h3><h3 id="输入格式："><a href="#输入格式：" class="headerlink" title="输入格式："></a>输入格式：</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;包含两个整数 N 和 M ，分别表示矩形纸片的长和宽。接下来的 N 行包含一个 N × M 的 01 矩阵，表示这张矩形纸片的颜色( 0 表示白色， 1 表示黑色)。</p>
-<h3 id="输出格式："><a href="#输出格式：" class="headerlink" title="输出格式："></a>输出格式：</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;包含两行，每行包含一个整数。第一行为可以找到的最大正方形棋盘的面积，第二行为可以找到的最大矩形棋盘的面积(注意正方形和矩形是可以相交或者包含的)。可以看出，本题实质上在求一个矩阵中满足 01 相间排列性质的最大方阵和最大矩阵的面积，可以用悬线法高效解决。</p>
-<p>悬线法思想：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;定义 up(x，y)表示点(x，y)所在的满足性质(本题就是点的值互异)的<strong>“最大”</strong>矩形的高度 ，left(x，y) 表 示 点 (x，y) 所 在 的 满 足 性 质 的 同 一 个 “ 最 大 ” 矩 形 向 左 延 伸 的 距离，right(x，y)是向右的距离。那么横向延伸距离为 a=right+left-1，纵向即为 b=up，方阵面积为 min(a，b)<sup>2</sup> ，矩阵面积即为 a*b。对“最大”矩形的理解其实是一个较困难的问题。它要求每一个点的“最大”矩形<strong>必须继承自其正上方点</strong>，所在的矩形并且<strong>高度必须加一</strong>，也就是说这个点的最大矩形必须是在其正上方点所在点的矩形的子集基础上只作左右延伸得到的。除非正上方的点无法延伸到这个点(本题中即是这两个点同为 1 或同为 0)，这个点所在的矩形才可以完全独立于正上方点所在的矩形而没有交集，否则它们一定有所交集。“最大”即是指在满足这个继承性质的前提下可以得到的最大矩阵，它显然是唯一的。由于这种方法就像一根悬线左右摆动，不断求左右延伸量，来求子矩阵，故名悬线法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;初始化全部点的三个值均为 1，这是第一次初始化。首先认为每一个点所在的最大矩形均为 1，在其所在的一行中更新 left 和 right。这是第二次初始化，这也是完全没有继承上一行矩阵时的值。自上而下从左到右遍历整个矩阵，按照 up，left，right 的定义更新值，算出面积。如果可以更新的话，递推公式为(首行不必更新)：</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这一篇文章谈谈动态规划(Dynamic Programming， DP)。本材料中大量地出现动态规划类题目，这里做一个总结。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;动态规划是一种解决多阶段决策问题的高效算法设计思路，它的本质是分治思想。对于一个问题，它通常由若干子问题组成，解决了这些子问题，原问题也迎刃而解。例如树这种数据结构，它的分枝仍是一棵树，又如将区间分割，得到的仍是一个区间…很多事物都满足这种性质，可以考虑用DP思路解决。<br><a id="more"></a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面介绍一些DP术语。</p>
+<ul>
+<li>状态。当前阶段所面临的客观条件称为一种状态。状态需要一定的量去描述，称为状态变(参)量。同时状态也拥有一定的值，称为状态量。</li>
+<li>状态转移。状态可以视为一个问题，它由若干子问题构成，这些子问题也是一个个状态。由当前状态到它的子状态的过程称为状态转移。转移的数学表达式称为状态转移方程。</li>
+<li>无后效性。每一个状态都是客观的。一个状态所对应的问题可能是多个不同问题的子问题，但是无论它从哪一个状态转移过来，这个状态都应该是客观独立的，它的任何属性都不会随受前一个状态的影响。这种性质称为无后效性，能用DP解决的问题必须满足无后效性。</li>
+<li>最优化原理。一个问题是最优的，它的子问题必然也是最优的。</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用DP解决问题实际上就是设计合适的状态，列出对应的状态转移方程。状态的设计是很重要的，它必须满足以下几点要求:</p>
+<ul>
+<li>状态参量到状态量是一个多数值到单数值的映射，也就是说，每一个状态必须是确定的，唯一的，并且满足无后效性。</li>
+<li>状态必须是可转移的，也就是能够列出明确的状态转移方程。</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面我们思考这样一个题目，来认识状态设计:</p>
 <blockquote>
-<p>up(x，y)=up(x-1，y)+1<br>left(x，y)=min{left(x，y)，left(x-1，y)}<br>right(x，y)=min{right(x，y)，right(x-1，y)}<br>x&gt;=1</p>
+<h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2020年，人类在火星上建立了一个庞大的基地群，总共有n个基地。起初为了节约材料，人类只修建了n-1条道路来连接这些基地，并且每两个基地都能够通过道路到达，所以所有的基地形成了一个巨大的树状结构。如果基地A到基地B至少要经过d条道路的话，我们称基地A到基地B的距离为d。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于火星上非常干燥，经常引发火灾，人类决定在火星上修建若干个消防局。消防局只能修建在基地里，每个消防局有能力扑灭与它距离不超过2的基地的火灾。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;你的任务是计算至少要修建多少个消防局才能够确保火星上所有的基地在发生火灾时，消防队有能力及时扑灭火灾。</p>
+<h3 id="输入输出格式"><a href="#输入输出格式" class="headerlink" title="输入输出格式"></a>输入输出格式</h3><h4 id="输入格式："><a href="#输入格式：" class="headerlink" title="输入格式："></a>输入格式：</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输入文件的第一行为n （n&lt;=1000），表示火星上基地的数目。接下来的n-1行每行有一个正整数，其中文件第i行的正整数为a[i]，表示从编号为i的基地到编号为a[i]的基地之间有一条道路，为了更加简洁的描述树状结构的基地群，有a[i]&lt;i。</p>
+<h4 id="输出格式："><a href="#输出格式：" class="headerlink" title="输出格式："></a>输出格式：</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输出文件仅有一个正整数，表示至少要设立多少个消防局才有能力及时扑灭任何基地发生的火灾。</p>
 </blockquote>
-<p>下面证明这个思想的正确性，考虑用数学归纳法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先首行是完全满足三个值的定义的。因为作为首行，up 值必须为 1，left 和 right 在第二次初始化中得到的结果本身就是满足定义的。之后的操作中，倘若第 k 行所有点的三个值都满足定义，那么对于一个点(k，i)，若其正下方的点满足性质，可以做延伸，那么点(k+1，i)的 up 值必须是 up(k，i)+1。并且 left 取自己第二次初始化的值和 left(k，i)的较小值是合理的，这是因为前者是点(k+1，i)所在行可以向左延伸的最大距离，而 left(k，i)是点(k，i)所在的矩形向左延伸的最大距离，取较小值才是这个点在继承自上一个矩阵的基础上向左延伸的最大距离。right 同理，均满足定义。如果不能正下方的点不满足性质，无法作延伸也就无法继承，那么这两个矩形独立，这个点的三个值保持初始化状态不变。显然这也是满足定义的。于是递推公式成立。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是为什么仅仅作矩阵的继承操作，在遍历整个矩阵后一定可以找到最优解呢?<br><img src="/2019/01/09/悬线法/ph.png" title="示例"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假设 P(x，y)是实际上的最大的矩形中的某一点：红色矩形为 P 实际所在的最大矩形，黑色矩形是 P 继承正上方的点所在矩形得到的最大矩形。这时黑色矩形的最优性很可能不如红色矩形。但是注意到红色矩形的首行一行中至少有一点 Q(x’，y’)无法继承自其正上方的点，其 up 值便仍为 1，红色矩形向左向右延伸的最大距离也便在 Q 的第二次初始化中确定。Q 正下方的点列要继承 Q 所在的矩形，会将这个矩形的高度层层扩大，于是在 Q 正下方且在红色矩形的末行上的某点 Q’处取到最优解。这便证明了算法的最优性，并且给出了最优解的位置。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里给出本题的示例代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX 2001</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> n, m;</span><br><span class="line"><span class="keyword">int</span> op[MAX][MAX];</span><br><span class="line"><span class="keyword">int</span> l[MAX][MAX], r[MAX][MAX], u[MAX][MAX];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ios::sync_with_stdio(<span class="literal">false</span>);</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; m; j++)<span class="built_in">cin</span> &gt;&gt; op[i][j], l[i][j] = r[i][j] = <span class="number">1</span>, u[i][j] = <span class="number">1</span>;<span class="comment">//初始化</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; m; j++)</span><br><span class="line">            <span class="keyword">if</span> (op[i][j] != op[i][j - <span class="number">1</span>])</span><br><span class="line">                l[i][j] = l[i][j - <span class="number">1</span>]</span><br><span class="line">                          + <span class="number">1</span>;<span class="comment">//一行中更新 left</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = m - <span class="number">2</span>; j &gt;= <span class="number">0</span>; j--)</span><br><span class="line">            <span class="keyword">if</span> (op[i][j] != op[i][j + <span class="number">1</span>])</span><br><span class="line">                r[i][j] = r[i][j</span><br><span class="line">                               + <span class="number">1</span>] + <span class="number">1</span>;<span class="comment">//一行中更新 right</span></span><br><span class="line">    <span class="keyword">int</span> ans1 = <span class="number">0</span>, ans2 = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; m; j++) &#123;</span><br><span class="line">            <span class="keyword">int</span> a, b;</span><br><span class="line">            <span class="keyword">if</span> (i == <span class="number">0</span>) &#123;</span><br><span class="line">                a = r[i][j] + l[i][j] - <span class="number">1</span>;</span><br><span class="line">                b = min(a, u[i][j]);</span><br><span class="line">                ans1 = max(ans1, b * b), ans2 = max(ans2, a * u[i][j]);</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (op[i][j] != op[i - <span class="number">1</span>][j]) &#123;</span><br><span class="line">                u[i][j] = u[i - <span class="number">1</span>][j] + <span class="number">1</span>;</span><br><span class="line">                l[i][j] = min(l[i][j], l[i - <span class="number">1</span>][j]);</span><br><span class="line">                r[i][j] = min(r[i][j], r[i - <span class="number">1</span>][j]);</span><br><span class="line">                a = r[i][j] + l[i][j] - <span class="number">1</span>;</span><br><span class="line">                b = min(a, u[i][j]);</span><br><span class="line">                ans1 = max(ans1, b * b), ans2 = max(ans2, a * u[i][j]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; ans1 &lt;&lt; <span class="built_in">endl</span> &lt;&lt; ans2;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;题目实质上是给定一棵树，其中一个选定的点可以覆盖两层的其余顶点，求覆盖整棵树的选点最小值。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一个显然的状态设计思路是令f(x)表示以x为根的子树的选点最小值。这样做状态的确是唯一的并且有明确的值，但是它无法列出状态转移方程。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是，f(x)=SUM{f(k)}(k表示x的子节点)是否成立呢?显然不可，这是因为即使每一个子树都被覆盖掉了，根节点x也可能没被覆盖到;同时，每一个子树的选点覆盖范围可能有所包含，使得全局仍可以删掉几个点，结果不最优。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样的状态设计显然是失败的，问题便出在状态描述不清上。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;有时状态虽唯一，但是无法转移，我们就需要增加状态描述量来细化状态。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先认识到一个事实，原问题满足某种性质时，往往意味这它的子问题也要满足某种性质。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果我们定义f(x，y)表示根节点为x的子树，在满足性质P(y)的前提下最小选点数。P定义如下:</p>
+<ul>
+<li>P(0):子树完全被覆盖，且根节点被选。</li>
+<li>P(1):子树完全被覆盖，子节点被选。</li>
+<li>P(2):子树完全被覆盖，孙子节点被选。</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;子树被完全覆盖仅有这三种状态</p>
+<ul>
+<li>P(3):所有子节点及其子树都被覆盖，但根节点未知。</li>
+<li>P(4):所有孙子节点及其子树都被覆盖，但根节点和子节点未知。</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其实还可以有P(5):所有孙子节点的子节点及其子树都被覆盖，但根节点子节点，孙子节点未知。但之后我们可以看到这种状态不参与转移，是无用的。仅这样就是可以转移的。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;若原树满足P(0)，则根节点向下两层(儿子和孙子)都一定被覆盖，但是倘若全树都被覆盖，所有子树都必须满足其孙子节点及其子树都被覆盖的性质。我们发现P(0~4)都符合条件，可以证明其余的任何状态都不符合，又发现全树的选点数是所有子树上选点数加一，于是有:</p>
+<blockquote>
+<p>f(x，0)=SUM{min{f(k，0~4)}}+1</p>
+</blockquote>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于每一个子树，我们取其五个性质中选点最少的一个，这样既满足性质又能使解最优。这样直接作和是不会出现漏选多选的情况的。这是因为，子树都满足了需要的性质，全树一定可以完全被覆盖，不会缺选;同时，由于每一个子树都是满足性质的，并且我们选的是最小值，其余状态又不能使性质成立，删掉一个点必然使性质不再成立，所以不会多点。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;若原树满足P(1)，则根节点下一层全被覆盖，此时因为全树都被覆盖，所有子树都必须满足其子节点和子树都被覆盖的性质(即P(0~3))，被选的点满足P(0)性质。所以有:</p>
+<blockquote>
+<p>f(x，1)=min{f(k，0)+SUM{min{f(k’，0~3)}}}，k是任意子节点，k’是剩余的子节点。</p>
+</blockquote>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;理解同上。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;同理我们可得:</p>
+<blockquote>
+<p>f(x，2)=min{f(k，1)+SUM{min{f(k’，0~2)}}}，k是任意子节点，k’是剩余的子节点。<br>f(x，3)=SUM{min{f(k，0~2)}}<br>f(x，4)=SUM{min{f(k，0~3)}}</p>
+</blockquote>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这种转移方法称为<strong>性质转移</strong>，它的原理是当原问题满足状态指定的某种性质时，其子问题也要满足特定的性质，这时原问题状态可以转移到所有满足特定性质的子问题状态。我们这里给出的五个状态就是所有满足的状态，少一个都会难以转移。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另一种转移方式即为<strong>决策转移</strong>，它的原理通常是不同的决策，例如背包问题。本题用决策转移很难列方程。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为了更好地理解状态设计，我们来重新认识一下01背包问题这种经典DP问题。本材料第2题就是这类问题。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;01背包属于决策转移型，决策是选不选当前的这个物品。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当我们从所有物品中随机拿出一个时，如果背包可以装下的话，便会面临选还是不选的问题，这便是一个决策。我们规定物品全集为S，拿出的物品为x，物品i价值为w<sub>i</sub>，则两种决策得到的价值分别为:</p>
+<blockquote>
+<p>选该物品:w<sub>x</sub>+?<br>不选该物品:0+?</p>
+</blockquote>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里的?表示后面加上的价值我们暂时无法确定。但是注意到，如果我们选了该物品，对于剩下的物品集合S-{x}与我们的原问题集合S，它们的问题本质上是同一类问题，都是从一个集合中取一些物品使价值总和最大，不选与之同理。这样就把问题拆成了两个本质相同的子问题。同时子问题最优时，原问题才最优，这是显然的。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是我们定义dp(Q)表示对于集合Q，从中拿走若干个物品得到的价值最大值。但是很快我们便发现，这其中忽略了物品体积的问题，物品体积显然会影响决策(太大时一定不能选)，并且这样描述状态并不能唯一地确定状态。于是我们应定义dp(Q，p)表示背包容量为p时，从集合Q中拿走若干物品得到的价值最大值。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么就有关系(vi表示物品i的体积):</p>
+<blockquote>
+<p>若p&gt;=v<sub>x</sub>时:dp(Q，p)=max{dp(Q-{x}，p)，dp(Q-{x}，p-v<sub>x</sub>)+w<sub>x</sub>}</p>
+</blockquote>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里从不选和选中取一个较大值。</p>
+<blockquote>
+<p>p&lt;v<sub>x</sub>时，dp(Q，p)=dp(Q-{x}，p)</p>
+</blockquote>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这时，x无法被选择。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这就得到了状态转移方程。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意到，实际操作中集合运算是十分复杂的，并且物品放入顺序显然对结果没有影响。我们根据自排序原则，可以规定物品按输入顺序放入，这样就把集合放到了一个数组中。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这时，我们的状态就成了dp(a，p)表示从数组中1~a这个集合中拿物品，背包容量为p的最大价值。每次都按照从右向左的顺序拿，转移方程就成为</p>
+<blockquote>
+<p>p&gt;=w<sub>a</sub>时:dp(a，p)=max{dp(a-1，p)，dp(a-1，p-v<sub>a</sub>)+w<sub>a</sub>}<br>否则 dp(a，p)=dp(a-1，p)</p>
+</blockquote>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这就是01背包问题的DP正解。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当然存在放入顺序影响结果的情况，见题目烹饪方案。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里总结两种转移方式的思考方向:</p>
+<ol>
+<li>先确定问题以及子问题</li>
+<li>判断是性质转移还是决策转移</li>
+<li>决策转移，根据决策列方程，注意描述清楚状态;若为性质转移，要善于发现潜在的性质，用该性质描述状态。</li>
+<li>递推或递归求解。必要时采用离散化，状态压缩，数组降维，滚动数组的方法。这些方法在本材料中都有提及。</li>
+</ol>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;值得注意的是，状态设计很灵活，状态量不一定就是待求量，当前决策也可能包含在状态参量里，这些需要经验来判断。</p>
 
       
     </div>
@@ -518,7 +573,7 @@
           
             <a href="/tags/提高算法/" rel="tag"><i class="fa fa-tag"></i>提高算法</a>
           
-            <a href="/tags/矩阵/" rel="tag"><i class="fa fa-tag"></i>矩阵</a>
+            <a href="/tags/动态规划/" rel="tag"><i class="fa fa-tag"></i>动态规划</a>
           
         </div>
       
@@ -531,14 +586,18 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2019/01/10/洛谷P1373-小a和uim之大逃离/" rel="next" title="[洛谷P1373]小a和uim之大逃离">
+                <i class="fa fa-chevron-left"></i> [洛谷P1373]小a和uim之大逃离
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/01/09/洛谷P1387-最大正方形/" rel="prev" title="[洛谷P1387]最大正方形">
-                [洛谷P1387]最大正方形 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/01/10/树的k级覆盖问题/" rel="prev" title="树的k级覆盖问题">
+                树的k级覆盖问题 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -615,7 +674,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">33</span>
+                    <span class="site-state-item-count">46</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -703,7 +762,25 @@
                     
                       
                     
-                    <span class="site-state-item-count">30</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">39</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -739,7 +816,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目描述"><span class="nav-number">1.</span> <span class="nav-text">题目描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输入输出格式"><span class="nav-number">2.</span> <span class="nav-text">输入输出格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输入格式："><span class="nav-number">3.</span> <span class="nav-text">输入格式：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输出格式："><span class="nav-number">4.</span> <span class="nav-text">输出格式：</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目描述"><span class="nav-number">1.</span> <span class="nav-text">题目描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输入输出格式"><span class="nav-number">2.</span> <span class="nav-text">输入输出格式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#输入格式："><span class="nav-number">2.1.</span> <span class="nav-text">输入格式：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#输出格式："><span class="nav-number">2.2.</span> <span class="nav-text">输出格式：</span></a></li></ol></li></ol></div>
             
 
           </div>

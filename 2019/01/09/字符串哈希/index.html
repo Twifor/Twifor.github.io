@@ -117,18 +117,18 @@
 
 
 
-  <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;很多题目涉及字符串问题，但是字符串不如整数那样容易处理，尤其是涉及图时。这时我们需要构造映射string-&amp;gt;int来将字符串转化为int，这就是字符串哈希算法。">
+  <meta name="description" content="本文改编自https://blog.csdn.net/pengwill97/article/details/80879387&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;很多题目涉及字符串问题，但是字符串不如整数那样容易处理，尤其是涉及图时。这时我们需要构造映射string-&amp;gt;int来将字符串转化为int，这就是字符串哈希算法。">
 <meta name="keywords" content="基础算法,字符串,哈希">
 <meta property="og:type" content="article">
 <meta property="og:title" content="字符串哈希">
 <meta property="og:url" content="https://twifor.github.io/2019/01/09/字符串哈希/index.html">
 <meta property="og:site_name" content="Twifor~Liyh">
-<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;很多题目涉及字符串问题，但是字符串不如整数那样容易处理，尤其是涉及图时。这时我们需要构造映射string-&amp;gt;int来将字符串转化为int，这就是字符串哈希算法。">
+<meta property="og:description" content="本文改编自https://blog.csdn.net/pengwill97/article/details/80879387&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;很多题目涉及字符串问题，但是字符串不如整数那样容易处理，尤其是涉及图时。这时我们需要构造映射string-&amp;gt;int来将字符串转化为int，这就是字符串哈希算法。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-09T10:42:53.466Z">
+<meta property="og:updated_time" content="2019-01-09T12:41:32.039Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="字符串哈希">
-<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;很多题目涉及字符串问题，但是字符串不如整数那样容易处理，尤其是涉及图时。这时我们需要构造映射string-&amp;gt;int来将字符串转化为int，这就是字符串哈希算法。">
+<meta name="twitter:description" content="本文改编自https://blog.csdn.net/pengwill97/article/details/80879387&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;很多题目涉及字符串问题，但是字符串不如整数那样容易处理，尤其是涉及图时。这时我们需要构造映射string-&amp;gt;int来将字符串转化为int，这就是字符串哈希算法。">
 
 
 
@@ -421,7 +421,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-09 18:42:53" itemprop="dateModified" datetime="2019-01-09T18:42:53+08:00">2019-01-09</time>
+                <time title="修改时间：2019-01-09 20:41:32" itemprop="dateModified" datetime="2019-01-09T20:41:32+08:00">2019-01-09</time>
               
             
           </span>
@@ -482,7 +482,7 @@
       
 
       
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;很多题目涉及字符串问题，但是字符串不如整数那样容易处理，尤其是涉及图时。这时我们需要构造映射string-&gt;int来将字符串转化为int，这就是字符串哈希算法。<br><a id="more"></a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;哈希方案有很多种，这里我们选择很常用的一个–BKDR Hash。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;哈希思路是将字符串看成是一个base位进制数(base为一个大质数)，具体思路如下:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于字符串的第i位，我们有:</p>
+        <p><div class="note warning"><p>本文改编自<a href="https://blog.csdn.net/pengwill97/article/details/80879387" target="_blank" rel="noopener">https://blog.csdn.net/pengwill97/article/details/80879387</a></p></div><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;很多题目涉及字符串问题，但是字符串不如整数那样容易处理，尤其是涉及图时。这时我们需要构造映射string-&gt;int来将字符串转化为int，这就是字符串哈希算法。<br><a id="more"></a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;哈希方案有很多种，这里我们选择很常用的一个–BKDR Hash。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;哈希思路是将字符串看成是一个base位进制数(base为一个大质数)，具体思路如下:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于字符串的第i位，我们有:</p>
 <blockquote>
 <p>hash(0)=ID(i);<br>hash(i)=(hash(i-1)*base+ID(i))%P，i≥1;<br>ID(i)=str(i)-’a’+1</p>
 </blockquote>
@@ -652,6 +652,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2019/01/10/区间问题专题/" rel="prev" title="区间问题专题">
+                区间问题专题 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -717,7 +721,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">33</span>
+                    <span class="site-state-item-count">46</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -805,7 +809,25 @@
                     
                       
                     
-                    <span class="site-state-item-count">30</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">39</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
