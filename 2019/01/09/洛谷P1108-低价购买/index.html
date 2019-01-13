@@ -125,7 +125,7 @@
 <meta property="og:site_name" content="Twifor~Liyh">
 <meta property="og:description" content="难度：提高+/省选- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;“低价购买”这条建议是在奶牛股票市场取得成功的一半规则。要想被认为是伟大的投资者，你必须遵循以下的问题建议:“低价购买;再低价购买”。每次你购买一支股票，你必须用低于你上次购买它的价格购买它。买的次数越多越好!你的目标是在遵循以上建议的前提下，求你最多能购买股票的次数。你将">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-09T09:57:19.687Z">
+<meta property="og:updated_time" content="2019-01-13T06:28:29.972Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[洛谷P1108]低价购买">
 <meta name="twitter:description" content="难度：提高+/省选- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;“低价购买”这条建议是在奶牛股票市场取得成功的一半规则。要想被认为是伟大的投资者，你必须遵循以下的问题建议:“低价购买;再低价购买”。每次你购买一支股票，你必须用低于你上次购买它的价格购买它。买的次数越多越好!你的目标是在遵循以上建议的前提下，求你最多能购买股票的次数。你将">
@@ -421,7 +421,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-09 17:57:19" itemprop="dateModified" datetime="2019-01-09T17:57:19+08:00">2019-01-09</time>
+                <time title="修改时间：2019-01-13 14:28:29" itemprop="dateModified" datetime="2019-01-13T14:28:29+08:00">2019-01-13</time>
               
             
           </span>
@@ -493,14 +493,9 @@
 <p>4 2</p>
 </blockquote>
 <h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;题目考察线性动态规划/递推，与本材料第四题导弹拦截非常类似(只是多了一个求方案数的步骤)。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第一问很容易求得，既可以使用O(n<sup>2</sup>)的经典动态规划思路也可以使用O(nlogn)的二分和贪心思路(详见第四题的加强版本解析)。示例代码给出的是前者。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面探讨方案数的求法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;令f(x)为以下标为x的元素为末尾的最长序列方案数。则dp(x)不为1时有如下的递推关系(不正确的版本):</p>
-<blockquote>
-<p>f(x)=SUM{f(k)}，1&lt;=k&lt;x，dp(k)=dp(x)-1，value(k)&gt;value(x)</p>
-</blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;初始化f(x)为0，dp(x)为1时直接令f(x)=1。这样答案即为所有dp(x)取到最大值的f(x)之和。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里注意到f(x)是很多函数值的和，它们其中重复的组合一定会被重复计算。容易发现，对于一个给定的x，value(x)即是确定的。倘若对于两个k1，k2满足递推式中的条件但是value(k1)≠value(k2)，我们可以肯定k1和k2这两个序列必不存在相同的序列组合。倘若value(k1)=value(k2)且有k1&lt;k2，我们可以肯定以k1所指元素为末尾的所有序列都在k2对应的序列集合中。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;综上可知若令S(x)表示以下标为x的元素为末尾的序列组成的集合，那么有:</p>
-<blockquote>
-<p>value(a)≠value(b)时:  S(a)∩S(b)=∅<br>value(a)=value(b)(a&lt;b)时:  S(a)⊆S(b)</p>
-</blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样可知求和对于两个值相同的元素，只加上靠后元素的f值即可。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但这样仍不宜实现，因为这样需要开一个专门的数组来判断哪些value值已经被访问了。我们不妨在求每一个f值时就将它之前的与它相同的元素的f值置为0，以此表示该元素已经”失效”了，也就是当求f(x)时若dp(k)=dp(x)且value(k)=value(x)则f(k)=0。这样再结合递推关系就可以求得所有方案数。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> dp[<span class="number">5001</span>], op[<span class="number">5001</span>], n;</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> f[<span class="number">5001</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; op[i];</span><br><span class="line">        dp[i] = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> ans = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; i; j++)<span class="keyword">if</span> (op[j] &gt; op[i])dp[i] = max(dp[j] + <span class="number">1</span>, dp[i]);</span><br><span class="line">        ans = max(dp[i], ans);</span><br><span class="line">    &#125;</span><br><span class="line">    f[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; i; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (dp[j] == dp[i] &amp;&amp; op[j] == op[i])f[j] = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">if</span> (dp[j] == dp[i] - <span class="number">1</span> &amp;&amp; op[j] &gt; op[i])f[i] += f[j];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (dp[i] == <span class="number">1</span>)f[i] = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> ans2 = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)<span class="keyword">if</span> (dp[i] == ans)ans2 += f[i];</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; ans &lt;&lt; <span class="string">" "</span> &lt;&lt; ans2;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<script type="math/tex; mode=display">f(x)=\sum f(k)，1\leq k<x，dp(k)=dp(x)-1，value(k)>value(x)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;初始化f(x)为0，dp(x)为1时直接令f(x)=1。这样答案即为所有dp(x)取到最大值的f(x)之和。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里注意到f(x)是很多函数值的和，它们其中重复的组合一定会被重复计算。容易发现，对于一个给定的x，value(x)即是确定的。倘若对于两个k1，k2满足递推式中的条件但是value(k1)≠value(k2)，我们可以肯定k1和k2这两个序列必不存在相同的序列组合。倘若value(k1)=value(k2)且有k1&lt;k2，我们可以肯定以k1所指元素为末尾的所有序列都在k2对应的序列集合中。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;综上可知若令S(x)表示以下标为x的元素为末尾的序列组成的集合，那么有:</p>
+<script type="math/tex; mode=display">value(a)≠value(b)时:  S(a)\cap S(b)=\varnothing \\
+value(a)=value(b)(a<b)时:  S(a)\subseteq S(b)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样可知求和对于两个值相同的元素，只加上靠后元素的f值即可。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但这样仍不宜实现，因为这样需要开一个专门的数组来判断哪些value值已经被访问了。我们不妨在求每一个f值时就将它之前的与它相同的元素的f值置为0，以此表示该元素已经”失效”了，也就是当求f(x)时若dp(k)=dp(x)且value(k)=value(x)则f(k)=0。这样再结合递推关系就可以求得所有方案数。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> dp[<span class="number">5001</span>], op[<span class="number">5001</span>], n;</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> f[<span class="number">5001</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; op[i];</span><br><span class="line">        dp[i] = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> ans = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; i; j++)<span class="keyword">if</span> (op[j] &gt; op[i])dp[i] = max(dp[j] + <span class="number">1</span>, dp[i]);</span><br><span class="line">        ans = max(dp[i], ans);</span><br><span class="line">    &#125;</span><br><span class="line">    f[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; i; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (dp[j] == dp[i] &amp;&amp; op[j] == op[i])f[j] = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">if</span> (dp[j] == dp[i] - <span class="number">1</span> &amp;&amp; op[j] &gt; op[i])f[i] += f[j];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (dp[i] == <span class="number">1</span>)f[i] = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> ans2 = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)<span class="keyword">if</span> (dp[i] == ans)ans2 += f[i];</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; ans &lt;&lt; <span class="string">" "</span> &lt;&lt; ans2;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -629,7 +624,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">49</span>
+                    <span class="site-state-item-count">50</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -978,6 +973,48 @@
   
 
   
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+	  preview: 'none'
+    },
+	messageStyle: 'none',
+	"HTML-CSS": {
+      showMathMenu: false //关闭右击菜单显示
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style>
+
+    
+  
 
 
   
@@ -996,7 +1033,7 @@
 
   
 
-<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/koharu.model.json"},"display":{"position":"right","width":75,"height":150},"mobile":{"show":true},"log":false});</script></body>
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/koharu.model.json"},"display":{"position":"right","width":75,"height":150},"mobile":{"show":false},"log":false});</script></body>
 </html>
 <!-- 页面点击小红心 -->
 <script type="text/javascript" src="/js/src/clicklove.js"></script>

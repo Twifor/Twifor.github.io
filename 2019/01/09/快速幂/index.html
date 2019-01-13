@@ -117,18 +117,18 @@
 
 
 
-  <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;我们现在来认识一种新的求幂算法–快速幂算法。这个算法可以在O(logn)的时间复杂度下计算nm的值(要求m为自然数)。相比朴素O(n)累乘算法，效率大大提升。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;快速幂算法基于倍增思想，是倍增算法的一个应用。">
+  <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;我们现在来认识一种新的求幂算法—快速幂算法。这个算法可以在O(logn)的时间复杂度下计算nm的值(要求m为自然数)。相比朴素O(n)累乘算法，效率大大提升。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;快速幂算法基于倍增思想，是倍增算法的一个应用。">
 <meta name="keywords" content="基础算法,倍增">
 <meta property="og:type" content="article">
 <meta property="og:title" content="快速幂">
 <meta property="og:url" content="https://twifor.github.io/2019/01/09/快速幂/index.html">
 <meta property="og:site_name" content="Twifor~Liyh">
-<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;我们现在来认识一种新的求幂算法–快速幂算法。这个算法可以在O(logn)的时间复杂度下计算nm的值(要求m为自然数)。相比朴素O(n)累乘算法，效率大大提升。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;快速幂算法基于倍增思想，是倍增算法的一个应用。">
+<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;我们现在来认识一种新的求幂算法—快速幂算法。这个算法可以在O(logn)的时间复杂度下计算nm的值(要求m为自然数)。相比朴素O(n)累乘算法，效率大大提升。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;快速幂算法基于倍增思想，是倍增算法的一个应用。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-09T10:20:38.603Z">
+<meta property="og:updated_time" content="2019-01-13T06:50:49.320Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="快速幂">
-<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;我们现在来认识一种新的求幂算法–快速幂算法。这个算法可以在O(logn)的时间复杂度下计算nm的值(要求m为自然数)。相比朴素O(n)累乘算法，效率大大提升。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;快速幂算法基于倍增思想，是倍增算法的一个应用。">
+<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;我们现在来认识一种新的求幂算法—快速幂算法。这个算法可以在O(logn)的时间复杂度下计算nm的值(要求m为自然数)。相比朴素O(n)累乘算法，效率大大提升。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;快速幂算法基于倍增思想，是倍增算法的一个应用。">
 
 
 
@@ -421,7 +421,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-09 18:20:38" itemprop="dateModified" datetime="2019-01-09T18:20:38+08:00">2019-01-09</time>
+                <time title="修改时间：2019-01-13 14:50:49" itemprop="dateModified" datetime="2019-01-13T14:50:49+08:00">2019-01-13</time>
               
             
           </span>
@@ -482,11 +482,8 @@
       
 
       
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们现在来认识一种新的求幂算法–快速幂算法。这个算法可以在O(logn)的时间复杂度下计算n<sup>m</sup>的值(要求m为自然数)。相比朴素O(n)累乘算法，效率大大提升。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;快速幂算法基于倍增思想，是倍增算法的一个应用。<br><a id="more"></a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;每一个自然数都可以写出它唯一的二进制数，即有:</p>
-<blockquote>
-<p>m=2<sup>k1</sup>+2<sup>k2</sup>+…+2<sup>km</sup></p>
-</blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里0&lt;=k1&lt;k2&lt;…&lt;km。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么n<sup>m</sup>可以表示为n^(2<sup>k1</sup>+2<sup>k2</sup>+…+2<sup>km</sup>)，即n^2<sup>k1</sup> × n^2<sup>k2</sup> × … × n^2<sup>km</sup>，从而化为几个数的乘积，并且这几个数有这平方级的关系。这样就可以把求幂运算压至O(logn)复杂度。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;示例代码(答案对P取模):<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> P = <span class="number">10000007</span>;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> <span class="keyword">int</span> n, m;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> <span class="keyword">int</span> t = n;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> <span class="keyword">int</span> ans = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span> (m &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (m % <span class="number">2</span> == <span class="number">1</span>)ans *= t, ans %= P;</span><br><span class="line">        t *= t;</span><br><span class="line">        t %= P;</span><br><span class="line">        m /= <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; ans;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们现在来认识一种新的求幂算法—快速幂算法。这个算法可以在O(logn)的时间复杂度下计算n<sup>m</sup>的值(要求m为自然数)。相比朴素O(n)累乘算法，效率大大提升。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;快速幂算法基于倍增思想，是倍增算法的一个应用。<br><a id="more"></a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;每一个自然数都可以写出它唯一的二进制数，即有:</p>
+<script type="math/tex; mode=display">m=2^{k_1}+2^{k_2}+...+2^{k_m}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里$0\leq k_1 &lt; k_2&lt; …&lt; k_m$。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么$n^m$可以表示为$n^{2^{k_1}+2^{k_2}+…+2^{k_m}}$，即$n^{2^{k_1}} × n^{2^{k_2}} × … × n^{2^{k_m}}$，从而化为几个数的乘积，并且这几个数有这平方级的关系。这样就可以把求幂运算压至O(logn)复杂度。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;示例代码(答案对P取模):<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> P = <span class="number">10000007</span>;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> <span class="keyword">int</span> n, m;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> <span class="keyword">int</span> t = n;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> <span class="keyword">int</span> ans = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span> (m &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (m % <span class="number">2</span> == <span class="number">1</span>)ans *= t, ans %= P;</span><br><span class="line">        t *= t;</span><br><span class="line">        t %= P;</span><br><span class="line">        m /= <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; ans;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -604,7 +601,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">49</span>
+                    <span class="site-state-item-count">50</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -936,6 +933,48 @@
   
 
   
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+	  preview: 'none'
+    },
+	messageStyle: 'none',
+	"HTML-CSS": {
+      showMathMenu: false //关闭右击菜单显示
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style>
+
+    
+  
 
 
   
@@ -954,7 +993,7 @@
 
   
 
-<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/koharu.model.json"},"display":{"position":"right","width":75,"height":150},"mobile":{"show":true},"log":false});</script></body>
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/koharu.model.json"},"display":{"position":"right","width":75,"height":150},"mobile":{"show":false},"log":false});</script></body>
 </html>
 <!-- 页面点击小红心 -->
 <script type="text/javascript" src="/js/src/clicklove.js"></script>

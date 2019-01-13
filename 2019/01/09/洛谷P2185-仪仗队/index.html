@@ -126,7 +126,7 @@
 <meta property="og:description" content="难度：提高+/省选- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;作为体育委员，C君负责这次运动会仪仗队的训练。仪仗队是由学生组成的N * N的方阵，为了保证队伍在行进中整齐划一，C君会跟在仪仗队的左后方，根据其视线所及的学生人数来判断队伍是否整齐(如下图)。  现在，C君希望你告诉他队伍整齐时能看到的学生人数。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://twifor.github.io/2019/01/09/洛谷P2185-仪仗队/ph.png">
-<meta property="og:updated_time" content="2019-01-09T04:15:32.316Z">
+<meta property="og:updated_time" content="2019-01-13T06:22:01.093Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[洛谷P2185]仪仗队">
 <meta name="twitter:description" content="难度：提高+/省选- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;作为体育委员，C君负责这次运动会仪仗队的训练。仪仗队是由学生组成的N * N的方阵，为了保证队伍在行进中整齐划一，C君会跟在仪仗队的左后方，根据其视线所及的学生人数来判断队伍是否整齐(如下图)。  现在，C君希望你告诉他队伍整齐时能看到的学生人数。">
@@ -423,7 +423,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-09 12:15:32" itemprop="dateModified" datetime="2019-01-09T12:15:32+08:00">2019-01-09</time>
+                <time title="修改时间：2019-01-13 14:22:01" itemprop="dateModified" datetime="2019-01-13T14:22:01+08:00">2019-01-13</time>
               
             
           </span>
@@ -495,10 +495,7 @@
 <p>9</p>
 </blockquote>
 <h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;以左下方的观察点为原点建系，发现可以观察到的人总在正上方和正右方以及右上方一个n-1阶的方阵中。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;以图中n=6为例，我们考察右上方5阶方阵中的观察情况。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1，5)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2，5)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3，5)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(4，5)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff0000">(5，5)</font><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1，4)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff0000">(2，4)</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3，4)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff0000">(4，4)</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(5，4)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1，3)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2，3)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff0000">(3，3)</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(4，3)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(5，3)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1，2)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff0000">(2，2)</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3，2)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff0000">(4，2)</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(5，2)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1，1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2，1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3，1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(4，1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(5，1)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其中红色标出的是观察不到的人的坐标。我们发现可以被观察到等价于其横纵坐标互素。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么若令f(x)表示n阶方阵中横纵坐标互素的点的个数，则答案即为f(N)+2。注意N=1时特判为0。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面我们探讨f(x)的求法，很自然想到递推。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1，5)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2，5)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3，5)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(4，5)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff0000">(5，5)</font><font color="#00ff00"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1，4)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2，4)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3，4)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(4，4)</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(5，4)<font color="#00ff00"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1，3)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2，3)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3，3)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(4，3)</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(5，3)<font color="#00ff00"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1，2)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2，2)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3，2)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(4，2)</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(5，2)<font color="#00ff00"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1，1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2，1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3，1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(4，1)</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(5，1)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如上图，我们在n=4(绿色部分)的基础上递推到n=5的情况，容易发现(5，5)一定会被剔除，然后(5，5)的正左方和正下方一定是成对剔除的。显然，如果令φ(x)表示小于x且与x互素的正整数的个数，则有以下递推式:</p>
-<blockquote>
-<p>f(x)=f(x-1)+2*φ(x)</p>
-</blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在问题的关键在于求解φ(x)。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;φ(x)在数论上是有定义的，称为欧拉函数(Euler’s totient function)。现在介绍欧拉函数的线性筛法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为了理解这个筛法，要了解以下三个基本原理:</p>
+<script type="math/tex; mode=display">f(x)=f(x-1)+2*φ(x)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在问题的关键在于求解φ(x)。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;φ(x)在数论上是有定义的，称为欧拉函数(Euler’s totient function)。现在介绍欧拉函数的线性筛法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为了理解这个筛法，要了解以下三个基本原理:</p>
 <ul>
 <li>若p为素数，则φ(p)=p-1</li>
 <li>若p为素数且p†k，则φ(kp)=(p-1)φ(k)</li>
@@ -507,7 +504,7 @@
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;证明见题后注解。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用这三个原理结合埃氏筛素数法，可得到下面筛法:</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> euler[<span class="number">40001</span>] = &#123;<span class="number">0</span>&#125;;<span class="comment">//记录欧拉函数值</span></span><br><span class="line"><span class="keyword">int</span> mark[<span class="number">40001</span>] = &#123;<span class="number">0</span>&#125;;<span class="comment">//记录是不是素数</span></span><br><span class="line"><span class="keyword">int</span> prim[<span class="number">40001</span>], tot = <span class="number">0</span>;<span class="comment">//储存当前已知的素数,tot 记录个数</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= <span class="number">40000</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!mark[i]) &#123;</span><br><span class="line">    	prim[++tot] = i;</span><br><span class="line">    	euler[i] = i - <span class="number">1</span>;<span class="comment">//判断为素数,直接给欧拉函数赋值</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= tot; j++) &#123;</span><br><span class="line">    	<span class="keyword">if</span> (i * prim[j] &gt; <span class="number">40000</span>)<span class="keyword">break</span>;</span><br><span class="line">    	mark[i * prim[j]] = <span class="number">1</span>;<span class="comment">//标记这个数一定不是素数</span></span><br><span class="line">    	<span class="keyword">if</span> (i % prim[j] == <span class="number">0</span>)euler[i * prim[j]] = euler[i] * prim[j];</span><br><span class="line">    	<span class="keyword">else</span> euler[i * prim[j]] = euler[i] * (prim[j] - <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个筛法的可行性除了与埃氏筛法有关外，还利用了一个事实:每一个合数都可以写成k*p的形式并且p&lt;=k。prim数组中存放了所有不大于i的质数，由上面的原理可知在计算φ(i*prim[j])时φ(i)一定已经被求出了。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个筛法很重要，它是很多数论方面题目的重要算法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;利用这个算法再结合递推式，本题目迎刃而解。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> euler[<span class="number">40001</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> mark[<span class="number">40001</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> prim[<span class="number">40001</span>], tot = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> A[<span class="number">40001</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= <span class="number">40000</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!mark[i]) &#123;</span><br><span class="line">            prim[++tot] = i;</span><br><span class="line">            euler[i] = i - <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= tot; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (i * prim[j] &gt; <span class="number">40000</span>)<span class="keyword">break</span>;</span><br><span class="line">            mark[i * prim[j]] = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (i % prim[j] == <span class="number">0</span>)euler[i * prim[j]] = euler[i] * prim[j];</span><br><span class="line">            <span class="keyword">else</span> euler[i * prim[j]] = euler[i] * (prim[j] - <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    A[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= <span class="number">40000</span>; i++)A[i] = A[i - <span class="number">1</span>] + <span class="number">2</span> * euler[i];</span><br><span class="line">    <span class="keyword">int</span> n;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">    <span class="keyword">if</span> (n == <span class="number">1</span>)<span class="built_in">cout</span> &lt;&lt; <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="built_in">cout</span> &lt;&lt; A[n - <span class="number">1</span>] + <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里给出欧拉函数性质后两个的证明。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先欧拉函数是积性函数，即在(a，b)=1时有φ(ab)=φ(a)φ(b)。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么在p†k时，由于p是素数，必有(p，k)=1，故φ(pk)=φ(p)φ(k)=(p-1)φ(k)。在p|k时，不妨设k=qps(p†q)，那么φ(pk)=φ(ps+1q)=φ(ps+1)φ(q)。这里φ(ps+1)为ps+1-ps，即ps(p-1)，因此φ(pk)=(p-1)psφ(q)。并且φ(k)=φ(q)φ(ps)=φ(q)ps-1(p-1)。代入即得φ(pk)=pφ(k)。</p>
+<h3 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里给出欧拉函数性质后两个的证明。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先欧拉函数是积性函数，即在(a，b)=1时有φ(ab)=φ(a)φ(b)。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么在p†k时，由于p是素数，必有(p，k)=1，故φ(pk)=φ(p)φ(k)=(p-1)φ(k)。在p|k时，不妨设k=qp<sup>s</sup>(p†q)，那么φ(pk)=φ(p<sup>s+1</sup>q)=φ(p<sup>s+1</sup>)φ(q)。这里φ(p<sup>s+1</sup>)为p<sup>s+1</sup>-p<sup>s</sup>，即p<sup>s</sup>(p-1)，因此φ(pk)=(p-1)p<sup>s</sup>φ(q)。并且φ(k)=φ(q)φ(p<sup>s</sup>)=φ(q)p<sup>s-1</sup>(p-1)。代入即得φ(pk)=pφ(k)。</p>
 
       
     </div>
@@ -634,7 +631,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">49</span>
+                    <span class="site-state-item-count">50</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -983,6 +980,48 @@
   
 
   
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+	  preview: 'none'
+    },
+	messageStyle: 'none',
+	"HTML-CSS": {
+      showMathMenu: false //关闭右击菜单显示
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style>
+
+    
+  
 
 
   
@@ -1001,7 +1040,7 @@
 
   
 
-<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/koharu.model.json"},"display":{"position":"right","width":75,"height":150},"mobile":{"show":true},"log":false});</script></body>
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/koharu.model.json"},"display":{"position":"right","width":75,"height":150},"mobile":{"show":false},"log":false});</script></body>
 </html>
 <!-- 页面点击小红心 -->
 <script type="text/javascript" src="/js/src/clicklove.js"></script>

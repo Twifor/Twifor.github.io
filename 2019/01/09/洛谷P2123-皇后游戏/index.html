@@ -125,12 +125,10 @@
 <meta property="og:site_name" content="Twifor~Liyh">
 <meta property="og:description" content="难度：省选/NOI- 题目背景&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;还记得 NOIP 2012 提高组 Day1 的国王游戏吗？时光飞逝，光阴荏苒，两年过去了。国王游戏早已过时，如今已被皇后游戏取代，请你来解决类似于国王游戏的另一个问题。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://twifor.github.io/2019/01/09/洛谷P2123-皇后游戏/ph.png">
-<meta property="og:updated_time" content="2019-01-09T09:58:34.192Z">
+<meta property="og:updated_time" content="2019-01-13T06:43:42.104Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[洛谷P2123]皇后游戏">
 <meta name="twitter:description" content="难度：省选/NOI- 题目背景&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;还记得 NOIP 2012 提高组 Day1 的国王游戏吗？时光飞逝，光阴荏苒，两年过去了。国王游戏早已过时，如今已被皇后游戏取代，请你来解决类似于国王游戏的另一个问题。">
-<meta name="twitter:image" content="https://twifor.github.io/2019/01/09/洛谷P2123-皇后游戏/ph.png">
 
 
 
@@ -423,7 +421,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-09 17:58:34" itemprop="dateModified" datetime="2019-01-09T17:58:34+08:00">2019-01-09</time>
+                <time title="修改时间：2019-01-13 14:43:42" itemprop="dateModified" datetime="2019-01-13T14:43:42+08:00">2019-01-13</time>
               
             
           </span>
@@ -486,7 +484,11 @@
       
         <p>难度：省选/NOI-</p>
 <h3 id="题目背景"><a href="#题目背景" class="headerlink" title="题目背景"></a>题目背景</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;还记得 NOIP 2012 提高组 Day1 的国王游戏吗？时光飞逝，光阴荏苒，两年过去了。国王游戏早已过时，如今已被皇后游戏取代，请你来解决类似于国王游戏的另一个问题。<br><a id="more"></a></p>
-<h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;皇后有 n 位大臣，每位大臣的左右手上面分别写上了一个正整数。恰逢国庆节来临，皇后决定为 n 位大臣颁发奖金，其中第 i 位大臣所获得的奖金数目为第i－1 位大臣所获得奖金数目与前 i 位大臣左手上的数的和的较大值再加上第 i 位大臣右手上的数。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;形式化地讲:我们设第 i 位大臣左手上的正整数为 a<sub>i</sub>，右手上的正整数为 b<sub>i</sub>，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;则第 i 位大臣获得的奖金数目为 c<sub>i</sub>可以表达为:<br><img src="/2019/01/09/洛谷P2123-皇后游戏/ph.png"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当然，吝啬的皇后并不希望太多的奖金被发给大臣，所以她想请你来重新安排一下队伍的顺序，使得获得奖金最多的大臣，所获奖金数目尽可能的少。注意:重新安排队伍并不意味着一定要打乱顺序，我们允许不改变任何一位大臣的位置。</p>
+<h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;皇后有 n 位大臣，每位大臣的左右手上面分别写上了一个正整数。恰逢国庆节来临，皇后决定为 n 位大臣颁发奖金，其中第 i 位大臣所获得的奖金数目为第i－1 位大臣所获得奖金数目与前 i 位大臣左手上的数的和的较大值再加上第 i 位大臣右手上的数。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;形式化地讲:我们设第 i 位大臣左手上的正整数为 a<sub>i</sub>，右手上的正整数为 b<sub>i</sub>，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;则第 i 位大臣获得的奖金数目为 c<sub>i</sub>可以表达为:</p>
+<script type="math/tex; mode=display">c_i=\begin{cases}
+a_1+b_1 & i=1\\
+\max\{c_{i-1},\displaystyle\sum_{j=1}^ia_j\} & 2\leq i\leq n
+\end{cases}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当然，吝啬的皇后并不希望太多的奖金被发给大臣，所以她想请你来重新安排一下队伍的顺序，使得获得奖金最多的大臣，所获奖金数目尽可能的少。注意:重新安排队伍并不意味着一定要打乱顺序，我们允许不改变任何一位大臣的位置。</p>
 <h3 id="输入输出格式"><a href="#输入输出格式" class="headerlink" title="输入输出格式"></a>输入输出格式</h3><h4 id="输入格式"><a href="#输入格式" class="headerlink" title="输入格式:"></a>输入格式:</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第一行包含一个正整数 T，表示测试数据的组数。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接下来 T 个部分，每个部分的第一行包含一个正整数 n，表示大臣的数目。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;每个部分接下来 n 行中，每行两个正整数，分别为 a<sub>i</sub>和 b<sub>i</sub>，含义如上文所述。</p>
 <h4 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式:"></a>输出格式:</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;共 T 行，每行包含一个整数，表示获得奖金最多的大臣所获得的奖金数目。</p>
 <h3 id="输入输出样例"><a href="#输入输出样例" class="headerlink" title="输入输出样例"></a>输入输出样例</h3><h4 id="Sample-input-1"><a href="#Sample-input-1" class="headerlink" title="Sample input#1"></a>Sample input#1</h4><blockquote>
@@ -503,66 +505,33 @@
 </blockquote>
 <h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;按照 1，2，3 这样排列队伍，获得最多奖金的大臣获得奖金的数目为 10;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;按照 1，3，2 这样排列队伍，获得最多奖金的大臣获得奖金的数目为 9;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;按照 2，1，3 这样排列队伍，获得最多奖金的大臣获得奖金的数目为 9;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;按照 2，3，1 这样排列队伍，获得最多奖金的大臣获得奖金的数目为 8;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;按照 3，1，2 这样排列队伍，获得最多奖金的大臣获得奖金的数目为 9;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;按照 3，2，1 这样排列队伍，获得最多奖金的大臣获得奖金的数目为 8。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当按照 3，2，1 这样排列队伍时，三位大臣左右手的数分别为:(1， 2)，(2， 2)，(4， 1)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第 1 位大臣获得的奖金为 1 + 2 = 3;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第 2 位大臣获得的奖金为 max{3， 3} + 2 = 5;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第 3 为大臣获得的奖金为 max{5， 7} + 1 = 8。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于全部测试数据满足:T≤10，1≤n≤20000，1≤a<sub>i</sub>，b<sub>i</sub>≤10<sup>9</sup>。</p>
 <h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考察数学推导，排序和贪心，难度很高。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于两个相邻的大臣i，j，假定i前方的a之和为p，i前的大臣c值为q，那么可以求出j的c值:</p>
-<blockquote>
-<p>c<sub>j</sub>=max{c<sub>i</sub>，p+a<sub>i</sub>+a<sub>j</sub>}+b<sub>j</sub></p>
-</blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里c<sub>i</sub>也可以求出:</p>
-<blockquote>
-<p>c<sub>i</sub>=max{q，p+a<sub>i</sub>}+b<sub>i</sub></p>
-</blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所以有</p>
-<blockquote>
-<p>c<sub>j</sub>=max{max{q，p+a<sub>i</sub>}+b<sub>i</sub>，p+a<sub>i</sub>+a<sub>j</sub>}+b<sub>j</sub></p>
-</blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;即</p>
-<blockquote>
-<p>c<sub>j</sub>=max{q+b<sub>i</sub>+b<sub>j</sub>，p+a<sub>i</sub>+b<sub>i</sub>+b<sub>j</sub>，p+a<sub>i</sub>+a<sub>j</sub>+b<sub>j</sub>}</p>
-</blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;同理交换后有</p>
-<blockquote>
-<p>c<sub>j</sub>=max{q+b<sub>j</sub>+b<sub>i</sub>，p+a<sub>j</sub>+b<sub>j</sub>+b<sub>i</sub>，p+a<sub>j</sub>+a<sub>i</sub>+b<sub>i</sub>}</p>
-</blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假定不交换更优，那么有</p>
-<blockquote>
-<p>max{q+b<sub>i</sub>+b<sub>j</sub>，p+a<sub>i</sub>+b<sub>i</sub>+b<sub>j</sub>，p+a<sub>i</sub>+a<sub>j</sub>+b<sub>j</sub>}&lt;=max{q+b<sub>j</sub>+b<sub>i</sub>，p+a<sub>j</sub>+b<sub>j</sub>+b<sub>i</sub>，p+a<sub>j</sub>+a<sub>i</sub>+b<sub>i</sub>}</p>
-</blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;把这个式子记作①。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发现其中都有q+b<sub>i</sub>+b<sub>j</sub>这一项，把它们归结为max{a，b}&lt;=max{a，c}。容易发现当b&lt;=c时max{a，b}&lt;=max{a，c}必成立。在b&gt;c时可能max{a，b}&lt;=max{a，c}，也可能max{a，b}&gt;max{a，c}。这时我们会交换两个元素使b&lt;=c，从而使max{a，b}&lt;=max{a，c}一定成立。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;因此我们可以不考虑q+b<sub>i</sub>+b<sub>j</sub>，只考虑后边式子的大小关系:</p>
-<blockquote>
-<p>max{p+a<sub>i</sub>+b<sub>i</sub>+b<sub>j</sub>，p+a<sub>i</sub>+a<sub>j</sub>+b<sub>j</sub>}&lt;=max{p+a<sub>j</sub>+b<sub>j</sub>+b<sub>i</sub>，p+a<sub>j</sub>+a<sub>i</sub>+b<sub>i</sub>}</p>
-</blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;记作②。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当②成立时，①必然也是成立的;而②不成立时交换后即可使①成立。所以可以通过②来判别是否要交换。另外可以发现②取等时，①也取等。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将②变形</p>
-<blockquote>
-<p>max{b<sub>i</sub>，a<sub>j</sub>}+a<sub>i</sub>+b<sub>j</sub>&lt;=max{b<sub>j</sub>，a<sub>i</sub>}+b<sub>i</sub>+a<sub>j</sub></p>
-</blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;移项得</p>
-<blockquote>
-<p>max{b<sub>i</sub>，a<sub>j</sub>}-b<sub>i</sub>-a<sub>j</sub>&lt;=max{b<sub>j</sub>，a<sub>i</sub>}-a<sub>i</sub>-b<sub>j</sub></p>
-</blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;等价于</p>
-<blockquote>
-<p>-min{b<sub>i</sub>，a<sub>j</sub>}&lt;=-min{b<sub>j</sub>，a<sub>i</sub>}</p>
-</blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;即为</p>
-<blockquote>
-<p>min{a<sub>i</sub>，b<sub>j</sub>}&lt;=min{a<sub>j</sub>，b<sub>i</sub>}</p>
-</blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;记为③。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为了更好地理解本题，下面给出几个概念和定理。</p>
+<script type="math/tex; mode=display">c_j=\max\{c_i，p+a_i+a_j\}+b_j</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里c<sub>i</sub>也可以求出:</p>
+<script type="math/tex; mode=display">c_i= \max\{q，p+a_i\}+b_i</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所以有</p>
+<script type="math/tex; mode=display">c_j=\max\{\max\{q，p+a_i\}+b_i，p+a_i+a_j\}+b_j</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;即</p>
+<script type="math/tex; mode=display">c_j=\max\{q+b_i+b_j，p+a_i+b_i+b_j，p+a_i+a_j+b_j\}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;同理交换后有</p>
+<script type="math/tex; mode=display">c_j=\max\{q+b_j+b_i，p+a_j+b_j+b_i，p+a_j+a_i+b_i\}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假定不交换更优，那么有</p>
+<script type="math/tex; mode=display">\max\{q+b_i+b_j，p+a_i+b_i+b_j，p+a_i+a_j+b_j\}\leq \max\{q+b_j+b_i，p+a_j+b_j+b_i，p+a_j+a_i+b_i\}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;把这个式子记作①。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发现其中都有q+b<sub>i</sub>+b<sub>j</sub>这一项，把它们归结为max{a，b}≤max{a，c}。容易发现当b≤时max{a，b}≤max{a，c}必成立。在b&gt;c时可能max{a，b}≤max{a，c}，也可能max{a，b}&gt;max{a，c}。这时我们会交换两个元素使b≤c，从而使max{a，b}≤max{a，c}一定成立。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;因此我们可以不考虑q+b<sub>i</sub>+b<sub>j</sub>，只考虑后边式子的大小关系:</p>
+<script type="math/tex; mode=display">\max\{p+a_i+b_i+b_j，p+a_i+a_j+b_j\}\leq \max\{p+a_j+b_j+b_i，p+a_j+a_i+b_i\}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;记作②。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当②成立时，①必然也是成立的;而②不成立时交换后即可使①成立。所以可以通过②来判别是否要交换。另外可以发现②取等时，①也取等。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将②变形</p>
+<script type="math/tex; mode=display">\max\{b_i，a_j\}+a_i+b_j\leq \max\{b_j，a_i\}+b_i+a_j</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;移项得</p>
+<script type="math/tex; mode=display">\max\{b_i，a_j\}-b_i-a_j\leq \max\{b_j，a_i\}-a_i-b_j</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;等价于</p>
+<script type="math/tex; mode=display">-\min\{b_i，a_j\}\leq -\min\{b_j，a_i\}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;即为</p>
+<script type="math/tex; mode=display">\min\{a_i，b_j\}\leq \min\{a_j，b_i\}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;记为③。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为了更好地理解本题，下面给出几个概念和定理。</p>
 <ul>
 <li>[判别元素]参与相邻元素判别的因子。比如这里的min{ai，bj}和min{aj，bi}。</li>
-<li>[相邻子条件]可以使相邻元素在某种次序下更优的判别元素所满足的条件。如果我们记A=min{a<sub>i</sub>，b<sub>j</sub>}，B=min{a<sub>j</sub>，b<sub>i</sub>}，则相邻子条件为A&lt;=B，此时i在j前更优。我们记相邻子条件为P(X，Y)，在判别元素X，Y满足相邻子条件(X&lt;=Y)时为真。</li>
-<li>[逆序]对于一个序列A<sub>1</sub>，A<sub>2</sub>，A<sub>3</sub>，…A<sub>n</sub>，若存在i，j(1&lt;=i&lt;j&lt;=n)使得P(A<sub>i</sub>，A<sub>j</sub>)为假，则称A<sub>i</sub>，A<sub>j</sub>组成一个逆序。逆序会破坏序列的最优性。</li>
+<li>[相邻子条件]可以使相邻元素在某种次序下更优的判别元素所满足的条件。如果我们记A=min{a<sub>i</sub>，b<sub>j</sub>}，B=min{a<sub>j</sub>，b<sub>i</sub>}，则相邻子条件为A≤B，此时i在j前更优。我们记相邻子条件为P(X，Y)，在判别元素X，Y满足相邻子条件(X≤Y)时为真。</li>
+<li>[逆序]对于一个序列A<sub>1</sub>，A<sub>2</sub>，A<sub>3</sub>，…A<sub>n</sub>，若存在i，j$(1 \leq i &lt; j \leq n)$使得P(A<sub>i</sub>，A<sub>j</sub>)为假，则称A<sub>i</sub>，A<sub>j</sub>组成一个逆序。逆序会破坏序列的最优性。</li>
 <li>[相邻全局最优化原理]一个序列，其判别元素序列为A<sub>1</sub>，A<sub>2</sub>，A<sub>3</sub>，…A<sub>n</sub>。当序列不存在逆序时，序列最优。</li>
 <li>[等价序列转化原理]交换相邻相等元素的位置，答案不变，这时两个序列等价。</li>
 </ul>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一个两两相邻元素都满足子条件的序列不一定是最优的，因为它可能存在逆序。比如序列ABC满足A&lt;=B，B&lt;=C，但是A&gt;C(一个逆序)，此时若B=C，我们可以进行等价变形得到ACB，此时AC违背了子条件，交换AC得到序列CAB，显然CAB是比ABC更优的序列。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是存在逆序并不一定使序列不最优，也就是说存在逆序的序列得到的答案可能与最优序列答案是相同的。但是没有逆序的序列一定是最优的，化为没有逆序的序列是我们最保险，最稳妥的做法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于国王游戏，我们可以采用按照左右手数值乘积升序排列的做法。这是因为排序后得到的序列没有逆序。这种两两相邻元素满足子条件就可以保证全局没有逆序的性质称为传递性。国王游戏中小于号是可传递的，但本题不可以。在本题中如果A&lt;=B，B&lt;=C，可能有A&gt;C的情况发生。如果我们只像国王游戏那样按照相邻子条件排序，得到的序列可能有逆序。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们应该设法创造一个具有传递性的排序思路。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;观察③式，发现a与b的情况可以归结为以下几种:</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一个两两相邻元素都满足子条件的序列不一定是最优的，因为它可能存在逆序。比如序列ABC满足A≤B，B≤C，但是A&gt;C(一个逆序)，此时若B=C，我们可以进行等价变形得到ACB，此时AC违背了子条件，交换AC得到序列CAB，显然CAB是比ABC更优的序列。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是存在逆序并不一定使序列不最优，也就是说存在逆序的序列得到的答案可能与最优序列答案是相同的。但是没有逆序的序列一定是最优的，化为没有逆序的序列是我们最保险，最稳妥的做法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于国王游戏，我们可以采用按照左右手数值乘积升序排列的做法。这是因为排序后得到的序列没有逆序。这种两两相邻元素满足子条件就可以保证全局没有逆序的性质称为传递性。国王游戏中小于号是可传递的，但本题不可以。在本题中如果A≤B，B≤C，可能有A&gt;C的情况发生。如果我们只像国王游戏那样按照相邻子条件排序，得到的序列可能有逆序。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们应该设法创造一个具有传递性的排序思路。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;观察③式，发现a与b的情况可以归结为以下几种:</p>
 <ul>
-<li>第一种:a<sub>i</sub>&lt;b<sub>i</sub>且a<sub>j</sub>&lt;b<sub>j</sub>，此时必有a<sub>i</sub>&lt;=a<sub>j</sub>，也就是说a是升序的。</li>
-<li>第二种:a<sub>i</sub>=b<sub>i</sub>且a<sub>j</sub>=b<sub>j</sub>。a与b都是不变的，③式显然成立。</li>
-<li>第三种:a<sub>i</sub>&gt;b<sub>i</sub>且a<sub>j</sub>&gt;b<sub>j</sub>，此时必有b<sub>j</sub>&lt;=b<sub>i</sub>，也就是说b是降序的。</li>
-<li>第四种:a<sub>i</sub>&lt;b<sub>i</sub>且a<sub>j</sub>&gt;b<sub>j</sub>，③式显然成立。</li>
-<li>当然还有第五种:a<sub>i</sub>&gt;b<sub>i</sub>且a<sub>j</sub>&lt;b<sub>j</sub>，此时③式显然不成立</li>
+<li>第一种:a<sub>i</sub> &lt; b<sub>i</sub>且a<sub>j</sub> &gt; b<sub>j</sub>，此时必有a<sub>i</sub>≤a<sub>j</sub>，也就是说a是升序的。</li>
+<li>第二种:a<sub>i</sub> = b<sub>i</sub>且a<sub>j</sub> = b<sub>j</sub>。a与b都是不变的，③式显然成立。</li>
+<li>第三种:a<sub>i</sub> &gt; b<sub>i</sub>且a<sub>j</sub> &gt; b<sub>j</sub>，此时必有b<sub>j</sub>≤b<sub>i</sub>，也就是说b是降序的。</li>
+<li>第四种:a<sub>i</sub> &lt; b<sub>i</sub>且a<sub>j</sub> &gt; b<sub>j</sub>，③式显然成立。</li>
+<li>当然还有第五种:a<sub>i</sub> &gt; b<sub>i</sub>且a<sub>j</sub> &lt; b<sub>j</sub>，此时③式显然不成立</li>
 </ul>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们先将I组(a&lt;b)的元素前置，然后跟上II组(a=b)的元素，最后跟上III组(a&gt;b)的元素。在I组中按照a升序排列，在III组中按b降序排列。可以证明这是一种可行且可传递的排序方法。我们可以证明它没有逆序，任取两个元素X，Y(Y在X后)，可以归结为以下六种情况来判别P(X，Y)的成立与否:</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们先将I组(a<b)的元素前置，然后跟上ii组(a=b)的元素，最后跟上iii组(a>b)的元素。在I组中按照a升序排列，在III组中按b降序排列。可以证明这是一种可行且可传递的排序方法。我们可以证明它没有逆序，任取两个元素X，Y(Y在X后)，可以归结为以下六种情况来判别P(X，Y)的成立与否:</b)的元素前置，然后跟上ii组(a=b)的元素，最后跟上iii组(a></p>
 <ul>
 <li>X，Y都来自I:符合第一种情况，成立。</li>
 <li>X来自I，Y来自II:显然成立</li>
@@ -571,7 +540,7 @@
 <li>X来自II，Y来自III:显然成立。</li>
 <li>X来自III，Y来自III:符合第三种，成立。</li>
 </ul>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样我们就找到了一种排序策略得到一个满足全局最优化原理的序列，从中找到的答案必然为最优解。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;通过这个题，我们可以发现相邻交换法并不只是按照相邻子条件排序就可以的，排序后的序列不能只让两两相邻元素符合子条件，还要没有逆序。这是相邻交换法的重要理论依据。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另一个值得注意的是，虽然a=b时可以任意排序(依据等价序列转化原理)，但是不能在重载时直接返回一个true或者false，这样会出现矛盾(a&lt;b且b&lt;a)造成RE。示例代码中把它归到了I组中。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node</span> &#123;</span></span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> a, b;</span><br><span class="line">    <span class="keyword">int</span> d;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">make</span><span class="params">(<span class="keyword">long</span> <span class="keyword">long</span> x, <span class="keyword">long</span> <span class="keyword">long</span> y)</span> </span>&#123;</span><br><span class="line">        a = x, b = y;</span><br><span class="line">        <span class="keyword">if</span> (a == b)d = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (a &lt; b)d = <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">else</span> d = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">bool</span> <span class="keyword">operator</span>&lt;(node p) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>-&gt;d != p.d)<span class="keyword">return</span> <span class="keyword">this</span>-&gt;d &lt; p.d;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>-&gt;d &lt;= <span class="number">0</span>)<span class="keyword">return</span> <span class="keyword">this</span>-&gt;a &lt; p.a;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> <span class="keyword">this</span>-&gt;b &gt; p.b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; op[<span class="number">20001</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> c[<span class="number">20001</span>];</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> T;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; T;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> t = <span class="number">1</span>; t &lt;= T; t++) &#123;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">            <span class="keyword">long</span> <span class="keyword">long</span> x, y;</span><br><span class="line">            <span class="built_in">cin</span> &gt;&gt; x &gt;&gt; y;</span><br><span class="line">            op[i].make(x, y);</span><br><span class="line">        &#125;</span><br><span class="line">        sort(op + <span class="number">1</span>, op + n + <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">long</span> <span class="keyword">long</span> ans = c[<span class="number">1</span>] = op[<span class="number">1</span>].a + op[<span class="number">1</span>].b, temp = op[<span class="number">1</span>].a;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= n; i++) &#123;</span><br><span class="line">            temp += op[i].a;</span><br><span class="line">            c[i] = max(c[i - <span class="number">1</span>], temp) + op[i].b;</span><br><span class="line">            ans = max(ans, c[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; ans &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样我们就找到了一种排序策略得到一个满足全局最优化原理的序列，从中找到的答案必然为最优解。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;通过这个题，我们可以发现相邻交换法并不只是按照相邻子条件排序就可以的，排序后的序列不能只让两两相邻元素符合子条件，还要没有逆序。这是相邻交换法的重要理论依据。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另一个值得注意的是，虽然a=b时可以任意排序(依据等价序列转化原理)，但是不能在重载时直接返回一个true或者false，这样会出现矛盾(a &lt; b且b &lt; a)造成RE。示例代码中把它归到了I组中。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node</span> &#123;</span></span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> a, b;</span><br><span class="line">    <span class="keyword">int</span> d;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">make</span><span class="params">(<span class="keyword">long</span> <span class="keyword">long</span> x, <span class="keyword">long</span> <span class="keyword">long</span> y)</span> </span>&#123;</span><br><span class="line">        a = x, b = y;</span><br><span class="line">        <span class="keyword">if</span> (a == b)d = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (a &lt; b)d = <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">else</span> d = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">bool</span> <span class="keyword">operator</span>&lt;(node p) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>-&gt;d != p.d)<span class="keyword">return</span> <span class="keyword">this</span>-&gt;d &lt; p.d;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>-&gt;d &lt;= <span class="number">0</span>)<span class="keyword">return</span> <span class="keyword">this</span>-&gt;a &lt; p.a;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> <span class="keyword">this</span>-&gt;b &gt; p.b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; op[<span class="number">20001</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> c[<span class="number">20001</span>];</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> T;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; T;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> t = <span class="number">1</span>; t &lt;= T; t++) &#123;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">            <span class="keyword">long</span> <span class="keyword">long</span> x, y;</span><br><span class="line">            <span class="built_in">cin</span> &gt;&gt; x &gt;&gt; y;</span><br><span class="line">            op[i].make(x, y);</span><br><span class="line">        &#125;</span><br><span class="line">        sort(op + <span class="number">1</span>, op + n + <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">long</span> <span class="keyword">long</span> ans = c[<span class="number">1</span>] = op[<span class="number">1</span>].a + op[<span class="number">1</span>].b, temp = op[<span class="number">1</span>].a;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= n; i++) &#123;</span><br><span class="line">            temp += op[i].a;</span><br><span class="line">            c[i] = max(c[i - <span class="number">1</span>], temp) + op[i].b;</span><br><span class="line">            ans = max(ans, c[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; ans &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -698,7 +667,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">49</span>
+                    <span class="site-state-item-count">50</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1047,6 +1016,48 @@
   
 
   
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+	  preview: 'none'
+    },
+	messageStyle: 'none',
+	"HTML-CSS": {
+      showMathMenu: false //关闭右击菜单显示
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style>
+
+    
+  
 
 
   
@@ -1065,7 +1076,7 @@
 
   
 
-<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/koharu.model.json"},"display":{"position":"right","width":75,"height":150},"mobile":{"show":true},"log":false});</script></body>
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/koharu.model.json"},"display":{"position":"right","width":75,"height":150},"mobile":{"show":false},"log":false});</script></body>
 </html>
 <!-- 页面点击小红心 -->
 <script type="text/javascript" src="/js/src/clicklove.js"></script>

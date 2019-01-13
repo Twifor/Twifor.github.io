@@ -125,7 +125,7 @@
 <meta property="og:site_name" content="Twifor~Liyh">
 <meta property="og:description" content="难度：普及+/提高 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在一个圆形操场的四周摆放N堆石子，现要将石子有次序地合并成一堆。规定每次只能选相邻的2堆合并成新的一堆，并将新的一堆的石子数，记为该次合并的得分。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;试设计出1个算法，计算出将N堆石子">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-09T02:43:07.087Z">
+<meta property="og:updated_time" content="2019-01-13T05:38:47.872Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[洛谷P1008]石子合并">
 <meta name="twitter:description" content="难度：普及+/提高 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在一个圆形操场的四周摆放N堆石子，现要将石子有次序地合并成一堆。规定每次只能选相邻的2堆合并成新的一堆，并将新的一堆的石子数，记为该次合并的得分。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;试设计出1个算法，计算出将N堆石子">
@@ -421,7 +421,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-09 10:43:07" itemprop="dateModified" datetime="2019-01-09T10:43:07+08:00">2019-01-09</time>
+                <time title="修改时间：2019-01-13 13:38:47" itemprop="dateModified" datetime="2019-01-13T13:38:47+08:00">2019-01-13</time>
               
             
           </span>
@@ -493,10 +493,7 @@
 <p>43<br>54</p>
 </blockquote>
 <h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;题目考察线性动态规划。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;与贪心算法不同的是，本题要求只能合并相邻的两堆石子，环形排布又加大了题目难度。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一种思路是将已知的序列首尾相接，从中截取长度为n的子序列，来模拟环形。这是因为在环形结构中，若只合并相邻的两个数，最后必有两个数待合并，从这两个数中间剪环为链，容易知这两者是等价的。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是期初我们并不知从何处剪环，故要将所有情况都考虑到，从每个剪环策略中选取最值即可。在这个思路中，从何处截取序列便是剪环的操作。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假定在一个剪环策略下，令左元素为l，右元素为r。设从x到y的序列合并得分最值为f(x，y)，那么可列出状态转移方程(设value(l，r)表示l到r的石子总和):</p>
-<blockquote>
-<p>f(x，y)=min/max{f(l，k)+f(k+1，r)}+value(l，r)</p>
-</blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其中l≤k&lt;r，并规定f(x，x)=0。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然后再开一个数组记忆化即可。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> n, minAns = <span class="number">1e9</span>, maxAns = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> op[<span class="number">250</span>] = &#123;<span class="number">0</span>&#125;, sum[<span class="number">250</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> vis1[<span class="number">250</span>][<span class="number">250</span>] = &#123;<span class="number">0</span>&#125;, vis2[<span class="number">250</span>][<span class="number">250</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">DP1</span><span class="params">(<span class="keyword">int</span> l, <span class="keyword">int</span> r)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (l == r)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (vis1[l][r] != <span class="number">0</span>)<span class="keyword">return</span> vis1[l][r];</span><br><span class="line">    <span class="keyword">int</span> minn = <span class="number">1e9</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">register</span> <span class="keyword">int</span> i = l; i &lt; r; i++)minn = min(DP1(l, i) + DP1(i + <span class="number">1</span>, r), minn);</span><br><span class="line">    <span class="keyword">return</span> vis1[l][r] = minn + sum[r] - sum[l - <span class="number">1</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">DP2</span><span class="params">(<span class="keyword">int</span> l, <span class="keyword">int</span> r)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (l == r)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (vis2[l][r] != <span class="number">0</span>)<span class="keyword">return</span> vis2[l][r];</span><br><span class="line">    <span class="keyword">int</span> maxn = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">register</span> <span class="keyword">int</span> i = l; i &lt; r; i++)maxn = max(DP2(l, i) + DP2(i + <span class="number">1</span>, r), maxn);</span><br><span class="line">    <span class="keyword">return</span> vis2[l][r] = maxn + sum[r] - sum[l - <span class="number">1</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">register</span> <span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; op[i];</span><br><span class="line">        op[i + n] = op[i];</span><br><span class="line">    &#125;</span><br><span class="line">    sum[<span class="number">1</span>] = op[<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">for</span> (</span><br><span class="line">            <span class="keyword">register</span> <span class="keyword">int</span> i = <span class="number">2</span>;</span><br><span class="line">            i &lt;= <span class="number">2</span> * n;</span><br><span class="line">            i++)</span><br><span class="line">        sum[i] = sum[i - <span class="number">1</span>] + op[i];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">register</span> <span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        minAns = min(minAns, DP1(i, i + n - <span class="number">1</span>));</span><br><span class="line">        maxAns = max(maxAns, DP2(i, i + n - <span class="number">1</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; minAns &lt;&lt; <span class="built_in">endl</span> &lt;&lt; maxAns;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<script type="math/tex; mode=display">f(x，y)=\min/\max\{f(l，k)+f(k+1，r)\}+value(l，r),l \leq k<r</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;规定f(x，x)=0，开一个数组记忆化即可。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> n, minAns = <span class="number">1e9</span>, maxAns = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> op[<span class="number">250</span>] = &#123;<span class="number">0</span>&#125;, sum[<span class="number">250</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> vis1[<span class="number">250</span>][<span class="number">250</span>] = &#123;<span class="number">0</span>&#125;, vis2[<span class="number">250</span>][<span class="number">250</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">DP1</span><span class="params">(<span class="keyword">int</span> l, <span class="keyword">int</span> r)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (l == r)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (vis1[l][r] != <span class="number">0</span>)<span class="keyword">return</span> vis1[l][r];</span><br><span class="line">    <span class="keyword">int</span> minn = <span class="number">1e9</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">register</span> <span class="keyword">int</span> i = l; i &lt; r; i++)minn = min(DP1(l, i) + DP1(i + <span class="number">1</span>, r), minn);</span><br><span class="line">    <span class="keyword">return</span> vis1[l][r] = minn + sum[r] - sum[l - <span class="number">1</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">DP2</span><span class="params">(<span class="keyword">int</span> l, <span class="keyword">int</span> r)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (l == r)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (vis2[l][r] != <span class="number">0</span>)<span class="keyword">return</span> vis2[l][r];</span><br><span class="line">    <span class="keyword">int</span> maxn = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">register</span> <span class="keyword">int</span> i = l; i &lt; r; i++)maxn = max(DP2(l, i) + DP2(i + <span class="number">1</span>, r), maxn);</span><br><span class="line">    <span class="keyword">return</span> vis2[l][r] = maxn + sum[r] - sum[l - <span class="number">1</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">register</span> <span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; op[i];</span><br><span class="line">        op[i + n] = op[i];</span><br><span class="line">    &#125;</span><br><span class="line">    sum[<span class="number">1</span>] = op[<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">for</span> (</span><br><span class="line">            <span class="keyword">register</span> <span class="keyword">int</span> i = <span class="number">2</span>;</span><br><span class="line">            i &lt;= <span class="number">2</span> * n;</span><br><span class="line">            i++)</span><br><span class="line">        sum[i] = sum[i - <span class="number">1</span>] + op[i];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">register</span> <span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        minAns = min(minAns, DP1(i, i + n - <span class="number">1</span>));</span><br><span class="line">        maxAns = max(maxAns, DP2(i, i + n - <span class="number">1</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; minAns &lt;&lt; <span class="built_in">endl</span> &lt;&lt; maxAns;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -623,7 +620,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">49</span>
+                    <span class="site-state-item-count">50</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -972,6 +969,48 @@
   
 
   
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+	  preview: 'none'
+    },
+	messageStyle: 'none',
+	"HTML-CSS": {
+      showMathMenu: false //关闭右击菜单显示
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style>
+
+    
+  
 
 
   
@@ -990,7 +1029,7 @@
 
   
 
-<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/koharu.model.json"},"display":{"position":"right","width":75,"height":150},"mobile":{"show":true},"log":false});</script></body>
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/koharu.model.json"},"display":{"position":"right","width":75,"height":150},"mobile":{"show":false},"log":false});</script></body>
 </html>
 <!-- 页面点击小红心 -->
 <script type="text/javascript" src="/js/src/clicklove.js"></script>

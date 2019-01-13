@@ -118,14 +118,14 @@
 
 
   <meta name="description" content="难度：提高+/省选- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;回到家中的猫猫把三桶鱼全部转移到了她那长方形大池子中，然后开始思考:到底要以何种方法吃鱼呢(猫猫就是这么可爱，吃鱼也要想好吃法 ^_*)。她发现，把大池子视为01矩阵(0表示对应位置无鱼，1表示对应位置有鱼)有助于决定吃鱼策略。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp">
-<meta name="keywords" content="动态规划,提高算法">
+<meta name="keywords" content="提高算法,动态规划">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[洛谷P1736]创意吃鱼法">
 <meta property="og:url" content="https://twifor.github.io/2019/01/09/洛谷P1736-创意吃鱼法/index.html">
 <meta property="og:site_name" content="Twifor~Liyh">
 <meta property="og:description" content="难度：提高+/省选- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;回到家中的猫猫把三桶鱼全部转移到了她那长方形大池子中，然后开始思考:到底要以何种方法吃鱼呢(猫猫就是这么可爱，吃鱼也要想好吃法 ^_*)。她发现，把大池子视为01矩阵(0表示对应位置无鱼，1表示对应位置有鱼)有助于决定吃鱼策略。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-09T04:19:34.165Z">
+<meta property="og:updated_time" content="2019-01-13T06:23:31.064Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[洛谷P1736]创意吃鱼法">
 <meta name="twitter:description" content="难度：提高+/省选- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;回到家中的猫猫把三桶鱼全部转移到了她那长方形大池子中，然后开始思考:到底要以何种方法吃鱼呢(猫猫就是这么可爱，吃鱼也要想好吃法 ^_*)。她发现，把大池子视为01矩阵(0表示对应位置无鱼，1表示对应位置有鱼)有助于决定吃鱼策略。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp">
@@ -421,7 +421,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-09 12:19:34" itemprop="dateModified" datetime="2019-01-09T12:19:34+08:00">2019-01-09</time>
+                <time title="修改时间：2019-01-13 14:23:31" itemprop="dateModified" datetime="2019-01-13T14:23:31+08:00">2019-01-13</time>
               
             
           </span>
@@ -493,10 +493,8 @@
 <p>3</p>
 </blockquote>
 <h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考察二维DP。该题目与本材料第一题最大正方形有类似之处。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;容易发现，从左下角开始向右上方吸和从右上角开始向左下方吸本质是一样的。我们不妨强制要求只能向上吸，这样吸的方向就只有两种:向左上方和向右上方。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;规定dp(x，y，z)为从坐标(x，y)开始向z方向吸到的鱼的最大数目。这里z的定义是:向左上方为0，向右上方为1。dp全初始化为0。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是这样很难进行状态转移，这是因为在方阵中只有对角线有鱼时才可以吸。如果没有这个限制，状态转移方程很容易列出。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于加上了限制，我们需要三个辅助数组来帮助完成状态转移。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;取R1(x，y)表示坐标(x，y)的左方离它最近的鱼与其的距离;R2(x，y)表示坐标(x，y)的右方离它最近的鱼与其的距离;C(x，y)表示坐标(x，y)的上方离它最近的鱼与其的距离。我们不需要与下方鱼的距离，这是因为我们已经强制规定只能向上吸，下方的鱼对我们求解没有意义。这里的三个数组都在坐标(x，y)有鱼时才有定义。在某个方向上没有鱼时，直接赋上与边界的距离即可。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样的话，状态转移方程就可以列出了，在坐标(x，y)有鱼时，有如下递推式:</p>
-<blockquote>
-<p>dp(x，y，0)=min{R1(x，y)，C(x，y)，dp(x-1，y-1，0)+1}<br>dp(x，y，1)=min{R2(x，y)，C(x，y)，dp(x-1，y+1，1)+1}</p>
-</blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;坐标(x，y)没有鱼时，直接赋值为0。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从所有dp值中找到最大值即为答案。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;示例代码的数组记录的是鱼的坐标值，在递推时现算出距离。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> dp[<span class="number">2505</span>][<span class="number">2505</span>][<span class="number">2</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> n, m;</span><br><span class="line"><span class="keyword">short</span> <span class="keyword">int</span> op[<span class="number">2501</span>][<span class="number">2501</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">short</span> <span class="keyword">int</span> sumR_1[<span class="number">2505</span>][<span class="number">2505</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">short</span> <span class="keyword">int</span> sumR_2[<span class="number">2505</span>][<span class="number">2505</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">short</span> <span class="keyword">int</span> sumC[<span class="number">2505</span>][<span class="number">2505</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">register</span> <span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> temp = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">register</span> <span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= m; j++) &#123;</span><br><span class="line">            <span class="built_in">cin</span> &gt;&gt; op[i][j];</span><br><span class="line">            <span class="keyword">if</span> (op[i][j])sumR_2[i][temp] = j, sumR_1[i][j] = temp, temp = j;</span><br><span class="line">        &#125;</span><br><span class="line">        sumR_2[i][temp] = <span class="number">2501</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">register</span> <span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= m; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> temp = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">register</span> <span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; j++)</span><br><span class="line">            <span class="keyword">if</span> (op[j][i])sumC[i][j] = temp, temp = j;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">register</span> <span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">register</span> <span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= m; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!op[i][j])<span class="keyword">continue</span>;</span><br><span class="line">            dp[i][j][<span class="number">0</span>] = min(min(j - sumR_1[i][j], i - sumC[j][i]), </span><br><span class="line">dp[i - <span class="number">1</span>][j - <span class="number">1</span>][<span class="number">0</span>] + <span class="number">1</span>);</span><br><span class="line">            dp[i][j][<span class="number">1</span>] = min(min(sumR_2[i][j] - j, i - sumC[j][i]), </span><br><span class="line">dp[i - <span class="number">1</span>][j + <span class="number">1</span>][<span class="number">1</span>] + <span class="number">1</span>);</span><br><span class="line">            ans = max(ans, max(dp[i][j][<span class="number">0</span>], dp[i][j][<span class="number">1</span>]));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; ans &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<script type="math/tex; mode=display">dp(x，y，0)=\min\{R1(x，y)，C(x，y)，dp(x-1，y-1，0)+1\}\\
+dp(x，y，1)=\min\{R2(x，y)，C(x，y)，dp(x-1，y+1，1)+1\}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;坐标(x，y)没有鱼时，直接赋值为0。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从所有dp值中找到最大值即为答案。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;示例代码的数组记录的是鱼的坐标值，在递推时现算出距离。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> dp[<span class="number">2505</span>][<span class="number">2505</span>][<span class="number">2</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> n, m;</span><br><span class="line"><span class="keyword">short</span> <span class="keyword">int</span> op[<span class="number">2501</span>][<span class="number">2501</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">short</span> <span class="keyword">int</span> sumR_1[<span class="number">2505</span>][<span class="number">2505</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">short</span> <span class="keyword">int</span> sumR_2[<span class="number">2505</span>][<span class="number">2505</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">short</span> <span class="keyword">int</span> sumC[<span class="number">2505</span>][<span class="number">2505</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">register</span> <span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> temp = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">register</span> <span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= m; j++) &#123;</span><br><span class="line">            <span class="built_in">cin</span> &gt;&gt; op[i][j];</span><br><span class="line">            <span class="keyword">if</span> (op[i][j])sumR_2[i][temp] = j, sumR_1[i][j] = temp, temp = j;</span><br><span class="line">        &#125;</span><br><span class="line">        sumR_2[i][temp] = <span class="number">2501</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">register</span> <span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= m; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> temp = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">register</span> <span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; j++)</span><br><span class="line">            <span class="keyword">if</span> (op[j][i])sumC[i][j] = temp, temp = j;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">register</span> <span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">register</span> <span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= m; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!op[i][j])<span class="keyword">continue</span>;</span><br><span class="line">            dp[i][j][<span class="number">0</span>] = min(min(j - sumR_1[i][j], i - sumC[j][i]), </span><br><span class="line">dp[i - <span class="number">1</span>][j - <span class="number">1</span>][<span class="number">0</span>] + <span class="number">1</span>);</span><br><span class="line">            dp[i][j][<span class="number">1</span>] = min(min(sumR_2[i][j] - j, i - sumC[j][i]), </span><br><span class="line">dp[i - <span class="number">1</span>][j + <span class="number">1</span>][<span class="number">1</span>] + <span class="number">1</span>);</span><br><span class="line">            ans = max(ans, max(dp[i][j][<span class="number">0</span>], dp[i][j][<span class="number">1</span>]));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; ans &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -520,9 +518,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/动态规划/" rel="tag"><i class="fa fa-tag"></i>动态规划</a>
-          
             <a href="/tags/提高算法/" rel="tag"><i class="fa fa-tag"></i>提高算法</a>
+          
+            <a href="/tags/动态规划/" rel="tag"><i class="fa fa-tag"></i>动态规划</a>
           
         </div>
       
@@ -623,7 +621,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">49</span>
+                    <span class="site-state-item-count">50</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -972,6 +970,48 @@
   
 
   
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+	  preview: 'none'
+    },
+	messageStyle: 'none',
+	"HTML-CSS": {
+      showMathMenu: false //关闭右击菜单显示
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style>
+
+    
+  
 
 
   
@@ -990,7 +1030,7 @@
 
   
 
-<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/koharu.model.json"},"display":{"position":"right","width":75,"height":150},"mobile":{"show":true},"log":false});</script></body>
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/koharu.model.json"},"display":{"position":"right","width":75,"height":150},"mobile":{"show":false},"log":false});</script></body>
 </html>
 <!-- 页面点击小红心 -->
 <script type="text/javascript" src="/js/src/clicklove.js"></script>

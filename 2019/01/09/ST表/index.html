@@ -125,7 +125,7 @@
 <meta property="og:site_name" content="Twifor~Liyh">
 <meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;ST表是一种求区间最值的高效数据结构，不支持动态维护，建表时间复杂度O(nlogn)，查询复杂度O(1)。在不需要修改原数据的情况下ST表要比线段树更简洁，但在需要修改原数据时只能用线段树。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-09T10:31:09.556Z">
+<meta property="og:updated_time" content="2019-01-13T06:52:25.313Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ST表">
 <meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;ST表是一种求区间最值的高效数据结构，不支持动态维护，建表时间复杂度O(nlogn)，查询复杂度O(1)。在不需要修改原数据的情况下ST表要比线段树更简洁，但在需要修改原数据时只能用线段树。">
@@ -421,7 +421,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-09 18:31:09" itemprop="dateModified" datetime="2019-01-09T18:31:09+08:00">2019-01-09</time>
+                <time title="修改时间：2019-01-13 14:52:25" itemprop="dateModified" datetime="2019-01-13T14:52:25+08:00">2019-01-13</time>
               
             
           </span>
@@ -483,15 +483,10 @@
 
       
         <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ST表是一种求区间最值的高效数据结构，不支持动态维护，建表时间复杂度O(nlogn)，查询复杂度O(1)。在不需要修改原数据的情况下ST表要比线段树更简洁，但在需要修改原数据时只能用线段树。<br><a id="more"></a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ST表可以定义为二维数组ST[][]，其中ST[i][j]表示从第j的元素开始的长度为2i的区间中的最值，也就是区间[j，j+2<sup>i-1</sup>]中的最值。这个表可以用DP思想建立。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;建表前，我们需要两个辅助数组log[]与bin[]。其中log[i]储存使2<sup>k</sup>&lt;=i的整数k的最大值;bin[i]储存2<sup>i</sup>。这两个数组都可以通过递推实现:</p>
-<blockquote>
-<p>log[0]=-1，log[x]=log[x/2]+1<br>bin[0]=1，bin[x]=bin[x/2]*2</p>
-</blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log数组大小达到数据量n，bin达到logn。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;辅助数组构建完毕后开始建ST表。首先对ST表首行初始化，即ST[0][x]。它们都表示从x号元素开始长度为1的区间的最值，显然就是该元素本身。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;此外ST表中有递推公式:</p>
-<blockquote>
-<p>ST[i][x]=max/min{ST[i-1][x]，ST[i-1][x+bin[i-1]]}</p>
-</blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;即将区间分成两半，求取其中的最值，这里注意x+bin[i]-1&lt;=n。递推后即可完成建表。</p>
-<p>下面探讨查询操作。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其实我们也可以用将区间平均拆分的分治思想来求给定区间的最值，但是给定区间长度不一定就是2的方幂，于是我们需要其它分治方法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意到有不等式2<sup>log[l]</sup>*2&gt;l。这是显然的。这个不等式启示我们可以将长度为l的区间拆分成两个长度为2<sup>log[l]</sup>的区间，这两个区间已然覆盖了区间所有的值。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;因此区间[a，b]的最值即为max/min{ST[log[l]][a]，ST[log[l]][b-bin[log[l]]+1]}<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里l=b-a+1，为区间长度。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> ST[<span class="number">20</span>][<span class="number">10000</span>];<span class="comment">//储存ST表数据</span></span><br><span class="line"><span class="keyword">int</span> op[<span class="number">10000</span>], n;<span class="comment">//储存区间数据</span></span><br><span class="line"><span class="keyword">int</span> <span class="built_in">log</span>[<span class="number">10000</span>], bin[<span class="number">20</span>];<span class="comment">//储存log值以及指数值</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; op[i];</span><br><span class="line">        ST[<span class="number">0</span>][i] = op[i];</span><br><span class="line">    &#125;<span class="comment">//第一行初始化</span></span><br><span class="line">    <span class="built_in">log</span>[<span class="number">0</span>] = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)<span class="built_in">log</span>[i] = <span class="built_in">log</span>[i / <span class="number">2</span>] + <span class="number">1</span>;<span class="comment">//log初始化</span></span><br><span class="line">    bin[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; <span class="number">20</span>; i++)bin[i] = bin[i - <span class="number">1</span>] * <span class="number">2</span>;<span class="comment">//bin初始化</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; <span class="number">20</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (j + bin[i] - <span class="number">1</span> &lt;= n) &#123;</span><br><span class="line">                ST[i][j] = min(ST[i - <span class="number">1</span>][j], ST[i - <span class="number">1</span>][j + bin[i - <span class="number">1</span>]]);<span class="comment">//递推建表,DP思想</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> k;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; k;<span class="comment">//查询k次</span></span><br><span class="line">    <span class="keyword">while</span> (k-- &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">int</span> l, r;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; l &gt;&gt; r;</span><br><span class="line">        <span class="keyword">int</span> t = <span class="built_in">log</span>[r - l + <span class="number">1</span>];</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; min(ST[t][l], ST[t][r - bin[t] + <span class="number">1</span>]) &lt;&lt; <span class="built_in">endl</span>;<span class="comment">//输出查询结果</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<script type="math/tex; mode=display">log[0]=-1，log[x]=log[x/2]+1\\
+bin[0]=1，bin[x]=bin[x/2]*2</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log数组大小达到数据量n，bin达到logn。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;辅助数组构建完毕后开始建ST表。首先对ST表首行初始化，即ST[0][x]。它们都表示从x号元素开始长度为1的区间的最值，显然就是该元素本身。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;此外ST表中有递推公式:</p>
+<script type="math/tex; mode=display">ST[i][x]=\max/\min\{ST[i-1][x]，ST[i-1][x+bin[i-1]]\}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;即将区间分成两半，求取其中的最值，这里注意x+bin[i]-1≤n。递推后即可完成建表。</p>
+<p>下面探讨查询操作。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其实我们也可以用将区间平均拆分的分治思想来求给定区间的最值，但是给定区间长度不一定就是2的方幂，于是我们需要其它分治方法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意到有不等式2<sup>log[l]</sup>*2&gt;l。这是显然的。这个不等式启示我们可以将长度为l的区间拆分成两个长度为2<sup>log[l]</sup>的区间，这两个区间已然覆盖了区间所有的值。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;因此区间[a，b]的最值即为$\max/\min\{ST[log[l]][a]，ST[log[l]][b-bin[log[l]]+1]\}$。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里l=b-a+1，为区间长度。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> ST[<span class="number">20</span>][<span class="number">10000</span>];<span class="comment">//储存ST表数据</span></span><br><span class="line"><span class="keyword">int</span> op[<span class="number">10000</span>], n;<span class="comment">//储存区间数据</span></span><br><span class="line"><span class="keyword">int</span> <span class="built_in">log</span>[<span class="number">10000</span>], bin[<span class="number">20</span>];<span class="comment">//储存log值以及指数值</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; op[i];</span><br><span class="line">        ST[<span class="number">0</span>][i] = op[i];</span><br><span class="line">    &#125;<span class="comment">//第一行初始化</span></span><br><span class="line">    <span class="built_in">log</span>[<span class="number">0</span>] = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)<span class="built_in">log</span>[i] = <span class="built_in">log</span>[i / <span class="number">2</span>] + <span class="number">1</span>;<span class="comment">//log初始化</span></span><br><span class="line">    bin[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; <span class="number">20</span>; i++)bin[i] = bin[i - <span class="number">1</span>] * <span class="number">2</span>;<span class="comment">//bin初始化</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; <span class="number">20</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (j + bin[i] - <span class="number">1</span> &lt;= n) &#123;</span><br><span class="line">                ST[i][j] = min(ST[i - <span class="number">1</span>][j], ST[i - <span class="number">1</span>][j + bin[i - <span class="number">1</span>]]);<span class="comment">//递推建表,DP思想</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> k;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; k;<span class="comment">//查询k次</span></span><br><span class="line">    <span class="keyword">while</span> (k-- &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">int</span> l, r;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; l &gt;&gt; r;</span><br><span class="line">        <span class="keyword">int</span> t = <span class="built_in">log</span>[r - l + <span class="number">1</span>];</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; min(ST[t][l], ST[t][r - bin[t] + <span class="number">1</span>]) &lt;&lt; <span class="built_in">endl</span>;<span class="comment">//输出查询结果</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -613,7 +608,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">49</span>
+                    <span class="site-state-item-count">50</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -945,6 +940,48 @@
   
 
   
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+	  preview: 'none'
+    },
+	messageStyle: 'none',
+	"HTML-CSS": {
+      showMathMenu: false //关闭右击菜单显示
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style>
+
+    
+  
 
 
   
@@ -963,7 +1000,7 @@
 
   
 
-<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/koharu.model.json"},"display":{"position":"right","width":75,"height":150},"mobile":{"show":true},"log":false});</script></body>
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/koharu.model.json"},"display":{"position":"right","width":75,"height":150},"mobile":{"show":false},"log":false});</script></body>
 </html>
 <!-- 页面点击小红心 -->
 <script type="text/javascript" src="/js/src/clicklove.js"></script>

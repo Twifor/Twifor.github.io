@@ -125,7 +125,7 @@
 <meta property="og:site_name" content="Twifor~Liyh">
 <meta property="og:description" content="难度：普及+/提高 题目背景&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;由于你的帮助，火星只遭受了最小的损失。但gw懒得重建家园了，就造了一艘飞船飞向遥远的earth星。不过飞船飞到一半，gw发现了一个很严重的问题:肚子饿了~&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;gw还是会做饭的，于是拿出">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-09T02:50:46.729Z">
+<meta property="og:updated_time" content="2019-01-13T05:43:34.935Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[洛谷P1417]烹调方案">
 <meta name="twitter:description" content="难度：普及+/提高 题目背景&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;由于你的帮助，火星只遭受了最小的损失。但gw懒得重建家园了，就造了一艘飞船飞向遥远的earth星。不过飞船飞到一半，gw发现了一个很严重的问题:肚子饿了~&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;gw还是会做饭的，于是拿出">
@@ -421,7 +421,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-09 10:50:46" itemprop="dateModified" datetime="2019-01-09T10:50:46+08:00">2019-01-09</time>
+                <time title="修改时间：2019-01-13 13:43:34" itemprop="dateModified" datetime="2019-01-13T13:43:34+08:00">2019-01-13</time>
               
             
           </span>
@@ -495,18 +495,9 @@
 <p>408</p>
 </blockquote>
 <h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;题目考察线性动态规划，也属于基本的01背包问题，但本题相比背包问题更能体现出问题的本质。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在经典的01背包问题即第二题采药中，物品的顺序是不影响最终结果的。这个结论显然，因为物品无论先加入还是后加入，它们占据背包的空间不变，价值也不变，对其它物品也不会造成实质上的影响。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但本题不同，本题中物品的价值随着时间的增长而减小，所以对于两个物品，将哪一个放到前面会直接影响结果。也就是说只有把B放于A前或反之时才有最优解。我们在DP时必须遵从这个会出现最优解的顺序来加入物品，即要先对物品进行排序。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是，排序的标准是什么?<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考虑两个物品，假定在时刻p开始加入背包，则将第一个物品先放入随机放入第二个时的价值为:</p>
-<blockquote>
-<p>v<sub>1</sub>=a<sub>1</sub>-(p+c<sub>1</sub>-1)b<sub>1</sub>+a<sub>2</sub>-(p+c<sub>1</sub>+c<sub>2</sub>-1)b<sub>2</sub></p>
-</blockquote>
-<p>反之时总价值为:</p>
-<blockquote>
-<p>v<sub>2</sub>=a<sub>2</sub>-(p+c<sub>2</sub>-1)b<sub>2</sub>+a<sub>1</sub>-(p+c<sub>2</sub>+c<sub>1</sub>-1)b<sub>1</sub></p>
-</blockquote>
-<p>令v<sub>1</sub>&lt;v<sub>2</sub>，进行运算，得到:</p>
-<blockquote>
-<p>c<sub>2</sub>b<sub>1</sub>&lt;c<sub>1</sub>b<sub>2</sub></p>
-</blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个不等式是本题的关键，它说明:只要有上述不等式成立，第二个物品较第一个物品先放入背包会有最优解。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为了最大程度利用时间，没有哪一时刻是空闲的，也就是说当一个物品放置结束时(即烹饪完一个食材)立即开始下一个物品的放入。倘若任何两个相邻放置的物品都符合上述的不等式，容易知这时的物品放入顺序会出现最优解。下面是简单证明:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;倘若物品顺序不符合这个排序规则时有最优解，一定会出现两个相邻的物品违反上述不等式的情况，这时由上面的推导过程知将两个物品放入顺序调换后会得到更多的价值总和，这与最优解矛盾。故仅有按上述排序规则排出的放入顺序才会有最优解。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;按照这个原则排序后再按照01背包问题的DP思路进行即可。注意这里的状态转移方程与01背包不完全相同。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> t, n;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node</span> &#123;</span></span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> a, b, c;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">bool</span> <span class="keyword">operator</span>&lt;(node p) &#123;</span><br><span class="line">        <span class="keyword">return</span> c * p.b &lt; b * p.c;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; op[<span class="number">51</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> vis[<span class="number">60</span>][<span class="number">100001</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; t &gt;&gt; n;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)<span class="built_in">cin</span> &gt;&gt; op[i].a;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)<span class="built_in">cin</span> &gt;&gt; op[i].b;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)<span class="built_in">cin</span> &gt;&gt; op[i].c;</span><br><span class="line">    sort(op + <span class="number">1</span>, op + n + <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">register</span> <span class="keyword">int</span> i = n; i &gt;= <span class="number">1</span>; i--) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">register</span> <span class="keyword">long</span> <span class="keyword">long</span> j = t; j &gt;= <span class="number">1</span>; j--) &#123;</span><br><span class="line">            <span class="keyword">if</span> (op[i].c + j - <span class="number">1</span> &gt; t)vis[i][j] = vis[i + <span class="number">1</span>][j];</span><br><span class="line">            <span class="keyword">else</span> vis[i][j] = max(op[i].a - (j + op[i].c - <span class="number">1</span>) * op[i].b + vis[i + <span class="number">1</span>][j + op[i].c], vis[i + <span class="number">1</span>][j]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; vis[<span class="number">1</span>][<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<script type="math/tex; mode=display">v_1=a_1-(p+c_1-1)b_1+a_2-(p+c_1+c_2-1)b_2</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;反之时总价值为:</p>
+<script type="math/tex; mode=display">v_2=a_2-(p+c_2-1)b_2+a_1-(p+c_2+c_1-1)b_1</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;令$v_1&lt;v_2$，进行运算，得到:</p>
+<script type="math/tex; mode=display">c_2b_1<c_1b_2</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个不等式是本题的关键，它说明:只要有上述不等式成立，第二个物品较第一个物品先放入背包会有最优解。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为了最大程度利用时间，没有哪一时刻是空闲的，也就是说当一个物品放置结束时(即烹饪完一个食材)立即开始下一个物品的放入。倘若任何两个相邻放置的物品都符合上述的不等式，容易知这时的物品放入顺序会出现最优解。下面是简单证明:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;倘若物品顺序不符合这个排序规则时有最优解，一定会出现两个相邻的物品违反上述不等式的情况，这时由上面的推导过程知将两个物品放入顺序调换后会得到更多的价值总和，这与最优解矛盾。故仅有按上述排序规则排出的放入顺序才会有最优解。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;按照这个原则排序后再按照01背包问题的DP思路进行即可。注意这里的状态转移方程与01背包不完全相同。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> t, n;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node</span> &#123;</span></span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> a, b, c;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">bool</span> <span class="keyword">operator</span>&lt;(node p) &#123;</span><br><span class="line">        <span class="keyword">return</span> c * p.b &lt; b * p.c;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; op[<span class="number">51</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> vis[<span class="number">60</span>][<span class="number">100001</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; t &gt;&gt; n;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)<span class="built_in">cin</span> &gt;&gt; op[i].a;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)<span class="built_in">cin</span> &gt;&gt; op[i].b;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)<span class="built_in">cin</span> &gt;&gt; op[i].c;</span><br><span class="line">    sort(op + <span class="number">1</span>, op + n + <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">register</span> <span class="keyword">int</span> i = n; i &gt;= <span class="number">1</span>; i--) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">register</span> <span class="keyword">long</span> <span class="keyword">long</span> j = t; j &gt;= <span class="number">1</span>; j--) &#123;</span><br><span class="line">            <span class="keyword">if</span> (op[i].c + j - <span class="number">1</span> &gt; t)vis[i][j] = vis[i + <span class="number">1</span>][j];</span><br><span class="line">            <span class="keyword">else</span> vis[i][j] = max(op[i].a - (j + op[i].c - <span class="number">1</span>) * op[i].b + vis[i + <span class="number">1</span>][j + op[i].c], vis[i + <span class="number">1</span>][j]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; vis[<span class="number">1</span>][<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -635,7 +626,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">49</span>
+                    <span class="site-state-item-count">50</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -984,6 +975,48 @@
   
 
   
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+	  preview: 'none'
+    },
+	messageStyle: 'none',
+	"HTML-CSS": {
+      showMathMenu: false //关闭右击菜单显示
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style>
+
+    
+  
 
 
   
@@ -1002,7 +1035,7 @@
 
   
 
-<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/koharu.model.json"},"display":{"position":"right","width":75,"height":150},"mobile":{"show":true},"log":false});</script></body>
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/koharu.model.json"},"display":{"position":"right","width":75,"height":150},"mobile":{"show":false},"log":false});</script></body>
 </html>
 <!-- 页面点击小红心 -->
 <script type="text/javascript" src="/js/src/clicklove.js"></script>

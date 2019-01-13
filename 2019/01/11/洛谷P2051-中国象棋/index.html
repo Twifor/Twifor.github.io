@@ -118,14 +118,14 @@
 
 
   <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;第一次不看任何解析A出的省选难度题，留作纪念。  难度：省选/NOI- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;这次小可可想解决的难题和中国象棋有关，在一个N行M列的棋盘上，让你放若干个炮（可以是0个），使得没有一个炮可以攻击到另一个炮，请">
-<meta name="keywords" content="动态规划,提高算法">
+<meta name="keywords" content="提高算法,动态规划">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[洛谷P2051]中国象棋">
 <meta property="og:url" content="https://twifor.github.io/2019/01/11/洛谷P2051-中国象棋/index.html">
 <meta property="og:site_name" content="Twifor~Liyh">
 <meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;第一次不看任何解析A出的省选难度题，留作纪念。  难度：省选/NOI- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;这次小可可想解决的难题和中国象棋有关，在一个N行M列的棋盘上，让你放若干个炮（可以是0个），使得没有一个炮可以攻击到另一个炮，请">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-11T07:17:19.324Z">
+<meta property="og:updated_time" content="2019-01-13T07:43:08.084Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[洛谷P2051]中国象棋">
 <meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;第一次不看任何解析A出的省选难度题，留作纪念。  难度：省选/NOI- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;这次小可可想解决的难题和中国象棋有关，在一个N行M列的棋盘上，让你放若干个炮（可以是0个），使得没有一个炮可以攻击到另一个炮，请">
@@ -421,7 +421,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-11 15:17:19" itemprop="dateModified" datetime="2019-01-11T15:17:19+08:00">2019-01-11</time>
+                <time title="修改时间：2019-01-13 15:43:08" itemprop="dateModified" datetime="2019-01-13T15:43:08+08:00">2019-01-13</time>
               
             
           </span>
@@ -502,18 +502,9 @@
 <li>P(2)：第一行有两个棋子</li>
 </ul>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;只有这三种情况，因为每一行一列不可能有三个及以上数目的棋子。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于t=0的情况很容易进行状态转移，这是因为首行没有棋子，不会对下面的棋子选取产生任何影响。</p>
-<blockquote>
-<p>dp(x，y，0)=dp(x-1，y，0)+dp(x-1，y，1)+dp(x-1，y，2)</p>
-</blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t=1的情况就复杂很多。注意到第一行仅有且必须有一个棋子，它所在的一列的后x-1行可能有0个或1个棋子。我们可以最这两个子情况分别讨论，方案总数即是它们的和。当后x-1行没有棋子时，删去这一列和首行，得到一个x-1行y-1列的棋盘。这时我们发现首行的棋子对这个x-1行y-1列的棋盘棋子选取没有任何影响，方案总数即为dp(x-1，y-1，0)+dp(x-1，y-1，1)+dp(x-1，y-1，2)，再乘上y（被删去的一列有y种选法）就是第一个子情况的方案数。当后x-1行有一个棋子时，删去首行并将这一列拿到最左端，将这个棋盘（看作矩阵）转置，这是一个y行x-1列的棋盘且首行仅有一个棋子，故方案数即为dp(y，x-1，1)，再乘上y（理解同上）就是第二个子情况的方案数。于是有：</p>
-<blockquote>
-<p>dp(x，y，1)=(dp(x-1，y-1，0)+dp(x-1，y-1，1)+dp(x-1，y-1，2)+dp(y，x-1，1))*y</p>
-</blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最后再来看t=2的情况。我们仍然可以这种情况归结为三种子情况：两个棋子下面均没有其他棋子、一个棋子下面有一个棋子但另一个没有、两个棋子下面均有一个棋子。将它们三个的值加起来即可。第一种子情况理解与t=1相同，删去这两列，得到一个x-1行y-2列的棋盘，方案数为dp(x-1，y-2，0)+dp(x-1，y-2，1)+dp(x-1，y-2，2)，还需要乘上y*(y-1)/2（两个空列的组合数）。第二个子情况理解仍然同t=1时，删去没有棋子的那一列，将有一个棋子的一列拿到最左端，转置后得到一个y-1行x-1列的棋盘且满足P(1)性质，方案数即为dp(y-1，x-1，1)，需要再乘上y*(y-1)（乘一个排列数，将这两列作排列）。最后一种子情况很复杂，仍然需要划分为两种情况：下面的两个棋子不在同一行、下面的两个棋子在同一行。前者可以删去首行，再将两列合并，移到最左边，转置后得到一个y-1行x-1列并且满足性质P(2)的棋盘，方案数即为dp(y-1，x-1，2)，再乘上y*(y-1)即可。后者从棋盘中合并首行和两个棋子所在的一行，移到最顶端，这时下面的x-2行y列的棋盘在首行两个棋子所在的列不应有棋子，也就是两个空列。我们删去这两个空列，得到一个x-2行y-2列的棋盘，它的棋子选取没有受到影响，方案数为dp(x-2，y-2，0)+dp(x-2，y-2，1)+dp(x-2，y-2，2)，再乘上y*(y-1)/2（这里是一个组合数，是两个空列的选取情况），再乘上x-1（下面棋子所在行的情况）就是后一种情况的答案。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;因此t=2时的状态转移方程为：</p>
-<blockquote>
-<p>dp(x，y，2)=(dp(x-1，y-2，0)+dp(x-1，y-2，1)+dp(x-1，y-2，2))*y*(y-1)/2+dp(y-1，x-1，1)*y*(y-1)+(dp(x-2，y-2，0)+dp(x-2，y-2，1)+dp(x-2，y-2，2))*y*(y-1)/2*(x-1)</p>
-</blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意边界处理和取模，递推即可。答案即为dp(n，m，0)+dp(n，m，1)+dp(n，m，2)对9999973的模。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX 101</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MOD 9999973</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> dp[MAX][MAX][<span class="number">3</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> n, m;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">long</span> <span class="keyword">long</span> <span class="title">DP</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y, <span class="keyword">int</span> t)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="number">0</span> || y == <span class="number">0</span>)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (t == <span class="number">0</span>)<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (t == <span class="number">1</span>)<span class="keyword">return</span> y;</span><br><span class="line">        <span class="keyword">if</span> (t == <span class="number">2</span>)<span class="keyword">return</span> y * (y - <span class="number">1</span>) / <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (y == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (t == <span class="number">0</span>)<span class="keyword">return</span> (DP(x - <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>) + DP(x - <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>) + DP(x - <span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>)) % MOD;</span><br><span class="line">        <span class="keyword">if</span> (t == <span class="number">1</span>)<span class="keyword">return</span> x;</span><br><span class="line">        <span class="keyword">if</span> (t == <span class="number">2</span>)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (t == <span class="number">2</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (x == <span class="number">2</span>)<span class="keyword">return</span> y * (y - <span class="number">1</span>) / <span class="number">2</span> * (y * y + y + <span class="number">2</span>) / <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">if</span> (y == <span class="number">2</span>)<span class="keyword">return</span> x * x;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//上面是边界处理</span></span><br><span class="line">    <span class="keyword">if</span> (dp[x][y][t] &gt;= <span class="number">0</span>)<span class="keyword">return</span> dp[x][y][t];<span class="comment">//记忆化</span></span><br><span class="line">    <span class="comment">//下面是状态转移，t=2时方程太长，分开计算</span></span><br><span class="line">    <span class="keyword">if</span> (t == <span class="number">0</span>)<span class="keyword">return</span> dp[x][y][t] = (DP(x - <span class="number">1</span>, y, <span class="number">0</span>) + DP(x - <span class="number">1</span>, y, <span class="number">1</span>) + DP(x - <span class="number">1</span>, y, <span class="number">2</span>)) % MOD;</span><br><span class="line">    <span class="keyword">if</span> (t == <span class="number">1</span>)<span class="keyword">return</span> dp[x][y][t] = ((DP(x - <span class="number">1</span>, y - <span class="number">1</span>, <span class="number">0</span>) + DP(x - <span class="number">1</span>, y - <span class="number">1</span>, <span class="number">1</span>) + DP(x - <span class="number">1</span>, y - <span class="number">1</span>, <span class="number">2</span>)) % MOD + DP(y, x - <span class="number">1</span>, <span class="number">1</span>)) * y % MOD;</span><br><span class="line">    <span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">    ans += (DP(x - <span class="number">1</span>, y - <span class="number">2</span>, <span class="number">0</span>) + DP(x - <span class="number">1</span>, y - <span class="number">2</span>, <span class="number">1</span>) + DP(x - <span class="number">1</span>, y - <span class="number">2</span>, <span class="number">2</span>)) * y * (y - <span class="number">1</span>) / <span class="number">2</span> % MOD;</span><br><span class="line">    ans += DP(y - <span class="number">1</span>, x - <span class="number">1</span>, <span class="number">1</span>) * y * (y - <span class="number">1</span>) % MOD;</span><br><span class="line">    ans %= MOD;</span><br><span class="line">    ans += DP(y - <span class="number">1</span>, x - <span class="number">1</span>, <span class="number">2</span>) * y * (y - <span class="number">1</span>) % MOD + (DP(x - <span class="number">2</span>, y - <span class="number">2</span>, <span class="number">0</span>) + DP(x - <span class="number">2</span>, y - <span class="number">2</span>, <span class="number">1</span>) + DP(x - <span class="number">2</span>, y - <span class="number">2</span>, <span class="number">2</span>)) % MOD * y * (y - <span class="number">1</span>) / <span class="number">2</span> * (x - <span class="number">1</span>) % MOD;</span><br><span class="line">    <span class="keyword">return</span> dp[x][y][t] = ans % MOD;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m;</span><br><span class="line">    <span class="built_in">memset</span>(dp, <span class="number">-1</span>, <span class="keyword">sizeof</span>(dp));</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; (DP(n, m, <span class="number">0</span>) + DP(n, m, <span class="number">1</span>) + DP(n, m, <span class="number">2</span>)) % MOD &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<script type="math/tex; mode=display">dp(x，y，0)=dp(x-1，y，0)+dp(x-1，y，1)+dp(x-1，y，2)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t=1的情况就复杂很多。注意到第一行仅有且必须有一个棋子，它所在的一列的后x-1行可能有0个或1个棋子。我们可以最这两个子情况分别讨论，方案总数即是它们的和。当后x-1行没有棋子时，删去这一列和首行，得到一个x-1行y-1列的棋盘。这时我们发现首行的棋子对这个x-1行y-1列的棋盘棋子选取没有任何影响，方案总数即为dp(x-1，y-1，0)+dp(x-1，y-1，1)+dp(x-1，y-1，2)，再乘上y（被删去的一列有y种选法）就是第一个子情况的方案数。当后x-1行有一个棋子时，删去首行并将这一列拿到最左端，将这个棋盘（看作矩阵）转置，这是一个y行x-1列的棋盘且首行仅有一个棋子，故方案数即为dp(y，x-1，1)，再乘上y（理解同上）就是第二个子情况的方案数。于是有：</p>
+<script type="math/tex; mode=display">dp(x，y，1)=(dp(x-1，y-1，0)+dp(x-1，y-1，1)+dp(x-1，y-1，2)+dp(y，x-1，1))*y</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最后再来看t=2的情况。我们仍然可以这种情况归结为三种子情况：两个棋子下面均没有其他棋子、一个棋子下面有一个棋子但另一个没有、两个棋子下面均有一个棋子。将它们三个的值加起来即可。第一种子情况理解与t=1相同，删去这两列，得到一个x-1行y-2列的棋盘，方案数为dp(x-1，y-2，0)+dp(x-1，y-2，1)+dp(x-1，y-2，2)，还需要乘上y*(y-1)/2（两个空列的组合数）。第二个子情况理解仍然同t=1时，删去没有棋子的那一列，将有一个棋子的一列拿到最左端，转置后得到一个y-1行x-1列的棋盘且满足P(1)性质，方案数即为dp(y-1，x-1，1)，需要再乘上y*(y-1)（乘一个排列数，将这两列作排列）。最后一种子情况很复杂，仍然需要划分为两种情况：下面的两个棋子不在同一行、下面的两个棋子在同一行。前者可以删去首行，再将两列合并，移到最左边，转置后得到一个y-1行x-1列并且满足性质P(2)的棋盘，方案数即为dp(y-1，x-1，2)，再乘上y*(y-1)即可。后者从棋盘中合并首行和两个棋子所在的一行，移到最顶端，这时下面的x-2行y列的棋盘在首行两个棋子所在的列不应有棋子，也就是两个空列。我们删去这两个空列，得到一个x-2行y-2列的棋盘，它的棋子选取没有受到影响，方案数为dp(x-2，y-2，0)+dp(x-2，y-2，1)+dp(x-2，y-2，2)，再乘上y*(y-1)/2（这里是一个组合数，是两个空列的选取情况），再乘上x-1（下面棋子所在行的情况）就是后一种情况的答案。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;因此t=2时的状态转移方程为：</p>
+<script type="math/tex; mode=display">dp(x，y，2)=(dp(x-1，y-2，0)+dp(x-1，y-2，1)+dp(x-1，y-2，2))*y*(y-1)/2+dp(y-1，x-1，1)*y*(y-1)+(dp(x-2，y-2，0)+dp(x-2，y-2，1)+dp(x-2，y-2，2))*y*(y-1)/2*(x-1)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意边界处理和取模，递推即可。答案即为dp(n，m，0)+dp(n，m，1)+dp(n，m，2)对9999973的模。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX 101</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MOD 9999973</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> dp[MAX][MAX][<span class="number">3</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> n, m;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">long</span> <span class="keyword">long</span> <span class="title">DP</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y, <span class="keyword">int</span> t)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="number">0</span> || y == <span class="number">0</span>)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (t == <span class="number">0</span>)<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (t == <span class="number">1</span>)<span class="keyword">return</span> y;</span><br><span class="line">        <span class="keyword">if</span> (t == <span class="number">2</span>)<span class="keyword">return</span> y * (y - <span class="number">1</span>) / <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (y == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (t == <span class="number">0</span>)<span class="keyword">return</span> (DP(x - <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>) + DP(x - <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>) + DP(x - <span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>)) % MOD;</span><br><span class="line">        <span class="keyword">if</span> (t == <span class="number">1</span>)<span class="keyword">return</span> x;</span><br><span class="line">        <span class="keyword">if</span> (t == <span class="number">2</span>)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (t == <span class="number">2</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (x == <span class="number">2</span>)<span class="keyword">return</span> y * (y - <span class="number">1</span>) / <span class="number">2</span> * (y * y + y + <span class="number">2</span>) / <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">if</span> (y == <span class="number">2</span>)<span class="keyword">return</span> x * x;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//上面是边界处理</span></span><br><span class="line">    <span class="keyword">if</span> (dp[x][y][t] &gt;= <span class="number">0</span>)<span class="keyword">return</span> dp[x][y][t];<span class="comment">//记忆化</span></span><br><span class="line">    <span class="comment">//下面是状态转移，t=2时方程太长，分开计算</span></span><br><span class="line">    <span class="keyword">if</span> (t == <span class="number">0</span>)<span class="keyword">return</span> dp[x][y][t] = (DP(x - <span class="number">1</span>, y, <span class="number">0</span>) + DP(x - <span class="number">1</span>, y, <span class="number">1</span>) + DP(x - <span class="number">1</span>, y, <span class="number">2</span>)) % MOD;</span><br><span class="line">    <span class="keyword">if</span> (t == <span class="number">1</span>)<span class="keyword">return</span> dp[x][y][t] = ((DP(x - <span class="number">1</span>, y - <span class="number">1</span>, <span class="number">0</span>) + DP(x - <span class="number">1</span>, y - <span class="number">1</span>, <span class="number">1</span>) + DP(x - <span class="number">1</span>, y - <span class="number">1</span>, <span class="number">2</span>)) % MOD + DP(y, x - <span class="number">1</span>, <span class="number">1</span>)) * y % MOD;</span><br><span class="line">    <span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">    ans += (DP(x - <span class="number">1</span>, y - <span class="number">2</span>, <span class="number">0</span>) + DP(x - <span class="number">1</span>, y - <span class="number">2</span>, <span class="number">1</span>) + DP(x - <span class="number">1</span>, y - <span class="number">2</span>, <span class="number">2</span>)) * y * (y - <span class="number">1</span>) / <span class="number">2</span> % MOD;</span><br><span class="line">    ans += DP(y - <span class="number">1</span>, x - <span class="number">1</span>, <span class="number">1</span>) * y * (y - <span class="number">1</span>) % MOD;</span><br><span class="line">    ans %= MOD;</span><br><span class="line">    ans += DP(y - <span class="number">1</span>, x - <span class="number">1</span>, <span class="number">2</span>) * y * (y - <span class="number">1</span>) % MOD + (DP(x - <span class="number">2</span>, y - <span class="number">2</span>, <span class="number">0</span>) + DP(x - <span class="number">2</span>, y - <span class="number">2</span>, <span class="number">1</span>) + DP(x - <span class="number">2</span>, y - <span class="number">2</span>, <span class="number">2</span>)) % MOD * y * (y - <span class="number">1</span>) / <span class="number">2</span> * (x - <span class="number">1</span>) % MOD;</span><br><span class="line">    <span class="keyword">return</span> dp[x][y][t] = ans % MOD;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m;</span><br><span class="line">    <span class="built_in">memset</span>(dp, <span class="number">-1</span>, <span class="keyword">sizeof</span>(dp));</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; (DP(n, m, <span class="number">0</span>) + DP(n, m, <span class="number">1</span>) + DP(n, m, <span class="number">2</span>)) % MOD &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;虽然花了我3个小时去想它的解法（太弱），但评测用时36ms，内存占0.93mb AC这题还是值得的。</p>
 
       
@@ -538,9 +529,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/动态规划/" rel="tag"><i class="fa fa-tag"></i>动态规划</a>
-          
             <a href="/tags/提高算法/" rel="tag"><i class="fa fa-tag"></i>提高算法</a>
+          
+            <a href="/tags/动态规划/" rel="tag"><i class="fa fa-tag"></i>动态规划</a>
           
         </div>
       
@@ -562,6 +553,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/13/洛谷P1415-拆分数列/" rel="prev" title="[洛谷P1415]拆分数列">
+                [洛谷P1415]拆分数列 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -637,7 +632,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">49</span>
+                    <span class="site-state-item-count">50</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -986,6 +981,48 @@
   
 
   
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+	  preview: 'none'
+    },
+	messageStyle: 'none',
+	"HTML-CSS": {
+      showMathMenu: false //关闭右击菜单显示
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style>
+
+    
+  
 
 
   
@@ -1004,7 +1041,7 @@
 
   
 
-<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/koharu.model.json"},"display":{"position":"right","width":75,"height":150},"mobile":{"show":true},"log":false});</script></body>
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/koharu.model.json"},"display":{"position":"right","width":75,"height":150},"mobile":{"show":false},"log":false});</script></body>
 </html>
 <!-- 页面点击小红心 -->
 <script type="text/javascript" src="/js/src/clicklove.js"></script>

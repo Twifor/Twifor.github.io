@@ -118,14 +118,14 @@
 
 
   <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;这一篇文章谈谈动态规划(Dynamic Programming， DP)。本材料中大量地出现动态规划类题目，这里做一个总结。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;动态规划是一种解决多阶段决策问题的高效算法设计思路，它的本质是分治思想。对于一个问题">
-<meta name="keywords" content="动态规划,提高算法">
+<meta name="keywords" content="提高算法,动态规划">
 <meta property="og:type" content="article">
 <meta property="og:title" content="动态规划与状态设计">
 <meta property="og:url" content="https://twifor.github.io/2019/01/10/动态规划与状态设计/index.html">
 <meta property="og:site_name" content="Twifor~Liyh">
 <meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;这一篇文章谈谈动态规划(Dynamic Programming， DP)。本材料中大量地出现动态规划类题目，这里做一个总结。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;动态规划是一种解决多阶段决策问题的高效算法设计思路，它的本质是分治思想。对于一个问题">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-10T16:53:06.572Z">
+<meta property="og:updated_time" content="2019-01-13T07:33:48.070Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="动态规划与状态设计">
 <meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;这一篇文章谈谈动态规划(Dynamic Programming， DP)。本材料中大量地出现动态规划类题目，这里做一个总结。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;动态规划是一种解决多阶段决策问题的高效算法设计思路，它的本质是分治思想。对于一个问题">
@@ -421,7 +421,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-11 00:53:06" itemprop="dateModified" datetime="2019-01-11T00:53:06+08:00">2019-01-11</time>
+                <time title="修改时间：2019-01-13 15:33:48" itemprop="dateModified" datetime="2019-01-13T15:33:48+08:00">2019-01-13</time>
               
             
           </span>
@@ -500,7 +500,7 @@
 <h3 id="输入输出格式"><a href="#输入输出格式" class="headerlink" title="输入输出格式"></a>输入输出格式</h3><h4 id="输入格式："><a href="#输入格式：" class="headerlink" title="输入格式："></a>输入格式：</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输入文件的第一行为n （n&lt;=1000），表示火星上基地的数目。接下来的n-1行每行有一个正整数，其中文件第i行的正整数为a[i]，表示从编号为i的基地到编号为a[i]的基地之间有一条道路，为了更加简洁的描述树状结构的基地群，有a[i]&lt;i。</p>
 <h4 id="输出格式："><a href="#输出格式：" class="headerlink" title="输出格式："></a>输出格式：</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输出文件仅有一个正整数，表示至少要设立多少个消防局才有能力及时扑灭任何基地发生的火灾。</p>
 </blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;题目实质上是给定一棵树，其中一个选定的点可以覆盖两层的其余顶点，求覆盖整棵树的选点最小值。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一个显然的状态设计思路是令f(x)表示以x为根的子树的选点最小值。这样做状态的确是唯一的并且有明确的值，但是它无法列出状态转移方程。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是，f(x)=SUM{f(k)}(k表示x的子节点)是否成立呢?显然不可，这是因为即使每一个子树都被覆盖掉了，根节点x也可能没被覆盖到;同时，每一个子树的选点覆盖范围可能有所包含，使得全局仍可以删掉几个点，结果不最优。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样的状态设计显然是失败的，问题便出在状态描述不清上。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;有时状态虽唯一，但是无法转移，我们就需要增加状态描述量来细化状态。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先认识到一个事实，原问题满足某种性质时，往往意味这它的子问题也要满足某种性质。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果我们定义f(x，y)表示根节点为x的子树，在满足性质P(y)的前提下最小选点数。P定义如下:</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;题目实质上是给定一棵树，其中一个选定的点可以覆盖两层的其余顶点，求覆盖整棵树的选点最小值。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一个显然的状态设计思路是令f(x)表示以x为根的子树的选点最小值。这样做状态的确是唯一的并且有明确的值，但是它无法列出状态转移方程。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是，f(x)=$\sum f(k)$(k表示x的子节点)是否成立呢?显然不可，这是因为即使每一个子树都被覆盖掉了，根节点x也可能没被覆盖到;同时，每一个子树的选点覆盖范围可能有所包含，使得全局仍可以删掉几个点，结果不最优。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样的状态设计显然是失败的，问题便出在状态描述不清上。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;有时状态虽唯一，但是无法转移，我们就需要增加状态描述量来细化状态。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先认识到一个事实，原问题满足某种性质时，往往意味这它的子问题也要满足某种性质。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果我们定义f(x，y)表示根节点为x的子树，在满足性质P(y)的前提下最小选点数。P定义如下:</p>
 <ul>
 <li>P(0):子树完全被覆盖，且根节点被选。</li>
 <li>P(1):子树完全被覆盖，子节点被选。</li>
@@ -512,35 +512,22 @@
 <li>P(4):所有孙子节点及其子树都被覆盖，但根节点和子节点未知。</li>
 </ul>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其实还可以有P(5):所有孙子节点的子节点及其子树都被覆盖，但根节点子节点，孙子节点未知。但之后我们可以看到这种状态不参与转移，是无用的。仅这样就是可以转移的。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;若原树满足P(0)，则根节点向下两层(儿子和孙子)都一定被覆盖，但是倘若全树都被覆盖，所有子树都必须满足其孙子节点及其子树都被覆盖的性质。我们发现P(0~4)都符合条件，可以证明其余的任何状态都不符合，又发现全树的选点数是所有子树上选点数加一，于是有:</p>
-<blockquote>
-<p>f(x，0)=SUM{min{f(k，0~4)}}+1</p>
-</blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于每一个子树，我们取其五个性质中选点最少的一个，这样既满足性质又能使解最优。这样直接作和是不会出现漏选多选的情况的。这是因为，子树都满足了需要的性质，全树一定可以完全被覆盖，不会缺选;同时，由于每一个子树都是满足性质的，并且我们选的是最小值，其余状态又不能使性质成立，删掉一个点必然使性质不再成立，所以不会多点。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;若原树满足P(1)，则根节点下一层全被覆盖，此时因为全树都被覆盖，所有子树都必须满足其子节点和子树都被覆盖的性质(即P(0~3))，被选的点满足P(0)性质。所以有:</p>
-<blockquote>
-<p>f(x，1)=min{f(k，0)+SUM{min{f(k’，0~3)}}}，k是任意子节点，k’是剩余的子节点。</p>
-</blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;理解同上。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;同理我们可得:</p>
-<blockquote>
-<p>f(x，2)=min{f(k，1)+SUM{min{f(k’，0~2)}}}，k是任意子节点，k’是剩余的子节点。<br>f(x，3)=SUM{min{f(k，0~2)}}<br>f(x，4)=SUM{min{f(k，0~3)}}</p>
-</blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这种转移方法称为<strong>性质转移</strong>，它的原理是当原问题满足状态指定的某种性质时，其子问题也要满足特定的性质，这时原问题状态可以转移到所有满足特定性质的子问题状态。我们这里给出的五个状态就是所有满足的状态，少一个都会难以转移。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另一种转移方式即为<strong>决策转移</strong>，它的原理通常是不同的决策，例如背包问题。本题用决策转移很难列方程。</p>
+<script type="math/tex; mode=display">f(x，0)=\sum(min\{f(k，0...4)\})+1</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于每一个子树，我们取其五个性质中选点最少的一个，这样既满足性质又能使解最优。这样直接作和是不会出现漏选多选的情况的。这是因为，子树都满足了需要的性质，全树一定可以完全被覆盖，不会缺选;同时，由于每一个子树都是满足性质的，并且我们选的是最小值，其余状态又不能使性质成立，删掉一个点必然使性质不再成立，所以不会多点。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;若原树满足P(1)，则根节点下一层全被覆盖，此时因为全树都被覆盖，所有子树都必须满足其子节点和子树都被覆盖的性质(即P(0~3))，被选的点满足P(0)性质。所以有:</p>
+<script type="math/tex; mode=display">f(x，1)=\min\{f(k，0)+\sum (\min\{f(k’，0...3)\})\}，k是任意子节点，k’是剩余的子节点</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;理解同上。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;同理我们可得:</p>
+<script type="math/tex; mode=display">f(x，2)=\min\{f(k，1)+\sum (\min\{f(k’，0...2)\})\}，k是任意子节点，k’是剩余的子节点\\
+f(x，3)=\sum (\min\{f(k，0...2)\})\\
+f(x，4)=\sum (\min\{f(k，0...3)\})</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这种转移方法称为<strong>性质转移</strong>，它的原理是当原问题满足状态指定的某种性质时，其子问题也要满足特定的性质，这时原问题状态可以转移到所有满足特定性质的子问题状态。我们这里给出的五个状态就是所有满足的状态，少一个都会难以转移。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另一种转移方式即为<strong>决策转移</strong>，它的原理通常是不同的决策，例如背包问题。本题用决策转移很难列方程。</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为了更好地理解状态设计，我们来重新认识一下01背包问题这种经典DP问题。本材料第2题就是这类问题。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;01背包属于决策转移型，决策是选不选当前的这个物品。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当我们从所有物品中随机拿出一个时，如果背包可以装下的话，便会面临选还是不选的问题，这便是一个决策。我们规定物品全集为S，拿出的物品为x，物品i价值为w<sub>i</sub>，则两种决策得到的价值分别为:</p>
 <blockquote>
 <p>选该物品:w<sub>x</sub>+?<br>不选该物品:0+?</p>
 </blockquote>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里的?表示后面加上的价值我们暂时无法确定。但是注意到，如果我们选了该物品，对于剩下的物品集合S-{x}与我们的原问题集合S，它们的问题本质上是同一类问题，都是从一个集合中取一些物品使价值总和最大，不选与之同理。这样就把问题拆成了两个本质相同的子问题。同时子问题最优时，原问题才最优，这是显然的。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是我们定义dp(Q)表示对于集合Q，从中拿走若干个物品得到的价值最大值。但是很快我们便发现，这其中忽略了物品体积的问题，物品体积显然会影响决策(太大时一定不能选)，并且这样描述状态并不能唯一地确定状态。于是我们应定义dp(Q，p)表示背包容量为p时，从集合Q中拿走若干物品得到的价值最大值。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么就有关系(vi表示物品i的体积):</p>
-<blockquote>
-<p>若p&gt;=v<sub>x</sub>时:dp(Q，p)=max{dp(Q-{x}，p)，dp(Q-{x}，p-v<sub>x</sub>)+w<sub>x</sub>}</p>
-</blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里从不选和选中取一个较大值。</p>
-<blockquote>
-<p>p&lt;v<sub>x</sub>时，dp(Q，p)=dp(Q-{x}，p)</p>
-</blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这时，x无法被选择。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这就得到了状态转移方程。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意到，实际操作中集合运算是十分复杂的，并且物品放入顺序显然对结果没有影响。我们根据自排序原则，可以规定物品按输入顺序放入，这样就把集合放到了一个数组中。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这时，我们的状态就成了dp(a，p)表示从数组中1~a这个集合中拿物品，背包容量为p的最大价值。每次都按照从右向左的顺序拿，转移方程就成为</p>
-<blockquote>
-<p>p&gt;=w<sub>a</sub>时:dp(a，p)=max{dp(a-1，p)，dp(a-1，p-v<sub>a</sub>)+w<sub>a</sub>}<br>否则 dp(a，p)=dp(a-1，p)</p>
-</blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这就是01背包问题的DP正解。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当然存在放入顺序影响结果的情况，见题目烹饪方案。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里总结两种转移方式的思考方向:</p>
+<script type="math/tex; mode=display">若p\geq v_x时:dp(Q，p)=\max\{dp(Q-\{x\}，p)，dp(Q-\{x\}，p-v_x)+w_x\}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里从不选和选中取一个较大值。</p>
+<script type="math/tex; mode=display">p<v_x时，dp(Q，p)=dp(Q-\{x\}，p)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这时，x无法被选择。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这就得到了状态转移方程。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意到，实际操作中集合运算是十分复杂的，并且物品放入顺序显然对结果没有影响。我们根据自排序原则，可以规定物品按输入顺序放入，这样就把集合放到了一个数组中。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这时，我们的状态就成了dp(a，p)表示从数组中1~a这个集合中拿物品，背包容量为p的最大价值。每次都按照从右向左的顺序拿，转移方程就成为</p>
+<script type="math/tex; mode=display">dp(a,p)=\begin{cases}
+\max\{dp(a-1，p)，dp(a-1，p-v_a)+w_a\}\ \ \  & p\geq w_a\\
+dp(a-1,p)
+\end{cases}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这就是01背包问题的DP正解。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当然存在放入顺序影响结果的情况，见题目烹饪方案。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里总结两种转移方式的思考方向:</p>
 <ol>
 <li>先确定问题以及子问题</li>
 <li>判断是性质转移还是决策转移</li>
@@ -571,9 +558,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/动态规划/" rel="tag"><i class="fa fa-tag"></i>动态规划</a>
-          
             <a href="/tags/提高算法/" rel="tag"><i class="fa fa-tag"></i>提高算法</a>
+          
+            <a href="/tags/动态规划/" rel="tag"><i class="fa fa-tag"></i>动态规划</a>
           
         </div>
       
@@ -674,7 +661,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">49</span>
+                    <span class="site-state-item-count">50</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1023,6 +1010,48 @@
   
 
   
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+	  preview: 'none'
+    },
+	messageStyle: 'none',
+	"HTML-CSS": {
+      showMathMenu: false //关闭右击菜单显示
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style>
+
+    
+  
 
 
   
@@ -1041,7 +1070,7 @@
 
   
 
-<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/koharu.model.json"},"display":{"position":"right","width":75,"height":150},"mobile":{"show":true},"log":false});</script></body>
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/koharu.model.json"},"display":{"position":"right","width":75,"height":150},"mobile":{"show":false},"log":false});</script></body>
 </html>
 <!-- 页面点击小红心 -->
 <script type="text/javascript" src="/js/src/clicklove.js"></script>
