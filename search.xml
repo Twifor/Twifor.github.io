@@ -9,9 +9,9 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
-        <tag>区间</tag>
         <tag>区间最值</tag>
         <tag>数据结构</tag>
+        <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
       </tags>
@@ -25,13 +25,13 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
-        <tag>动态规划</tag>
-        <tag>区间</tag>
         <tag>区间最值</tag>
         <tag>ST表</tag>
-        <tag>矩阵</tag>
+        <tag>动态规划</tag>
+        <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
+        <tag>矩阵</tag>
       </tags>
   </entry>
   <entry>
@@ -42,8 +42,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>字符串</tag>
       </tags>
   </entry>
@@ -55,8 +55,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -67,8 +67,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -79,8 +79,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>贪心</tag>
       </tags>
   </entry>
@@ -118,8 +118,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -130,8 +130,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>滚动数组</tag>
       </tags>
   </entry>
@@ -145,8 +145,8 @@
       <tags>
         <tag>图论</tag>
         <tag>图的最短路</tag>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>数学期望</tag>
       </tags>
   </entry>
@@ -182,9 +182,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
+        <tag>提高算法</tag>
         <tag>动态规划</tag>
         <tag>状态压缩</tag>
-        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -287,8 +287,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>区间最值</tag>
+        <tag>提高算法</tag>
         <tag>数据结构</tag>
         <tag>ST表</tag>
       </tags>
@@ -313,8 +313,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>图论</tag>
+        <tag>基础算法</tag>
         <tag>图的最短路</tag>
       </tags>
   </entry>
@@ -326,8 +326,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>图论</tag>
+        <tag>基础算法</tag>
         <tag>图的最短路</tag>
       </tags>
   </entry>
@@ -363,10 +363,10 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
-        <tag>DFS</tag>
+        <tag>动态规划</tag>
         <tag>矩阵</tag>
+        <tag>DFS</tag>
       </tags>
   </entry>
   <entry>
@@ -390,8 +390,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -414,8 +414,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>数论</tag>
         <tag>离散化</tag>
       </tags>
@@ -428,8 +428,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -492,8 +492,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
