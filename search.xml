@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[[洛谷P2157]学校食堂]]></title>
+    <url>%2F2019%2F01%2F15%2F%E6%B4%9B%E8%B0%B7P2157-%E5%AD%A6%E6%A0%A1%E9%A3%9F%E5%A0%82%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这题难度不算小，2007山东省选题。 难度：省选/NOI- 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小F 的学校在城市的一个偏僻角落，所有学生都只好在学校吃饭。学校有一个食堂，虽然简陋，但食堂大厨总能做出让同学们满意的菜肴。当然，不同的人口味也不一定相同，但每个人的口味都可以用一个非负整数表示。 由于人手不够，食堂每次只能为一个人做菜。做每道菜所需的时间是和前一道菜有关的，若前一道菜的对应的口味是a，这一道为b，则做这道菜所需的时间为（a or b）-（a and b），而做第一道菜是不需要计算时间的。其中，or 和and 表示整数逐位或运算及逐位与运算，C语言中对应的运算符为“|”和“&amp;”。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;学生数目相对于这个学校还是比较多的，吃饭做菜往往就会花去不少时间。因此，学校食堂偶尔会不按照大家的排队顺序做菜，以缩短总的进餐时间。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;虽然同学们能够理解学校食堂的这种做法，不过每个同学还是有一定容忍度的。也就是说，队伍中的第i 个同学，最多允许紧跟他身后的Bi 个人先拿到饭菜。一旦在此之后的任意同学比当前同学先拿到饭，当前同学将会十分愤怒。因此，食堂做菜还得照顾到同学们的情绪。 现在，小F 想知道在满足所有人的容忍度这一前提下，自己的学校食堂做完这些菜最少需要多少时间。 输入输出格式输入格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第一行包含一个正整数C，表示测试点的数据组数。 每组数据的第一行包含一个正整数N，表示同学数。 每组数据的第二行起共N行，每行包含两个用空格分隔的非负整数Ti和Bi，表示按队伍顺序从前往后的每个同学所需的菜的口味和这个同学的忍受度。 每组数据之间没有多余空行。 输出格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;包含C行，每行一个整数，表示对应数据中食堂完成所有菜所需的最少时间。 输入输出样例Sample input 255 24 112 03 32 225 04 0 Sample output 161 说明对于第一组数据：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;同学1允许同学2或同学3在他之前拿到菜；同学2允许同学3在他之前拿到菜；同学3比较小气，他必须比他后面的同学先拿菜……&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一种最优的方案是按同学3、同学2、同学1、同学4、同学5做菜，每道菜所需的时间分别是0、8、1、6及1。【数据规模和约定】&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于30%的数据，满足1 ≤ N ≤ 20。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于100%的数据，满足1 ≤ N ≤ 1,000，0 ≤ Ti ≤ 1,000，0 ≤ Bi ≤ 7，1 ≤ C ≤ 5。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;存在30%的数据，满足0 ≤ Bi ≤ 1。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;存在65%的数据，满足0 ≤ Bi ≤ 5。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;存在45%的数据，满足0 ≤ Ti ≤ 130。 题解&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考察状态压缩DP。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;令dp(r,k,p)表示从第r（从0开始）个人开始，上一个人打饭的人距离r位置为k，且r后面七个人（含自己）的打饭状态为p（状态压缩，0表示未打饭、1表示已经打饭），那么可知状态转移方程： dp(r,k,p)=\begin{cases} dp(r+1,k-1,p>>1)\ \ \ & p\&1=1\\ \min\{dp(r,l,p|(1]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>提高算法</tag>
+        <tag>动态规划</tag>
+        <tag>状态压缩</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[单调队列与固定长区间最值]]></title>
     <url>%2F2019%2F01%2F14%2F%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97%E4%B8%8E%E5%9B%BA%E5%AE%9A%E9%95%BF%E5%8C%BA%E9%97%B4%E6%9C%80%E5%80%BC%2F</url>
     <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里探讨一种求固定长度区间最值的高效方法—用单调队列求最值。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先先认识什么是单调队列。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;队列是一种先进先出(FIFO)的线性表，而单调队列则是指队列中元素符合单调性的特殊队列，可以分为单调增和单调减队列。前者队首元素总是最大的，后者总是最小的。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当有元素需要加入队列时（这里以单调增队列为例），我们需要考察这个元素与队尾元素的大小关系。如果它比队尾元素小，则元素入队后仍符合单调性，直接入队即可；若否，则队尾元素出队，然后继续比较，直到队空或队尾元素大于或等于待入队元素，之后该元素入队。也就是说，单调队列中有元素入队时，会把比它小的所有元素“挤出”。这里我们还可以发现入队操作需要访问队尾元素，这是STL中的queue做不到的。通常单调队列用STL中的deque(双向队列)实现，当然也可以手写。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是如何用单调队列维护固定长度的区间最值？&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所谓固定长度区间最值，即是给定一段区间(长度为n)，维护区间内所有长度为m的区间最值。我们通常用一个一维数组（比如ans[]）来记录结果。这时ans[i]表示[i,i+n-1]的最值。这里值得注意的是，用单调队列维护固定长区间最值时，队列中存放的不是元素本身，而是元素在区间中的编号，检验大小关系时，利用编号到元素的映射里比较。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;具体算法如下： 区间前n个元素入单调队列，这时队首所指元素即为前n个元素最值，将其记录在ans[0]中（下标从0开始）。 对于第n+1以及以后的元素（假设编号是k），该元素先入队，再取队首元素，如果队首元素（是一个编号）不在区间[k-n+1,k]中，那么忽略该元素，直到队首元素在区间中，这个编号所指元素即为最值。 附算法正确性证明：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;采用数学归纳法。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[0,n-1]的最值显然可以得到。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假设单调队列中成功地维护了[a,a+n-1]的最值p，在第a+n个元素入队后，我们证明队列可以维护[a+1,a+n]的最值q。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果p就是编号为a的元素。q编号在[a+1,a+n]中，假如有q≤p。编号在[a+1,a+n]中的所有元素x都应满足x≤q。根据单调队列的构造方法，可知q一定不会被“挤出”，并且一定在p的紧跟着的后面。根据算法，q因为编号不在[a+1,a+n]中，会被忽略，然后立刻得到q，即为最值，成立。若q&gt;p，则q会将p“挤出”并且其编号成为队首，并且之后一定不会再被“挤出”，取出即为最值，成立。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果p编号在[a+1,a+n-1]中，我们只需比较编号为a+n的元素x和p即可。如果x≤p，则p仍然在队首，取出即为最值。若x&gt;p，则x会将p“挤出”，于是x成为队首，取出即为最值。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;因此算法正确。]]></content>
@@ -29,9 +42,9 @@
         <tag>ST表</tag>
         <tag>动态规划</tag>
         <tag>区间</tag>
+        <tag>矩阵</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
-        <tag>矩阵</tag>
       </tags>
   </entry>
   <entry>
