@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[[洛谷P2467]地精部落]]></title>
+    <url>%2F2019%2F01%2F17%2F%E6%B4%9B%E8%B0%B7P2467-%E5%9C%B0%E7%B2%BE%E9%83%A8%E8%90%BD%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;记录一道简单的省选题 难度：省选/NOI-（个人感觉难度虚高） 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;传说很久以前，大地上居住着一种神秘的生物：地精。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;地精喜欢住在连绵不绝的山脉中。具体地说，一座长度为N的山脉H可分为从左到右的N段，每段有一个独一无二的高度Hi，其中Hi是1到N之间的正整数。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果一段山脉比所有与它相邻的山脉都高，则这段山脉是一个山峰。位于边缘的山脉只有一段相邻的山脉，其他都有两段（即左边和右边）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;类似地，如果一段山脉比所有它相邻的山脉都低，则这段山脉是一个山谷。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;地精们有一个共同的爱好——饮酒，酒馆可以设立在山谷之中。地精的酒馆不论白天黑夜总是人声鼎沸，地精美酒的香味可以飘到方圆数里的地方。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;地精还是一种非常警觉的生物，他们在每座山峰上都可以设立瞭望台，并轮流担当瞭望工作，以确保在第一时间得知外敌的入侵。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;地精们希望这N段山脉每段都可以修建瞭望台或酒馆的其中之一，只有满足这个条件的整座山脉才可能有地精居住。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在你希望知道，长度为N的可能有地精居住的山脉有多少种。两座山脉A和B不同当且仅当存在一个i，使得Ai≠Bi。由于这个数目可能很大，你只对它除以P的余数感兴趣。 输入输出格式输入格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输入文件goblin.in仅含一行，两个正整数N, P。 输出格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输出文件goblin.out仅含一行，一个非负整数，表示你所求的答案对P取余之后的结果。 输入输出样例Samplle input 4 7 Sample output 3 说明【样例说明】共有十种可能的情况，分别为：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1324&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1423&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2143&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2314&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2413&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3142&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3241&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3412&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4132&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4231&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;加下划线的数位表示可以设立瞭望台的山峰，其它表示可以设立酒馆的山谷。【数据规模和约定】&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于20%的数据，满足N≤10；&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于40%的数据，满足N≤18；&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于70%的数据，满足N≤550；&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于100%的数据，满足3≤N≤4200，P≤1e9。 题解&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可以说是一道很水的省选题了。考察动态规划，题目本质上是对于一个数N，求1~N能够组成的大小相间的排列方案数。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;令dp(x，p，y)表示长度为x，末尾数字作p(0为山谷、1为山峰)，末尾数不超过y时的方案数，则有状态转移方程： dp(x,0,i)=dp(x,0,i-1)+dp(x-1,1,x-1)-dp(x-1,1,i-1),1\leq i \leq x\\ dp(x,1,i)=dp(x,1,i-1)+dp(x-1,0,i-1),1\leq i \leq x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对状态转移方程的理解是本题唯一难点。之后将数组第一维滚动掉，最终空间复杂度O(N)，时间复杂度O(N2)。123456789101112131415161718192021#include&lt;iostream&gt;#define N 4200+1using namespace std;int n, mod, dp[2][2][N] = &#123;0&#125;;bool k = false;//0山谷，1山峰int main() &#123; cin &gt;&gt; n &gt;&gt; mod; dp[0][0][2] = dp[0][0][1] = dp[0][1][2] = 1; for (int i = 3; i &lt;= n; i++) &#123; k = !k; for (int j = 1; j &lt;= i; j++) &#123; dp[k][0][j] = (dp[k][0][j - 1] + (dp[!k][1][i - 1] - dp[!k][1][j - 1] + mod) % mod) % mod; dp[k][1][j] = (dp[k][1][j - 1] + dp[!k][0][j - 1]) % mod; &#125; &#125; cout &lt;&lt; (dp[k][0][n] + dp[k][1][n]) % mod; return 0;&#125;]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>提高算法</tag>
+        <tag>动态规划</tag>
+        <tag>滚动数组</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[[洛谷P2331]最大子矩阵]]></title>
     <url>%2F2019%2F01%2F16%2F%E6%B4%9B%E8%B0%B7P2331-%E6%9C%80%E5%A4%A7%E5%AD%90%E7%9F%A9%E9%98%B5%2F</url>
     <content type="text"><![CDATA[难度：提高+/省选- 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里有一个n*m的矩阵，请你选出其中k个子矩阵，使得这个k个子矩阵分值之和最大。注意：选出的k个子矩阵不能相互重叠。 输入输出格式输入格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第一行为n,m,k（1≤n≤100,1≤m≤2,1≤k≤10），接下来n行描述矩阵每行中的每个元素的分值(每个元素的分值的绝对值不超过32767)。 输出格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;只有一行为k个子矩阵分值之和最大为多少。 输入输出样例Sample input 3 2 21 -32 3-2 3 Sample output 9 题解&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先好好读题，m只能取1或2（坑了很多人了！）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于构造数据的缘故，本题考虑和不考虑空矩阵（分值为0）都是可以的。如果我们考虑空矩阵，题意即为选取不超过k个不重叠的子矩阵使得分值之和最大。介绍两种解法，其中第一种解法不考虑空矩阵，第二种考虑。 辣鸡解法（也就是我第一次的解法） &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我第一次AC本题时用的方法，时间空间复杂度都很高。但是因为数据量太小，轻松水过~&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;思路是矩阵先划分再分配。如果我们规定dp(x1,y1,x2,y2,p)表示从坐标(x1，y1)到(x2，y2)的矩阵区域中选取p个子矩阵时的分值最大值，那么在p&gt;1时，一定可以将这p个子矩阵划分到两个区域中。我们既可以横向划分（有x2-x1种情况）也可以纵向划分（y1≠y2时才可以划分，显然这时仅有1种情况），之后再对这两个划分区域进行子矩阵数量的分配，注意分配时不要超出区域最大承受的范围（因为我们没有考虑空矩阵）。本方法难点在于如何求解p=1时的情况，思路是先用dp手段求连续区间的最大值（要限制左端点），需要求三次（第一列，第二列以及两列对应元素和），再在这些dp数据中找到最大值即可。注意到这里找最大值是一个区间最值问题，用ST表维护。总体时间复杂度O(kn3m2)。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081#include&lt;iostream&gt;#include&lt;cstdio&gt;using namespace std;int dp[100][2][100][2][11] = &#123;0&#125;, dp2[2][100][100], op[100][2], op2[100] = &#123;0&#125;, dp3[100][100], n, m, k;int ST[2][100][100][10], ST2[100][100][10];int Log[101], bin[10];int main() &#123; cin &gt;&gt; n &gt;&gt; m &gt;&gt; k; for (int i = 0; i &lt; n; i++) for (int j = 0; j &lt; m; j++) &#123; cin &gt;&gt; op[i][j]; dp2[j][i][i] = op[i][j]; op2[i] += op[i][j]; &#125; for (int i = 0; i &lt; n; i++) &#123;//求区间连续最大值 for (int j = i; j &lt; n; j++) &#123; if (j == i)dp2[0][i][i] = op[i][0], dp2[1][i][i] = op[i][1], dp3[i][j] = op2[i]; else &#123; if (dp2[0][i][j - 1] &lt; 0)dp2[0][i][j] = op[j][0]; else dp2[0][i][j] = op[j][0] + dp2[0][i][j - 1]; if (dp2[1][i][j - 1] &lt; 0)dp2[1][i][j] = op[j][1]; else dp2[1][i][j] = op[j][1] + dp2[1][i][j - 1]; if (dp3[i][j - 1] &lt; 0)dp3[i][j] = op2[j]; else dp3[i][j] = op2[j] + dp3[i][j - 1]; &#125; ST[0][i][j][0] = dp2[0][i][j], ST[1][i][j][0] = dp2[1][i][j], ST2[i][j][0] = dp3[i][j]; &#125; &#125; Log[0] = -1, bin[0] = 1; for (int i = 1; i &lt;= 100; i++)Log[i] = Log[i / 2] + 1; for (int i = 1; i &lt; 10; i++)bin[i] = bin[i - 1] * 2;//ST表初始化 for (int i = 0; i &lt; n; i++) for (int j = 1; j &lt;= Log[n]; j++) for (int p = i; p &lt; n; p++) if (p + bin[j] &lt;= n) &#123; ST[0][i][p][j] = max(ST[0][i][p][j - 1], ST[0][i][p + bin[j - 1]][j - 1]); ST[1][i][p][j] = max(ST[1][i][p][j - 1], ST[1][i][p + bin[j - 1]][j - 1]); ST2[i][p][j] = max(ST2[i][p][j - 1], ST2[i][p + bin[j - 1]][j - 1]); &#125; for (int l = 1; l &lt;= k; l++) &#123;//数量枚举 for (int x1 = 0; x1 &lt; n; x1++) &#123; for (int y1 = 0; y1 &lt; m; y1++) &#123; for (int x2 = x1; x2 &lt; n; x2++) &#123; for (int y2 = y1; y2 &lt; m; y2++) &#123; dp[x1][y1][x2][y2][l] = -0x7fffffff; if (l == 1) &#123; int len = x2 - x1 + 1; if (y1 == 0) dp[x1][y1][x2][y2][l] = max(ST[0][x1][x1][Log[len]], ST[0][x1][x2 - bin[Log[len]] + 1][Log[len]]); if (y2 == 1) dp[x1][y1][x2][y2][l] = max(dp[x1][y1][x2][y2][l], max(ST[1][x1][x1][Log[len]], ST[1][x1][x2 - bin[Log[len]] + 1][Log[len]])); if (y1 != y2) dp[x1][y1][x2][y2][l] = max(dp[x1][y1][x2][y2][l], max(ST2[x1][x1][Log[len]], ST2[x1][x2 - bin[Log[len]] + 1][Log[len]])); &#125; else &#123; for (int i = x1; i &lt; x2; i++) &#123; int last = min(l, (i - x1 + 1) * (y2 - y1 + 1)); for (int j = max(0, l - (x2 - i) * (y2 - y1 + 1)); j &lt;= last; j++)//分配 dp[x1][y1][x2][y2][l] = max(dp[x1][y1][x2][y2][l], dp[x1][y1][i][y2][j] + dp[i + 1][y1][x2][y2][l - j]); &#125; if (y1 != y2) &#123; int last = min(l, x2 - x1 + 1); for (int i = max(0, l + x1 - x2 - 1); i &lt;= last; i++) dp[x1][y1][x2][y2][l] = max(dp[x1][y1][x2][y2][l], dp[x1][0][x2][0][i] + dp[x1][1][x2][1][l - i]); &#125; &#125; &#125; &#125; &#125; &#125; &#125; cout&lt;&lt;dp[0][0][n - 1][m - 1][k]; return 0;&#125; 更好的解法 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;划分为m=1和m=2两种情况。m=1时就是一个改编的连续区间和最值问题，直接上DP求出即可。方法是令dp(x，p)表示在序号为1~x（从1开始计数）的区间中找到不超过p个连续子区间分值之和的最大值，那么有状态转移方程： dp(x，p)=\max\{\max\{dp(i,p),dp(i,p-1)+S(i+1,x)\}\},0\leq i < x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S(a，b)为[a，b]的分值之和，用前缀和维护。初始化dp(1，i)=max(0,value(1,1))(1≤i≤k)，其余为0，递推即可。答案即为dp(n，k)。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m=2时令dp(i，j，p)表示从第一列前i行，第二列前j行组成的区域中选取不超过p个子矩阵的分值之和最大值。在末行元素不选时有： dp(i,j,p)=\max\{dp(i-1,j,p),dp(i,j-1,p)\}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里类似最长公共子序列的解法。而选取第一列末行元素时有： dp(i,j,p)=\max\{dp(l,j,p-1)+S1(l+1,i)\},0\leq l < i&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S1(a，b)表示第一列区间[a，b]的分值之和，同样用前缀和维护。同理可得选取第二列末行元素时有： dp(i,j,p)=\max\{dp(i,l,p-1)+S2(l+1,j)\},0\leq l < j&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S2维护第二列区间分值之和。特殊地，在i=j时，我们可以将它们同时选取，分到同一个子矩阵中： dp(i,j,p)=\max\{dp(l,l,p-1)+S1(l+1,i)+S2(l+1,j)\},0\leq l < i=j&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从它们当中找到最大值即可，初始化方法类似m=1时的情形。答案即为dp(n，n，k)，时间复杂度为O(knm+1)。这种方法代码量较小，效率较高。1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950#include&lt;iostream&gt;using namespace std;int op[101][3], dp1[101][11] = &#123;0&#125;, dp2[101][101][11] = &#123;0&#125;, sum[3][101] = &#123;0&#125;;int n, m, k;int main() &#123; cin &gt;&gt; n &gt;&gt; m &gt;&gt; k; for (int i = 1; i &lt;= n; i++) &#123; for (int j = 1; j &lt;= m; j++) &#123; cin &gt;&gt; op[i][j]; if (i == 1)sum[j][i] = op[i][j];//前缀和 else sum[j][i] = sum[j][i - 1] + op[i][j]; &#125; &#125; if (m == 1) &#123; for (int i = 1; i &lt;= k; i++)dp1[1][i] = max(0, op[1][1]); for (int i = 2; i &lt;= n; i++) &#123; for (int j = 1; j &lt;= k; j++) &#123; for (int p = i - 1; p &gt;= 0; p--) &#123; dp1[i][j] = max(dp1[i][j], dp1[p][j - 1] + sum[1][i] - sum[1][p]); dp1[i][j] = max(dp1[i][j], dp1[p][j]); &#125; &#125; &#125; cout &lt;&lt; dp1[n][k]; &#125; else &#123; for (int i = 1; i &lt;= k; i++)dp2[0][1][i] = max(0, op[1][2]), dp2[1][0][i] = max(0, op[1][1]); for (int i = 0; i &lt;= n; i++) &#123; for (int j = 0; j &lt;= n; j++) &#123; if (!i &amp;&amp; !j)continue; for (int p = 1; p &lt;= k; p++) &#123; if (i &gt; 0)dp2[i][j][p] = max(dp2[i][j][p], dp2[i - 1][j][p]);//不选的情况 if (j &gt; 0)dp2[i][j][p] = max(dp2[i][j][p], dp2[i][j - 1][p]); for (int z = i - 1; z &gt;= 0; z--)//第一列枚举 dp2[i][j][p] = max(dp2[i][j][p], dp2[z][j][p - 1] + sum[1][i] - sum[1][z]); for (int z = j - 1; z &gt;= 0; z--)//第二列枚举 dp2[i][j][p] = max(dp2[i][j][p], dp2[i][z][p - 1] + sum[2][j] - sum[2][z]); if (i == j) &#123; for (int z = i - 1; z &gt;= 0; z--)//全枚举 dp2[i][j][p] = max(dp2[i][j][p], dp2[z][z][p - 1] + sum[1][i] - sum[1][z] + sum[2][i] - sum[2][z]); &#125; &#125; &#125; &#125; cout &lt;&lt; dp2[n][n][k]; &#125; return 0;&#125;]]></content>
@@ -38,9 +51,9 @@
         <tag>基础算法</tag>
         <tag>区间最值</tag>
         <tag>数据结构</tag>
-        <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
+        <tag>区间</tag>
       </tags>
   </entry>
   <entry>
@@ -55,9 +68,9 @@
         <tag>区间最值</tag>
         <tag>ST表</tag>
         <tag>动态规划</tag>
-        <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
+        <tag>区间</tag>
         <tag>矩阵</tag>
       </tags>
   </entry>
@@ -121,7 +134,7 @@
       <tags>
         <tag>动态规划</tag>
         <tag>树</tag>
-        <tag>背包</tag>
+        <tag>背包问题</tag>
       </tags>
   </entry>
   <entry>
@@ -133,8 +146,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>贪心</tag>
         <tag>树</tag>
+        <tag>贪心</tag>
       </tags>
   </entry>
   <entry>
@@ -340,8 +353,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>图论</tag>
+        <tag>基础算法</tag>
         <tag>图的最短路</tag>
       </tags>
   </entry>
@@ -353,8 +366,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>图论</tag>
+        <tag>基础算法</tag>
         <tag>图的最短路</tag>
       </tags>
   </entry>
@@ -443,8 +456,8 @@
       <tags>
         <tag>提高算法</tag>
         <tag>动态规划</tag>
-        <tag>离散化</tag>
         <tag>数论</tag>
+        <tag>离散化</tag>
       </tags>
   </entry>
   <entry>
@@ -570,8 +583,8 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
-        <tag>贪心</tag>
         <tag>堆</tag>
+        <tag>贪心</tag>
       </tags>
   </entry>
   <entry>
