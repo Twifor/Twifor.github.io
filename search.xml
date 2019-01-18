@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[四边形不等式]]></title>
+    <url>%2F2019%2F01%2F18%2F%E5%9B%9B%E8%BE%B9%E5%BD%A2%E4%B8%8D%E7%AD%89%E5%BC%8F%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本节介绍DP的优化方法之一————四边形不等式。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在列状态转移方程时，我们常常会遇到如下形式的方程： dp(i,j)=\min\{dp(i,k)+dp(k+1,j)\}+m(i,j),i\leq k < j&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这种方程很常见，比如题目合并石子的方程就满足这种形式。m为转移的代价。dp时间复杂度为O(n2)，转移枚举为O(n)，故总体时间复杂度为O(n3)。我们可以用四边形不等式将其减至O(n2)复杂度。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果对于a≤i&lt;j≤b，总有： m(a,j)+m(i,b)\leq m(i,j)+m(a,b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;则称m满足四边形不等式，一句话概括为：交叉小于包含。下面介绍三个重要定理。 【定理一】m满足四边形不等式的充要条件是 $m(i,j)+m(i+1,j+1)≤m(i+1,j)+m(i,j+1),i&lt;j$。 证明：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;显然这个不等式是m满足四边形不等式的特殊情形，于是必要性成立，下证充分性。我们只需证明$m(i,j)+m(i+a,j+b)≤m(i+a,j)+m(i,j+b),i\leq i+a &lt; j \leq j+b$，这里只对i的情况进行讨论，采用数学归纳法。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由已知可知，$m(i,j)+m(i+1,j+1)\leq m(i+1,j)+m(i,j+1)$是成立的。假设$m(i,j)+m(i+k,j+1)\leq m(i+k,j)+m(i,j+1)$成立，那么由已知，应有： m(i+k,j)+m(i+k+1,j+1)\leq m(i+k+1,j)+m(i+k,j+1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;与假设的式子联立，立即得到： m(i,j)+m(i+k,j+1)+m(i+k,j)+m(i+k+1,j+1)\leq m(i+k,j)+m(i,j+1)+m(i+k+1,j)+m(i+k,j+1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;也就是： m(i,j)+m(i+k+1,j+1)\leq m(i,j+1)+m(i+k+1,j)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由归纳法，我们便知$m(i,j)+m(i+a,j+1)≤m(i+a,j)+m(i,j+1)$是成立的，j类似证明即可。两个结合便可证明四边形不等式，于是定理一得证。这个定义可以帮助我们判断m是否满足四边形不等式。 【定理二】若m满足四边形不等式，则dp也满足四边形不等式。 证明：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;只需证明$dp(a,j)+dp(i,b)\leq dp(i,j)+dp(a,b),a\leq i &lt; j\leq b$。采用数学归纳法。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a=i&lt;i+1=j=b时显然成立。对于固定的a、i，我们假设在a≤i&lt;j≤b≤P时成立，那么在b=P+1时：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假设dp(i,j)在k=x处取得最优解，dp(a,P+1)在k=y处取到最优解，假设x≤y(x &gt;y时类似可证)，那么上式等价于： dp(a,j)+dp(i,P+1)\leq dp(i,x)+dp(x+1,j)+dp(a,y)+dp(y+1,P+1)+m(i,j)+m(a,P+1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意到： dp(a,j)+dp(i,P+1)\leq dp(a,x)+dp(x+1,j)+dp(i,y)+dp(y+1,P+1)+m(a,j)+m(i,P+1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;而m满足四边形不等式，也就是有： m(a,j)+m(i,P+1)\leq m(i,j)+m(a,P+1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于a≤i&lt;x≤y&lt;P+1由归纳假设，有(i=x时也成立)： dp(a,x)+dp(i,y)\leq dp(i,x)+dp(a,y)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是有： dp(a,x)+dp(x+1,j)+dp(i,y)+dp(y+1,P+1)+m(a,j)+m(i,P+1)\leq dp(i,x)+dp(x+1,j)+dp(a,y)+dp(y+1,P+1)+m(i,j)+m(a,P+1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么： dp(a,j)+dp(i,P+1)\leq dp(i,j)+dp(a,P+1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;也就是对P+1也成立，由归纳法可知dp也满足四边形不等式。这个定理是定理三的基础。 【定理三】若dp满足四边形不等式，设S(i,j)为dp(i,j)取最优解的k值，那么有$S(i,j-1)\leq S(i,j)\leq S(i+1,j)$ 证明：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设$dp_k(i,j)=dp(i,k)+dp(k+1,j)+m(i,j)，S(i,j)=d$那么：$(dp_k(i+1,j)-dp_d(i+1,j))-(dp_k(i,j)-dp_d(i,j))$$=(dp_k(i+1,j)+dp_d(i,j))-(dp_d(i+1,j)+dp_k(i,j))$$=(dp(i+1,k)+dp(k,j)+dp(i,d)+dp(d,j)+m(i+1,j)+m(i,j))-\\(dp(i+1,d)+dp(d,j)+dp(i,k)+dp(k,j)+m(i+1,j)+m(i,j))$$=(dp(i+1,k)+dp(i,d))-(dp(i+1,d)+dp(i,k))$ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;倘若k&lt;d，那么有i&lt;i+1&lt;k&lt;d。由dp的四边形不等式，有： dp(i,k)+dp(i+1,d)\leq dp(i+1,k)+dp(1,d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是$(dp_k(i+1,j)-dp_d(i+1,j))-(dp_k(i,j)-dp_d(i,j))\geq 0$，即： dp_k(i+1,j)-dp_d(i+1,j)\geq dp_k(i,j)-dp_d(i,j)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于S(i,j)=d，故$dp_k(i,j)\geq dp_d(i,j)$，所以： dp_k(i+1,j)\geq dp_d(i+1,j)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个式子说明，k&lt;d时不能取到比k=d更优的解，所以S(i+1,j)≥d。S(i,j-1)≤d同理可证，定理三成立。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;定理三表明，k的取值可以优化到一个很小的范围内，即[S(i,j-1),S(i+1,j)]，我们开一个数组S储存这个结果，时间复杂度便压缩到O(n2)。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是对于最大值又如何做呢？最大值不能用四边形不等式，但是它有另一个性质：最大值的k值一定在端点处取到。这个性质仍然可以帮助我们优化算法。容易验证石子合并的m是满足四边形不等式的，于是我们可以用四边形不等式优化DP过程，下面给出优化版代码：12345678910111213141516171819202122232425262728293031323334353637#include&lt;iostream&gt;#define N 100*2+1using namespace std;int n, op[N], sum[N] = &#123;0&#125;;int dp1[N][N], dp2[N][N], S[N][N];int ans1 = 0x7fffffff, ans2 = -1;int main() &#123; cin &gt;&gt; n; for (int i = 1; i &lt;= n; i++) &#123; cin &gt;&gt; op[i]; op[i + n] = op[i]; &#125; for (int i = 1; i &lt;= 2 * n; i++)sum[i] = op[i] + sum[i - 1];//前缀和 for (int j = 2 * n; j &gt;= 1; j--) &#123;//最大值 for (int z = j; z &lt;= 2 * n; z++) &#123; if (j == z)dp2[j][z] = 0; else dp2[j][z] = max(dp2[j + 1][z], dp2[j][z - 1]) + sum[z] - sum[j - 1]; &#125; &#125; for (int j = 2 * n; j &gt;= 1; j--) &#123;//最小值 for (int z = j; z &lt;= 2 * n; z++) &#123; if (j == z)S[j][z] = j, dp1[j][z] = 0; else &#123; dp1[j][z] = 0x7fffffff; for (int k = S[j][z - 1]; k &lt;= S[j + 1][z] &amp;&amp; k &lt; z; k++) &#123; if (dp1[j][k] + dp1[k + 1][z] + sum[z] - sum[j - 1] &lt; dp1[j][z]) dp1[j][z] = dp1[j][k] + dp1[k + 1][z] + sum[z] - sum[j - 1], S[j][z] = k; &#125; &#125; &#125; &#125; for (int i = 1; i &lt;= n; i++)ans1 = min(ans1, dp1[i][i + n - 1]), ans2 = max(ans2, dp2[i][i + n - 1]); cout &lt;&lt; ans1 &lt;&lt; endl &lt;&lt; ans2; return 0;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于环的处理，我们仍然是剪环为链，但是这里我们的做法比原先的做法高明的多（直接将n个石子扩展为2n个，再寻找答案），于是时间复杂度降了一维。我们再用四边形不等式降一维，总体时间复杂度便为O(n2)。]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>动态规划</tag>
+        <tag>四边形不等式</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[[洛谷P3652]时间复杂度]]></title>
     <url>%2F2019%2F01%2F17%2F%E6%B4%9B%E8%B0%B7P3652-%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%2F</url>
     <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NOIP2017 D1 T2原题，难度较大的模拟 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小明正在学习一种新的编程语言 A++，刚学会循环语句的他激动地写了好多程序并 给出了他自己算出的时间复杂度，可他的编程老师实在不想一个一个检查小明的程序， 于是你的机会来啦！下面请你编写程序来判断小明对他的每个程序给出的时间复杂度是否正确。A++语言的循环结构如下： F i x y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;循环体E &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其中F i x y表示新建变量 i（变量 i 不可与未被销毁的变量重名）并初始化为 x， 然后判断 i 和 y 的大小关系，若 i 小于等于 y 则进入循环，否则不进入。每次循环结束后 i 都会被修改成 i +1，一旦 i 大于 y 终止循环。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x 和 y 可以是正整数（x 和 y 的大小关系不定）或变量 n。n 是一个表示数据规模的变量，在时间复杂度计算中需保留该变量而不能将其视为常数，该数远大于 100。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;“E”表示循环体结束。循环体结束时，这个循环体新建的变量也被销毁。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：本题中为了书写方便，在描述复杂度时，使用大写英文字母“O”表示通常意义下“Θ”的概念。 输入输出格式输入格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输入文件第一行一个正整数 t，表示有 t（t≤10）个程序需要计算时间复杂度。 每个程序我们只需抽取其中 F i x y和E即可计算时间复杂度。注意：循环结构 允许嵌套。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接下来每个程序的第一行包含一个正整数 L 和一个字符串，L 代表程序行数，字符 串表示这个程序的复杂度，O(1)表示常数复杂度，O(n^w)表示复杂度为n^w，其中w是一个小于100的正整数（输入中不包含引号），输入保证复杂度只有O(1)和O(n^w) 两种类型。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接下来 L 行代表程序中循环结构中的F i x y或者 E。 程序行若以F开头，表示进入一个循环，之后有空格分离的三个字符（串）i x y， 其中 i 是一个小写字母（保证不为n），表示新建的变量名，x 和 y 可能是正整数或 n ，已知若为正整数则一定小于 100。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;程序行若以E开头，则表示循环体结束。 输出格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输出文件共 t 行，对应输入的 t 个程序，每行输出Yes或No或者ERR（输出中不包含引号），若程序实际复杂度与输入给出的复杂度一致则输出Yes，不一致则输出No，若程序有语法错误（其中语法错误只有: ① F 和 E 不匹配 ②新建的变量与已经存在但未被销毁的变量重复两种情况），则输出ERR 。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意：即使在程序不会执行的循环体中出现了语法错误也会编译错误，要输出 ERR。 输入输出样例Sample input 82 O(1)F i 1 1E2 O(n^1)F x 1 nE1 O(1)F x 1 n4 O(n^2)F x 5 nF y 10 nEE4 O(n^2)F x 9 nEF y 2 nE4 O(n^1)F x 9 nF y n 4EE4 O(1)F y n 4F x 9 nEE4 O(n^2)F x 1 nF x 1 10EE Sample output YesYesERRYesNoYesYesERR 说明【输入输出样例解释1】&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第一个程序 i 从 1 到 1 是常数复杂度。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第二个程序 x 从 1 到 n 是 n 的一次方的复杂度。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第三个程序有一个 F 开启循环却没有 E 结束，语法错误。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第四个程序二重循环，n 的平方的复杂度。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第五个程序两个一重循环，n 的一次方的复杂度。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第六个程序第一重循环正常，但第二重循环开始即终止（因为n远大于100，100大于4）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第七个程序第一重循环无法进入，故为常数复杂度。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第八个程序第二重循环中的变量 x 与第一重循环中的变量重复，出现语法错误②，输出 ERR。 【数据规模与约定】&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于 30%的数据：不存在语法错误，数据保证小明给出的每个程序的前 L/2 行一定为以 F 开头的语句，第 L/2+1行至第 L 行一定为以 E 开头的语句，L≤10，若 x、y 均为整数，x 一定小于 y，且只有 y 有可能为 n。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于50%的数据：不存在语法错误，L≤100，且若 x、y 均为整数，x 一定小于 y， 且只有 y 有可能为 n。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于70%的数据：不存在语法错误，L≤100。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于100%的数据：L≤100。 题解&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;思路还是比较清晰的，用栈模拟循环嵌套过程，并不断记录已经存在的变量。详细过程见代码注释。1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374#include&lt;iostream&gt;#include&lt;string&gt;#include&lt;cstring&gt;#include&lt;stack&gt;using namespace std;bool vis[26];stack&lt;int&gt; sta;inline int find(string x) &#123;//字符串解析 if (x[2] == '1')return 0; int s = 0; for (int i = 4; x[i] != ')'; i++)s = s * 10 + x[i] - '0'; return s;&#125;inline int solve(string x, string y) &#123;//循环开始结束时间解析，0表示可执行的常数次数，1表示可执行的线性次数，-1表示不可执行 if (x[0] == 'n' &amp;&amp; y[0] == 'n')return 0; if (y[0] == 'n')return 1;//一定可以执行，与n成正比 if (x[0] == 'n')return -1;//一定不能被执行 if (x.length() &gt; y.length())return -1; if (x.length() &lt; y.length())return 0;//可以被执行，常数复杂度 for (int i = 0; i &lt; x.length(); i++)if (x[i] &lt; y[i])return 0; else if (x[i] &gt; y[i])return -1; return 0;//x=y，常数复杂度&#125;int main() &#123; int T, L, ans0, ans, depth; //T 样例数、L 行数、ans0 给定的时间复杂度答案(只存指数，O(1)存0)、ans 实际的答案(语法错误即为-1)，depth为有效深度 //有效深度指可以被执行的并且与n有线性时间关系的循环嵌套层数，ans就是depth的最大值 bool key;//是否会执行 string op, n1, n2; char e; cin &gt;&gt; T; for (int ti = 0; ti &lt; T; ti++) &#123; cin &gt;&gt; L &gt;&gt; op; ans0 = find(op), memset(vis, 0, sizeof(vis)), ans = 0, key = true, depth = 0;//初始化 while (!sta.empty())sta.pop();//清空栈 for (int i = 0; i &lt; L; i++) &#123;//逐行读取 cin &gt;&gt; e;// if (e == 'E') &#123;//循环结束标志 if (sta.empty())ans = -1;//栈已空，ERR else &#123; if (sta.top() / 100 == 1)key = true, vis[sta.top() - 100] = false;//找到不可执行开始符，标记又可以执行 else if (sta.top() / 100 == 2) &#123;//找到有效深度标识符 if (key)depth--;//可以被执行的情况下深度减一 vis[sta.top() - 200] = false; &#125; else vis[sta.top()] = false;//直接去除重名标记 sta.pop();//出栈 &#125; if (ans == -1)continue;//语法错误跳过 &#125; else &#123;//循环开始标志 cin &gt;&gt; e &gt;&gt; n1 &gt;&gt; n2; if (vis[e - 'a'])ans = -1;//重名，ERR else vis[e - 'a'] = true;//加上重名限制 if (ans == -1)continue;//已经有语法错误，后面跳过即可 int temp = solve(n1, n2);//储存循环结果 if (temp == 1) &#123;//随n线性时间复杂度情况 if (key)depth++;//如果可以执行，更新有效深度 sta.push(200 + e - 'a');//入栈，打上有效深度标记 &#125; else if (temp == -1) &#123;//不能执行 if (key)sta.push(100 + e - 'a'), key = false;//标记不可执行开始符，标记key，之后不可执行 else sta.push(e - 'a'); &#125; else sta.push(e - 'a');//常数复杂度不影响结果，不更新有效深度，直接入栈即可 &#125; ans = max(ans, depth);//ans在不为-1时记录最大有效深度 &#125; if (!sta.empty())ans = -1;//栈没空，说明少E，ERR if (ans == -1)cout &lt;&lt; "ERR" &lt;&lt; endl; else if (ans0 != ans)cout &lt;&lt; "No" &lt;&lt; endl; else cout &lt;&lt; "Yes" &lt;&lt; endl; &#125; return 0;&#125;]]></content>
@@ -20,8 +32,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
+        <tag>提高算法</tag>
         <tag>滚动数组</tag>
       </tags>
   </entry>
@@ -33,9 +45,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
+        <tag>动态规划</tag>
         <tag>提高算法</tag>
         <tag>ST表</tag>
-        <tag>动态规划</tag>
         <tag>矩阵</tag>
       </tags>
   </entry>
@@ -47,9 +59,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
         <tag>状态压缩</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -63,9 +75,9 @@
         <tag>基础算法</tag>
         <tag>区间最值</tag>
         <tag>数据结构</tag>
+        <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
-        <tag>区间</tag>
       </tags>
   </entry>
   <entry>
@@ -77,13 +89,13 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
+        <tag>动态规划</tag>
         <tag>区间最值</tag>
         <tag>ST表</tag>
-        <tag>动态规划</tag>
-        <tag>队列</tag>
-        <tag>单调队列</tag>
         <tag>区间</tag>
         <tag>矩阵</tag>
+        <tag>队列</tag>
+        <tag>单调队列</tag>
       </tags>
   </entry>
   <entry>
@@ -94,8 +106,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
+        <tag>提高算法</tag>
         <tag>字符串</tag>
       </tags>
   </entry>
@@ -107,8 +119,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -119,8 +131,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -131,8 +143,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
+        <tag>提高算法</tag>
         <tag>贪心</tag>
       </tags>
   </entry>
@@ -170,8 +182,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -182,8 +194,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
+        <tag>提高算法</tag>
         <tag>滚动数组</tag>
       </tags>
   </entry>
@@ -197,8 +209,8 @@
       <tags>
         <tag>图论</tag>
         <tag>图的最短路</tag>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
+        <tag>提高算法</tag>
         <tag>数学期望</tag>
       </tags>
   </entry>
@@ -234,9 +246,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
         <tag>状态压缩</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -339,8 +351,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>区间最值</tag>
         <tag>提高算法</tag>
+        <tag>区间最值</tag>
         <tag>数据结构</tag>
         <tag>ST表</tag>
       </tags>
@@ -415,8 +427,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
+        <tag>提高算法</tag>
         <tag>矩阵</tag>
         <tag>DFS</tag>
       </tags>
@@ -442,8 +454,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -466,8 +478,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
+        <tag>提高算法</tag>
         <tag>数论</tag>
         <tag>离散化</tag>
       </tags>
@@ -480,8 +492,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -544,8 +556,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -562,8 +574,8 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[[洛谷P1008]石子合并]]></title>
-    <url>%2F2019%2F01%2F09%2F%E6%B4%9B%E8%B0%B7P1008-%E7%9F%B3%E5%AD%90%E5%90%88%E5%B9%B6%2F</url>
+    <title><![CDATA[[洛谷P1880]石子合并]]></title>
+    <url>%2F2019%2F01%2F09%2F%E6%B4%9B%E8%B0%B7P1880-%E7%9F%B3%E5%AD%90%E5%90%88%E5%B9%B6%2F</url>
     <content type="text"><![CDATA[难度：普及+/提高 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在一个圆形操场的四周摆放N堆石子，现要将石子有次序地合并成一堆。规定每次只能选相邻的2堆合并成新的一堆，并将新的一堆的石子数，记为该次合并的得分。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;试设计出1个算法，计算出将N堆石子合并成1堆的最小得分和最大得分。 输入输出格式输入格式:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数据的第1行为正整数N，1≤N≤100，表示有N堆石子。第2行有N个数，分别表示每堆石子的个数。 输出格式:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输出共2行，第1行为最小得分，第2行为最大得分。 输入输出样例Sample input 44 5 9 4 Sample output 4354 题解&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;题目考察线性动态规划。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;与贪心算法不同的是，本题要求只能合并相邻的两堆石子，环形排布又加大了题目难度。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一种思路是将已知的序列首尾相接，从中截取长度为n的子序列，来模拟环形。这是因为在环形结构中，若只合并相邻的两个数，最后必有两个数待合并，从这两个数中间剪环为链，容易知这两者是等价的。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是期初我们并不知从何处剪环，故要将所有情况都考虑到，从每个剪环策略中选取最值即可。在这个思路中，从何处截取序列便是剪环的操作。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假定在一个剪环策略下，令左元素为l，右元素为r。设从x到y的序列合并得分最值为f(x，y)，那么可列出状态转移方程(设value(l，r)表示l到r的石子总和): f(x，y)=\min/\max\{f(l，k)+f(k+1，r)\}+value(l，r),l \leq k]]></content>
       <categories>
         <category>算法与OI</category>
@@ -671,8 +683,8 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
-        <tag>动态规划</tag>
         <tag>二分查找</tag>
+        <tag>动态规划</tag>
         <tag>子序列</tag>
       </tags>
   </entry>
