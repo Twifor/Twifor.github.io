@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Stein算法]]></title>
+    <url>%2F2019%2F01%2F19%2FStein%E7%AE%97%E6%B3%95%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本次介绍一种在高精度下求最大公约数的算法——stein算法。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;比较常规的gcd算法有辗转相除法和更相减损术，但是后者过慢，前者不利于高精度（因为有大量的除法取余运算，对高精度十分不友好），于是需要一种更高效又易于操作的算法。这便是stein算法，它是更相减损术的改进。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;算法思想如下（比如求x和y的最大公因数）： 如果两个数均为偶数，则两数均取半，答案为2*gcd(x/2，y/2)。 如果两数中有一方为偶数，一方为奇数（假如x为偶数），则偶数取半，答案为gcd(x/2，y)。 如果两数均为奇数，若x=y则答案即为x；否则若x&gt;y，则答案为gcd(x-y，y)，x&lt;y为gcd(x，y-x)。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;算法正确性很容易证明，这里略。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;重复以上过程即可得到答案。容易发现整个过程中只有除以2，乘法和减法运算，在高精度下容易操作。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面用洛谷P2152 SuperGCD来应用这个算法。 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sheng bill有着惊人的心算能力，甚至能用大脑计算出两个巨大的数的GCD（最大公约 数）！因此他经常和别人比赛计算GCD。有一天Sheng bill很嚣张地找到了你，并要求和你比赛，但是输给Sheng bill岂不是很丢脸！所以你决定写一个程序来教训他。 输入输出格式输入格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;共两行： 第一行：一个数A。 第二行：一个数B。 输出格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一行，表示A和B的最大公约数。 输入输出样例Sample input 1254 Sample output 6 说明&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于20%的数据，0 &lt; A , B ≤ 1018。 对于100%的数据，0 &lt; A , B ≤ 1010000。 题解&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一道很裸的高精度gcd，注意压位（这里压8位），用stein算法就可以快速求出。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所谓压位，就是将10进制数按10k进制数储存在数组中（这里选k=8），从而减小时空消耗的方法。压位后的输出是一大坑点，要格外注意前导0数量的准确判定。压位后的运算过程与朴素10进位方法没有大的差别，要注意提前设置好进位base。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这题不要用递归，否则MLE，用数组循环即可。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114#include&lt;iostream&gt;#include&lt;string&gt;#define P 8#define Base 100000000using namespace std;long long s1[10000] = &#123;0&#125;, s2[10000] = &#123;0&#125;, ans[10000] = &#123;0&#125;, temp[10000] = &#123;0&#125;;inline int change(string x) &#123;//化字符串为数字 int s = 0; for (int i = 0; i &lt; x.length(); i++)s = s * 10 + x[i] - '0'; return s;&#125;inline bool isEven(const long long *x) &#123;//判断偶数 return x[1] % 2 == 0;&#125;inline void div(long long *x) &#123;//除以2 int r = 0; for (int i = x[0]; i &gt;= 1; i--) &#123; if (x[i] % 2 == 0) &#123; x[i] = (x[i] + r * Base) / 2; r = 0; &#125; else x[i] = (x[i] + r * Base) / 2, r = 1; &#125; if (x[x[0]] == 0)x[0]--;&#125;inline void times(long long *x) &#123;//x=x*2 int r = 0; for (int i = 1; i &lt;= x[0]; i++)x[i] *= 2, x[i] += r, r = x[i] / Base, x[i] %= Base; if (r != 0)x[++x[0]] = r;&#125;inline int cmp(long long *x, long long *y) &#123;//x&lt;y? if (x[0] &lt; y[0])return 1; if (x[0] &gt; y[0])return -1; for (int i = x[0]; i &gt;= 1; i--) if (x[i] &lt; y[i])return 1; else if (x[i] &gt; y[i])return -1; return 0;//=&#125;inline void times2(long long *x, const long long *y) &#123;//x=x*y for (int i = 1; i &lt;= x[0]; i++) &#123; for (int j = 1; j &lt;= y[0]; j++) &#123; temp[j + i - 1] += x[i] * y[j]; &#125; &#125; long long r = 0; x[0] = y[0] + x[0] - 1; for (int i = 1; i &lt;= x[0]; i++) &#123; long long t = temp[i] + r; x[i] = t % Base; r = t / Base; &#125; while (r != 0)x[++x[0]] = r % Base, r /= Base;&#125;inline void sub(long long *x, long long *y) &#123;//x=x-y for (int i = 1; i &lt;= x[0]; i++) &#123; if (x[i] &gt;= y[i])x[i] -= y[i]; else &#123; x[i] = x[i] + Base - y[i];//不够借位 x[i + 1]--; &#125; &#125; for (int i = x[0]; i &gt;= 1; i--)//重新找右值 if (x[i] != 0) &#123; x[0] = i; return; &#125;&#125;inline void print(long long *x) &#123;//输出x int te; for (int i = x[0]; i &gt;= 1; i--) &#123; if (i == x[0]) cout &lt;&lt; x[i]; else &#123; te = Base / 10; while (te &gt; 0)cout &lt;&lt; x[i] / te, x[i] %= te, te /= 10; &#125; &#125; cout &lt;&lt; endl;&#125;int main() &#123; string a, b; cin &gt;&gt; a &gt;&gt; b; for (int i = a.length() - 1; i &gt;= 0; i -= P) &#123;//压位 if (i - P + 1 &gt;= 0)s1[++s1[0]] = change(a.substr(i - P + 1, P)); else s1[++s1[0]] = change(a.substr(0, i + 1)); &#125; for (int i = b.length() - 1; i &gt;= 0; i -= P) &#123;//压位 if (i - P + 1 &gt;= 0)s2[++s2[0]] = change(b.substr(i - P + 1, P)); else s2[++s2[0]] = change(b.substr(0, i + 1)); &#125; ans[1] = ans[0] = 1; while (true) &#123;//stein算法执行 if (isEven(s1) &amp;&amp; isEven(s2))div(s1), div(s2), times(ans); else if (isEven(s1))div(s1); else if (isEven(s2))div(s2); else &#123; int status = cmp(s1, s2); if (status == 0) &#123; times2(ans, s1); print(ans); return 0; &#125; else if (status == 1)sub(s2, s1); else sub(s1, s2); &#125; &#125;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P.S.据说Python代码就两行…Orz]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>数论</tag>
+        <tag>最大公约数</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[[洛谷P3084]Photo]]></title>
     <url>%2F2019%2F01%2F19%2F%E6%B4%9B%E8%B0%B7P3084-Photo%2F</url>
     <content type="text"><![CDATA[难度：省选/NOI- 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;农夫约翰决定给站在一条线上的N(1 ≤ N ≤ 200,000)头奶牛制作一张全家福照片，N头奶牛编号1到N。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是约翰拍摄了M(1 ≤ M ≤ 100,000)张照片，每张照片都覆盖了连续一段奶牛：第i张照片中包含了编号ai 到 bi的奶牛。但是这些照片不一定把每一只奶牛都拍了进去。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在拍完照片后，约翰发现了一个有趣的事情：每张照片中都有且仅有一只身上带有斑点的奶牛。约翰意识到他的牛群中有一些斑点奶牛，但他从来没有统计过它们的数量。 根据照片，请你帮约翰估算在他的牛群中最多可能有多少只斑点奶牛。如果无解，输出“-1”。 输入输出格式输入格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第一行两个整数：N和M。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第2到M+1行，两个整数，ai和bi。 输出格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;共一行，牛群中斑点奶牛的最大数目。如果无解输出-1。 输入输出样例Sample input 5 31 42 53 4 Sample output 1 题解&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这其实是差分约束的题目，也可以用DP做。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;规定r(i)为包含i这个点的所有区间的左端点最小值-1，l(i)表示在i左侧的所有区间左端点的最大值。这两个量是后面DP的基础，可以用两遍for循环解决。初始化l(i)=0，r(i)=i-1，并在读入数据时预处理。有方程： l(i)=\max\{l(i),l(i-1)\};r(i)=\min\{r(i),r(i+1)\}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个思路很重要，可以用于一些区间DP的预处理。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;令dp(i)为1~i的奶牛最大数量并且i处必须有奶牛，仅有i=n+1时为i处没有奶牛的值。有状态转移方程： dp(i)=\begin{cases}\max\{dp(k)\}+1,l(i)\leq k \leq r(i)\ \ \ & i\leq n\\ \max\{dp(k)\},l(i)\leq k \leq r(i)\ \ \ & i=n+1 \end{cases}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果l(i)&gt;r(i)则dp(i)=-inf。最终答案即为dp(n+1)，如果为负输出-1。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意到l和r都是单调递增的，可以用单调队列优化。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051#include&lt;iostream&gt;#include&lt;cstdio&gt;#define N 200000+1#define inf 0x7ffffffusing namespace std;inline int read() &#123; char e = getchar(); int s = 0; while (e &lt; '0' || e &gt; '9')e = getchar(); while (e &gt;= '0' &amp;&amp; e &lt;= '9')s = s * 10 + e - '0', e = getchar(); return s;&#125;int deq[N + 100], fr = 0, ba = -1;int n, m, l[N] = &#123;0&#125;, r[N], dp[N];int x, y;inline void Push(int x) &#123;//单调队列 while (ba &gt;= fr &amp;&amp; dp[deq[ba]] &lt; dp[x])ba--; deq[++ba] = x;&#125;inline int Front(int x) &#123; while (deq[fr] &lt; x)fr++; return deq[fr];&#125;int main() &#123; n = read(), m = read(); for (int i = 1; i &lt;= n + 1; i++)r[i] = i - 1; for (int i = 1; i &lt;= m; i++) &#123; x = read(), y = read(); l[y + 1] = max(l[y + 1], x), r[y] = min(r[y], x - 1); &#125; for (int i = 2; i &lt;= n + 1; i++)l[i] = max(l[i], l[i - 1]); for (int i = n; i &gt;= 1; i--)r[i] = min(r[i], r[i + 1]); dp[0] = 0; int key = 0; for (int i = 1; i &lt;= n + 1; i++) &#123; for (int k = key; k &lt;= r[i]; k++)Push(k); key = r[i] + 1; if (l[i] &gt; r[i])dp[i] = -inf; else if (i &lt;= n)dp[i] = dp[Front(l[i])] + 1; else dp[i] = dp[Front(l[i])]; &#125; if (dp[n + 1] &lt; 0)cout &lt;&lt; -1; else cout &lt;&lt; dp[n + 1]; return 0;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LYH注：这法真是妙，深深感受到自己的渺小]]></content>
@@ -8,8 +20,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>单调队列</tag>
       </tags>
   </entry>
@@ -57,8 +69,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>滚动数组</tag>
       </tags>
   </entry>
@@ -70,9 +82,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
         <tag>ST表</tag>
+        <tag>动态规划</tag>
         <tag>矩阵</tag>
       </tags>
   </entry>
@@ -84,10 +96,10 @@
         <category>算法与OI</category>
       </categories>
       <tags>
+        <tag>提高算法</tag>
         <tag>动态规划</tag>
         <tag>状态压缩</tag>
         <tag>位运算</tag>
-        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -101,9 +113,9 @@
         <tag>基础算法</tag>
         <tag>区间最值</tag>
         <tag>数据结构</tag>
-        <tag>区间</tag>
-        <tag>单调队列</tag>
         <tag>队列</tag>
+        <tag>单调队列</tag>
+        <tag>区间</tag>
       </tags>
   </entry>
   <entry>
@@ -115,12 +127,12 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
-        <tag>动态规划</tag>
         <tag>区间最值</tag>
         <tag>ST表</tag>
-        <tag>区间</tag>
-        <tag>单调队列</tag>
+        <tag>动态规划</tag>
         <tag>队列</tag>
+        <tag>单调队列</tag>
+        <tag>区间</tag>
         <tag>矩阵</tag>
       </tags>
   </entry>
@@ -132,8 +144,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>字符串</tag>
       </tags>
   </entry>
@@ -145,8 +157,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -157,8 +169,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -169,8 +181,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>贪心</tag>
       </tags>
   </entry>
@@ -196,8 +208,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>贪心</tag>
         <tag>树</tag>
+        <tag>贪心</tag>
       </tags>
   </entry>
   <entry>
@@ -208,8 +220,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -220,8 +232,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>滚动数组</tag>
       </tags>
   </entry>
@@ -235,8 +247,8 @@
       <tags>
         <tag>图论</tag>
         <tag>图的最短路</tag>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>数学期望</tag>
       </tags>
   </entry>
@@ -272,9 +284,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
+        <tag>提高算法</tag>
         <tag>动态规划</tag>
         <tag>状态压缩</tag>
-        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -403,21 +415,21 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>图论</tag>
+        <tag>基础算法</tag>
         <tag>图的最短路</tag>
       </tags>
   </entry>
   <entry>
     <title><![CDATA[Dijkstra算法与SPFA算法]]></title>
     <url>%2F2019%2F01%2F09%2FDijkstra%E7%AE%97%E6%B3%95%E4%B8%8ESPFA%E7%AE%97%E6%B3%95%2F</url>
-    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dijkstra算法是一种基于贪心思想的求单源最短路算法，时间复杂度为O(n2)。Dijkstra算法要求边权非负。步骤:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;① 一个数组dis[]保存最短路径长的结果，源点值置为0，其余为inf。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;② 一个集合S保存所有已求出最短路径长的节点，初始化S为空。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;③ 从不在S中的节点集合中找到dis最小的节点，用这个节点更新与之相邻的的节点dis值(这个过程叫松弛)，并将这个节点加入S。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;重复③，直到所有节点都加入S中。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们证明，不在S中的节点集合里面dis最小的节点，设为min，它的dis最小值必为当前值。这是因为若存在另外一条路径使得点dis值更小，必定会经过其余的某一个点，假设该点dis值为k，则应该有k+p]]></content>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dijkstra算法是一种基于贪心思想的求单源最短路算法，时间复杂度为O(n2)。Dijkstra算法要求边权为正。步骤:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;① 一个数组dis[]保存最短路径长的结果，源点值置为0，其余为inf。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;② 一个集合S保存所有已求出最短路径长的节点，初始化S为空。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;③ 从不在S中的节点集合中找到dis最小的节点，用这个节点更新与之相邻的的节点dis值(这个过程叫松弛)，并将这个节点加入S。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;重复③，直到所有节点都加入S中。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们证明，不在S中的节点集合里面dis最小的节点，设为min，它的dis最小值必为当前值。这是因为若存在另外一条路径使得点dis值更小，必定会经过其余的某一个点，假设该点dis值为k，则应该有k+p]]></content>
       <categories>
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>图论</tag>
+        <tag>基础算法</tag>
         <tag>图的最短路</tag>
       </tags>
   </entry>
@@ -453,8 +465,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>矩阵</tag>
         <tag>DFS</tag>
       </tags>
@@ -480,8 +492,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -492,8 +504,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数论</tag>
         <tag>提高算法</tag>
+        <tag>数论</tag>
       </tags>
   </entry>
   <entry>
@@ -504,9 +516,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
+        <tag>提高算法</tag>
         <tag>数论</tag>
         <tag>动态规划</tag>
-        <tag>提高算法</tag>
         <tag>离散化</tag>
       </tags>
   </entry>
@@ -518,8 +530,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -582,8 +594,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -709,8 +721,8 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
-        <tag>动态规划</tag>
         <tag>二分查找</tag>
+        <tag>动态规划</tag>
         <tag>子序列</tag>
       </tags>
   </entry>
