@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[[洛谷P3084]Photo]]></title>
+    <url>%2F2019%2F01%2F19%2F%E6%B4%9B%E8%B0%B7P3084-Photo%2F</url>
+    <content type="text"><![CDATA[难度：省选/NOI- 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;农夫约翰决定给站在一条线上的N(1 ≤ N ≤ 200,000)头奶牛制作一张全家福照片，N头奶牛编号1到N。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是约翰拍摄了M(1 ≤ M ≤ 100,000)张照片，每张照片都覆盖了连续一段奶牛：第i张照片中包含了编号ai 到 bi的奶牛。但是这些照片不一定把每一只奶牛都拍了进去。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在拍完照片后，约翰发现了一个有趣的事情：每张照片中都有且仅有一只身上带有斑点的奶牛。约翰意识到他的牛群中有一些斑点奶牛，但他从来没有统计过它们的数量。 根据照片，请你帮约翰估算在他的牛群中最多可能有多少只斑点奶牛。如果无解，输出“-1”。 输入输出格式输入格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第一行两个整数：N和M。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第2到M+1行，两个整数，ai和bi。 输出格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;共一行，牛群中斑点奶牛的最大数目。如果无解输出-1。 输入输出样例Sample input 5 31 42 53 4 Sample output 1 题解&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这其实是差分约束的题目，也可以用DP做。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;规定r(i)为包含i这个点的所有区间的左端点最小值-1，l(i)表示在i左侧的所有区间左端点的最大值。这两个量是后面DP的基础，可以用两遍for循环解决。初始化l(i)=0，r(i)=i-1，并在读入数据时预处理。有方程： l(i)=\max\{l(i),l(i-1)\};r(i)=\min\{r(i),r(i+1)\}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个思路很重要，可以用于一些区间DP的预处理。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;令dp(i)为1~i的奶牛最大数量并且i处必须有奶牛，仅有i=n+1时为i处没有奶牛的值。有状态转移方程： dp(i)=\begin{cases}\max\{dp(k)\}+1,l(i)\leq k \leq r(i)\ \ \ & i\leq n\\ \max\{dp(k)\},l(i)\leq k \leq r(i)\ \ \ & i=n+1 \end{cases}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果l(i)&gt;r(i)则dp(i)=-inf。最终答案即为dp(n+1)，如果为负输出-1。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意到l和r都是单调递增的，可以用单调队列优化。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051#include&lt;iostream&gt;#include&lt;cstdio&gt;#define N 200000+1#define inf 0x7ffffffusing namespace std;inline int read() &#123; char e = getchar(); int s = 0; while (e &lt; '0' || e &gt; '9')e = getchar(); while (e &gt;= '0' &amp;&amp; e &lt;= '9')s = s * 10 + e - '0', e = getchar(); return s;&#125;int deq[N + 100], fr = 0, ba = -1;int n, m, l[N] = &#123;0&#125;, r[N], dp[N];int x, y;inline void Push(int x) &#123;//单调队列 while (ba &gt;= fr &amp;&amp; dp[deq[ba]] &lt; dp[x])ba--; deq[++ba] = x;&#125;inline int Front(int x) &#123; while (deq[fr] &lt; x)fr++; return deq[fr];&#125;int main() &#123; n = read(), m = read(); for (int i = 1; i &lt;= n + 1; i++)r[i] = i - 1; for (int i = 1; i &lt;= m; i++) &#123; x = read(), y = read(); l[y + 1] = max(l[y + 1], x), r[y] = min(r[y], x - 1); &#125; for (int i = 2; i &lt;= n + 1; i++)l[i] = max(l[i], l[i - 1]); for (int i = n; i &gt;= 1; i--)r[i] = min(r[i], r[i + 1]); dp[0] = 0; int key = 0; for (int i = 1; i &lt;= n + 1; i++) &#123; for (int k = key; k &lt;= r[i]; k++)Push(k); key = r[i] + 1; if (l[i] &gt; r[i])dp[i] = -inf; else if (i &lt;= n)dp[i] = dp[Front(l[i])] + 1; else dp[i] = dp[Front(l[i])]; &#125; if (dp[n + 1] &lt; 0)cout &lt;&lt; -1; else cout &lt;&lt; dp[n + 1]; return 0;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LYH注：这法真是妙，深深感受到自己的渺小]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>动态规划</tag>
+        <tag>提高算法</tag>
+        <tag>单调队列</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[单调队列优化DP]]></title>
+    <url>%2F2019%2F01%2F19%2F%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97%E4%BC%98%E5%8C%96DP%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在之前的日志中提到了单调队列的一个用途——求固定长区间最值。这里介绍单调队列的另一种用途——优化DP。建议先阅读《单调队列求固定长区间最值》再阅读本文。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在状态转移方程中，有一种方程十分常见，它的形式如下所示： dp(i)=\min/\max\{s(k)\}+c(i),l(i)\leq k \leq r(i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里dp由s转移而来（s可以就是dp本身），s的取值范围由l(i)和r(i)确定，c(i)为转移代价，与k的选取无关。我们在求解这个方程时，需要for一遍i，还要for一遍k才可以得到dp值。如果l和r的距离很大，时间复杂度将达到O(n2)，转移时间消耗不可忽视。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当我们从小到大递推dp值时，如果发现l和r均单调递增，这时我们可以用单调队列优化DP过程，降低时间复杂度。这里的单调队列仍然存下标，具体算法如下： 定义开始点key，key初始化为最小的l值，如果从0开始计数则key=l(0)。 对于枚举到的每一个i，将[key，r(i)]的下标加入单调队列，并更新key=r(i)+1。 取队首元素。如果队首元素不在[l(i)，r(i)]中，忽略该元素继续取队首。最终得到的队首元素所指的元素即为最值。 算法正确性证明：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们证明i=k+1时可以求出最值：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;倘若l(k+1)&gt;r(k)，那么由于key更新为r(k)+1≤l(k+1)，易知[l(k+1)，r(k+1)]中的所有元素都在i=k+1时入队，显然可以得到最优解。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;倘若l(k)≤l(k+1)≤r(k)，如果i=k+1的最优解出现在[r(k)+1,r(k+1)]中，那么这一个区间的值一定在i=k+1时入队，一样可以求出最优解。如果i=k+1的最优解出现在[l(k+1)，r(k)]中（假设为p），我们证明p这个元素不可能被“剔除”。倘若存在q由于比p更优将p剔除出队列，那么一定有q&gt;p，容易知q也在[l(k+1)，r(k)]中，那么q应该是i=k+1时比p更优的解，这与p最优矛盾。因此p最优时不可能被剔除，最终我们仍可以得到最优解。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;综上所述，算法正确。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;单调队列求固定长区间最值其实是这种方法的特殊情况。]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>动态规划</tag>
+        <tag>单调队列</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[四边形不等式]]></title>
     <url>%2F2019%2F01%2F18%2F%E5%9B%9B%E8%BE%B9%E5%BD%A2%E4%B8%8D%E7%AD%89%E5%BC%8F%2F</url>
     <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本节介绍DP的优化方法之一————四边形不等式。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在列状态转移方程时，我们常常会遇到如下形式的方程： dp(i,j)=\min\{dp(i,k)+dp(k+1,j)\}+m(i,j),i\leq k < j&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这种方程很常见，比如题目合并石子的方程就满足这种形式。m为转移的代价。dp时间复杂度为O(n2)，转移枚举为O(n)，故总体时间复杂度为O(n3)。我们可以用四边形不等式将其减至O(n2)复杂度。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果对于a≤i&lt;j≤b，总有： m(a,j)+m(i,b)\leq m(i,j)+m(a,b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;则称m满足四边形不等式，一句话概括为：交叉小于包含。下面介绍三个重要定理。 【定理一】m满足四边形不等式的充要条件是 $m(i,j)+m(i+1,j+1)≤m(i+1,j)+m(i,j+1),i&lt;j$。 证明：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;显然这个不等式是m满足四边形不等式的特殊情形，于是必要性成立，下证充分性。我们只需证明$m(i,j)+m(i+a,j+b)≤m(i+a,j)+m(i,j+b),i\leq i+a &lt; j \leq j+b$，这里只对i的情况进行讨论，采用数学归纳法。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由已知可知，$m(i,j)+m(i+1,j+1)\leq m(i+1,j)+m(i,j+1)$是成立的。假设$m(i,j)+m(i+k,j+1)\leq m(i+k,j)+m(i,j+1)$成立，那么由已知，应有： m(i+k,j)+m(i+k+1,j+1)\leq m(i+k+1,j)+m(i+k,j+1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;与假设的式子联立，立即得到： m(i,j)+m(i+k,j+1)+m(i+k,j)+m(i+k+1,j+1)\leq m(i+k,j)+m(i,j+1)+m(i+k+1,j)+m(i+k,j+1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;也就是： m(i,j)+m(i+k+1,j+1)\leq m(i,j+1)+m(i+k+1,j)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由归纳法，我们便知$m(i,j)+m(i+a,j+1)≤m(i+a,j)+m(i,j+1)$是成立的，j类似证明即可。两个结合便可证明四边形不等式，于是定理一得证。这个定义可以帮助我们判断m是否满足四边形不等式。 【定理二】若m满足四边形不等式，则dp也满足四边形不等式。 证明：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;只需证明$dp(a,j)+dp(i,b)\leq dp(i,j)+dp(a,b),a\leq i &lt; j\leq b$。采用数学归纳法。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a=i&lt;i+1=j=b时显然成立。对于固定的a、i，我们假设在a≤i&lt;j≤b≤P时成立，那么在b=P+1时：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假设dp(i,j)在k=x处取得最优解，dp(a,P+1)在k=y处取到最优解，假设x≤y(x &gt;y时类似可证)，那么上式等价于： dp(a,j)+dp(i,P+1)\leq dp(i,x)+dp(x+1,j)+dp(a,y)+dp(y+1,P+1)+m(i,j)+m(a,P+1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意到： dp(a,j)+dp(i,P+1)\leq dp(a,x)+dp(x+1,j)+dp(i,y)+dp(y+1,P+1)+m(a,j)+m(i,P+1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;而m满足四边形不等式，也就是有： m(a,j)+m(i,P+1)\leq m(i,j)+m(a,P+1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于a≤i&lt;x≤y&lt;P+1由归纳假设，有(i=x时也成立)： dp(a,x)+dp(i,y)\leq dp(i,x)+dp(a,y)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是有： dp(a,x)+dp(x+1,j)+dp(i,y)+dp(y+1,P+1)+m(a,j)+m(i,P+1)\leq dp(i,x)+dp(x+1,j)+dp(a,y)+dp(y+1,P+1)+m(i,j)+m(a,P+1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么： dp(a,j)+dp(i,P+1)\leq dp(i,j)+dp(a,P+1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;也就是对P+1也成立，由归纳法可知dp也满足四边形不等式。这个定理是定理三的基础。 【定理三】若dp满足四边形不等式，设S(i,j)为dp(i,j)取最优解的k值，那么有$S(i,j-1)\leq S(i,j)\leq S(i+1,j)$ 证明：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设$dp_k(i,j)=dp(i,k)+dp(k+1,j)+m(i,j)，S(i,j)=d$那么：$(dp_k(i+1,j)-dp_d(i+1,j))-(dp_k(i,j)-dp_d(i,j))$$=(dp_k(i+1,j)+dp_d(i,j))-(dp_d(i+1,j)+dp_k(i,j))$$=(dp(i+1,k)+dp(k,j)+dp(i,d)+dp(d,j)+m(i+1,j)+m(i,j))-\\(dp(i+1,d)+dp(d,j)+dp(i,k)+dp(k,j)+m(i+1,j)+m(i,j))$$=(dp(i+1,k)+dp(i,d))-(dp(i+1,d)+dp(i,k))$ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;倘若k&lt;d，那么有i&lt;i+1&lt;k&lt;d。由dp的四边形不等式，有： dp(i,k)+dp(i+1,d)\leq dp(i+1,k)+dp(1,d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是$(dp_k(i+1,j)-dp_d(i+1,j))-(dp_k(i,j)-dp_d(i,j))\geq 0$，即： dp_k(i+1,j)-dp_d(i+1,j)\geq dp_k(i,j)-dp_d(i,j)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于S(i,j)=d，故$dp_k(i,j)\geq dp_d(i,j)$，所以： dp_k(i+1,j)\geq dp_d(i+1,j)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个式子说明，k&lt;d时不能取到比k=d更优的解，所以S(i+1,j)≥d。S(i,j-1)≤d同理可证，定理三成立。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;定理三表明，k的取值可以优化到一个很小的范围内，即[S(i,j-1),S(i+1,j)]，我们开一个数组S储存这个结果，时间复杂度便压缩到O(n2)。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是对于最大值又如何做呢？最大值不能用四边形不等式，但是它有另一个性质：最大值的k值一定在端点处取到。这个性质仍然可以帮助我们优化算法。容易验证石子合并的m是满足四边形不等式的，于是我们可以用四边形不等式优化DP过程，下面给出优化版代码：12345678910111213141516171819202122232425262728293031323334353637#include&lt;iostream&gt;#define N 100*2+1using namespace std;int n, op[N], sum[N] = &#123;0&#125;;int dp1[N][N], dp2[N][N], S[N][N];int ans1 = 0x7fffffff, ans2 = -1;int main() &#123; cin &gt;&gt; n; for (int i = 1; i &lt;= n; i++) &#123; cin &gt;&gt; op[i]; op[i + n] = op[i]; &#125; for (int i = 1; i &lt;= 2 * n; i++)sum[i] = op[i] + sum[i - 1];//前缀和 for (int j = 2 * n; j &gt;= 1; j--) &#123;//最大值 for (int z = j; z &lt;= 2 * n; z++) &#123; if (j == z)dp2[j][z] = 0; else dp2[j][z] = max(dp2[j + 1][z], dp2[j][z - 1]) + sum[z] - sum[j - 1]; &#125; &#125; for (int j = 2 * n; j &gt;= 1; j--) &#123;//最小值 for (int z = j; z &lt;= 2 * n; z++) &#123; if (j == z)S[j][z] = j, dp1[j][z] = 0; else &#123; dp1[j][z] = 0x7fffffff; for (int k = S[j][z - 1]; k &lt;= S[j + 1][z] &amp;&amp; k &lt; z; k++) &#123; if (dp1[j][k] + dp1[k + 1][z] + sum[z] - sum[j - 1] &lt; dp1[j][z]) dp1[j][z] = dp1[j][k] + dp1[k + 1][z] + sum[z] - sum[j - 1], S[j][z] = k; &#125; &#125; &#125; &#125; for (int i = 1; i &lt;= n; i++)ans1 = min(ans1, dp1[i][i + n - 1]), ans2 = max(ans2, dp2[i][i + n - 1]); cout &lt;&lt; ans1 &lt;&lt; endl &lt;&lt; ans2; return 0;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于环的处理，我们仍然是剪环为链，但是这里我们的做法比原先的做法高明的多（直接将n个石子扩展为2n个，再寻找答案），于是时间复杂度降了一维。我们再用四边形不等式降一维，总体时间复杂度便为O(n2)。]]></content>
@@ -61,6 +86,7 @@
       <tags>
         <tag>动态规划</tag>
         <tag>状态压缩</tag>
+        <tag>位运算</tag>
         <tag>提高算法</tag>
       </tags>
   </entry>
@@ -76,8 +102,8 @@
         <tag>区间最值</tag>
         <tag>数据结构</tag>
         <tag>区间</tag>
-        <tag>队列</tag>
         <tag>单调队列</tag>
+        <tag>队列</tag>
       </tags>
   </entry>
   <entry>
@@ -93,9 +119,9 @@
         <tag>区间最值</tag>
         <tag>ST表</tag>
         <tag>区间</tag>
-        <tag>矩阵</tag>
-        <tag>队列</tag>
         <tag>单调队列</tag>
+        <tag>队列</tag>
+        <tag>矩阵</tag>
       </tags>
   </entry>
   <entry>
@@ -170,8 +196,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>树</tag>
         <tag>贪心</tag>
+        <tag>树</tag>
       </tags>
   </entry>
   <entry>
@@ -351,8 +377,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>区间最值</tag>
+        <tag>提高算法</tag>
         <tag>数据结构</tag>
         <tag>ST表</tag>
       </tags>
@@ -466,8 +492,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>数论</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -478,9 +504,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
+        <tag>数论</tag>
         <tag>动态规划</tag>
         <tag>提高算法</tag>
-        <tag>数论</tag>
         <tag>离散化</tag>
       </tags>
   </entry>
@@ -683,8 +709,8 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
-        <tag>二分查找</tag>
         <tag>动态规划</tag>
+        <tag>二分查找</tag>
         <tag>子序列</tag>
       </tags>
   </entry>
