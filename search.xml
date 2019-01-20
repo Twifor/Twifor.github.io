@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[矩阵快速幂与矩阵方法]]></title>
+    <url>%2F2019%2F01%2F20%2F%E7%9F%A9%E9%98%B5%E5%BF%AB%E9%80%9F%E5%B9%82%E4%B8%8E%E7%9F%A9%E9%98%B5%E6%96%B9%E6%B3%95%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本节介绍矩阵快速幂以及矩阵在OI中的简单应用。本文需要一些线性代数知识作铺垫，这里不再重复。关于快速幂的思想，建议先阅读快速幂。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先看这么一道题（洛谷P1307）： 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于Fibonacci数列：1,1,2,3,5,8,13……大家应该很熟悉吧~~~但是现在有一个很“简单”问题：第n项和第m项的最大公约数是多少？ 输入输出格式输入格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;两个正整数n和m。（n,m≤109）&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意：数据很大 输出格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fn和Fm的最大公约数。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于看了大数字就头晕，所以只要输出最后的8位数字就可以了。 输入输出样例Sample input 4 7 Sample output 1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;要解决本题需要先认识到一个事实（证明略）： gcd(Fib(n),Fib(m))=Fib(gcd(n,m))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是我们只需要求出n与m的最大公因数，再找它所对应的一位即可。注意在整个过程中对1e8取模，时间复杂度O(gcd(n,m))。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是，对于很大的数（比如本题达到1e9的数量级），循环1e9次显然会超时。于是我们需要借助矩阵这个工具来简化运算过程。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;矩阵是解决线性问题的利器。所谓运用矩阵工具，就是要善于发现题目中的线性关系。注意到斐波那契数列的递推式为： Fib(n+1)=Fib(n+1)+Fib(n-1),n\geq 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这是一个典型的线性关系，立即可以得到（用f(x)表示Fib(x)）： \begin{bmatrix} f(n+1)\\ \end{bmatrix}= \begin{bmatrix} 1&1 \end{bmatrix} \begin{bmatrix} f(n)\\ f(n-1) \end{bmatrix}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发现两侧的非常数矩阵形式不同，不利于递推，于是我们把它扩展为： \begin{bmatrix} f(n+1)\\ f(n) \end{bmatrix}= \begin{bmatrix} 1&1\\ 1&0 \end{bmatrix} \begin{bmatrix} f(n)\\ f(n-1) \end{bmatrix}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;进行如下定义： X(n)=\begin{bmatrix}f(n+1)\\f(n)\end{bmatrix}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么有递推关系： X(n)=\begin{bmatrix}1&1\\1&0\end{bmatrix}X(n-1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这就是斐波那契数列的矩阵递推式，反复利用递推公式可以得到： X(n)=\begin{bmatrix}1&1\\1&0\end{bmatrix}^{n-1}\begin{bmatrix}1\\1\end{bmatrix}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这就是斐波那契数列的矩阵通项公式，问题转化为如何快速求矩阵的幂。结合整数快速幂的思想，我们仍然可以用倍增方法求解矩阵的幂，将求矩阵乘积次数降至对数级别。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;矩阵快速幂与整数快速幂有以下几点区别： 矩阵的平方和乘积更复杂，我们可以采用朴素的行乘列法则暴力求出。 初始化的值由1改为单位矩阵，即：E_n=\begin{bmatrix}1&0\\0&1\end{bmatrix} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;利用矩阵快速幂优化，本题迎刃而解。123456789101112131415161718192021222324252627282930313233343536373839404142#include&lt;iostream&gt;#define MOD 100000000using namespace std;struct Matrix &#123;//2*2矩阵 long long Main[2][2]&#123;&#125;; Matrix(int a, int b, int c, int d) &#123; Main[0][0] = a, Main[0][1] = b, Main[1][0] = c, Main[1][1] = d; &#125; void operator*=(Matrix x) &#123;//重载乘法运算 long long temp[2][2]; temp[0][0] = (Main[0][0] * x.Main[0][0] + Main[0][1] * x.Main[1][0]) % MOD; temp[0][1] = (Main[0][0] * x.Main[0][1] + Main[0][1] * x.Main[1][1]) % MOD; temp[1][0] = (Main[1][0] * x.Main[0][0] + Main[1][1] * x.Main[1][0]) % MOD; temp[1][1] = (Main[1][0] * x.Main[0][1] + Main[1][1] * x.Main[1][1]) % MOD; Main[0][0] = temp[0][0], Main[0][1] = temp[0][1]; Main[1][0] = temp[1][0], Main[1][1] = temp[1][1]; &#125;&#125;;int gcd(int a, int b) &#123; if (a &lt; b)swap(a, b); if (b == 0)return a; return gcd(b, a % b);&#125;int main() &#123; int n, m; cin &gt;&gt; n &gt;&gt; m; Matrix sta(1, 1, 1, 0), ans(1, 0, 0, 1);//ans为单位阵 int p = gcd(n, m) - 1;//下计算sta的p次方，矩阵快速幂 while (p &gt; 0) &#123; if ((p &amp; 1) == 1)ans *= sta; sta *= sta; p &gt;&gt;= 1; &#125; cout &lt;&lt; (ans.Main[1][0] + ans.Main[1][1]) % MOD; return 0;&#125;]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>数论</tag>
+        <tag>矩阵</tag>
+        <tag>快速幂</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Stein算法]]></title>
     <url>%2F2019%2F01%2F19%2FStein%E7%AE%97%E6%B3%95%2F</url>
     <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本次介绍一种在高精度下求最大公约数的算法——stein算法。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;比较常规的gcd算法有辗转相除法和更相减损术，但是后者过慢，前者不利于高精度（因为有大量的除法取余运算，对高精度十分不友好），于是需要一种更高效又易于操作的算法。这便是stein算法，它是更相减损术的改进。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;算法思想如下（比如求x和y的最大公因数）： 如果两个数均为偶数，则两数均取半，答案为2*gcd(x/2，y/2)。 如果两数中有一方为偶数，一方为奇数（假如x为偶数），则偶数取半，答案为gcd(x/2，y)。 如果两数均为奇数，若x=y则答案即为x；否则若x&gt;y，则答案为gcd(x-y，y)，x&lt;y为gcd(x，y-x)。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;算法正确性很容易证明，这里略。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;重复以上过程即可得到答案。容易发现整个过程中只有除以2，乘法和减法运算，在高精度下容易操作。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面用洛谷P2152 SuperGCD来应用这个算法。 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sheng bill有着惊人的心算能力，甚至能用大脑计算出两个巨大的数的GCD（最大公约 数）！因此他经常和别人比赛计算GCD。有一天Sheng bill很嚣张地找到了你，并要求和你比赛，但是输给Sheng bill岂不是很丢脸！所以你决定写一个程序来教训他。 输入输出格式输入格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;共两行： 第一行：一个数A。 第二行：一个数B。 输出格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一行，表示A和B的最大公约数。 输入输出样例Sample input 1254 Sample output 6 说明&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于20%的数据，0 &lt; A , B ≤ 1018。 对于100%的数据，0 &lt; A , B ≤ 1010000。 题解&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一道很裸的高精度gcd，注意压位（这里压8位），用stein算法就可以快速求出。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所谓压位，就是将10进制数按10k进制数储存在数组中（这里选k=8），从而减小时空消耗的方法。压位后的输出是一大坑点，要格外注意前导0数量的准确判定。压位后的运算过程与朴素10进位方法没有大的差别，要注意提前设置好进位base。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这题不要用递归，否则MLE，用数组循环即可。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114#include&lt;iostream&gt;#include&lt;string&gt;#define P 8#define Base 100000000using namespace std;long long s1[10000] = &#123;0&#125;, s2[10000] = &#123;0&#125;, ans[10000] = &#123;0&#125;, temp[10000] = &#123;0&#125;;inline int change(string x) &#123;//化字符串为数字 int s = 0; for (int i = 0; i &lt; x.length(); i++)s = s * 10 + x[i] - '0'; return s;&#125;inline bool isEven(const long long *x) &#123;//判断偶数 return x[1] % 2 == 0;&#125;inline void div(long long *x) &#123;//除以2 int r = 0; for (int i = x[0]; i &gt;= 1; i--) &#123; if (x[i] % 2 == 0) &#123; x[i] = (x[i] + r * Base) / 2; r = 0; &#125; else x[i] = (x[i] + r * Base) / 2, r = 1; &#125; if (x[x[0]] == 0)x[0]--;&#125;inline void times(long long *x) &#123;//x=x*2 int r = 0; for (int i = 1; i &lt;= x[0]; i++)x[i] *= 2, x[i] += r, r = x[i] / Base, x[i] %= Base; if (r != 0)x[++x[0]] = r;&#125;inline int cmp(long long *x, long long *y) &#123;//x&lt;y? if (x[0] &lt; y[0])return 1; if (x[0] &gt; y[0])return -1; for (int i = x[0]; i &gt;= 1; i--) if (x[i] &lt; y[i])return 1; else if (x[i] &gt; y[i])return -1; return 0;//=&#125;inline void times2(long long *x, const long long *y) &#123;//x=x*y for (int i = 1; i &lt;= x[0]; i++) &#123; for (int j = 1; j &lt;= y[0]; j++) &#123; temp[j + i - 1] += x[i] * y[j]; &#125; &#125; long long r = 0; x[0] = y[0] + x[0] - 1; for (int i = 1; i &lt;= x[0]; i++) &#123; long long t = temp[i] + r; x[i] = t % Base; r = t / Base; &#125; while (r != 0)x[++x[0]] = r % Base, r /= Base;&#125;inline void sub(long long *x, long long *y) &#123;//x=x-y for (int i = 1; i &lt;= x[0]; i++) &#123; if (x[i] &gt;= y[i])x[i] -= y[i]; else &#123; x[i] = x[i] + Base - y[i];//不够借位 x[i + 1]--; &#125; &#125; for (int i = x[0]; i &gt;= 1; i--)//重新找右值 if (x[i] != 0) &#123; x[0] = i; return; &#125;&#125;inline void print(long long *x) &#123;//输出x int te; for (int i = x[0]; i &gt;= 1; i--) &#123; if (i == x[0]) cout &lt;&lt; x[i]; else &#123; te = Base / 10; while (te &gt; 0)cout &lt;&lt; x[i] / te, x[i] %= te, te /= 10; &#125; &#125; cout &lt;&lt; endl;&#125;int main() &#123; string a, b; cin &gt;&gt; a &gt;&gt; b; for (int i = a.length() - 1; i &gt;= 0; i -= P) &#123;//压位 if (i - P + 1 &gt;= 0)s1[++s1[0]] = change(a.substr(i - P + 1, P)); else s1[++s1[0]] = change(a.substr(0, i + 1)); &#125; for (int i = b.length() - 1; i &gt;= 0; i -= P) &#123;//压位 if (i - P + 1 &gt;= 0)s2[++s2[0]] = change(b.substr(i - P + 1, P)); else s2[++s2[0]] = change(b.substr(0, i + 1)); &#125; ans[1] = ans[0] = 1; while (true) &#123;//stein算法执行 if (isEven(s1) &amp;&amp; isEven(s2))div(s1), div(s2), times(ans); else if (isEven(s1))div(s1); else if (isEven(s2))div(s2); else &#123; int status = cmp(s1, s2); if (status == 0) &#123; times2(ans, s1); print(ans); return 0; &#125; else if (status == 1)sub(s2, s1); else sub(s1, s2); &#125; &#125;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P.S.据说Python代码就两行…Orz]]></content>
@@ -83,8 +96,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>ST表</tag>
         <tag>动态规划</tag>
+        <tag>ST表</tag>
         <tag>矩阵</tag>
       </tags>
   </entry>
@@ -113,9 +126,9 @@
         <tag>基础算法</tag>
         <tag>区间最值</tag>
         <tag>数据结构</tag>
-        <tag>队列</tag>
-        <tag>单调队列</tag>
         <tag>区间</tag>
+        <tag>单调队列</tag>
+        <tag>队列</tag>
       </tags>
   </entry>
   <entry>
@@ -127,13 +140,13 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
+        <tag>动态规划</tag>
         <tag>区间最值</tag>
         <tag>ST表</tag>
-        <tag>动态规划</tag>
-        <tag>队列</tag>
-        <tag>单调队列</tag>
         <tag>区间</tag>
         <tag>矩阵</tag>
+        <tag>单调队列</tag>
+        <tag>队列</tag>
       </tags>
   </entry>
   <entry>
@@ -194,8 +207,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>树</tag>
+        <tag>动态规划</tag>
         <tag>背包问题</tag>
       </tags>
   </entry>
@@ -389,8 +402,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>区间最值</tag>
         <tag>提高算法</tag>
+        <tag>区间最值</tag>
         <tag>数据结构</tag>
         <tag>ST表</tag>
       </tags>
@@ -415,8 +428,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>图论</tag>
         <tag>基础算法</tag>
+        <tag>图论</tag>
         <tag>图的最短路</tag>
       </tags>
   </entry>
@@ -428,8 +441,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>图论</tag>
         <tag>基础算法</tag>
+        <tag>图论</tag>
         <tag>图的最短路</tag>
       </tags>
   </entry>
@@ -441,8 +454,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>数论</tag>
+        <tag>基础算法</tag>
       </tags>
   </entry>
   <entry>
@@ -504,8 +517,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>数论</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -516,8 +529,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>数论</tag>
+        <tag>提高算法</tag>
         <tag>动态规划</tag>
         <tag>离散化</tag>
       </tags>
