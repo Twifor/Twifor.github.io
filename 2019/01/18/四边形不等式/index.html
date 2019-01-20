@@ -125,7 +125,7 @@
 <meta property="og:site_name" content="Twifor~Liyh">
 <meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本节介绍DP的优化方法之一————四边形不等式。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-18T16:41:19.117Z">
+<meta property="og:updated_time" content="2019-01-18T16:41:19.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="四边形不等式">
 <meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本节介绍DP的优化方法之一————四边形不等式。">
@@ -483,7 +483,7 @@
 
       
         <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本节介绍DP的优化方法之一————四边形不等式。<br><a id="more"></a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在列状态转移方程时，我们常常会遇到如下形式的方程：</p>
-<script type="math/tex; mode=display">dp(i,j)=\min\{dp(i,k)+dp(k+1,j)\}+m(i,j),i\leq k < j</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这种方程很常见，比如题目合并石子的方程就满足这种形式。m为转移的代价。dp时间复杂度为O(n<sup>2</sup>)，转移枚举为O(n)，故总体时间复杂度为O(n<sup>3</sup>)。我们可以用四边形不等式将其减至O(n<sup>2</sup>)复杂度。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果对于a≤i&lt;j≤b，总有：</p>
+<script type="math/tex; mode=display">dp(i,j)=\min\{dp(i,k)+dp(k+1,j)\}+m(i,j),i\leq k < j</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这种方程很常见，比如题目<a href="https://twifor.github.io/2019/01/09/%E6%B4%9B%E8%B0%B7P1880-%E7%9F%B3%E5%AD%90%E5%90%88%E5%B9%B6/">合并石子</a>的方程就满足这种形式。m为转移的代价。dp时间复杂度为O(n<sup>2</sup>)，转移枚举为O(n)，故总体时间复杂度为O(n<sup>3</sup>)。我们可以用四边形不等式将其减至O(n<sup>2</sup>)复杂度。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果对于a≤i&lt;j≤b，总有：</p>
 <script type="math/tex; mode=display">m(a,j)+m(i,b)\leq m(i,j)+m(a,b)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;则称m满足四边形不等式，一句话概括为：交叉小于包含。下面介绍三个重要定理。</p>
 <blockquote>
 <p>【定理一】m满足四边形不等式的充要条件是 $m(i,j)+m(i+1,j+1)≤m(i+1,j)+m(i,j+1),i&lt;j$。</p>
@@ -630,7 +630,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">61</span>
+                    <span class="site-state-item-count">62</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

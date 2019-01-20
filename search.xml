@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[扩展欧几里得算法]]></title>
+    <url>%2F2019%2F01%2F20%2F%E6%89%A9%E5%B1%95%E6%AC%A7%E5%87%A0%E9%87%8C%E5%BE%97%E7%AE%97%E6%B3%95%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本文探讨扩展欧几里得算法，这是一个基础而常用的数论算法。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;众所周知，欧几里得算法（辗转相除法）是求解两数最大公约数的算法，前文我们又认识到stein算法用于在高精度下代替欧几里得算法。扩展欧几里得算法又是做什么的呢？&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;扩展欧几里得算法不仅可以求出两数（假如为a，b）的最大公因数，还可以求出方程$ax+by=gcd(a,b)$的一个特解。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在过河的题后注解中，我们已经认识到了模线性方程解的性质，这里不再重复。下面探讨算法思想。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考虑数15和36，它们的欧几里得算法过程如下： 36\div 15=2\cdots \cdots 6\\ 15\div6=2\cdots \cdots 3\\ 6\div 3=2\cdots \cdots 0\\ 3\div 0 =X&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所以最大公约数为3。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;容易发现整个过程中出现了4个算式，对于每一个式子中的被除数和除数，我们将其设为a、b（比如第一个式子中a=36，第二个中a=15），并设gcd(36，15)=g，考虑a和b的一组特解x1、y1，那么有： ax_1+by_1=g&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们需要将这个式子扩展下去。根据带余除法原理，可以把a写成如下形式： a=kb+r,0\leq r]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>数论</tag>
+        <tag>最大公约数</tag>
+        <tag>基础算法</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[矩阵快速幂与矩阵方法]]></title>
     <url>%2F2019%2F01%2F20%2F%E7%9F%A9%E9%98%B5%E5%BF%AB%E9%80%9F%E5%B9%82%E4%B8%8E%E7%9F%A9%E9%98%B5%E6%96%B9%E6%B3%95%2F</url>
     <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本节介绍矩阵快速幂以及矩阵在OI中的简单应用。本文需要一些线性代数知识作铺垫，这里不再重复。关于快速幂的思想，建议先阅读快速幂。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先看这么一道题（洛谷P1307）： 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于Fibonacci数列：1,1,2,3,5,8,13……大家应该很熟悉吧~~~但是现在有一个很“简单”问题：第n项和第m项的最大公约数是多少？ 输入输出格式输入格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;两个正整数n和m。（n,m≤109）&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意：数据很大 输出格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fn和Fm的最大公约数。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于看了大数字就头晕，所以只要输出最后的8位数字就可以了。 输入输出样例Sample input 4 7 Sample output 1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;要解决本题需要先认识到一个事实（证明略）： gcd(Fib(n),Fib(m))=Fib(gcd(n,m))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是我们只需要求出n与m的最大公因数，再找它所对应的一位即可。注意在整个过程中对1e8取模，时间复杂度O(gcd(n,m))。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是，对于很大的数（比如本题达到1e9的数量级），循环1e9次显然会超时。于是我们需要借助矩阵这个工具来简化运算过程。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;矩阵是解决线性问题的利器。所谓运用矩阵工具，就是要善于发现题目中的线性关系。注意到斐波那契数列的递推式为： Fib(n+1)=Fib(n+1)+Fib(n-1),n\geq 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这是一个典型的线性关系，立即可以得到（用f(x)表示Fib(x)）： \begin{bmatrix} f(n+1)\\ \end{bmatrix}= \begin{bmatrix} 1&1 \end{bmatrix} \begin{bmatrix} f(n)\\ f(n-1) \end{bmatrix}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发现两侧的非常数矩阵形式不同，不利于递推，于是我们把它扩展为： \begin{bmatrix} f(n+1)\\ f(n) \end{bmatrix}= \begin{bmatrix} 1&1\\ 1&0 \end{bmatrix} \begin{bmatrix} f(n)\\ f(n-1) \end{bmatrix}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;进行如下定义： X(n)=\begin{bmatrix}f(n+1)\\f(n)\end{bmatrix}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么有递推关系： X(n)=\begin{bmatrix}1&1\\1&0\end{bmatrix}X(n-1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这就是斐波那契数列的矩阵递推式，反复利用递推公式可以得到： X(n)=\begin{bmatrix}1&1\\1&0\end{bmatrix}^{n-1}\begin{bmatrix}1\\1\end{bmatrix}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这就是斐波那契数列的矩阵通项公式，问题转化为如何快速求矩阵的幂。结合整数快速幂的思想，我们仍然可以用倍增方法求解矩阵的幂，将求矩阵乘积次数降至对数级别。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;矩阵快速幂与整数快速幂有以下几点区别： 矩阵的平方和乘积更复杂，我们可以采用朴素的行乘列法则暴力求出。 初始化的值由1改为单位矩阵，即：E_n=\begin{bmatrix}1&0\\0&1\end{bmatrix} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;利用矩阵快速幂优化，本题迎刃而解。123456789101112131415161718192021222324252627282930313233343536373839404142#include&lt;iostream&gt;#define MOD 100000000using namespace std;struct Matrix &#123;//2*2矩阵 long long Main[2][2]&#123;&#125;; Matrix(int a, int b, int c, int d) &#123; Main[0][0] = a, Main[0][1] = b, Main[1][0] = c, Main[1][1] = d; &#125; void operator*=(Matrix x) &#123;//重载乘法运算 long long temp[2][2]; temp[0][0] = (Main[0][0] * x.Main[0][0] + Main[0][1] * x.Main[1][0]) % MOD; temp[0][1] = (Main[0][0] * x.Main[0][1] + Main[0][1] * x.Main[1][1]) % MOD; temp[1][0] = (Main[1][0] * x.Main[0][0] + Main[1][1] * x.Main[1][0]) % MOD; temp[1][1] = (Main[1][0] * x.Main[0][1] + Main[1][1] * x.Main[1][1]) % MOD; Main[0][0] = temp[0][0], Main[0][1] = temp[0][1]; Main[1][0] = temp[1][0], Main[1][1] = temp[1][1]; &#125;&#125;;int gcd(int a, int b) &#123; if (a &lt; b)swap(a, b); if (b == 0)return a; return gcd(b, a % b);&#125;int main() &#123; int n, m; cin &gt;&gt; n &gt;&gt; m; Matrix sta(1, 1, 1, 0), ans(1, 0, 0, 1);//ans为单位阵 int p = gcd(n, m) - 1;//下计算sta的p次方，矩阵快速幂 while (p &gt; 0) &#123; if ((p &amp; 1) == 1)ans *= sta; sta *= sta; p &gt;&gt;= 1; &#125; cout &lt;&lt; (ans.Main[1][0] + ans.Main[1][1]) % MOD; return 0;&#125;]]></content>
@@ -41,7 +54,7 @@
   <entry>
     <title><![CDATA[单调队列优化DP]]></title>
     <url>%2F2019%2F01%2F19%2F%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97%E4%BC%98%E5%8C%96DP%2F</url>
-    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在之前的日志中提到了单调队列的一个用途——求固定长区间最值。这里介绍单调队列的另一种用途——优化DP。建议先阅读《单调队列求固定长区间最值》再阅读本文。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在状态转移方程中，有一种方程十分常见，它的形式如下所示： dp(i)=\min/\max\{s(k)\}+c(i),l(i)\leq k \leq r(i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里dp由s转移而来（s可以就是dp本身），s的取值范围由l(i)和r(i)确定，c(i)为转移代价，与k的选取无关。我们在求解这个方程时，需要for一遍i，还要for一遍k才可以得到dp值。如果l和r的距离很大，时间复杂度将达到O(n2)，转移时间消耗不可忽视。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当我们从小到大递推dp值时，如果发现l和r均单调递增，这时我们可以用单调队列优化DP过程，降低时间复杂度。这里的单调队列仍然存下标，具体算法如下： 定义开始点key，key初始化为最小的l值，如果从0开始计数则key=l(0)。 对于枚举到的每一个i，将[key，r(i)]的下标加入单调队列，并更新key=r(i)+1。 取队首元素。如果队首元素不在[l(i)，r(i)]中，忽略该元素继续取队首。最终得到的队首元素所指的元素即为最值。 算法正确性证明：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们证明i=k+1时可以求出最值：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;倘若l(k+1)&gt;r(k)，那么由于key更新为r(k)+1≤l(k+1)，易知[l(k+1)，r(k+1)]中的所有元素都在i=k+1时入队，显然可以得到最优解。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;倘若l(k)≤l(k+1)≤r(k)，如果i=k+1的最优解出现在[r(k)+1,r(k+1)]中，那么这一个区间的值一定在i=k+1时入队，一样可以求出最优解。如果i=k+1的最优解出现在[l(k+1)，r(k)]中（假设为p），我们证明p这个元素不可能被“剔除”。倘若存在q由于比p更优将p剔除出队列，那么一定有q&gt;p，容易知q也在[l(k+1)，r(k)]中，那么q应该是i=k+1时比p更优的解，这与p最优矛盾。因此p最优时不可能被剔除，最终我们仍可以得到最优解。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;综上所述，算法正确。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;单调队列求固定长区间最值其实是这种方法的特殊情况。]]></content>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在之前的日志中提到了单调队列的一个用途——求固定长区间最值。这里介绍单调队列的另一种用途——优化DP。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在状态转移方程中，有一种方程十分常见，它的形式如下所示： dp(i)=\min/\max\{s(k)\}+c(i),l(i)\leq k \leq r(i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里dp由s转移而来（s可以就是dp本身），s的取值范围由l(i)和r(i)确定，c(i)为转移代价，与k的选取无关。我们在求解这个方程时，需要for一遍i，还要for一遍k才可以得到dp值。如果l和r的距离很大，时间复杂度将达到O(n2)，转移时间消耗不可忽视。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当我们从小到大递推dp值时，如果发现l和r均单调递增，这时我们可以用单调队列优化DP过程，降低时间复杂度。这里的单调队列仍然存下标，具体算法如下： 定义开始点key，key初始化为最小的l值，如果从0开始计数则key=l(0)。 对于枚举到的每一个i，将[key，r(i)]的下标加入单调队列，并更新key=r(i)+1。 取队首元素。如果队首元素不在[l(i)，r(i)]中，忽略该元素继续取队首。最终得到的队首元素所指的元素即为最值。 算法正确性证明：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们证明i=k+1时可以求出最值：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;倘若l(k+1)&gt;r(k)，那么由于key更新为r(k)+1≤l(k+1)，易知[l(k+1)，r(k+1)]中的所有元素都在i=k+1时入队，显然可以得到最优解。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;倘若l(k)≤l(k+1)≤r(k)，如果i=k+1的最优解出现在[r(k)+1,r(k+1)]中，那么这一个区间的值一定在i=k+1时入队，一样可以求出最优解。如果i=k+1的最优解出现在[l(k+1)，r(k)]中（假设为p），我们证明p这个元素不可能被“剔除”。倘若存在q由于比p更优将p剔除出队列，那么一定有q&gt;p，容易知q也在[l(k+1)，r(k)]中，那么q应该是i=k+1时比p更优的解，这与p最优矛盾。因此p最优时不可能被剔除，最终我们仍可以得到最优解。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;综上所述，算法正确。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;单调队列求固定长区间最值其实是这种方法的特殊情况。]]></content>
       <categories>
         <category>算法与OI</category>
       </categories>
@@ -123,9 +136,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>区间最值</tag>
         <tag>数据结构</tag>
+        <tag>基础算法</tag>
         <tag>区间</tag>
         <tag>单调队列</tag>
         <tag>队列</tag>
@@ -139,14 +152,14 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>区间最值</tag>
         <tag>ST表</tag>
+        <tag>基础算法</tag>
         <tag>动态规划</tag>
         <tag>区间</tag>
         <tag>单调队列</tag>
-        <tag>队列</tag>
         <tag>矩阵</tag>
+        <tag>队列</tag>
       </tags>
   </entry>
   <entry>
@@ -221,8 +234,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>树</tag>
         <tag>贪心</tag>
+        <tag>树</tag>
       </tags>
   </entry>
   <entry>
@@ -258,9 +271,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
+        <tag>提高算法</tag>
         <tag>图论</tag>
         <tag>图的最短路</tag>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
         <tag>数学期望</tag>
       </tags>
@@ -428,8 +441,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>图论</tag>
         <tag>基础算法</tag>
+        <tag>图论</tag>
         <tag>图的最短路</tag>
       </tags>
   </entry>
@@ -441,8 +454,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>图论</tag>
         <tag>基础算法</tag>
+        <tag>图论</tag>
         <tag>图的最短路</tag>
       </tags>
   </entry>
@@ -454,8 +467,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>数论</tag>
+        <tag>基础算法</tag>
       </tags>
   </entry>
   <entry>
@@ -530,8 +543,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>动态规划</tag>
         <tag>数论</tag>
+        <tag>动态规划</tag>
         <tag>离散化</tag>
       </tags>
   </entry>
@@ -594,8 +607,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>数据结构</tag>
+        <tag>基础算法</tag>
         <tag>线段树</tag>
       </tags>
   </entry>
@@ -644,8 +657,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>数据结构</tag>
+        <tag>基础算法</tag>
         <tag>树状数组</tag>
       </tags>
   </entry>
@@ -670,8 +683,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>数据结构</tag>
+        <tag>基础算法</tag>
         <tag>堆</tag>
       </tags>
   </entry>
@@ -734,8 +747,8 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
-        <tag>动态规划</tag>
         <tag>二分查找</tag>
+        <tag>动态规划</tag>
         <tag>子序列</tag>
       </tags>
   </entry>
