@@ -117,25 +117,25 @@
 
 
 
-  <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;除了Dijkstra算法和SPFA算法，另一种求最短路方法是Floyd算法。这个算法可以求出任意两点之间的最短路径长度，支持负边权，需要用邻接矩阵存图。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;算法缺点是耗时过大，时间复杂度O(n3)。算法步骤:&amp;n">
-<meta name="keywords" content="图论,基础算法,图的最短路">
+  <meta name="description" content="难度：提高+/省选- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;AKN玩游戏玩累了，于是他开始和同伴下棋了，玩的是跳棋！对手是wwx！这两位上古神遇在一起下棋，使得棋局变得玄幻莫测，高手过招，必有一赢，他们都将用最佳策略下棋，现在给你一个n*20的棋盘，以及棋盘上有若干个棋子，问谁赢？akn先手！&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;n">
+<meta name="keywords" content="状态压缩,博弈论">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Floyd算法">
-<meta property="og:url" content="https://twifor.github.io/2019/01/09/Floyd算法/index.html">
+<meta property="og:title" content="[洛谷P2575]高手过招">
+<meta property="og:url" content="https://twifor.github.io/2019/01/23/洛谷P2575-高手过招/index.html">
 <meta property="og:site_name" content="Twifor~Liyh">
-<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;除了Dijkstra算法和SPFA算法，另一种求最短路方法是Floyd算法。这个算法可以求出任意两点之间的最短路径长度，支持负边权，需要用邻接矩阵存图。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;算法缺点是耗时过大，时间复杂度O(n3)。算法步骤:&amp;n">
+<meta property="og:description" content="难度：提高+/省选- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;AKN玩游戏玩累了，于是他开始和同伴下棋了，玩的是跳棋！对手是wwx！这两位上古神遇在一起下棋，使得棋局变得玄幻莫测，高手过招，必有一赢，他们都将用最佳策略下棋，现在给你一个n*20的棋盘，以及棋盘上有若干个棋子，问谁赢？akn先手！&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;n">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-13T06:46:09.589Z">
+<meta property="og:updated_time" content="2019-01-23T14:30:37.339Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Floyd算法">
-<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;除了Dijkstra算法和SPFA算法，另一种求最短路方法是Floyd算法。这个算法可以求出任意两点之间的最短路径长度，支持负边权，需要用邻接矩阵存图。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;算法缺点是耗时过大，时间复杂度O(n3)。算法步骤:&amp;n">
+<meta name="twitter:title" content="[洛谷P2575]高手过招">
+<meta name="twitter:description" content="难度：提高+/省选- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;AKN玩游戏玩累了，于是他开始和同伴下棋了，玩的是跳棋！对手是wwx！这两位上古神遇在一起下棋，使得棋局变得玄幻莫测，高手过招，必有一赢，他们都将用最佳策略下棋，现在给你一个n*20的棋盘，以及棋盘上有若干个棋子，问谁赢？akn先手！&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;n">
 
 
 
 
 
 
-  <link rel="canonical" href="https://twifor.github.io/2019/01/09/Floyd算法/">
+  <link rel="canonical" href="https://twifor.github.io/2019/01/23/洛谷P2575-高手过招/">
 
 
 
@@ -145,7 +145,7 @@
   };
 </script>
 
-  <title>Floyd算法 | Twifor~Liyh</title>
+  <title>[洛谷P2575]高手过招 | Twifor~Liyh</title>
   
 
 
@@ -361,7 +361,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://twifor.github.io/2019/01/09/Floyd算法/">
+    <link itemprop="mainEntityOfPage" href="https://twifor.github.io/2019/01/23/洛谷P2575-高手过招/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Twifor">
@@ -378,7 +378,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Floyd算法
+          <h1 class="post-title" itemprop="name headline">[洛谷P2575]高手过招
 
               
             
@@ -404,7 +404,7 @@
                 
               
 
-              <time title="创建时间：2019-01-09 18:10:24" itemprop="dateCreated datePublished" datetime="2019-01-09T18:10:24+08:00">2019-01-09</time>
+              <time title="创建时间：2019-01-23 22:15:36" itemprop="dateCreated datePublished" datetime="2019-01-23T22:15:36+08:00">2019-01-23</time>
             
 
             
@@ -421,7 +421,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-13 14:46:09" itemprop="dateModified" datetime="2019-01-13T14:46:09+08:00">2019-01-13</time>
+                <time title="修改时间：2019-01-23 22:30:37" itemprop="dateModified" datetime="2019-01-23T22:30:37+08:00">2019-01-23</time>
               
             
           </span>
@@ -453,8 +453,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/01/09/Floyd算法/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/01/09/Floyd算法/" itemprop="commentCount"></span>
+                <a href="/2019/01/23/洛谷P2575-高手过招/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/01/23/洛谷P2575-高手过招/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -482,8 +482,19 @@
       
 
       
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;除了Dijkstra算法和SPFA算法，另一种求最短路方法是Floyd算法。这个算法可以求出任意两点之间的最短路径长度，支持负边权，需要用邻接矩阵存图。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;算法缺点是耗时过大，时间复杂度O(n<sup>3</sup>)。<br>算法步骤:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 初始化dist数组，邻接节点dist值即为相邻边权值，否则为inf(无穷大)。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 枚举每一个节点，用这个节点作中介，更新所有节点对的最短路径值。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最后dist即为最短路径数组，如果为inf则两点不连通。<br><a id="more"></a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;代码如下:<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">1</span>; k &lt;= n; k++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (i != j &amp;&amp; i != k &amp;&amp; j != k)</span><br><span class="line">		dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>算法正确性证明:<br>首先我们要清楚，最短路只有三种情况:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 两点直接相连且路径最短。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 两点经一个中介点路径最短。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 两点经多个中介点路径最短。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;情况1已经求出，且算法全程对这个值没有影响。情况2在枚举到中介点k时就已经求出了所有以k为单个中介的两点最短路。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于情况3，我们假设中介点为a<sub>1</sub> &lt; a<sub>2 </sub> &lt; … &lt; a<sub>m</sub>。两点靠m个中介点获得最短路。令集合S={x，y，a<sub>1</sub>，a<sub>2</sub>…a<sub>m</sub>}(x，y分别是源点和终点)。当k枚举到a<sub>1</sub>时，必然会更新这样一对属于情况2的节点对(a<sub>i</sub>，a<sub>j</sub>)，其中a<sub>i</sub>，a<sub>j</sub>∈S。这时我们可以看作是a<sub>i</sub>，a<sub>j</sub>直接相连而不经过a<sub>1</sub>，然后从S中清除a<sub>1</sub>，这样m个中介就减少至m-1个。后面的过程每次都使中介点减一，在枚举完成之前必可以将其转化为情况2并求出最短路径值。</p>
+        <p>难度：提高+/省选-</p>
+<h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AKN玩游戏玩累了，于是他开始和同伴下棋了，玩的是跳棋！对手是wwx！这两位上古神遇在一起下棋，使得棋局变得玄幻莫测，高手过招，必有一赢，他们都将用最佳策略下棋，现在给你一个n*20的棋盘，以及棋盘上有若干个棋子，问谁赢？akn先手！<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;游戏规则是这样的：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于一个棋子，能将它向右移动一格，如果右边有棋子，则向右跳到第一个空格，如果右边没有空格，则不能移动这个棋子，如果所有棋子都不能移动，那么将输掉这场比赛。<br><a id="more"></a></p>
+<h3 id="输入输出格式"><a href="#输入输出格式" class="headerlink" title="输入输出格式"></a>输入输出格式</h3><h4 id="输入格式："><a href="#输入格式：" class="headerlink" title="输入格式："></a>输入格式：</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第一行一个T，表示T组数据<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;每组数据第一行n，表示n*20的棋盘<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接下来n行每行第一个数m表示第i行有m个棋子<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;随后跟着m个数pj表示第i行的棋子布局</p>
+<h4 id="输出格式："><a href="#输出格式：" class="headerlink" title="输出格式："></a>输出格式：</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果AKN能赢，则输出”YES”，否则输出”NO”。</p>
+<h3 id="输入输出样例"><a href="#输入输出样例" class="headerlink" title="输入输出样例"></a>输入输出样例</h3><h4 id="Sample-input"><a href="#Sample-input" class="headerlink" title="Sample input"></a>Sample input</h4><blockquote>
+<p>2<br>1<br>2 19 20<br>2<br>1 19<br>1 18</p>
+</blockquote>
+<h4 id="Sample-output"><a href="#Sample-output" class="headerlink" title="Sample output"></a>Sample output</h4><blockquote>
+<p>NO<br>YES</p>
+</blockquote>
+<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10%的数据T≤1，n≤1<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另外10%的数据m≤1<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;100%的数据T≤100，n≤1000，m≤20，1≤pj≤20</p>
+<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;比较裸的状态压缩类博弈论。注意到跳棋只能在一行内操作，不能跨行，于是我们就可以将每一行都看成是一个子游戏，整个游戏即为原游戏和。用二进制数表示每一行20个格子的有无状态，递推出SG值，最后根据SG定理求Nim和判断即可。SG函数值可以暴力求出。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本题可以比较好地练习SG函数求法和SG定理应用，故加入博客。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> SG[<span class="number">1</span> &lt;&lt; <span class="number">20</span>];</span><br><span class="line"><span class="keyword">bool</span> vis[<span class="number">20</span>] = &#123;<span class="literal">false</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">solve</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = y - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)<span class="keyword">if</span> ((x &amp; (<span class="number">1</span> &lt;&lt; i)) == <span class="number">0</span>)<span class="keyword">return</span> i;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    SG[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; (<span class="number">1</span> &lt;&lt; <span class="number">20</span>); i++) &#123;<span class="comment">//暴力求SG函数值</span></span><br><span class="line">        <span class="built_in">memset</span>(vis, <span class="literal">false</span>, <span class="keyword">sizeof</span>(vis));</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; (<span class="number">1</span> &lt;&lt; j) &lt;= i; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> ((i &amp; (<span class="number">1</span> &lt;&lt; j)) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">int</span> p = solve(i, j);</span><br><span class="line">                <span class="keyword">if</span> (p != <span class="number">-1</span>) &#123;</span><br><span class="line">                    vis[SG[((~(<span class="number">1</span> &lt;&lt; j)) &amp; i) | (<span class="number">1</span> &lt;&lt; p)]] = <span class="literal">true</span>;<span class="comment">//这是一个玄学的式子，用于mex运算</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">20</span>; j++)</span><br><span class="line">            <span class="keyword">if</span> (!vis[j]) &#123;</span><br><span class="line">                SG[i] = j;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> T;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; T;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> ti = <span class="number">0</span>; ti &lt; T; ti++) &#123;</span><br><span class="line">        <span class="keyword">int</span> n, ans = <span class="number">-1</span>;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> k, p = <span class="number">0</span>;</span><br><span class="line">            <span class="built_in">cin</span> &gt;&gt; k;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; k; j++) &#123;</span><br><span class="line">                <span class="keyword">int</span> x;</span><br><span class="line">                <span class="built_in">cin</span> &gt;&gt; x;</span><br><span class="line">                p |= (<span class="number">1</span> &lt;&lt; (<span class="number">20</span> - x));</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (ans == <span class="number">-1</span>)ans = SG[p];</span><br><span class="line">            <span class="keyword">else</span> ans ^= SG[p];<span class="comment">//求Nim和</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (ans == <span class="number">0</span>)<span class="built_in">cout</span> &lt;&lt; <span class="string">"NO"</span> &lt;&lt; <span class="built_in">endl</span>;<span class="comment">//根据SG函数值判断结果</span></span><br><span class="line">        <span class="keyword">else</span> <span class="built_in">cout</span> &lt;&lt; <span class="string">"YES"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其实这个方法很粗暴，并不优，但可以在SG函数求取时优化。</p>
 
       
     </div>
@@ -507,11 +518,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/图论/" rel="tag"><i class="fa fa-tag"></i>图论</a>
+            <a href="/tags/状态压缩/" rel="tag"><i class="fa fa-tag"></i>状态压缩</a>
           
-            <a href="/tags/基础算法/" rel="tag"><i class="fa fa-tag"></i>基础算法</a>
-          
-            <a href="/tags/图的最短路/" rel="tag"><i class="fa fa-tag"></i>图的最短路</a>
+            <a href="/tags/博弈论/" rel="tag"><i class="fa fa-tag"></i>博弈论</a>
           
         </div>
       
@@ -524,8 +533,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/09/Dijkstra算法与SPFA算法/" rel="next" title="Dijkstra算法与SPFA算法">
-                <i class="fa fa-chevron-left"></i> Dijkstra算法与SPFA算法
+              <a href="/2019/01/22/简单博弈论和SG定理/" rel="next" title="简单博弈论和SG定理">
+                <i class="fa fa-chevron-left"></i> 简单博弈论和SG定理
               </a>
             
           </div>
@@ -534,8 +543,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/01/09/快速幂/" rel="prev" title="快速幂">
-                快速幂 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/01/23/阶梯Nim/" rel="prev" title="阶梯Nim">
+                阶梯Nim <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -585,8 +594,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -746,6 +764,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目描述"><span class="nav-number">1.</span> <span class="nav-text">题目描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输入输出格式"><span class="nav-number">2.</span> <span class="nav-text">输入输出格式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#输入格式："><span class="nav-number">2.1.</span> <span class="nav-text">输入格式：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#输出格式："><span class="nav-number">2.2.</span> <span class="nav-text">输出格式：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输入输出样例"><span class="nav-number">3.</span> <span class="nav-text">输入输出样例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Sample-input"><span class="nav-number">3.1.</span> <span class="nav-text">Sample input</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Sample-output"><span class="nav-number">3.2.</span> <span class="nav-text">Sample output</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#说明"><span class="nav-number">4.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#题解"><span class="nav-number">5.</span> <span class="nav-text">题解</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
