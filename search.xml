@@ -14,7 +14,7 @@
   <entry>
     <title><![CDATA[[洛谷P2575]高手过招]]></title>
     <url>%2F2019%2F01%2F23%2F%E6%B4%9B%E8%B0%B7P2575-%E9%AB%98%E6%89%8B%E8%BF%87%E6%8B%9B%2F</url>
-    <content type="text"><![CDATA[难度：提高+/省选- 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AKN玩游戏玩累了，于是他开始和同伴下棋了，玩的是跳棋！对手是wwx！这两位上古神遇在一起下棋，使得棋局变得玄幻莫测，高手过招，必有一赢，他们都将用最佳策略下棋，现在给你一个n*20的棋盘，以及棋盘上有若干个棋子，问谁赢？akn先手！&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;游戏规则是这样的：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于一个棋子，能将它向右移动一格，如果右边有棋子，则向右跳到第一个空格，如果右边没有空格，则不能移动这个棋子，如果所有棋子都不能移动，那么将输掉这场比赛。 输入输出格式输入格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第一行一个T，表示T组数据&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;每组数据第一行n，表示n*20的棋盘&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接下来n行每行第一个数m表示第i行有m个棋子&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;随后跟着m个数pj表示第i行的棋子布局 输出格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果AKN能赢，则输出”YES”，否则输出”NO”。 输入输出样例Sample input 212 19 2021 191 18 Sample output NOYES 说明&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10%的数据T≤1，n≤1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另外10%的数据m≤1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;100%的数据T≤100，n≤1000，m≤20，1≤pj≤20 题解&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;比较裸的状态压缩类博弈论。注意到跳棋只能在一行内操作，不能跨行，于是我们就可以将每一行都看成是一个子游戏，整个游戏即为原游戏和。用二进制数表示每一行20个格子的有无状态，递推出SG值，最后根据SG定理求Nim和判断即可。SG函数值可以暴力求出。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本题可以比较好地练习SG函数求法和SG定理应用，故加入博客。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051#include&lt;iostream&gt;#include&lt;cstring&gt;using namespace std;int SG[1 &lt;&lt; 20];bool vis[20] = &#123;false&#125;;inline int solve(int x, int y) &#123; for (int i = y - 1; i &gt;= 0; i--)if ((x &amp; (1 &lt;&lt; i)) == 0)return i; return -1;&#125;int main() &#123; SG[0] = 0; for (int i = 1; i &lt; (1 &lt;&lt; 20); i++) &#123;//暴力求SG函数值 memset(vis, false, sizeof(vis)); for (int j = 0; (1 &lt;&lt; j) &lt;= i; j++) &#123; if ((i &amp; (1 &lt;&lt; j)) &gt; 0) &#123; int p = solve(i, j); if (p != -1) &#123; vis[SG[((~(1 &lt;&lt; j)) &amp; i) | (1 &lt;&lt; p)]] = true;//这是一个玄学的式子，用于mex运算 &#125; &#125; &#125; for (int j = 0; j &lt; 20; j++) if (!vis[j]) &#123; SG[i] = j; break; &#125; &#125; int T; cin &gt;&gt; T; for (int ti = 0; ti &lt; T; ti++) &#123; int n, ans = -1; cin &gt;&gt; n; for (int i = 1; i &lt;= n; i++) &#123; int k, p = 0; cin &gt;&gt; k; for (int j = 0; j &lt; k; j++) &#123; int x; cin &gt;&gt; x; p |= (1 &lt;&lt; (20 - x)); &#125; if (ans == -1)ans = SG[p]; else ans ^= SG[p];//求Nim和 &#125; if (ans == 0)cout &lt;&lt; "NO" &lt;&lt; endl;//根据SG函数值判断结果 else cout &lt;&lt; "YES" &lt;&lt; endl; &#125; return 0;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其实这个方法很粗暴，并不优，但可以在SG函数求取时优化。]]></content>
+    <content type="text"><![CDATA[难度：提高+/省选- 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AKN玩游戏玩累了，于是他开始和同伴下棋了，玩的是跳棋！对手是wwx！这两位上古神遇在一起下棋，使得棋局变得玄幻莫测，高手过招，必有一赢，他们都将用最佳策略下棋，现在给你一个n*20的棋盘，以及棋盘上有若干个棋子，问谁赢？akn先手！&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;游戏规则是这样的：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于一个棋子，能将它向右移动一格，如果右边有棋子，则向右跳到第一个空格，如果右边没有空格，则不能移动这个棋子，如果所有棋子都不能移动，那么将输掉这场比赛。 输入输出格式输入格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第一行一个T，表示T组数据&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;每组数据第一行n，表示n*20的棋盘&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接下来n行每行第一个数m表示第i行有m个棋子&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;随后跟着m个数pj表示第i行的棋子布局 输出格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果AKN能赢，则输出”YES”，否则输出”NO”。 输入输出样例Sample input 212 19 2021 191 18 Sample output NOYES 说明&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10%的数据T≤1，n≤1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另外10%的数据m≤1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;100%的数据T≤100，n≤1000，m≤20，1≤pj≤20 题解&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;比较裸的状态压缩类博弈论。注意到跳棋只能在一行内操作，不能跨行，于是我们就可以将每一行都看成是一个子游戏，整个游戏即为原游戏和。用二进制数表示每一行20个格子的有无状态，递推出SG值，最后根据SG定理求Nim和判断即可。SG函数值可以暴力求出。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本题可以比较好地练习SG函数求法和SG定理应用，故加入博客。1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950#include&lt;iostream&gt;#include&lt;cstring&gt;using namespace std;int SG[1 &lt;&lt; 20];bool vis[20] = &#123;false&#125;;inline int solve(int x, int y) &#123; for (int i = y - 1; i &gt;= 0; i--)if ((x &amp; (1 &lt;&lt; i)) == 0)return i; return -1;&#125;int main() &#123; SG[0] = 0; for (int i = 1; i &lt; (1 &lt;&lt; 20); i++) &#123;//暴力求SG函数值 memset(vis, false, sizeof(vis)); for (int j = 0; (1 &lt;&lt; j) &lt;= i; j++) &#123; if ((i &amp; (1 &lt;&lt; j)) &gt; 0) &#123; int p = solve(i, j); if (p != -1) &#123; vis[SG[((~(1 &lt;&lt; j)) &amp; i) | (1 &lt;&lt; p)]] = true;//这是一个玄学的式子，用于mex运算 &#125; &#125; &#125; for (int j = 0; j &lt; 20; j++) if (!vis[j]) &#123; SG[i] = j; break; &#125; &#125; int T; cin &gt;&gt; T; for (int ti = 0; ti &lt; T; ti++) &#123; int n, ans = 0; cin &gt;&gt; n; for (int i = 1; i &lt;= n; i++) &#123; int k, p = 0; cin &gt;&gt; k; for (int j = 0; j &lt; k; j++) &#123; int x; cin &gt;&gt; x; p |= (1 &lt;&lt; (20 - x)); &#125; ans ^= SG[p];//求Nim和 &#125; if (ans == 0)cout &lt;&lt; "NO" &lt;&lt; endl;//根据SG函数值判断结果 else cout &lt;&lt; "YES" &lt;&lt; endl; &#125; return 0;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其实这个方法很粗暴，并不优，但可以在SG函数求取时优化。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面介绍一种洛谷大佬想出的方法：用阶梯Nim方法解决本问题。要理解该做法，需要先了解什么是阶梯Nim，可以参考这篇博客。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将两个空位之间的部分看做阶梯，其中的棋子数目就是阶梯上的石子数目，那么本问题就相当于做阶梯Nim游戏。比如若仅有18、19处有棋子，那么阶梯就是：第一阶梯2个棋子，之后的阶梯没有棋子，共17个阶梯；又比如仅有18、19、20处有棋子，则阶梯相当于所有阶梯都没有石子，共16个阶梯。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为什么可以将这个跳棋问题看作阶梯Nim游戏呢？这是由游戏的操作性质决定的。考虑仅有16、17、18处有棋子，那么该局面的二进制表示为011100（只写后几位），对应阶梯为0、3、0（按阶梯编号升序，只写前几位）。这个局面可以转移到001110、010110、011010三个状态，对应的阶梯分别为：（3，0，0）、（2，1，0）、（1，2，0），正好对应了初始阶梯Nim局面的三种移动石子的方式，可见本游戏的棋子移动规则就是阶梯Nim游戏的变形。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是我们可以用阶梯Nim的方法去求SG值，该方法效率很高，时间复杂度O(20Tn)。1234567891011121314151617181920212223242526272829303132333435363738#include&lt;iostream&gt;#include&lt;cstring&gt;using namespace std;bool vis[21];int temp[20] = &#123;0&#125;;int main() &#123; int T; cin &gt;&gt; T; for (int ti = 0; ti &lt; T; ti++) &#123; int n, ans = 0, ans0 = 0; cin &gt;&gt; n; for (int i = 0; i &lt; n; i++) &#123; int k, last = -1; ans0 = 0; cin &gt;&gt; k; memset(vis, false, sizeof(vis)); temp[0] = 0; for (int j = 0; j &lt; k; j++) &#123; int x; cin &gt;&gt; x; vis[x] = true; &#125; for (int j = 20; j &gt; 0; j--) &#123; if (!vis[j]) &#123; if (last != -1)temp[++temp[0]] = last - j - 1; last = j; &#125; &#125; if (last != 1)temp[++temp[0]] = last - 1; for (int j = 1; j &lt;= temp[0]; j += 2)ans0 ^= temp[j]; ans ^= ans0; &#125; if (ans == 0)cout &lt;&lt; "NO" &lt;&lt; endl; else cout &lt;&lt; "YES" &lt;&lt; endl; &#125;&#125;]]></content>
       <categories>
         <category>算法与OI</category>
       </categories>
@@ -171,12 +171,12 @@
         <category>算法与OI</category>
       </categories>
       <tags>
+        <tag>基础算法</tag>
         <tag>区间最值</tag>
         <tag>数据结构</tag>
-        <tag>基础算法</tag>
+        <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
-        <tag>区间</tag>
       </tags>
   </entry>
   <entry>
@@ -187,13 +187,13 @@
         <category>算法与OI</category>
       </categories>
       <tags>
+        <tag>基础算法</tag>
         <tag>区间最值</tag>
         <tag>ST表</tag>
-        <tag>基础算法</tag>
         <tag>动态规划</tag>
+        <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
-        <tag>区间</tag>
         <tag>矩阵</tag>
       </tags>
   </entry>
@@ -306,9 +306,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>图论</tag>
         <tag>图的最短路</tag>
+        <tag>提高算法</tag>
         <tag>动态规划</tag>
         <tag>数学期望</tag>
       </tags>
@@ -578,8 +578,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>动态规划</tag>
         <tag>数论</tag>
+        <tag>动态规划</tag>
         <tag>离散化</tag>
       </tags>
   </entry>
@@ -642,8 +642,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数据结构</tag>
         <tag>基础算法</tag>
+        <tag>数据结构</tag>
         <tag>线段树</tag>
       </tags>
   </entry>
@@ -692,8 +692,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数据结构</tag>
         <tag>基础算法</tag>
+        <tag>数据结构</tag>
         <tag>树状数组</tag>
       </tags>
   </entry>
@@ -718,8 +718,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数据结构</tag>
         <tag>基础算法</tag>
+        <tag>数据结构</tag>
         <tag>堆</tag>
       </tags>
   </entry>
@@ -782,8 +782,8 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
-        <tag>动态规划</tag>
         <tag>二分查找</tag>
+        <tag>动态规划</tag>
         <tag>子序列</tag>
       </tags>
   </entry>
