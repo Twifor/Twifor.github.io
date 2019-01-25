@@ -117,25 +117,25 @@
 
 
 
-  <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本节介绍矩阵快速幂以及矩阵在OI中的简单应用。本文需要一些线性代数知识作铺垫，这里不再重复。关于快速幂的思想，建议先阅读快速幂。">
-<meta name="keywords" content="数论,矩阵,快速幂">
+  <meta name="description" content="难度：省选/NOI- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;小L有一座环形花园，沿花园的顺时针方向，他把各个花圃编号为1~N(2≤N≤1015)。他的环形花园每天都会换一个新花样，但他的花园都不外乎一个规则，任意相邻M(2≤M≤5,M≤N)个花圃中有不超过K(1≤K&amp;lt;M)个C形的花圃，其余花圃均为P形的花圃。&amp;nbsp;&amp;nb">
+<meta name="keywords" content="图论,矩阵,快速幂">
 <meta property="og:type" content="article">
-<meta property="og:title" content="矩阵快速幂与矩阵方法">
-<meta property="og:url" content="https://twifor.github.io/2019/01/20/矩阵快速幂与矩阵方法/index.html">
+<meta property="og:title" content="[洛谷P1357]花园">
+<meta property="og:url" content="https://twifor.github.io/2019/01/25/洛谷P1357-花园/index.html">
 <meta property="og:site_name" content="Twifor~Liyh">
-<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本节介绍矩阵快速幂以及矩阵在OI中的简单应用。本文需要一些线性代数知识作铺垫，这里不再重复。关于快速幂的思想，建议先阅读快速幂。">
+<meta property="og:description" content="难度：省选/NOI- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;小L有一座环形花园，沿花园的顺时针方向，他把各个花圃编号为1~N(2≤N≤1015)。他的环形花园每天都会换一个新花样，但他的花园都不外乎一个规则，任意相邻M(2≤M≤5,M≤N)个花圃中有不超过K(1≤K&amp;lt;M)个C形的花圃，其余花圃均为P形的花圃。&amp;nbsp;&amp;nb">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-20T04:26:15.764Z">
+<meta property="og:updated_time" content="2019-01-25T02:09:27.434Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="矩阵快速幂与矩阵方法">
-<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本节介绍矩阵快速幂以及矩阵在OI中的简单应用。本文需要一些线性代数知识作铺垫，这里不再重复。关于快速幂的思想，建议先阅读快速幂。">
+<meta name="twitter:title" content="[洛谷P1357]花园">
+<meta name="twitter:description" content="难度：省选/NOI- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;小L有一座环形花园，沿花园的顺时针方向，他把各个花圃编号为1~N(2≤N≤1015)。他的环形花园每天都会换一个新花样，但他的花园都不外乎一个规则，任意相邻M(2≤M≤5,M≤N)个花圃中有不超过K(1≤K&amp;lt;M)个C形的花圃，其余花圃均为P形的花圃。&amp;nbsp;&amp;nb">
 
 
 
 
 
 
-  <link rel="canonical" href="https://twifor.github.io/2019/01/20/矩阵快速幂与矩阵方法/">
+  <link rel="canonical" href="https://twifor.github.io/2019/01/25/洛谷P1357-花园/">
 
 
 
@@ -145,7 +145,7 @@
   };
 </script>
 
-  <title>矩阵快速幂与矩阵方法 | Twifor~Liyh</title>
+  <title>[洛谷P1357]花园 | Twifor~Liyh</title>
   
 
 
@@ -361,7 +361,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://twifor.github.io/2019/01/20/矩阵快速幂与矩阵方法/">
+    <link itemprop="mainEntityOfPage" href="https://twifor.github.io/2019/01/25/洛谷P1357-花园/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Twifor">
@@ -378,7 +378,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">矩阵快速幂与矩阵方法
+          <h1 class="post-title" itemprop="name headline">[洛谷P1357]花园
 
               
             
@@ -404,7 +404,7 @@
                 
               
 
-              <time title="创建时间：2019-01-20 11:46:37" itemprop="dateCreated datePublished" datetime="2019-01-20T11:46:37+08:00">2019-01-20</time>
+              <time title="创建时间：2019-01-25 09:29:14" itemprop="dateCreated datePublished" datetime="2019-01-25T09:29:14+08:00">2019-01-25</time>
             
 
             
@@ -421,7 +421,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-20 12:26:15" itemprop="dateModified" datetime="2019-01-20T12:26:15+08:00">2019-01-20</time>
+                <time title="修改时间：2019-01-25 10:09:27" itemprop="dateModified" datetime="2019-01-25T10:09:27+08:00">2019-01-25</time>
               
             
           </span>
@@ -453,8 +453,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/01/20/矩阵快速幂与矩阵方法/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/01/20/矩阵快速幂与矩阵方法/" itemprop="commentCount"></span>
+                <a href="/2019/01/25/洛谷P1357-花园/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/01/25/洛谷P1357-花园/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -482,51 +482,28 @@
       
 
       
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本节介绍矩阵快速幂以及矩阵在OI中的简单应用。本文需要一些线性代数知识作铺垫，这里不再重复。关于快速幂的思想，建议先阅读<a href="https://twifor.github.io/2019/01/09/%E5%BF%AB%E9%80%9F%E5%B9%82/">快速幂</a>。<br><a id="more"></a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先看这么一道题（洛谷P1307）：</p>
-<h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于Fibonacci数列：1,1,2,3,5,8,13……大家应该很熟悉吧~~~但是现在有一个很“简单”问题：第n项和第m项的最大公约数是多少？</p>
-<h3 id="输入输出格式"><a href="#输入输出格式" class="headerlink" title="输入输出格式"></a>输入输出格式</h3><h4 id="输入格式："><a href="#输入格式：" class="headerlink" title="输入格式："></a>输入格式：</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;两个正整数n和m。（n,m≤10<sup>9</sup>）<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意：数据很大</p>
-<h3 id="输出格式："><a href="#输出格式：" class="headerlink" title="输出格式："></a>输出格式：</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fn和Fm的最大公约数。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于看了大数字就头晕，所以只要输出最后的8位数字就可以了。</p>
-<h3 id="输入输出样例"><a href="#输入输出样例" class="headerlink" title="输入输出样例"></a>输入输出样例</h3><h4 id="Sample-input"><a href="#Sample-input" class="headerlink" title="Sample input"></a>Sample input</h4><blockquote>
-<p>4 7</p>
+        <p>难度：省选/NOI-</p>
+<h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小L有一座环形花园，沿花园的顺时针方向，他把各个花圃编号为1~N(2≤N≤10<sup>15</sup>)。他的环形花园每天都会换一个新花样，但他的花园都不外乎一个规则，任意相邻M(2≤M≤5,M≤N)个花圃中有不超过K(1≤K&lt;M)个C形的花圃，其余花圃均为P形的花圃。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例如，N=10,M=5,K=3。则<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CCPCPPPPCC 是一种不符合规则的花圃；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CCPPPPCPCP 是一种符合规则的花圃。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请帮小L求出符合规则的花园种数Mod 1000000007<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现请您编写一个程序解决此题。</p>
+<a id="more"></a>
+<h3 id="输入输出格式"><a href="#输入输出格式" class="headerlink" title="输入输出格式"></a>输入输出格式</h3><h4 id="输入格式："><a href="#输入格式：" class="headerlink" title="输入格式："></a>输入格式：</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一行，三个数N,M,K。</p>
+<h4 id="输出格式："><a href="#输出格式：" class="headerlink" title="输出格式："></a>输出格式：</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;花园种数Mod 1000000007</p>
+<h3 id="输入输出样例"><a href="#输入输出样例" class="headerlink" title="输入输出样例"></a>输入输出样例</h3><h4 id="Sample-input-1"><a href="#Sample-input-1" class="headerlink" title="Sample input#1"></a>Sample input#1</h4><blockquote>
+<p>10 5 3</p>
 </blockquote>
-<h4 id="Sample-output"><a href="#Sample-output" class="headerlink" title="Sample output"></a>Sample output</h4><blockquote>
-<p>1</p>
+<h4 id="Sample-output-1"><a href="#Sample-output-1" class="headerlink" title="Sample output#1"></a>Sample output#1</h4><blockquote>
+<p>458</p>
 </blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;要解决本题需要先认识到一个事实（证明略）：</p>
-<script type="math/tex; mode=display">gcd(Fib(n),Fib(m))=Fib(gcd(n,m))</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是我们只需要求出n与m的最大公因数，再找它所对应的一位即可。注意在整个过程中对1e8取模，时间复杂度O(gcd(n,m))。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是，对于很大的数（比如本题达到1e9的数量级），循环1e9次显然会超时。于是我们需要借助矩阵这个工具来简化运算过程。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;矩阵是解决线性问题的利器。所谓运用矩阵工具，就是要善于发现题目中的线性关系。注意到斐波那契数列的递推式为：</p>
-<script type="math/tex; mode=display">Fib(n+1)=Fib(n+1)+Fib(n-1),n\geq 2</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这是一个典型的线性关系，立即可以得到（用f(x)表示Fib(x)）：</p>
-<script type="math/tex; mode=display">
-\begin{bmatrix}
-f(n+1)\\
-\end{bmatrix}=
-\begin{bmatrix}
-1&1
-\end{bmatrix}
-\begin{bmatrix}
-f(n)\\
-f(n-1)
-\end{bmatrix}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发现两侧的非常数矩阵形式不同，不利于递推，于是我们把它扩展为：</p>
-<script type="math/tex; mode=display">
-\begin{bmatrix}
-f(n+1)\\
-f(n)
-\end{bmatrix}=
-\begin{bmatrix}
-1&1\\
-1&0
-\end{bmatrix}
-\begin{bmatrix}
-f(n)\\
-f(n-1)
-\end{bmatrix}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;进行如下定义：</p>
-<script type="math/tex; mode=display">X(n)=\begin{bmatrix}f(n+1)\\f(n)\end{bmatrix}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么有递推关系：</p>
-<script type="math/tex; mode=display">X(n)=\begin{bmatrix}1&1\\1&0\end{bmatrix}X(n-1)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这就是斐波那契数列的矩阵递推式，反复利用递推公式可以得到：</p>
-<script type="math/tex; mode=display">X(n)=\begin{bmatrix}1&1\\1&0\end{bmatrix}^{n-1}\begin{bmatrix}1\\1\end{bmatrix}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这就是斐波那契数列的矩阵通项公式，问题转化为如何快速求矩阵的幂。结合整数快速幂的思想，我们仍然可以用倍增方法求解矩阵的幂，将求矩阵乘积次数降至对数级别。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;矩阵快速幂与整数快速幂有以下几点区别：</p>
-<ol>
-<li>矩阵的平方和乘积更复杂，我们可以采用朴素的行乘列法则暴力求出。</li>
-<li>初始化的值由1改为单位矩阵，即：<script type="math/tex; mode=display">E_n=\begin{bmatrix}1&0\\0&1\end{bmatrix}</script></li>
-</ol>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;利用矩阵快速幂优化，本题迎刃而解。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MOD 100000000</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Matrix</span> &#123;</span><span class="comment">//2*2矩阵</span></span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> Main[<span class="number">2</span>][<span class="number">2</span>]&#123;&#125;;</span><br><span class="line"></span><br><span class="line">    Matrix(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> c, <span class="keyword">int</span> d) &#123;</span><br><span class="line">        Main[<span class="number">0</span>][<span class="number">0</span>] = a, Main[<span class="number">0</span>][<span class="number">1</span>] = b, Main[<span class="number">1</span>][<span class="number">0</span>] = c, Main[<span class="number">1</span>][<span class="number">1</span>] = d;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> <span class="keyword">operator</span>*=(Matrix x) &#123;<span class="comment">//重载乘法运算</span></span><br><span class="line">        <span class="keyword">long</span> <span class="keyword">long</span> temp[<span class="number">2</span>][<span class="number">2</span>];</span><br><span class="line">        temp[<span class="number">0</span>][<span class="number">0</span>] = (Main[<span class="number">0</span>][<span class="number">0</span>] * x.Main[<span class="number">0</span>][<span class="number">0</span>] + Main[<span class="number">0</span>][<span class="number">1</span>] * x.Main[<span class="number">1</span>][<span class="number">0</span>]) % MOD;</span><br><span class="line">        temp[<span class="number">0</span>][<span class="number">1</span>] = (Main[<span class="number">0</span>][<span class="number">0</span>] * x.Main[<span class="number">0</span>][<span class="number">1</span>] + Main[<span class="number">0</span>][<span class="number">1</span>] * x.Main[<span class="number">1</span>][<span class="number">1</span>]) % MOD;</span><br><span class="line">        temp[<span class="number">1</span>][<span class="number">0</span>] = (Main[<span class="number">1</span>][<span class="number">0</span>] * x.Main[<span class="number">0</span>][<span class="number">0</span>] + Main[<span class="number">1</span>][<span class="number">1</span>] * x.Main[<span class="number">1</span>][<span class="number">0</span>]) % MOD;</span><br><span class="line">        temp[<span class="number">1</span>][<span class="number">1</span>] = (Main[<span class="number">1</span>][<span class="number">0</span>] * x.Main[<span class="number">0</span>][<span class="number">1</span>] + Main[<span class="number">1</span>][<span class="number">1</span>] * x.Main[<span class="number">1</span>][<span class="number">1</span>]) % MOD;</span><br><span class="line">        Main[<span class="number">0</span>][<span class="number">0</span>] = temp[<span class="number">0</span>][<span class="number">0</span>], Main[<span class="number">0</span>][<span class="number">1</span>] = temp[<span class="number">0</span>][<span class="number">1</span>];</span><br><span class="line">        Main[<span class="number">1</span>][<span class="number">0</span>] = temp[<span class="number">1</span>][<span class="number">0</span>], Main[<span class="number">1</span>][<span class="number">1</span>] = temp[<span class="number">1</span>][<span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">gcd</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (a &lt; b)swap(a, b);</span><br><span class="line">    <span class="keyword">if</span> (b == <span class="number">0</span>)<span class="keyword">return</span> a;</span><br><span class="line">    <span class="keyword">return</span> gcd(b, a % b);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n, m;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m;</span><br><span class="line">    Matrix sta(1, 1, 1, 0), ans(1, 0, 0, 1);//ans为单位阵</span><br><span class="line">    <span class="keyword">int</span> p = gcd(n, m) - <span class="number">1</span>;<span class="comment">//下计算sta的p次方，矩阵快速幂</span></span><br><span class="line">    <span class="keyword">while</span> (p &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> ((p &amp; <span class="number">1</span>) == <span class="number">1</span>)ans *= sta;</span><br><span class="line">        sta *= sta;</span><br><span class="line">        p &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; (ans.Main[<span class="number">1</span>][<span class="number">0</span>] + ans.Main[<span class="number">1</span>][<span class="number">1</span>]) % MOD;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="Sample-input-2"><a href="#Sample-input-2" class="headerlink" title="Sample input#2"></a>Sample input#2</h4><blockquote>
+<p>6 2 1</p>
+</blockquote>
+<h4 id="Sample-output-2"><a href="#Sample-output-2" class="headerlink" title="Sample output#2"></a>Sample output#2</h4><blockquote>
+<p>18</p>
+</blockquote>
+<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一道让人头秃的计数题，考察图论、矩阵快速幂。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意到m和k都很小，十分有利于状态压缩，我们就可以用一个二进制数表示花园的种类序列。比如对于题目中给出的CCPPPPCPCP序列，我们可以写成：1100001010。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在样例一下，m=5，我们发现上面给出的例子便是样例一的一个合法解，将它拆成若干个长度为5的连续子序列，得到：11000、10000、00001、00010、00101、01010，由于是环，故还有后面的部分：10101、01011、10110、01100。这里每一个子序列都是合法的，易知它们的种类是有限的，这样总的序列可以看做是这些子序列的一个排列。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;容易发现这些序列有很明确的后继关系：后一个序列总是前一个序列去掉最高位再在末尾加上0或1得到的。我们将每一个合法子序列看作节点，这种后继关系看作有向边，可以建立一个图。那么我们要求的序列就是这个图上的一条路。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;题目要求是环也不影响我们的做法。在上文给出的01序列的最后我们补充一个11000，这样序列首尾相同，将它们首尾连接得到的一定是一个合法的环。因此题目等价于<strong>求图上所有边数为n的回路数量</strong>，这是因为回路与我们要求的环有着一一对应的关系。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如何求长度固定的回路条数便成问题的重点，这里我们需要邻接矩阵来完成这项操作。我们需要一个基本事实：</p>
+<blockquote>
+<p>设一个图的邻接矩阵为S，则S<sup>n</sup>中第i行第j列的元素表示节点i到节点j长度为n的路的数量。</p>
+</blockquote>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个结论很重要，它是求路数量问题的一个重要解法原理。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于图的规模很小，邻接矩阵空间占用不大，因此可以对矩阵求n次幂，从而找到路的数量。求幂当然选择矩阵快速幂，而回路怎么找呢？回路可以看作节点i到节点i本身的路，也就是主对角线上的元素，求完幂后将主对角线上的元素加起来再取模就是答案。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MOD 1000000007</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> m, k, cnt = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> n;</span><br><span class="line"><span class="keyword">int</span> to1[<span class="number">100</span>], to2[<span class="number">100</span>];</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Matrix</span> &#123;</span></span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> op[<span class="number">100</span>][<span class="number">100</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> <span class="keyword">operator</span>*=(Matrix x) &#123;</span><br><span class="line">        <span class="keyword">long</span> <span class="keyword">long</span> temp[<span class="number">100</span>][<span class="number">100</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= cnt; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= cnt; j++) &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">1</span>; k &lt;= cnt; k++)temp[i][j] += op[i][k] * x.op[k][j], temp[i][j] %= MOD;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= cnt; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= cnt; j++)op[i][j] = temp[i][j];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">check</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (x &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> ((x &amp; <span class="number">1</span>) &gt; <span class="number">0</span>)ans++;</span><br><span class="line">        x &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m &gt;&gt; k;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; (<span class="number">1</span> &lt;&lt; m); i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> tp = check(i);</span><br><span class="line">        <span class="keyword">if</span> (tp &lt;= k)cnt++, to1[cnt] = i, to2[i] = cnt;<span class="comment">//构造双向映射</span></span><br><span class="line">    &#125;</span><br><span class="line">    Matrix sta, E;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= cnt; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> temp = (to1[i] &amp; ((<span class="number">1</span> &lt;&lt; (m - <span class="number">1</span>)) - <span class="number">1</span>)) &lt;&lt; <span class="number">1</span>;<span class="comment">//去首并左移</span></span><br><span class="line">        <span class="keyword">if</span> (check(temp) == k)sta.op[i][to2[temp]] = <span class="number">1</span>;<span class="comment">//填邻接矩阵</span></span><br><span class="line">        <span class="keyword">else</span> sta.op[i][to2[temp]] = sta.op[i][to2[temp + <span class="number">1</span>]] = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= cnt; i++)E.op[i][i] = <span class="number">1</span>;<span class="comment">//单位阵</span></span><br><span class="line">    <span class="keyword">while</span> (n &gt; <span class="number">0</span>) &#123;<span class="comment">//矩阵快速幂</span></span><br><span class="line">        <span class="keyword">if</span> ((n &amp; <span class="number">1</span>) &gt; <span class="number">0</span>)E *= sta;</span><br><span class="line">        sta *= sta;</span><br><span class="line">        n &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> ans0 = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= cnt; i++)ans0 += E.op[i][i], ans0 %= MOD;<span class="comment">//对角线求和取模</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; ans0;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -550,7 +527,7 @@ f(n-1)
       
         <div class="post-tags">
           
-            <a href="/tags/数论/" rel="tag"><i class="fa fa-tag"></i>数论</a>
+            <a href="/tags/图论/" rel="tag"><i class="fa fa-tag"></i>图论</a>
           
             <a href="/tags/矩阵/" rel="tag"><i class="fa fa-tag"></i>矩阵</a>
           
@@ -567,8 +544,8 @@ f(n-1)
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/19/Stein算法/" rel="next" title="Stein算法">
-                <i class="fa fa-chevron-left"></i> Stein算法
+              <a href="/2019/01/23/阶梯Nim/" rel="next" title="阶梯Nim">
+                <i class="fa fa-chevron-left"></i> 阶梯Nim
               </a>
             
           </div>
@@ -576,10 +553,6 @@ f(n-1)
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/01/20/扩展欧几里得算法/" rel="prev" title="扩展欧几里得算法">
-                扩展欧几里得算法 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -809,7 +782,7 @@ f(n-1)
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目描述"><span class="nav-number">1.</span> <span class="nav-text">题目描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输入输出格式"><span class="nav-number">2.</span> <span class="nav-text">输入输出格式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#输入格式："><span class="nav-number">2.1.</span> <span class="nav-text">输入格式：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输出格式："><span class="nav-number">3.</span> <span class="nav-text">输出格式：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输入输出样例"><span class="nav-number">4.</span> <span class="nav-text">输入输出样例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Sample-input"><span class="nav-number">4.1.</span> <span class="nav-text">Sample input</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Sample-output"><span class="nav-number">4.2.</span> <span class="nav-text">Sample output</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目描述"><span class="nav-number">1.</span> <span class="nav-text">题目描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输入输出格式"><span class="nav-number">2.</span> <span class="nav-text">输入输出格式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#输入格式："><span class="nav-number">2.1.</span> <span class="nav-text">输入格式：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#输出格式："><span class="nav-number">2.2.</span> <span class="nav-text">输出格式：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输入输出样例"><span class="nav-number">3.</span> <span class="nav-text">输入输出样例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Sample-input-1"><span class="nav-number">3.1.</span> <span class="nav-text">Sample input#1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Sample-output-1"><span class="nav-number">3.2.</span> <span class="nav-text">Sample output#1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Sample-input-2"><span class="nav-number">3.3.</span> <span class="nav-text">Sample input#2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Sample-output-2"><span class="nav-number">3.4.</span> <span class="nav-text">Sample output#2</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#题解"><span class="nav-number">4.</span> <span class="nav-text">题解</span></a></li></ol></div>
             
 
           </div>
@@ -1015,48 +988,6 @@ f(n-1)
   
   
 
-  
-    
-      <script type="text/x-mathjax-config">
-  
-
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-      processEscapes: true,
-      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-	  preview: 'none'
-    },
-	messageStyle: 'none',
-	"HTML-CSS": {
-      showMathMenu: false //关闭右击菜单显示
-    },
-    TeX: {
-      
-      equationNumbers: {
-        autoNumber: "AMS"
-      }
-    }
-  });
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-      for (i = 0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-      }
-  });
-</script>
-<script src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-<style>
-.MathJax_Display {
-  overflow: auto hidden;
-}
-</style>
-
-    
   
 
 
