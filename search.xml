@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[[洛谷P1641]生成字符串]]></title>
+    <url>%2F2019%2F01%2F25%2F%E6%B4%9B%E8%B0%B7P1641-%E7%94%9F%E6%88%90%E5%AD%97%E7%AC%A6%E4%B8%B2%2F</url>
+    <content type="text"><![CDATA[难度：省选/NOI- 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lxhgww最近接到了一个生成字符串的任务，任务需要他把n个1和m个0组成字符串，但是任务还要求在组成的字符串中，在任意的前k个字符中，1的个数不能少于0的个数。现在lxhgww想要知道满足要求的字符串共有多少个，聪明的程序员们，你们能帮助他吗？ 输入输出格式输入格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输入数据是一行，包括2个数字n和m。 输出格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输出数据是一行，包括1个数字，表示满足要求的字符串数目，这个数可能会很大，只需输出这个数除以20100403的余数。 输入输出样例Sample input 2 2 Sample output 2 说明&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;每点2秒&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于30%的数据，保证1≤m≤n≤1000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于100%的数据，保证1≤m≤n≤1000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;来源：SCOI 2010 题解&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;更让人头秃的计数题（前一个是这个）…&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将字符序号（从1开始）看做横坐标x，前x个字符中1的数目与0的数目之差为纵坐标y，那么字符的选取可以看做坐标系上从点(0，0)开始的一条条连续的折线，它的终点为(n+m，n-m)。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;根据这个思路，我们从点(0，0)开始，选1就向右上方走，选0向右下方走，直到点(n+m，n-m)。这样的总的连线便对应一个字符串，容易知道若折线终点为(n+m，n-m)，那么整个过程1的数量一定为n，0的数量一定为m，不可能超出这个限制。显然在这种情况下方案数为$C^m_{n+m}$（从n+m步中选m步向下走）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如何限制前k个字符中1的数量不小于0的数量呢？如果1的数量小于0的数量，则纵坐标应小于0，连线一定与y=-1有所交集。下面我们证明与y=-1有交集的方案数与从(0，-2)开始到(n+m，n-m)方案数相同。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于一个从(0，0)开始且与y=-1有交集的连线（我们称之为非法连线），我们取其与y=-1的第一个交点p，将[0，p]的部分折到y=-1的下方。这样得到的连线显然是唯一的并且起点成为(0，-2)，这还是一个从(0，-2)开始结束于(n+m，n-m)的连线。同样对于一个从(0，-2)开始结束于(n+m，n-m)的连线，它与y=-1必然有交集，取其第一个交点p，将[0，p]的部分折到上方，得到一条从(0，0)开始的非法连线。从上面的讨论可以看出，非法连线与从(0，-2)开始在(n+m，n-m)结束的连线有着一一对应关系，它们的方案数必然是相同的，证毕。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那从(0，-2)到(n+m，n-m)有多少方案呢？由于每一次都一定向右走，但是不一定向上还是向下，我们不妨假设向上走了x步，则向下走了m+n-x步，由于最后停在了(n+m，n-m)上，故有： x-(m+n-x)=n-m+2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;解得x=n+1，所以方案数为$C_{n+m}^{n+1}$，这个数也等于$C_{n+m}^{m-1}$。于是题目实质上是求$C_{m+n}^m-C_{m+n}^{m-1}$对20100403的模。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先想到的是杨辉三角递推法，但那样一定会超时。注意到组合数的阶乘公式为： C_n^m=\frac {n!} {m!(n-m)!}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;分子分母的模很易求，但除法的模并不那样易求，这里我们需要乘法逆元来求除法的模（20100403是一个大质数）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;只需预处理出阶乘，再用费马小定理或者扩展欧几里得算法求出逆元，利用逆元求出除法的模，问题便得以解决。123456789101112131415161718192021222324252627282930//费马小定理求逆元#include&lt;iostream&gt;#define MOD 20100403using namespace std;long long op[2000001], n, m;inline long long find(long long x) &#123;//快速幂 int p = MOD - 2; long long ans = 1; while (p &gt; 0) &#123; if ((p &amp; 1) &gt; 0)ans *= x, ans %= MOD; x *= x; x %= MOD; p &gt;&gt;= 1; &#125; return ans;&#125;int main() &#123; cin &gt;&gt; n &gt;&gt; m; op[0] = 1; for (int i = 1; i &lt;= n + m; i++)op[i] = op[i - 1] * i % MOD; long long a = find(op[m] * op[n] % MOD), b = find(op[m - 1] * op[n + 1] % MOD);//a和b是逆元 long long c = op[n + m] * a % MOD, d = op[n + m] * b % MOD; long long ans = c - d; if (ans &lt; 0)ans += MOD; cout &lt;&lt; ans; return 0;&#125; 1234567891011121314151617181920212223242526272829303132333435//扩展欧几里得算法求逆元#include&lt;iostream&gt;#define MOD 20100403using namespace std;long long op[2000001], n, m;int exGcd(int a, int b, long long &amp;x, long long &amp;y) &#123;//扩展欧几里得算法 if (b == 0) &#123; x = 1, y = 0; return a; &#125; int t = exGcd(b, a % b, y, x); y -= a / b * x; return t;&#125;inline long long find(int p) &#123; long long x, y; exGcd(MOD, p, x, y); while (y &lt; 0)y += MOD; return y % MOD;&#125;int main() &#123; cin &gt;&gt; n &gt;&gt; m; op[0] = 1; for (int i = 1; i &lt;= n + m; i++)op[i] = op[i - 1] * i % MOD; long long a = find(op[m] * op[n] % MOD), b = find(op[m - 1] * op[n + 1] % MOD); long long c = op[n + m] * a % MOD, d = op[n + m] * b % MOD; long long ans = c - d; if (ans &lt; 0)ans += MOD; cout &lt;&lt; ans; return 0;&#125;]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>数论</tag>
+        <tag>提高算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[乘法逆元]]></title>
+    <url>%2F2019%2F01%2F25%2F%E4%B9%98%E6%B3%95%E9%80%86%E5%85%83%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;乘法逆元在OI中常用于在除法运算取模，这是一个重要方法。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先先认识什么是乘法逆元，对于整数a，若存在整数x使得$ax\equiv1(mod\ p)$，则称x为a关于1模p的乘法逆元。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将同余式化为整除式可得$ax+py=1$，根据裴蜀定理可知a与p互质，即$gcd(a,p)=1$。这说明当且仅当a与p互质时，a关于模p的乘法逆元才存在。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;乘法逆元有什么作用呢？它常用于除法的取模，我们知道： (a+b)\ mod\ p=(a\ mod\ p+b\ mod\ p)\ mod\ p\\ (a-b)\ mod\ p=(a\ mod\ p-b\ mod\ p)\ mod\ p\\ ab\ mod\ p=(a\ mod\ p)(b\ mod\ p)\ mod\ p&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是除法并没有： \frac a b\ mod\ p=\frac {a\ mod\ p} {b\ mod\ p}\ mod\ p&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这对我们计算除法的模带来困难，乘法逆元可以解决这个问题，假设最后结果为x，则有： \frac a b\equiv x(mod\ p)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当b与p互质时，上式等价于： a\equiv bx(mod\ p)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设b的乘法逆元为b-1，即有： bb^{-1}\equiv 1(mod\ p)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么有： ab^{-1}\equiv b^{-1}bx\equiv x(mod\ p)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所以我们如果要算a/b对p的模，只需计算ab-1对p的模即可，关键在于求b的逆元。下面先介绍两种通用方法。 用费马小定理求解逆元 【费马(Fermat)小定理】当p为质数且a与p互质时，有$a^{p-1}\equiv 1(mod\ p)$ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;费马小定理变形一下得到$aa^{p-2}\equiv 1(mod\ p)$，那么逆元就是ap-2。用快速幂算法求出ap-2并取模就是逆元。这个方法需要p为质数，并且a与p互质。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;费马小定理其实是欧拉定理的特殊情况，p不为质数时，用欧拉函数值代替p-1然后求逆元也是可以的，这样便不要求p为质数。 用扩展欧几里得算法求解逆元 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当a与p互质时，我们可以用扩展欧几里得算法求出一个特解x、y使得$ax+bp=1$，也就是$ax\equiv 1(mod\ p)$，这样x就是逆元。本方法只需要a与p互质（这也是逆元存在的条件），缺点是求出的x可能为负数。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;若用inv(x)来表示x的乘法逆元，则有： inv(ab)\equiv inv(a)inv(b)(mod\ p)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这说明逆元是积性的，很容易证明，这是逆元的一个重要性质。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最后介绍逆元的递推求法。对于一个数a，现欲求a在模p意义下的逆元，根据带余除法原理，可以将p表示为ak+b。假设b的逆元为b-1，那么： bb^{-1}\equiv 1(mod\ p)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;也就是： (p-ak)b^{-1}\equiv 1(mod\ p)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;即： pb^{-1}-akb^{-1}\equiv -akb^{-1}\equiv 1(mod\ p)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;因此： -kb^{-1}\equiv a^{-1}(mod\ p)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们就得到了一个递推式： inv(a)\equiv -(p/a)inv(p\ mod\ a)(mod\ p)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个递推式可以帮助我们在O(n)复杂度下求出1~n的逆元。]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>基础算法</tag>
+        <tag>数论</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[[洛谷P1357]花园]]></title>
     <url>%2F2019%2F01%2F25%2F%E6%B4%9B%E8%B0%B7P1357-%E8%8A%B1%E5%9B%AD%2F</url>
     <content type="text"><![CDATA[难度：省选/NOI- 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小L有一座环形花园，沿花园的顺时针方向，他把各个花圃编号为1~N(2≤N≤1015)。他的环形花园每天都会换一个新花样，但他的花园都不外乎一个规则，任意相邻M(2≤M≤5,M≤N)个花圃中有不超过K(1≤K&lt;M)个C形的花圃，其余花圃均为P形的花圃。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例如，N=10,M=5,K=3。则&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CCPCPPPPCC 是一种不符合规则的花圃；&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CCPPPPCPCP 是一种符合规则的花圃。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请帮小L求出符合规则的花园种数Mod 1000000007&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现请您编写一个程序解决此题。 输入输出格式输入格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一行，三个数N,M,K。 输出格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;花园种数Mod 1000000007 输入输出样例Sample input#1 10 5 3 Sample output#1 458 Sample input#2 6 2 1 Sample output#2 18 题解&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一道让人头秃的计数题，考察图论、矩阵快速幂。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意到m和k都很小，十分有利于状态压缩，我们就可以用一个二进制数表示花园的种类序列。比如对于题目中给出的CCPPPPCPCP序列，我们可以写成：1100001010。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在样例一下，m=5，我们发现上面给出的例子便是样例一的一个合法解，将它拆成若干个长度为5的连续子序列，得到：11000、10000、00001、00010、00101、01010，由于是环，故还有后面的部分：10101、01011、10110、01100。这里每一个子序列都是合法的，易知它们的种类是有限的，这样总的序列可以看做是这些子序列的一个排列。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;容易发现这些序列有很明确的后继关系：后一个序列总是前一个序列去掉最高位再在末尾加上0或1得到的。我们将每一个合法子序列看作节点，这种后继关系看作有向边，可以建立一个图。那么我们要求的序列就是这个图上的一条路。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;题目要求是环也不影响我们的做法。在上文给出的01序列的最后我们补充一个11000，这样序列首尾相同，将它们首尾连接得到的一定是一个合法的环。因此题目等价于求图上所有边数为n的回路数量，这是因为回路与我们要求的环有着一一对应的关系。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如何求长度固定的回路条数便成问题的重点，这里我们需要邻接矩阵来完成这项操作。我们需要一个基本事实： 设一个图的邻接矩阵为S，则Sn中第i行第j列的元素表示节点i到节点j长度为n的路的数量。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个结论很重要，它是求路数量问题的一个重要解法原理。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于图的规模很小，邻接矩阵空间占用不大，因此可以对矩阵求n次幂，从而找到路的数量。求幂当然选择矩阵快速幂，而回路怎么找呢？回路可以看作节点i到节点i本身的路，也就是主对角线上的元素，求完幂后将主对角线上的元素加起来再取模就是答案。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657#include&lt;iostream&gt;#define MOD 1000000007using namespace std;int m, k, cnt = 0;long long n;int to1[100], to2[100];struct Matrix &#123; long long op[100][100] = &#123;0&#125;; void operator*=(Matrix x) &#123; long long temp[100][100] = &#123;0&#125;; for (int i = 1; i &lt;= cnt; i++) &#123; for (int j = 1; j &lt;= cnt; j++) &#123; for (int k = 1; k &lt;= cnt; k++)temp[i][j] += op[i][k] * x.op[k][j], temp[i][j] %= MOD; &#125; &#125; for (int i = 1; i &lt;= cnt; i++) &#123; for (int j = 1; j &lt;= cnt; j++)op[i][j] = temp[i][j]; &#125; &#125;&#125;;inline int check(int x) &#123; int ans = 0; while (x &gt; 0) &#123; if ((x &amp; 1) &gt; 0)ans++; x &gt;&gt;= 1; &#125; return ans;&#125;int main() &#123; cin &gt;&gt; n &gt;&gt; m &gt;&gt; k; for (int i = 0; i &lt; (1 &lt;&lt; m); i++) &#123; int tp = check(i); if (tp &lt;= k)cnt++, to1[cnt] = i, to2[i] = cnt;//构造双向映射 &#125; Matrix sta, E; for (int i = 1; i &lt;= cnt; i++) &#123; int temp = (to1[i] &amp; ((1 &lt;&lt; (m - 1)) - 1)) &lt;&lt; 1;//去首并左移 if (check(temp) == k)sta.op[i][to2[temp]] = 1;//填邻接矩阵 else sta.op[i][to2[temp]] = sta.op[i][to2[temp + 1]] = 1; &#125; for (int i = 1; i &lt;= cnt; i++)E.op[i][i] = 1;//单位阵 while (n &gt; 0) &#123;//矩阵快速幂 if ((n &amp; 1) &gt; 0)E *= sta; sta *= sta; n &gt;&gt;= 1; &#125; long long ans0 = 0; for (int i = 1; i &lt;= cnt; i++)ans0 += E.op[i][i], ans0 %= MOD;//对角线求和取模 cout &lt;&lt; ans0; return 0;&#125;]]></content>
@@ -157,8 +181,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>ST表</tag>
         <tag>动态规划</tag>
+        <tag>ST表</tag>
         <tag>矩阵</tag>
       </tags>
   </entry>
@@ -188,8 +212,8 @@
         <tag>区间最值</tag>
         <tag>数据结构</tag>
         <tag>区间</tag>
-        <tag>队列</tag>
         <tag>单调队列</tag>
+        <tag>队列</tag>
       </tags>
   </entry>
   <entry>
@@ -201,13 +225,13 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
+        <tag>动态规划</tag>
         <tag>区间最值</tag>
         <tag>ST表</tag>
-        <tag>动态规划</tag>
         <tag>区间</tag>
-        <tag>矩阵</tag>
-        <tag>队列</tag>
         <tag>单调队列</tag>
+        <tag>队列</tag>
+        <tag>矩阵</tag>
       </tags>
   </entry>
   <entry>
@@ -268,8 +292,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>树</tag>
+        <tag>动态规划</tag>
         <tag>背包问题</tag>
       </tags>
   </entry>
@@ -463,8 +487,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>区间最值</tag>
         <tag>提高算法</tag>
+        <tag>区间最值</tag>
         <tag>数据结构</tag>
         <tag>ST表</tag>
       </tags>
@@ -541,8 +565,8 @@
       <tags>
         <tag>提高算法</tag>
         <tag>动态规划</tag>
-        <tag>矩阵</tag>
         <tag>DFS</tag>
+        <tag>矩阵</tag>
       </tags>
   </entry>
   <entry>
@@ -578,8 +602,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>数论</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -590,9 +614,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
+        <tag>数论</tag>
         <tag>提高算法</tag>
         <tag>动态规划</tag>
-        <tag>数论</tag>
         <tag>离散化</tag>
       </tags>
   </entry>
