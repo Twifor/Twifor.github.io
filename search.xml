@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[[洛谷P2154]虔诚的墓主人]]></title>
+    <url>%2F2019%2F01%2F27%2F%E6%B4%9B%E8%B0%B7P2154-%E8%99%94%E8%AF%9A%E7%9A%84%E5%A2%93%E4%B8%BB%E4%BA%BA%2F</url>
+    <content type="text"><![CDATA[难度：省选/NOI- 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小W是一片新造公墓的管理人。公墓可以看成一块N×M的矩形，矩形的每个格点，要么种着一棵常青树，要么是一块还没有归属的墓地。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当地的居民都是非常虔诚的基督徒，他们愿意提前为自己找一块合适墓地。为了体现自己对主的真诚，他们希望自己的墓地拥有着较高的虔诚度。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一块墓地的虔诚度是指以这块墓地为中心的十字架的数目。一个十字架可以看成中间是墓地，墓地的正上、正下、正左、正右都有恰好k棵常青树。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小W希望知道他所管理的这片公墓中所有墓地的虔诚度总和是多少。 输入输出格式输入格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输入文件religious.in的第一行包含两个用空格分隔的正整数N和M，表示公墓的宽和长，因此这个矩形公墓共有(N+1) ×(M+1)个格点，左下角的坐标为(0, 0)，右上角的坐标为(N, M)。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第二行包含一个正整数W，表示公墓中常青树的个数。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第三行起共W行，每行包含两个用空格分隔的非负整数xi和yi，表示一棵常青树的坐标。输入保证没有两棵常青树拥有相同的坐标。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最后一行包含一个正整数k，意义如题目所示。 输出格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输出文件religious.out仅包含一个非负整数，表示这片公墓中所有墓地的虔诚度总和。为了方便起见，答案对2,147,483,648取模。 输入输出样例Sample input 5 6130 20 31 21 32 02 12 42 52 63 23 34 35 22 Sample output 6 说明&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;图中，以墓地(2, 2)和(2, 3)为中心的十字架各有3个，即它们的虔诚度均为3。其他墓地的虔诚度为0。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于30%的数据，满足1 ≤ N, M ≤ 1,000。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于60%的数据，满足1 ≤ N, M ≤ 1,000,000。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于100%的数据，满足1 ≤ N, M ≤ 1,000,000,000，0 ≤ xi ≤ N，0 ≤ yi ≤ M，1 ≤ W ≤ 100,000，1 ≤ k ≤ 10。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;存在50%的数据，满足1 ≤ k ≤ 2。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;存在25%的数据，满足1 ≤ W ≤ 10000。 题解&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先认识到如果一个墓地上、下、左、右各有a、b、c、d棵常青树，则虔诚度为$C_a^kC_b^kC_c^kC_d^k$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从数据范围想思路。发现N和M特别大，所以需要离散化坐标。具体做法是将没有树的行列去除，再对坐标重新编号，这样N，M就降至1e5。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;即使经过了离散化，如果枚举每一个墓地坐标，也需要相当的时间消耗。注意到如果一个墓地的上方或下方没有常青树，那么这个墓地的虔诚度一定为0，不用考虑。所以只需要考虑第一棵常青树和最后一棵常青树之间的部分即可。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;做这个题的思想是：固定一维（横坐标），移动另一位（纵坐标）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先预处理出组合数。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;离散化之后，将常青树坐标按横坐标为第一关键字，纵坐标为第二关键字升序排序。这样坐标点就按照横坐标进行了分类，并且每一类中纵坐标升序。我们用数组记录当前每一个纵坐标已经有的树的数量，再用一个变量记录当前横坐标已经有的树的数量，还需要记录每一个纵坐标横坐标的常青树总数。在每一类中，找到相邻的两个坐标点，枚举它们中间部分的墓地坐标点，依次求它们的虔诚度，最后再求和即可。对于每一个遍历到的常青树，更新其纵坐标横坐标已有的常青藤数量。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但这样仍不是最佳策略。注意到两个相邻常青树之间的所有墓地上下的树的数量是不变的，只有左右的树的数量在随纵坐标的变化而变化。对于每一个纵坐标，它都有自己的$C_c^kC_d^k$值，这样求两个相邻常青树之间墓地虔诚度的和就相当于求一个区间和，再乘以一个$C_a^kC_b^k$。每遍历到一棵常青树，需要更新这个节点的值，因此我们需要一种可以修改节点值又能求区间和的数据结构，肯定首选树状数组。于是用树状数组维护前缀和，这样时间复杂度降至O(wlogw)。1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768#include&lt;iostream&gt;#include &lt;algorithm&gt;#define MAX 100000using namespace std;struct Point &#123; int x, y, t;&#125; op[MAX];int n, m, w, k, C[MAX + 1][11] = &#123;0&#125;, ySum[MAX + 1] = &#123;0&#125;, xSum[MAX + 1] = &#123;0&#125;, now[MAX + 1] = &#123;0&#125;;int cnt = 0;int tree[MAX + 1] = &#123;0&#125;;//树状数组bool cmp1(Point x, Point y) &#123; if (x.x == y.x)return x.y &lt; y.y; return x.x &lt; y.x;&#125;bool cmp2(Point x, Point y) &#123; return x.y &lt; y.y;&#125;inline void add(int x, int y) &#123; for (int i = x; i &lt;= m; i += (i &amp; -i))tree[i] += y;&#125;inline int get(int x) &#123; int s = 0; for (int i = x; i &gt; 0; i -= (i &amp; -i))s += tree[i]; return s;&#125;int main() &#123; ios::sync_with_stdio(false); cin &gt;&gt; n &gt;&gt; m &gt;&gt; w; for (int i = 0; i &lt; w; i++)cin &gt;&gt; op[i].x &gt;&gt; op[i].y; cin &gt;&gt; k; C[1][0] = C[1][1] = 1; for (int i = 2; i &lt;= w; i++) &#123;//求组合数 C[i][0] = 1; for (int j = 1; j &lt;= min(k, i); j++)C[i][j] = C[i - 1][j - 1] + C[i - 1][j]; &#125; sort(op, op + w, cmp2);//y升序排序，离散化纵坐标 for (int i = 0; i &lt; w; i++) &#123; if (i == 0 || op[i].y != op[i - 1].y)cnt++; op[i].t = cnt; ySum[cnt]++; &#125; m = cnt; for (int i = 0; i &lt; w; i++)op[i].y = op[i].t; sort(op, op + w, cmp1), cnt = 0;//离散化横坐标 for (int i = 0; i &lt; w; i++) &#123; if (i == 0 || op[i].x != op[i - 1].x)cnt++; op[i].t = cnt; xSum[cnt]++; &#125; n = cnt; for (int i = 0; i &lt; w; i++)op[i].x = op[i].t; int ans = 0, np = 0; for (int i = 0; i &lt; w; i++) &#123; add(op[i].y, C[now[op[i].y] + 1][k] * C[ySum[op[i].y] - now[op[i].y] - 1][k] - C[now[op[i].y]][k] * C[ySum[op[i].y] - now[op[i].y]][k]); now[op[i].y]++; if (i == 0 || op[i].x != op[i - 1].x)np = 0; else ans += (get(op[i].y - 1) - get(op[i - 1].y)) * C[np][k] * C[xSum[op[i].x] - np][k]; np++; &#125; cout &lt;&lt; (ans &amp; ((1 &lt;&lt; 31) - 1)); return 0;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里有一个小技巧：如果结果是通过加减乘三种运算得到的并且需要对2147483648（即232）取模，我们可以利用int的自然溢出来完成这个操作。具体做法是不用每一步都取模，最后让答案与(1&lt;&lt;31)-1取按位与，这是一个优化常数的常用方法。该方法可行性可用补码性质证明。]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>数论</tag>
+        <tag>提高算法</tag>
+        <tag>树状数组</tag>
+        <tag>离散化</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[[洛谷P1641]生成字符串]]></title>
     <url>%2F2019%2F01%2F25%2F%E6%B4%9B%E8%B0%B7P1641-%E7%94%9F%E6%88%90%E5%AD%97%E7%AC%A6%E4%B8%B2%2F</url>
     <content type="text"><![CDATA[难度：省选/NOI- 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lxhgww最近接到了一个生成字符串的任务，任务需要他把n个1和m个0组成字符串，但是任务还要求在组成的字符串中，在任意的前k个字符中，1的个数不能少于0的个数。现在lxhgww想要知道满足要求的字符串共有多少个，聪明的程序员们，你们能帮助他吗？ 输入输出格式输入格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输入数据是一行，包括2个数字n和m。 输出格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输出数据是一行，包括1个数字，表示满足要求的字符串数目，这个数可能会很大，只需输出这个数除以20100403的余数。 输入输出样例Sample input 2 2 Sample output 2 说明&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;每点2秒&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于30%的数据，保证1≤m≤n≤1000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于100%的数据，保证1≤m≤n≤1000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;来源：SCOI 2010 题解&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;更让人头秃的计数题（前一个是这个）…&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将字符序号（从1开始）看做横坐标x，前x个字符中1的数目与0的数目之差为纵坐标y，那么字符的选取可以看做坐标系上从点(0，0)开始的一条条连续的折线，它的终点为(n+m，n-m)。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;根据这个思路，我们从点(0，0)开始，选1就向右上方走，选0向右下方走，直到点(n+m，n-m)。这样的总的连线便对应一个字符串，容易知道若折线终点为(n+m，n-m)，那么整个过程1的数量一定为n，0的数量一定为m，不可能超出这个限制。显然在这种情况下方案数为$C^m_{n+m}$（从n+m步中选m步向下走）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如何限制前k个字符中1的数量不小于0的数量呢？如果1的数量小于0的数量，则纵坐标应小于0，连线一定与y=-1有所交集。下面我们证明与y=-1有交集的方案数与从(0，-2)开始到(n+m，n-m)方案数相同。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于一个从(0，0)开始且与y=-1有交集的连线（我们称之为非法连线），我们取其与y=-1的第一个交点p，将[0，p]的部分折到y=-1的下方。这样得到的连线显然是唯一的并且起点成为(0，-2)，这还是一个从(0，-2)开始结束于(n+m，n-m)的连线。同样对于一个从(0，-2)开始结束于(n+m，n-m)的连线，它与y=-1必然有交集，取其第一个交点p，将[0，p]的部分折到上方，得到一条从(0，0)开始的非法连线。从上面的讨论可以看出，非法连线与从(0，-2)开始在(n+m，n-m)结束的连线有着一一对应关系，它们的方案数必然是相同的，证毕。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那从(0，-2)到(n+m，n-m)有多少方案呢？由于每一次都一定向右走，但是不一定向上还是向下，我们不妨假设向上走了x步，则向下走了m+n-x步，由于最后停在了(n+m，n-m)上，故有： x-(m+n-x)=n-m+2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;解得x=n+1，所以方案数为$C_{n+m}^{n+1}$，这个数也等于$C_{n+m}^{m-1}$。于是题目实质上是求$C_{m+n}^m-C_{m+n}^{m-1}$对20100403的模。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先想到的是杨辉三角递推法，但那样一定会超时。注意到组合数的阶乘公式为： C_n^m=\frac {n!} {m!(n-m)!}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;分子分母的模很易求，但除法的模并不那样易求，这里我们需要乘法逆元来求除法的模（20100403是一个大质数）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;只需预处理出阶乘，再用费马小定理或者扩展欧几里得算法求出逆元，利用逆元求出除法的模，问题便得以解决。123456789101112131415161718192021222324252627282930//费马小定理求逆元#include&lt;iostream&gt;#define MOD 20100403using namespace std;long long op[2000001], n, m;inline long long find(long long x) &#123;//快速幂 int p = MOD - 2; long long ans = 1; while (p &gt; 0) &#123; if ((p &amp; 1) &gt; 0)ans *= x, ans %= MOD; x *= x; x %= MOD; p &gt;&gt;= 1; &#125; return ans;&#125;int main() &#123; cin &gt;&gt; n &gt;&gt; m; op[0] = 1; for (int i = 1; i &lt;= n + m; i++)op[i] = op[i - 1] * i % MOD; long long a = find(op[m] * op[n] % MOD), b = find(op[m - 1] * op[n + 1] % MOD);//a和b是逆元 long long c = op[n + m] * a % MOD, d = op[n + m] * b % MOD; long long ans = c - d; if (ans &lt; 0)ans += MOD; cout &lt;&lt; ans; return 0;&#125; 1234567891011121314151617181920212223242526272829303132333435//扩展欧几里得算法求逆元#include&lt;iostream&gt;#define MOD 20100403using namespace std;long long op[2000001], n, m;int exGcd(int a, int b, long long &amp;x, long long &amp;y) &#123;//扩展欧几里得算法 if (b == 0) &#123; x = 1, y = 0; return a; &#125; int t = exGcd(b, a % b, y, x); y -= a / b * x; return t;&#125;inline long long find(int p) &#123; long long x, y; exGcd(MOD, p, x, y); while (y &lt; 0)y += MOD; return y % MOD;&#125;int main() &#123; cin &gt;&gt; n &gt;&gt; m; op[0] = 1; for (int i = 1; i &lt;= n + m; i++)op[i] = op[i - 1] * i % MOD; long long a = find(op[m] * op[n] % MOD), b = find(op[m - 1] * op[n + 1] % MOD); long long c = op[n + m] * a % MOD, d = op[n + m] * b % MOD; long long ans = c - d; if (ans &lt; 0)ans += MOD; cout &lt;&lt; ans; return 0;&#125;]]></content>
@@ -118,8 +132,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
+        <tag>提高算法</tag>
         <tag>单调队列</tag>
       </tags>
   </entry>
@@ -167,8 +181,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
+        <tag>提高算法</tag>
         <tag>滚动数组</tag>
       </tags>
   </entry>
@@ -180,10 +194,10 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
-        <tag>ST表</tag>
+        <tag>提高算法</tag>
         <tag>矩阵</tag>
+        <tag>ST表</tag>
       </tags>
   </entry>
   <entry>
@@ -194,10 +208,10 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
         <tag>状态压缩</tag>
         <tag>位运算</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -209,11 +223,11 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
+        <tag>区间</tag>
+        <tag>队列</tag>
+        <tag>单调队列</tag>
         <tag>区间最值</tag>
         <tag>数据结构</tag>
-        <tag>区间</tag>
-        <tag>单调队列</tag>
-        <tag>队列</tag>
       </tags>
   </entry>
   <entry>
@@ -226,12 +240,12 @@
       <tags>
         <tag>基础算法</tag>
         <tag>动态规划</tag>
-        <tag>区间最值</tag>
-        <tag>ST表</tag>
         <tag>区间</tag>
-        <tag>单调队列</tag>
         <tag>队列</tag>
+        <tag>单调队列</tag>
+        <tag>区间最值</tag>
         <tag>矩阵</tag>
+        <tag>ST表</tag>
       </tags>
   </entry>
   <entry>
@@ -242,8 +256,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
+        <tag>提高算法</tag>
         <tag>字符串</tag>
       </tags>
   </entry>
@@ -255,8 +269,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -267,8 +281,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -279,8 +293,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
+        <tag>提高算法</tag>
         <tag>贪心</tag>
       </tags>
   </entry>
@@ -292,8 +306,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>树</tag>
         <tag>动态规划</tag>
+        <tag>树</tag>
         <tag>背包问题</tag>
       </tags>
   </entry>
@@ -318,8 +332,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -330,8 +344,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
+        <tag>提高算法</tag>
         <tag>滚动数组</tag>
       </tags>
   </entry>
@@ -345,8 +359,8 @@
       <tags>
         <tag>图论</tag>
         <tag>图的最短路</tag>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
+        <tag>提高算法</tag>
         <tag>数学期望</tag>
       </tags>
   </entry>
@@ -382,9 +396,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
         <tag>状态压缩</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -563,10 +577,10 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
-        <tag>DFS</tag>
+        <tag>提高算法</tag>
         <tag>矩阵</tag>
+        <tag>DFS</tag>
       </tags>
   </entry>
   <entry>
@@ -590,8 +604,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -615,8 +629,8 @@
       </categories>
       <tags>
         <tag>数论</tag>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
+        <tag>提高算法</tag>
         <tag>离散化</tag>
       </tags>
   </entry>
@@ -628,8 +642,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -692,8 +706,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
