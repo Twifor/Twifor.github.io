@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[[数论]中国剩余定理]]></title>
+    <url>%2F2019%2F02%2F02%2F%E6%95%B0%E8%AE%BA-%E4%B8%AD%E5%9B%BD%E5%89%A9%E4%BD%99%E5%AE%9A%E7%90%86%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;中国剩余定理（又名孙子定理）是数论四大定理（威尔逊定理、中国剩余定理、欧拉定理、费马小定理）之一，这里介绍中国剩余定理以及扩展后的定理内容以及在OI中的应用。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先介绍中国剩余定理的内容。 【中国剩余定理】对于一次线性同余方程组： \begin{cases} x\equiv a_1(mod\ m_1)\\ x\equiv a_2(mod\ m_2)\\ \cdots \\ x\equiv a_n(mod\ m_n) \end{cases}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果$gcd(m_i,m_j)=1,1\leq i&lt;j\leq n$，则$x$在模$M=\displaystyle \prod_{i=1}^n m_i$意义下有唯一解。该解可以通过下面方法得到：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;规定$M_i=\displaystyle\frac {M} {m_i}$，并设$M_i^{-1}为M_i在模m_i下的乘法逆元$，那么解为： x\equiv \sum_{i=1}^n a_iM_iM_i^{-1}(mod\ M) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;证明参考数论相关书目，这里略。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关于乘法逆元可以见这篇文章。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;中国剩余定理可以帮助我们求一次线性同余方程组的解。但是当模数m不满足两两互素时，定理便不再适用，于是我们需要引入更一般化的定理。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;先给出一个一次线性同余方程组： \begin{cases} x\equiv a_1(mod\ m_1)\\ x\equiv a_2(mod\ m_2)\end{cases}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;化同余式为： x=a_1+k_1m_1=a_2+k_2m_2,(k_1,k_2\in \mathbb {Z})&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;记这个式子为①式，化①为同余式： k_1m_1\equiv a_2-a_1(mod\ m_2)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设$d=gcd(m_1,m_2)$，由上式可得$d|(a_2-a_1)$，若否则方程组无解。下面仅讨论有解的情况。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上式等价于： k_1\frac {m_1} {d}\equiv \frac{a_2-a_1} {d}(mod\ \frac {m_2} {d})&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;显然$\displaystyle\frac {m_1} {d}$与$\displaystyle\frac {m_2} {d}$互质，于是$\displaystyle\frac {m_1} {d}$在模$\displaystyle\frac {m_2} {d}$意义下存在乘法逆元，那么： k_1\equiv \frac {a_2-a_1} {d} (\frac {m_1} {d})^{-1}(mod\ \frac {m_2} {d})&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;化上式为： k_1=\frac {a_2-a_1} {d} (\frac {m_1} {d})^{-1}+k\frac {m_2} {d},(k\in \mathbb {Z})&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将上式代入①式： x=a_1+m_1(\frac {a_2-a_1} {d})(\frac {m_1} {d})^{-1}+k\frac {m_1m_2} {d}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;化为同余式： x\equiv a_1+m_1(\frac {a_2-a_1} {d})(\frac {m_1} {d})^{-1}(mod\ \frac {m_1m_2} {d})&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是我们得到了一个同余式。易见上面的变形都是等价变形，故该同余式的解与原方程组相同，这样我们就将两个同余方程合并成一个，并且这个同余方程的解是显见的。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;反复利用这个公式，可以将n个方程化为一个同余方程。中国剩余定理可以认为是这个公式的特例，这样就得到了一般化的定理。下面用HDU 1573(X问题)来应用这个公式。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;求在小于等于N的正整数中有多少个X满足：X mod a[0] = b[0], X mod a[1] = b[1], X mod a[2] = b[2], …, X mod a[i] = b[i], … (0 &lt; a[i] &lt;= 10,0 &lt; N &lt;= 1000,000,000 , 0 &lt; M &lt;= 10) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其实这个问题很裸地考察上面推导出的公式，直接应用即可。代码中用扩展欧几里得算法求逆元。12345678910111213141516171819202122232425262728293031323334353637383940414243444546#include&lt;iostream&gt;using namespace std;int N, M, a[15], b[15], flag = 1;int gcd(int x, int y) &#123; if (y == 0)return x; return gcd(y, x % y);&#125;int egcd(int a, int b, int &amp;x, int &amp;y) &#123; if (b == 0) &#123; x = 1, y = 0; return a; &#125; int p = egcd(b, a % b, y, x); y -= a / b * x; return p;&#125;int main() &#123; int T; cin &gt;&gt; T; while (T--) &#123; flag = 1; cin &gt;&gt; N &gt;&gt; M; for (int i = 1; i &lt;= M; i++)cin &gt;&gt; a[i];//模数 for (int i = 1; i &lt;= M; i++)cin &gt;&gt; b[i]; for (int i = 2; i &lt;= M; i++) &#123;//全部合并到a[1],b[1]中 int d = gcd(a[1], a[i]), e = b[i] - b[1], x, y; if (e % d != 0) &#123;//无解 cout &lt;&lt; 0 &lt;&lt; endl, flag = 0; break; &#125; egcd(a[1], a[i], x, y);//扩展欧几里得求逆元 b[1] = b[1] + a[1] * e / d * x; a[1] = a[1] * a[i] / d; b[1] = (b[1] % a[1] + a[1]) % a[1]; &#125; if (flag) &#123; if (b[1] &gt; 0)cout &lt;&lt; (N &gt;= b[1] ? (N - b[1]) / a[1] + 1 : 0) &lt;&lt; endl; else if (b[1] == 0)cout &lt;&lt; N / a[1] &lt;&lt; endl; &#125; &#125; return 0;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里有一个常用的技巧：C++中的%运算符得到的并不一定是数学上的模（要求非负），我们可以用表达式$(a\%p+p)\%p$将其化为数学上非负的模。]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>数论</tag>
+        <tag>提高算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[康托展开]]></title>
+    <url>%2F2019%2F02%2F02%2F%E5%BA%B7%E6%89%98%E5%B1%95%E5%BC%80%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;康托展开可以建立1~n全排列到n!的一一映射，常用于字符串哈希，这也是优化时间空间的一种方法。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;康托展开只能用于全排列的映射。对于1~n的一个排列，康托展开可以得到这个排列在全排列中按字典序的序号(12…n序号为0)，这样便可以建立字符串到[0,n!)的一个映射。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假设序列为$s_1s_2…s_n$，具体做法如下： 从左到右依次求出$s_i$的逆序数$a_i$，需要两遍循环。 康托展开的值为$\displaystyle\sum_{i=1}^na_i(n-i)!$。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;需要预处理出0~n-1的阶乘，注意0!=1。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;康托展开的原理是易于理解的，他通过找逆序数并乘以排列数的方式来求小于已知序列的排列有多少种，这样便得到已知序列在全排列中的序号。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么根据康托展开的值如何得到原排列呢？这就是逆康托展开。设值为x，逆展开算法如下： 开一个数组记录哪些数已经被选了，初始化全未被选。 对于序列的第i位（从1开始），计算$x/(n-i)!$（带余除法）的值p。 从未被选的数中找到第p+1小的数m，序列的第i位便为m。标记m已被选，更新$x=x\ mod\ (n-i)!$。 重复2和3步，直到序列的所有数均被求出。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;逆展开原理也是易于理解的。易知每一次求出的p就是逆序数，通过逆序数可以方便地推知第i位的值。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面通过经典八数码问题（洛谷P1379）来应用康托展开。 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在3×3的棋盘上，摆有八个棋子，每个棋子上标有1至8的某一数字。棋盘中留有一个空格，空格用0来表示。空格周围的棋子可以移到空格中。要求解的问题是：给出一种初始布局（初始状态）和目标布局（为了使题目简单,设目标状态为123804765），找到一种最少步骤的移动方法，实现从初始布局到目标布局的转变。 输入输出格式输入格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输入初始状态，一行九个数字，空格用0表示 输出格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;只有一行，该行只有一个数字，表示从初始状态到目标状态需要的最少移动次数(测试数据中无特殊无法到达目标状态数据) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;八数码问题是经典的搜索类问题，难度在于状态的描述（这是一个排列），康托展开可以很好地解决这个问题。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用康托展开将每一个排列化为数字，用于判重和搜索，必要时再逆展开为排列，可以降低时间空间复杂度。另外需要注意的是本题需要用BFS（因为要求最少步数）。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475#include&lt;iostream&gt;#include&lt;queue&gt;using namespace std;int jc[] = &#123;1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880&#125;;//预处理阶乘bool vis[362880] = &#123;false&#125;;inline int Hash(const char *op) &#123;//康托展开 int ans = 0; for (int i = 0, p = 8; i &lt; 9; i++, p--) &#123; int s = 0; for (int j = i + 1; j &lt; 9; j++)if (op[j] &lt; op[i])s++; ans += s * jc[p]; &#125; return ans;&#125;inline void cal(int h, char *op) &#123;//逆展开 bool vis[10] = &#123;false&#125;; for (int i = 0, p = 8; i &lt; 9; i++, p--) &#123; int s = h / jc[p]; for (int z = 0; z &lt; 9; z++) if (!vis[z]) &#123; if (s == 0) &#123; op[i] = static_cast&lt;char&gt;(z + '0'), vis[z] = true; break; &#125; else s--; &#125; h %= jc[p]; &#125;&#125;struct Node &#123; int h, step, begin; Node(int a, int b, int c) : h(a), step(b), begin(c) &#123;&#125;&#125;;char b[9];queue&lt;Node&gt; que;int main() &#123; cin &gt;&gt; b; for (int i = 0; i &lt; 9; i++) &#123; if (b[i] == '0') &#123; que.push(Node(Hash(b), 0, i)), vis[Hash(b)] = true; break; &#125; &#125; Node p(0, 0, 0); int h; while (!que.empty()) &#123; p = que.front(), que.pop(), cal(p.h, b); if (p.h == 46685) &#123;//46685是目标状态的康托展开值 cout &lt;&lt; p.step; return 0; &#125;//下面分四个状态转移 if (p.begin % 3 != 0) &#123; swap(b[p.begin], b[p.begin - 1]), h = Hash(b), swap(b[p.begin], b[p.begin - 1]); if (!vis[h])que.push(Node(h, p.step + 1, p.begin - 1)), vis[h] = true; &#125; if ((p.begin + 1) % 3 != 0) &#123; swap(b[p.begin], b[p.begin + 1]), h = Hash(b), swap(b[p.begin], b[p.begin + 1]); if (!vis[h])que.push(Node(h, p.step + 1, p.begin + 1)), vis[h] = true; &#125; if (p.begin &gt; 2) &#123; swap(b[p.begin], b[p.begin - 3]), h = Hash(b), swap(b[p.begin], b[p.begin - 3]); if (!vis[h])que.push(Node(h, p.step + 1, p.begin - 3)), vis[h] = true; &#125; if (p.begin &lt; 6) &#123; swap(b[p.begin], b[p.begin + 3]), h = Hash(b), swap(b[p.begin], b[p.begin + 3]); if (!vis[h])que.push(Node(h, p.step + 1, p.begin + 3)), vis[h] = true; &#125; &#125;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为了更好地降低时间复杂度，本题最好用双向BFS。双向BFS只适用于目标状态已知的情况（比如本题）。做法是开两个队列，分别从初始状态和目标状态转移，直到两个队列中出现重合状态。在某些情况下，这种方法可以大大提升效率。需要注意双向BFS时,visited数组需要额外记录这个状态是哪一个分枝访问到的。在转移时如果发现下一个状态已经被另一个分枝访问到了，则可以得出答案。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111#include&lt;iostream&gt;#include&lt;queue&gt;#include&lt;cstdlib&gt;using namespace std;int jc[] = &#123;1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880&#125;;int vis[362880] = &#123;0&#125;, step1[362880] = &#123;0&#125;, step2[362800] = &#123;0&#125;;inline int Hash(const char *op) &#123; int ans = 0; for (int i = 0, p = 8; i &lt; 9; i++, p--) &#123; int s = 0; for (int j = i + 1; j &lt; 9; j++)if (op[j] &lt; op[i])s++; ans += s * jc[p]; &#125; return ans;&#125;inline void cal(int h, char *op) &#123; bool vis[10] = &#123;false&#125;; for (int i = 0, p = 8; i &lt; 9; i++, p--) &#123; int s = h / jc[p]; for (int z = 0; z &lt; 9; z++) if (!vis[z]) &#123; if (s == 0) &#123; op[i] = static_cast&lt;char&gt;(z + '0'), vis[z] = true; break; &#125; else s--; &#125; h %= jc[p]; &#125;&#125;inline void print(int x) &#123; cout &lt;&lt; step1[x] + step2[x]; exit(0);&#125;struct Node &#123; int h, begin; Node(int a, int c) : h(a), begin(c) &#123;&#125;&#125;;char b[9];queue&lt;Node&gt; que, que2;int main() &#123; cin &gt;&gt; b; for (int i = 0; i &lt; 9; i++) &#123; if (b[i] == '0') &#123; que.push(Node(Hash(b), i)), vis[Hash(b)] = 1; break; &#125; &#125; if (Hash(b) == 46685) &#123; cout &lt;&lt; 0; return 0; &#125; que2.push(Node(46685, 4)), vis[46658] = 2; Node p(0, 0); int h; while (!que.empty() || !que2.empty()) &#123; if (!que.empty()) &#123;//第一个队列转移 p = que.front(), que.pop(), cal(p.h, b); if (p.begin % 3 != 0) &#123; swap(b[p.begin], b[p.begin - 1]), h = Hash(b), swap(b[p.begin], b[p.begin - 1]); if (vis[h] == 2)step1[h] = step1[p.h] + 1, print(h); if (!vis[h])que.push(Node(h, p.begin - 1)), vis[h] = 1, step1[h] = step1[p.h] + 1; &#125; if ((p.begin + 1) % 3 != 0) &#123; swap(b[p.begin], b[p.begin + 1]), h = Hash(b), swap(b[p.begin], b[p.begin + 1]); if (vis[h] == 2)step1[h] = step1[p.h] + 1, print(h); if (!vis[h])que.push(Node(h, p.begin + 1)), vis[h] = 1, step1[h] = step1[p.h] + 1; &#125; if (p.begin &gt; 2) &#123; swap(b[p.begin], b[p.begin - 3]), h = Hash(b), swap(b[p.begin], b[p.begin - 3]); if (vis[h] == 2)step1[h] = step1[p.h] + 1, print(h); if (!vis[h])que.push(Node(h, p.begin - 3)), vis[h] = 1, step1[h] = step1[p.h] + 1; &#125; if (p.begin &lt; 6) &#123; swap(b[p.begin], b[p.begin + 3]), h = Hash(b), swap(b[p.begin], b[p.begin + 3]); if (vis[h] == 2)step1[h] = step1[p.h] + 1, print(h); if (!vis[h])que.push(Node(h, p.begin + 3)), vis[h] = 1, step1[h] = step1[p.h] + 1; &#125; &#125; if (!que2.empty()) &#123;//第二个队列转移 p = que2.front(), que2.pop(), cal(p.h, b); if (p.begin % 3 != 0) &#123; swap(b[p.begin], b[p.begin - 1]), h = Hash(b), swap(b[p.begin], b[p.begin - 1]); if (vis[h] == 1)step2[h] = step2[p.h] + 1, print(h); if (!vis[h])que2.push(Node(h, p.begin - 1)), vis[h] = 2, step2[h] = step2[p.h] + 1; &#125; if ((p.begin + 1) % 3 != 0) &#123; swap(b[p.begin], b[p.begin + 1]), h = Hash(b), swap(b[p.begin], b[p.begin + 1]); if (vis[h] == 1)step2[h] = step2[p.h] + 1, print(h); if (!vis[h])que2.push(Node(h, p.begin + 1)), vis[h] = 2, step2[h] = step2[p.h] + 1; &#125; if (p.begin &gt; 2) &#123; swap(b[p.begin], b[p.begin - 3]), h = Hash(b), swap(b[p.begin], b[p.begin - 3]); if (vis[h] == 1)step2[h] = step2[p.h] + 1, print(h); if (!vis[h])que2.push(Node(h, p.begin - 3)), vis[h] = 2, step2[h] = step2[p.h] + 1; &#125; if (p.begin &lt; 6) &#123; swap(b[p.begin], b[p.begin + 3]), h = Hash(b), swap(b[p.begin], b[p.begin + 3]); if (vis[h] == 1)step2[h] = step2[p.h] + 1, print(h); if (!vis[h])que2.push(Node(h, p.begin + 3)), vis[h] = 2, step2[h] = step2[p.h] + 1; &#125; &#125; &#125;&#125;]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>提高算法</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[[洛谷P2154]虔诚的墓主人]]></title>
     <url>%2F2019%2F01%2F27%2F%E6%B4%9B%E8%B0%B7P2154-%E8%99%94%E8%AF%9A%E7%9A%84%E5%A2%93%E4%B8%BB%E4%BA%BA%2F</url>
     <content type="text"><![CDATA[难度：省选/NOI- 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小W是一片新造公墓的管理人。公墓可以看成一块N×M的矩形，矩形的每个格点，要么种着一棵常青树，要么是一块还没有归属的墓地。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当地的居民都是非常虔诚的基督徒，他们愿意提前为自己找一块合适墓地。为了体现自己对主的真诚，他们希望自己的墓地拥有着较高的虔诚度。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一块墓地的虔诚度是指以这块墓地为中心的十字架的数目。一个十字架可以看成中间是墓地，墓地的正上、正下、正左、正右都有恰好k棵常青树。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小W希望知道他所管理的这片公墓中所有墓地的虔诚度总和是多少。 输入输出格式输入格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输入文件religious.in的第一行包含两个用空格分隔的正整数N和M，表示公墓的宽和长，因此这个矩形公墓共有(N+1) ×(M+1)个格点，左下角的坐标为(0, 0)，右上角的坐标为(N, M)。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第二行包含一个正整数W，表示公墓中常青树的个数。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第三行起共W行，每行包含两个用空格分隔的非负整数xi和yi，表示一棵常青树的坐标。输入保证没有两棵常青树拥有相同的坐标。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最后一行包含一个正整数k，意义如题目所示。 输出格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输出文件religious.out仅包含一个非负整数，表示这片公墓中所有墓地的虔诚度总和。为了方便起见，答案对2,147,483,648取模。 输入输出样例Sample input 5 6130 20 31 21 32 02 12 42 52 63 23 34 35 22 Sample output 6 说明&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;图中，以墓地(2, 2)和(2, 3)为中心的十字架各有3个，即它们的虔诚度均为3。其他墓地的虔诚度为0。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于30%的数据，满足1 ≤ N, M ≤ 1,000。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于60%的数据，满足1 ≤ N, M ≤ 1,000,000。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于100%的数据，满足1 ≤ N, M ≤ 1,000,000,000，0 ≤ xi ≤ N，0 ≤ yi ≤ M，1 ≤ W ≤ 100,000，1 ≤ k ≤ 10。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;存在50%的数据，满足1 ≤ k ≤ 2。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;存在25%的数据，满足1 ≤ W ≤ 10000。 题解&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先认识到如果一个墓地上、下、左、右各有a、b、c、d棵常青树，则虔诚度为$C_a^kC_b^kC_c^kC_d^k$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从数据范围想思路。发现N和M特别大，所以需要离散化坐标。具体做法是将没有树的行列去除，再对坐标重新编号，这样N，M就降至1e5。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;即使经过了离散化，如果枚举每一个墓地坐标，也需要相当的时间消耗。注意到如果一个墓地的上方或下方没有常青树，那么这个墓地的虔诚度一定为0，不用考虑。所以只需要考虑第一棵常青树和最后一棵常青树之间的部分即可。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;做这个题的思想是：固定一维（横坐标），移动另一位（纵坐标）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先预处理出组合数。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;离散化之后，将常青树坐标按横坐标为第一关键字，纵坐标为第二关键字升序排序。这样坐标点就按照横坐标进行了分类，并且每一类中纵坐标升序。我们用数组记录当前每一个纵坐标已经有的树的数量，再用一个变量记录当前横坐标已经有的树的数量，还需要记录每一个纵坐标横坐标的常青树总数。在每一类中，找到相邻的两个坐标点，枚举它们中间部分的墓地坐标点，依次求它们的虔诚度，最后再求和即可。对于每一个遍历到的常青树，更新其纵坐标横坐标已有的常青藤数量。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但这样仍不是最佳策略。注意到两个相邻常青树之间的所有墓地上下的树的数量是不变的，只有左右的树的数量在随纵坐标的变化而变化。对于每一个纵坐标，它都有自己的$C_c^kC_d^k$值，这样求两个相邻常青树之间墓地虔诚度的和就相当于求一个区间和，再乘以一个$C_a^kC_b^k$。每遍历到一棵常青树，需要更新这个节点的值，因此我们需要一种可以修改节点值又能求区间和的数据结构，肯定首选树状数组。于是用树状数组维护前缀和，这样时间复杂度降至O(wlogw)。1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768#include&lt;iostream&gt;#include &lt;algorithm&gt;#define MAX 100000using namespace std;struct Point &#123; int x, y, t;&#125; op[MAX];int n, m, w, k, C[MAX + 1][11] = &#123;0&#125;, ySum[MAX + 1] = &#123;0&#125;, xSum[MAX + 1] = &#123;0&#125;, now[MAX + 1] = &#123;0&#125;;int cnt = 0;int tree[MAX + 1] = &#123;0&#125;;//树状数组bool cmp1(Point x, Point y) &#123; if (x.x == y.x)return x.y &lt; y.y; return x.x &lt; y.x;&#125;bool cmp2(Point x, Point y) &#123; return x.y &lt; y.y;&#125;inline void add(int x, int y) &#123; for (int i = x; i &lt;= m; i += (i &amp; -i))tree[i] += y;&#125;inline int get(int x) &#123; int s = 0; for (int i = x; i &gt; 0; i -= (i &amp; -i))s += tree[i]; return s;&#125;int main() &#123; ios::sync_with_stdio(false); cin &gt;&gt; n &gt;&gt; m &gt;&gt; w; for (int i = 0; i &lt; w; i++)cin &gt;&gt; op[i].x &gt;&gt; op[i].y; cin &gt;&gt; k; C[1][0] = C[1][1] = 1; for (int i = 2; i &lt;= w; i++) &#123;//求组合数 C[i][0] = 1; for (int j = 1; j &lt;= min(k, i); j++)C[i][j] = C[i - 1][j - 1] + C[i - 1][j]; &#125; sort(op, op + w, cmp2);//y升序排序，离散化纵坐标 for (int i = 0; i &lt; w; i++) &#123; if (i == 0 || op[i].y != op[i - 1].y)cnt++; op[i].t = cnt; ySum[cnt]++; &#125; m = cnt; for (int i = 0; i &lt; w; i++)op[i].y = op[i].t; sort(op, op + w, cmp1), cnt = 0;//离散化横坐标 for (int i = 0; i &lt; w; i++) &#123; if (i == 0 || op[i].x != op[i - 1].x)cnt++; op[i].t = cnt; xSum[cnt]++; &#125; n = cnt; for (int i = 0; i &lt; w; i++)op[i].x = op[i].t; int ans = 0, np = 0; for (int i = 0; i &lt; w; i++) &#123; add(op[i].y, C[now[op[i].y] + 1][k] * C[ySum[op[i].y] - now[op[i].y] - 1][k] - C[now[op[i].y]][k] * C[ySum[op[i].y] - now[op[i].y]][k]); now[op[i].y]++; if (i == 0 || op[i].x != op[i - 1].x)np = 0; else ans += (get(op[i].y - 1) - get(op[i - 1].y)) * C[np][k] * C[xSum[op[i].x] - np][k]; np++; &#125; cout &lt;&lt; (ans &amp; ((1 &lt;&lt; 31) - 1)); return 0;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里有一个小技巧：如果结果是通过加减乘三种运算得到的并且需要对2147483648（即232）取模，我们可以利用int的自然溢出来完成这个操作。具体做法是不用每一步都取模，最后让答案与(1&lt;&lt;31)-1取按位与，这是一个优化常数的常用方法。该方法可行性可用补码性质证明。]]></content>
@@ -132,8 +155,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>单调队列</tag>
       </tags>
   </entry>
@@ -181,8 +204,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>滚动数组</tag>
       </tags>
   </entry>
@@ -194,10 +217,10 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
-        <tag>矩阵</tag>
         <tag>ST表</tag>
+        <tag>动态规划</tag>
+        <tag>矩阵</tag>
       </tags>
   </entry>
   <entry>
@@ -208,10 +231,10 @@
         <category>算法与OI</category>
       </categories>
       <tags>
+        <tag>提高算法</tag>
         <tag>动态规划</tag>
         <tag>状态压缩</tag>
         <tag>位运算</tag>
-        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -223,11 +246,11 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
+        <tag>区间最值</tag>
+        <tag>数据结构</tag>
         <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
-        <tag>区间最值</tag>
-        <tag>数据结构</tag>
       </tags>
   </entry>
   <entry>
@@ -239,13 +262,13 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
+        <tag>区间最值</tag>
+        <tag>ST表</tag>
         <tag>动态规划</tag>
         <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
-        <tag>区间最值</tag>
         <tag>矩阵</tag>
-        <tag>ST表</tag>
       </tags>
   </entry>
   <entry>
@@ -256,8 +279,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>字符串</tag>
       </tags>
   </entry>
@@ -269,8 +292,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -281,8 +304,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -293,8 +316,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>贪心</tag>
       </tags>
   </entry>
@@ -332,8 +355,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -344,8 +367,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>滚动数组</tag>
       </tags>
   </entry>
@@ -359,8 +382,8 @@
       <tags>
         <tag>图论</tag>
         <tag>图的最短路</tag>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>数学期望</tag>
       </tags>
   </entry>
@@ -396,9 +419,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
+        <tag>提高算法</tag>
         <tag>动态规划</tag>
         <tag>状态压缩</tag>
-        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -501,8 +524,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>区间最值</tag>
+        <tag>提高算法</tag>
         <tag>数据结构</tag>
         <tag>ST表</tag>
       </tags>
@@ -527,8 +550,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>图论</tag>
+        <tag>基础算法</tag>
         <tag>图的最短路</tag>
       </tags>
   </entry>
@@ -540,8 +563,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>图论</tag>
+        <tag>基础算法</tag>
         <tag>图的最短路</tag>
       </tags>
   </entry>
@@ -577,8 +600,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>矩阵</tag>
         <tag>DFS</tag>
       </tags>
@@ -604,8 +627,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -629,8 +652,8 @@
       </categories>
       <tags>
         <tag>数论</tag>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>离散化</tag>
       </tags>
   </entry>
@@ -642,8 +665,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -706,8 +729,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
