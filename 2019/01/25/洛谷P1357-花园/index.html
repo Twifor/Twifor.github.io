@@ -125,7 +125,7 @@
 <meta property="og:site_name" content="Twifor~Liyh">
 <meta property="og:description" content="难度：省选/NOI- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;小L有一座环形花园，沿花园的顺时针方向，他把各个花圃编号为1~N(2≤N≤1015)。他的环形花园每天都会换一个新花样，但他的花园都不外乎一个规则，任意相邻M(2≤M≤5,M≤N)个花圃中有不超过K(1≤K&amp;lt;M)个C形的花圃，其余花圃均为P形的花圃。&amp;nbsp;&amp;nb">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-25T02:09:27.434Z">
+<meta property="og:updated_time" content="2019-02-06T11:44:14.886Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[洛谷P1357]花园">
 <meta name="twitter:description" content="难度：省选/NOI- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;小L有一座环形花园，沿花园的顺时针方向，他把各个花圃编号为1~N(2≤N≤1015)。他的环形花园每天都会换一个新花样，但他的花园都不外乎一个规则，任意相邻M(2≤M≤5,M≤N)个花圃中有不超过K(1≤K&amp;lt;M)个C形的花圃，其余花圃均为P形的花圃。&amp;nbsp;&amp;nb">
@@ -421,7 +421,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-25 10:09:27" itemprop="dateModified" datetime="2019-01-25T10:09:27+08:00">2019-01-25</time>
+                <time title="修改时间：2019-02-06 19:44:14" itemprop="dateModified" datetime="2019-02-06T19:44:14+08:00">2019-02-06</time>
               
             
           </span>
@@ -499,7 +499,7 @@
 <h4 id="Sample-output-2"><a href="#Sample-output-2" class="headerlink" title="Sample output#2"></a>Sample output#2</h4><blockquote>
 <p>18</p>
 </blockquote>
-<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一道让人头秃的计数题，考察图论、矩阵快速幂。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意到m和k都很小，十分有利于状态压缩，我们就可以用一个二进制数表示花园的种类序列。比如对于题目中给出的CCPPPPCPCP序列，我们可以写成：1100001010。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在样例一下，m=5，我们发现上面给出的例子便是样例一的一个合法解，将它拆成若干个长度为5的连续子序列，得到：11000、10000、00001、00010、00101、01010，由于是环，故还有后面的部分：10101、01011、10110、01100。这里每一个子序列都是合法的，易知它们的种类是有限的，这样总的序列可以看做是这些子序列的一个排列。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;容易发现这些序列有很明确的后继关系：后一个序列总是前一个序列去掉最高位再在末尾加上0或1得到的。我们将每一个合法子序列看作节点，这种后继关系看作有向边，可以建立一个图。那么我们要求的序列就是这个图上的一条路。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;题目要求是环也不影响我们的做法。在上文给出的01序列的最后我们补充一个11000，这样序列首尾相同，将它们首尾连接得到的一定是一个合法的环。因此题目等价于<strong>求图上所有边数为n的回路数量</strong>，这是因为回路与我们要求的环有着一一对应的关系。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如何求长度固定的回路条数便成问题的重点，这里我们需要邻接矩阵来完成这项操作。我们需要一个基本事实：</p>
+<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一道让人头秃的计数题，考察图论、矩阵快速幂。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意到m和k都很小，十分有利于状态压缩，可以用一个二进制数表示花园的种类序列。比如对于题目中给出的CCPPPPCPCP序列，可以写成：1100001010。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在样例一下，m=5，发现上面给出的例子便是样例一的一个合法解，将它拆成若干个长度为5的连续子序列，得到：11000、10000、00001、00010、00101、01010，由于是环，故还有后面的部分：10101、01011、10110、01100。这里每一个子序列都是合法的，易知它们的种类是有限的，这样总的序列可以看做是这些子序列的一个排列。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;容易发现这些序列有很明确的后继关系：后一个序列总是前一个序列去掉最高位再在末尾加上0或1得到的。将每一个合法子序列看作节点，这种后继关系看作有向边，可以建立一个图。那么要求的序列就是这个图上的一条路。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;题目要求是环也不影响做法。在上文给出的01序列的最后补充一个11000，这样序列首尾相同，将它们首尾连接得到的一定是一个合法的环。因此题目等价于<strong>求图上所有边数为n的回路数量</strong>，这是因为回路与要求的环有着一一对应的关系。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如何求长度固定的回路条数便成问题的重点，这里需要邻接矩阵来完成这项操作。有一个基本事实：</p>
 <blockquote>
 <p>设一个图的邻接矩阵为S，则S<sup>n</sup>中第i行第j列的元素表示节点i到节点j长度为n的路的数量。</p>
 </blockquote>

@@ -125,7 +125,7 @@
 <meta property="og:site_name" content="Twifor~Liyh">
 <meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;乘法逆元在OI中常用于在除法运算取模，这是一个重要方法。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;首先先认识什么是乘法逆元，对于整数a，若存在整数x使得$ax\equiv1(mod\ p)$，则称x为a关于1模p的乘法逆元。&amp;nbsp;&amp;nbsp;&amp;">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-25T10:20:51.055Z">
+<meta property="og:updated_time" content="2019-02-06T11:34:15.646Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="乘法逆元">
 <meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;乘法逆元在OI中常用于在除法运算取模，这是一个重要方法。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;首先先认识什么是乘法逆元，对于整数a，若存在整数x使得$ax\equiv1(mod\ p)$，则称x为a关于1模p的乘法逆元。&amp;nbsp;&amp;nbsp;&amp;">
@@ -421,7 +421,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-25 18:20:51" itemprop="dateModified" datetime="2019-01-25T18:20:51+08:00">2019-01-25</time>
+                <time title="修改时间：2019-02-06 19:34:15" itemprop="dateModified" datetime="2019-02-06T19:34:15+08:00">2019-02-06</time>
               
             
           </span>
@@ -482,15 +482,15 @@
       
 
       
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;乘法逆元在OI中常用于在除法运算取模，这是一个重要方法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先先认识什么是乘法逆元，对于整数a，若存在整数x使得$ax\equiv1(mod\ p)$，则称x为a关于1模p的乘法逆元。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将同余式化为整除式可得$ax+py=1$，根据裴蜀定理可知a与p互质，即$gcd(a,p)=1$。这说明当且仅当a与p互质时，a关于模p的乘法逆元才存在。<br><a id="more"></a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;乘法逆元有什么作用呢？它常用于除法的取模，我们知道：</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;乘法逆元在OI中常用于在除法运算取模，这是一个重要方法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先先认识什么是乘法逆元，对于整数a，若存在整数x使得$ax\equiv1(mod\ p)$，则称x为a关于1模p的乘法逆元。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将同余式化为整除式可得$ax+py=1$，根据裴蜀定理可知a与p互质，即$gcd(a,p)=1$。这说明当且仅当a与p互质时，a关于模p的乘法逆元才存在。<br><a id="more"></a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;乘法逆元有什么作用呢？它常用于除法的取模，已知：</p>
 <script type="math/tex; mode=display">(a+b)\ mod\ p=(a\ mod\ p+b\ mod\ p)\ mod\ p\\
 (a-b)\ mod\ p=(a\ mod\ p-b\ mod\ p)\ mod\ p\\
 ab\ mod\ p=(a\ mod\ p)(b\ mod\ p)\ mod\ p</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是除法并没有：</p>
-<script type="math/tex; mode=display">\frac a b\ mod\ p=\frac {a\ mod\ p} {b\ mod\ p}\ mod\ p</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这对我们计算除法的模带来困难，乘法逆元可以解决这个问题，假设最后结果为x，则有：</p>
+<script type="math/tex; mode=display">\frac a b\ mod\ p=\frac {a\ mod\ p} {b\ mod\ p}\ mod\ p</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这对计算除法的模带来困难，乘法逆元可以解决这个问题，假设最后结果为x，则有：</p>
 <script type="math/tex; mode=display">\frac a b\equiv x(mod\ p)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当b与p互质时，上式等价于：</p>
 <script type="math/tex; mode=display">a\equiv bx(mod\ p)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设b的乘法逆元为b<sup>-1</sup>，即有：</p>
 <script type="math/tex; mode=display">bb^{-1}\equiv 1(mod\ p)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么有：</p>
-<script type="math/tex; mode=display">ab^{-1}\equiv b^{-1}bx\equiv x(mod\ p)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所以我们如果要算a/b对p的模，只需计算ab<sup>-1</sup>对p的模即可，关键在于求b的逆元。下面先介绍两种通用方法。</p>
+<script type="math/tex; mode=display">ab^{-1}\equiv b^{-1}bx\equiv x(mod\ p)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所以如果要算a/b对p的模，只需计算ab<sup>-1</sup>对p的模即可，关键在于求b的逆元。下面先介绍两种通用方法。</p>
 <ul>
 <li>用费马小定理求解逆元</li>
 </ul>
@@ -501,14 +501,14 @@ ab\ mod\ p=(a\ mod\ p)(b\ mod\ p)\ mod\ p</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nb
 <ul>
 <li>用扩展欧几里得算法求解逆元</li>
 </ul>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当a与p互质时，我们可以用扩展欧几里得算法求出一个特解x、y使得$ax+bp=1$，也就是$ax\equiv 1(mod\ p)$，这样x就是逆元。本方法只需要a与p互质（这也是逆元存在的条件），缺点是求出的x可能为负数。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当a与p互质时，可以用扩展欧几里得算法求出一个特解x、y使得$ax+bp=1$，也就是$ax\equiv 1(mod\ p)$，这样x就是逆元。本方法只需要a与p互质（这也是逆元存在的条件），缺点是求出的x可能为负数。</p>
 <hr>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;若用inv(x)来表示x的乘法逆元，则有：</p>
 <script type="math/tex; mode=display">inv(ab)\equiv inv(a)inv(b)(mod\ p)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这说明逆元是积性的，很容易证明，这是逆元的一个重要性质。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最后介绍逆元的递推求法。对于一个数a，现欲求a在模p意义下的逆元，根据带余除法原理，可以将p表示为ak+b。假设b的逆元为b<sup>-1</sup>，那么：</p>
 <script type="math/tex; mode=display">bb^{-1}\equiv 1(mod\ p)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;也就是：</p>
 <script type="math/tex; mode=display">(p-ak)b^{-1}\equiv 1(mod\ p)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;即：</p>
 <script type="math/tex; mode=display">pb^{-1}-akb^{-1}\equiv -akb^{-1}\equiv 1(mod\ p)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;因此：</p>
-<script type="math/tex; mode=display">-kb^{-1}\equiv a^{-1}(mod\ p)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们就得到了一个递推式：</p>
+<script type="math/tex; mode=display">-kb^{-1}\equiv a^{-1}(mod\ p)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;就得到了一个递推式：</p>
 <script type="math/tex; mode=display">inv(a)\equiv -(p/a)inv(p\ mod\ a)(mod\ p)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个递推式可以帮助我们在O(n)复杂度下求出1~n的逆元。</p>
 
       

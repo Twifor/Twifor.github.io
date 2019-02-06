@@ -125,7 +125,7 @@
 <meta property="og:site_name" content="Twifor~Liyh">
 <meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;除了Dijkstra算法和SPFA算法，另一种求最短路方法是Floyd算法。这个算法可以求出任意两点之间的最短路径长度，支持负边权，需要用邻接矩阵存图。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;算法缺点是耗时过大，时间复杂度O(n3)。算法步骤:&amp;n">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-13T06:46:09.589Z">
+<meta property="og:updated_time" content="2019-02-06T11:33:08.906Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Floyd算法">
 <meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;除了Dijkstra算法和SPFA算法，另一种求最短路方法是Floyd算法。这个算法可以求出任意两点之间的最短路径长度，支持负边权，需要用邻接矩阵存图。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;算法缺点是耗时过大，时间复杂度O(n3)。算法步骤:&amp;n">
@@ -421,7 +421,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-13 14:46:09" itemprop="dateModified" datetime="2019-01-13T14:46:09+08:00">2019-01-13</time>
+                <time title="修改时间：2019-02-06 19:33:08" itemprop="dateModified" datetime="2019-02-06T19:33:08+08:00">2019-02-06</time>
               
             
           </span>
@@ -483,7 +483,7 @@
 
       
         <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;除了Dijkstra算法和SPFA算法，另一种求最短路方法是Floyd算法。这个算法可以求出任意两点之间的最短路径长度，支持负边权，需要用邻接矩阵存图。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;算法缺点是耗时过大，时间复杂度O(n<sup>3</sup>)。<br>算法步骤:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 初始化dist数组，邻接节点dist值即为相邻边权值，否则为inf(无穷大)。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 枚举每一个节点，用这个节点作中介，更新所有节点对的最短路径值。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最后dist即为最短路径数组，如果为inf则两点不连通。<br><a id="more"></a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;代码如下:<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">1</span>; k &lt;= n; k++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (i != j &amp;&amp; i != k &amp;&amp; j != k)</span><br><span class="line">		dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>算法正确性证明:<br>首先我们要清楚，最短路只有三种情况:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 两点直接相连且路径最短。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 两点经一个中介点路径最短。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 两点经多个中介点路径最短。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;情况1已经求出，且算法全程对这个值没有影响。情况2在枚举到中介点k时就已经求出了所有以k为单个中介的两点最短路。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于情况3，我们假设中介点为a<sub>1</sub> &lt; a<sub>2 </sub> &lt; … &lt; a<sub>m</sub>。两点靠m个中介点获得最短路。令集合S={x，y，a<sub>1</sub>，a<sub>2</sub>…a<sub>m</sub>}(x，y分别是源点和终点)。当k枚举到a<sub>1</sub>时，必然会更新这样一对属于情况2的节点对(a<sub>i</sub>，a<sub>j</sub>)，其中a<sub>i</sub>，a<sub>j</sub>∈S。这时我们可以看作是a<sub>i</sub>，a<sub>j</sub>直接相连而不经过a<sub>1</sub>，然后从S中清除a<sub>1</sub>，这样m个中介就减少至m-1个。后面的过程每次都使中介点减一，在枚举完成之前必可以将其转化为情况2并求出最短路径值。</p>
+<p>算法正确性证明:<br>首先要清楚，最短路只有三种情况:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 两点直接相连且路径最短。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 两点经一个中介点路径最短。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 两点经多个中介点路径最短。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;情况1已经求出，且算法全程对这个值没有影响。情况2在枚举到中介点k时就已经求出了所有以k为单个中介的两点最短路。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于情况3，假设中介点为a<sub>1</sub> &lt; a<sub>2 </sub> &lt; … &lt; a<sub>m</sub>。两点靠m个中介点获得最短路。令集合S={x，y，a<sub>1</sub>，a<sub>2</sub>…a<sub>m</sub>}(x，y分别是源点和终点)。当k枚举到a<sub>1</sub>时，必然会更新这样一对属于情况2的节点对(a<sub>i</sub>，a<sub>j</sub>)，其中a<sub>i</sub>，a<sub>j</sub>∈S。这时可以看作是a<sub>i</sub>，a<sub>j</sub>直接相连而不经过a<sub>1</sub>，然后从S中清除a<sub>1</sub>，这样m个中介就减少至m-1个。后面的过程每次都使中介点减一，在枚举完成之前必可以将其转化为情况2并求出最短路径值。</p>
 
       
     </div>

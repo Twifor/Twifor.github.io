@@ -125,7 +125,7 @@
 <meta property="og:site_name" content="Twifor~Liyh">
 <meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;这里探讨一种求固定长度区间最值的高效方法—用单调队列求最值。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-19T10:11:35.778Z">
+<meta property="og:updated_time" content="2019-02-06T11:35:37.985Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="单调队列与固定长区间最值">
 <meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;这里探讨一种求固定长度区间最值的高效方法—用单调队列求最值。">
@@ -421,7 +421,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-19 18:11:35" itemprop="dateModified" datetime="2019-01-19T18:11:35+08:00">2019-01-19</time>
+                <time title="修改时间：2019-02-06 19:35:37" itemprop="dateModified" datetime="2019-02-06T19:35:37+08:00">2019-02-06</time>
               
             
           </span>
@@ -482,12 +482,12 @@
       
 
       
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里探讨一种求固定长度区间最值的高效方法—用单调队列求最值。<br><a id="more"></a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先先认识什么是单调队列。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;队列是一种先进先出(FIFO)的线性表，而单调队列则是指队列中元素符合单调性的特殊队列，可以分为单调增和单调减队列。前者队首元素总是最大的，后者总是最小的。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当有元素需要加入队列时（这里以单调增队列为例），我们需要考察这个元素与队尾元素的大小关系。如果它比队尾元素小，则元素入队后仍符合单调性，直接入队即可；若否，则队尾元素出队，然后继续比较，直到队空或队尾元素大于或等于待入队元素，之后该元素入队。也就是说，单调队列中有元素入队时，会把比它小的所有元素“挤出”。这里我们还可以发现入队操作需要访问队尾元素，这是STL中的queue做不到的。通常单调队列用STL中的deque(双向队列)实现，当然也可以手写。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是如何用单调队列维护固定长度的区间最值？<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所谓固定长度区间最值，即是给定一段区间(长度为n)，维护区间内所有长度为m的区间最值。我们通常用一个一维数组（比如ans[]）来记录结果。这时ans[i]表示[i,i+n-1]的最值。这里值得注意的是，用单调队列维护固定长区间最值时，队列中存放的<strong>不是元素本身，而是元素在区间中的编号</strong>，检验大小关系时，利用编号到元素的映射里比较。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;具体算法如下：</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里探讨一种求固定长度区间最值的高效方法—用单调队列求最值。<br><a id="more"></a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先先认识什么是单调队列。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;队列是一种先进先出(FIFO)的线性表，而单调队列则是指队列中元素符合单调性的特殊队列，可以分为单调增和单调减队列。前者队首元素总是最大的，后者总是最小的。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当有元素需要加入队列时（这里以单调增队列为例），我们需要考察这个元素与队尾元素的大小关系。如果它比队尾元素小，则元素入队后仍符合单调性，直接入队即可；若否，则队尾元素出队，然后继续比较，直到队空或队尾元素大于或等于待入队元素，之后该元素入队。也就是说，单调队列中有元素入队时，会把比它小的所有元素“挤出”。这里还可以发现入队操作需要访问队尾元素，这是STL中的queue做不到的。通常单调队列用STL中的deque(双向队列)实现，当然也可以手写。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是如何用单调队列维护固定长度的区间最值？<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所谓固定长度区间最值，即是给定一段区间(长度为n)，维护区间内所有长度为m的区间最值。通常用一个一维数组（比如ans[]）来记录结果。这时ans[i]表示[i,i+n-1]的最值。这里值得注意的是，用单调队列维护固定长区间最值时，队列中存放的<strong>不是元素本身，而是元素在区间中的编号</strong>，检验大小关系时，利用编号到元素的映射里比较。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;具体算法如下：</p>
 <ol>
 <li>区间前n个元素入单调队列，这时队首所指元素即为前n个元素最值，将其记录在ans[0]中（下标从0开始）。</li>
 <li>对于第n+1以及以后的元素（假设编号是k），该元素<strong>先入队，再取队首元素</strong>，如果队首元素（是一个编号）不在区间[k-n+1,k]中，那么<strong>忽略</strong>该元素，直到队首元素在区间中，这个编号所指元素即为最值。</li>
 </ol>
-<p>附算法正确性证明：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;采用数学归纳法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[0,n-1]的最值显然可以得到。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假设单调队列中成功地维护了[a,a+n-1]的最值p，在第a+n个元素入队后，我们证明队列可以维护[a+1,a+n]的最值q。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果p就是编号为a的元素。q编号在[a+1,a+n]中，假如有q≤p。编号在[a+1,a+n]中的所有元素x都应满足x≤q。根据单调队列的构造方法，可知q一定不会被“挤出”，并且一定在p的紧跟着的后面。根据算法，q因为编号不在[a+1,a+n]中，会被忽略，然后立刻得到q，即为最值，成立。若q&gt;p，则q会将p“挤出”并且其编号成为队首，并且之后一定不会再被“挤出”，取出即为最值，成立。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果p编号在[a+1,a+n-1]中，我们只需比较编号为a+n的元素x和p即可。如果x≤p，则p仍然在队首，取出即为最值。若x&gt;p，则x会将p“挤出”，于是x成为队首，取出即为最值。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;因此算法正确。</p>
+<p>附算法正确性证明：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;采用数学归纳法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[0,n-1]的最值显然可以得到。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假设单调队列中成功地维护了[a,a+n-1]的最值p，在第a+n个元素入队后，下证明队列可以维护[a+1,a+n]的最值q。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果p就是编号为a的元素。q编号在[a+1,a+n]中，假如有q≤p。编号在[a+1,a+n]中的所有元素x都应满足x≤q。根据单调队列的构造方法，可知q一定不会被“挤出”，并且一定在p的紧跟着的后面。根据算法，q因为编号不在[a+1,a+n]中，会被忽略，然后立刻得到q，即为最值，成立。若q&gt;p，则q会将p“挤出”并且其编号成为队首，并且之后一定不会再被“挤出”，取出即为最值，成立。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果p编号在[a+1,a+n-1]中，只需比较编号为a+n的元素x和p即可。如果x≤p，则p仍然在队首，取出即为最值。若x&gt;p，则x会将p“挤出”，于是x成为队首，取出即为最值。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;因此算法正确。</p>
 
       
     </div>
