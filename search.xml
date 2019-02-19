@@ -286,9 +286,9 @@
         <tag>基础算法</tag>
         <tag>区间最值</tag>
         <tag>数据结构</tag>
-        <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
+        <tag>区间</tag>
       </tags>
   </entry>
   <entry>
@@ -303,9 +303,9 @@
         <tag>区间最值</tag>
         <tag>ST表</tag>
         <tag>动态规划</tag>
-        <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
+        <tag>区间</tag>
         <tag>矩阵</tag>
       </tags>
   </entry>
@@ -381,8 +381,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>贪心</tag>
         <tag>树</tag>
+        <tag>贪心</tag>
       </tags>
   </entry>
   <entry>
