@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Tarjan算法(强联通)]]></title>
+    <url>%2F2019%2F02%2F18%2FTarjan%E7%AE%97%E6%B3%95(%E5%BC%BA%E8%81%94%E9%80%9A)%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本节介绍一种求解有向图强联通分量的算法—Tarjan算法。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先是强联通分量的定义：一个有向图的满足强联通性的子图。所谓强联通性是指这个有向图中任意两点都可以相互联通的性质。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tarjan算法基于DFS，要理解这个算法需要先认清一个事实：在强联通图中一定存在一条回路能够遍历所有的点。这也是判定强联通图的充要条件。Tarjan算法就是通过找环来判定强联通性的。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面是Tarjan算法的实现过程。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用栈储存搜索树结点路径。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于图中每一个结点，它都有两个量：DFN与LOW。 DFN ：这个结点被访问的次序编号，也就是时间戳。 LOW ：在搜索树中，这个结点的子树中最小的结点编号（也就是最小的DFN值）。LOW保证了求出的是极大强联通子图。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意：每访问一个新结点，首先进行初始化：DFN=LOW=cnt++（cnt是时间戳计数器）并入栈。这是因为新的结点尚未向下扩展，这个结点在搜索树中没有子树，LOW即为自身的DFN。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;每访问到一个结点，遍历该点所有的出边。这时对于每一个出点，有以下几种情况： 该点从未被访问：对该点进行新的Tarjan算法（递归进行），以更新该点的DFN与LOW值。由于该点是原结点在搜索树中的子结点，以此更新原结点LOW值。若原结点为u，该结点为v，那么LOW[u]=min(LOW[u],LOW[v])。 该点已在栈中：直接更新原结点LOW值。需要注意的是，更新方法是LOW[u]=min(LOW[u],DFN[v])。这是因为出点已在栈中，但它也是搜索树的子结点，需要用它的DFN值来更新原结点。 其余情况忽略该结点。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;回溯后，如果一个结点的DFN=LOW，说明自己就在以自己为根的搜索树上，即为一个环。此时退栈，直到该点（含该点），得到的序列就是一个强联通分量。12345678910111213void tarjan(int x) &#123; DFN[x] = LOW[x] = index++, vis[x] = 1, sta.push(x); for (int i = head[x]; i != -1; i = edge[i].next) &#123; if (vis[edge[i].to])LOW[x] = min(DFN[edge[i].to], LOW[x]); else if (!DFN[edge[i].to])tarjan(edge[i].to), LOW[x] = min(LOW[x], LOW[edge[i].to]); &#125; if (DFN[x] == LOW[x]) &#123; int t; do cout &lt;&lt; (t = sta.top()) &lt;&lt; " ", vis[t] = 0, sta.pop(); while (t != x); cout &lt;&lt; endl; &#125;&#125;]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>图论</tag>
+        <tag>基础算法</tag>
+        <tag>强联通分量</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[多重背包问题及其优化]]></title>
     <url>%2F2019%2F02%2F04%2F%E5%A4%9A%E9%87%8D%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98%E5%8F%8A%E5%85%B6%E4%BC%98%E5%8C%96%2F</url>
     <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本文探讨多重背包问题。要认识这个问题需要先熟悉01背包和完全背包的状态转移方程。 01背包 dp(a,p)=\begin{cases} \max\{dp(a-1，p)，dp(a-1，p-v_a)+w_a\}\ \ \ & p\geq w_a\\ dp(a-1,p) \end{cases}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数组降维时需要从大到小遍历来更新状态。 完全背包 dp(a,p)=\begin{cases} \max\{dp(a-1，p)，dp(a，p-v_a)+w_a\}\ \ \ & p\geq w_a\\ dp(a-1,p) \end{cases}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数组降维时需要从小到大遍历来更新状态。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;多重背包是指每一个物品有着数量限制时的背包问题，这也是一类经典动态规划问题，解法主要有以下几种。 朴素解法 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果第i个物品有ci个，我们可以将这ci个物品看做不同的物品，从而化为01背包问题。这种方法十分简单，但时间复杂度为$O(V\displaystyle\sum_{i=1}^n w_ic_i)$，时间消耗很大。 二进制拆分 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;二进制拆分的做法也是将多重背包转化为01背包，但是二进制拆分更为高效，它基于以下数学原理：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;任何一个自然数x都可以写成如下形式： x=2^0+2^1+\cdots+2^k+p,\ p]]></content>
@@ -22,8 +35,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数论</tag>
         <tag>提高算法</tag>
+        <tag>数论</tag>
       </tags>
   </entry>
   <entry>
@@ -45,8 +58,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数论</tag>
         <tag>提高算法</tag>
+        <tag>数论</tag>
         <tag>树状数组</tag>
         <tag>离散化</tag>
       </tags>
@@ -59,8 +72,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数论</tag>
         <tag>提高算法</tag>
+        <tag>数论</tag>
       </tags>
   </entry>
   <entry>
@@ -232,8 +245,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>动态规划</tag>
         <tag>ST表</tag>
+        <tag>动态规划</tag>
         <tag>矩阵</tag>
       </tags>
   </entry>
@@ -276,13 +289,13 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
-        <tag>动态规划</tag>
         <tag>区间最值</tag>
         <tag>ST表</tag>
+        <tag>动态规划</tag>
         <tag>区间</tag>
-        <tag>矩阵</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
+        <tag>矩阵</tag>
       </tags>
   </entry>
   <entry>
@@ -343,8 +356,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>树</tag>
         <tag>动态规划</tag>
+        <tag>树</tag>
         <tag>背包问题</tag>
       </tags>
   </entry>
@@ -357,8 +370,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>树</tag>
         <tag>贪心</tag>
+        <tag>树</tag>
       </tags>
   </entry>
   <entry>
@@ -538,8 +551,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>区间最值</tag>
+        <tag>提高算法</tag>
         <tag>数据结构</tag>
         <tag>ST表</tag>
       </tags>
@@ -564,8 +577,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>图论</tag>
+        <tag>基础算法</tag>
         <tag>图的最短路</tag>
       </tags>
   </entry>
@@ -577,8 +590,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>图论</tag>
+        <tag>基础算法</tag>
         <tag>图的最短路</tag>
       </tags>
   </entry>
@@ -653,8 +666,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数论</tag>
         <tag>提高算法</tag>
+        <tag>数论</tag>
       </tags>
   </entry>
   <entry>
@@ -665,9 +678,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数论</tag>
         <tag>提高算法</tag>
         <tag>动态规划</tag>
+        <tag>数论</tag>
         <tag>离散化</tag>
       </tags>
   </entry>
@@ -870,8 +883,8 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
-        <tag>二分查找</tag>
         <tag>动态规划</tag>
+        <tag>二分查找</tag>
         <tag>子序列</tag>
       </tags>
   </entry>
