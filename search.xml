@@ -1,6 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[差分约束]]></title>
+    <url>%2F2019%2F02%2F20%2F%E5%B7%AE%E5%88%86%E7%BA%A6%E6%9D%9F%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;差分约束系统是很多问题求解的模型，这一类问题可以转化为图的单源最短路径问题。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所谓差分约束系统是指如下的若干不等式组成的约束系统： x_i-x_j\leq w&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里的$x_i,x_j$均为变量，w为常数。不等式组要么无解要么有无数种解，这是因为如果存在一组解，易知它们分别加上同样的数d得到的仍是一组解。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将不等式变形： x_i\leq x_j+w&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发现这与单源最短路径的松弛操作十分类似： dict[i]\leq dict[j]+w(i,j)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由此可知，如果将每一个变量看做点，不等关系看做边建图，求单源最短路径，它们的最短路径值一定满足所有的不等关系。这样差分约束问题就可以转化为图的单源最短路径问题。对于不等式$x_i-x_j\leq w$，需要建立j到i，边权为w的有向边。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;源点如何找呢？我们需要引入一个新变量$x_0$，并建立$x_0$到其余所有变量的有向边，边权为0，这样相当于加了下面几个约束关系： x_1-x_0\leq 0\\ x_2-x_0\leq 0\\ \cdots\\ x_n-x_0\leq 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;显然加入这些不等式不会影响原不等式的实际结果，可以认为$x_0$是所有变量的上界。这样以$x_0$为源点求单源最短路径即可。在求单源最短路径时，通常令源点的路径长即dict[0]=0，这样相当于规定了$x_0=0$，所有变量的取值便成为非正数。同样地，如果规定dict[0]=p，这样所有变量取值都不会超过p。源点的dict值可以作为变量取值的上界。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;不等式组的无解判定：当单源最短路不存在时（即图中有负环），不等式组无解。基于此，常常用SPFA算法解决差分约束问题。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另外，当不等式给出$x_i-x_j\geq w$形式不等式时，两边乘一个-1，即可化为标准形式。如果给出$x_i-x_j&lt;w$形式，可以化为$x_i-x_j\leq w-1$（因为变量取值通常只取整数）。$x_i-x_j=w$可以化为$x_i-x_j\geq w$和$x_i-x_j\leq w$两个不等式。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最终得出的解只是一组特解，这组特解不一定符合题意，通常需要将所有值同时加上合适的d来使它们都达到合理的范围。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;差分约束还有另一种解决方法，就是求最长路，这种方法针对形如$x_i-x_j\geq w$的方程。仍然建立j到i边权为w的有向边，但是要求最长路，此时dict[0]是所有变量的下界。求最长路方法与最短路类似，都用SPFA算法。无解判定：当图中存在正权环时无解。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例题：HDU1384 Intervals&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一道裸的差分约束题目。规定$d_i$为0~i中已经被选的数的个数，那么可以列出不等式： d_{b_i}-d_{a_i-1}\geq c_i&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;解决此类问题时需要善于找到隐藏不等关系，比如每一个数最多选一次，因此还有： 0\leq d_i-d_{i-1}\leq 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;建图跑最短（长）路即可，然后找到最小的合法解。题目特点决定了差分约束系统一定有解，不用判定无解情况。另外注意这题有多组测试样例，题干中未提及。12345678910111213141516171819202122232425262728293031323334353637383940414243444546#include&lt;iostream&gt;#include&lt;cstdio&gt;#include&lt;queue&gt;#define MAX (50000+5)#define inf (int)1e9using namespace std;struct &#123; int to, next, v;&#125; edge[MAX * 4 + 10000];int head[MAX], cnt = 1, vis[MAX] = &#123;0&#125;, n, a[MAX], b[MAX], c[MAX], dict[MAX], minn, maxn;inline void add(int x, int y, int z) &#123;//建边 edge[cnt].to = y, edge[cnt].next = head[x], edge[cnt].v = z, head[x] = cnt++;&#125;queue&lt;int&gt; que;int main() &#123; ios::sync_with_stdio(false); while (cin &gt;&gt; n) &#123; cnt = 1, minn = inf, maxn = -inf; for (int i = 0; i &lt;= 50002; i++)dict[i] = inf, head[i] = -1, vis[i] = 0; for (int i = 1; i &lt;= n; i++) &#123; cin &gt;&gt; a[i], cin &gt;&gt; b[i], cin &gt;&gt; c[i]; a[i] += 2, b[i] += 2; add(b[i], a[i] - 1, -c[i]), maxn = max(maxn, b[i]), minn = min(minn, a[i] - 1); &#125; for (int i = 2; i &lt;= maxn; i++)add(i - 1, i, 1), add(i, i - 1, 0);//补充约束关系 dict[0] = 0; for (int i = 1; i &lt;= maxn; i++)add(0, i, 0);//补充x0 que.push(0), vis[0] = 1; while (!que.empty()) &#123;//SPFA算法 int p = que.front(); que.pop(), vis[p] = 0; for (int i = head[p]; ~i; i = edge[i].next) &#123; if (dict[edge[i].to] &gt; dict[p] + edge[i].v) &#123; dict[edge[i].to] = dict[p] + edge[i].v; if (!vis[edge[i].to])que.push(edge[i].to), vis[edge[i].to] = 1; &#125; &#125; &#125; cout &lt;&lt; -dict[minn] &lt;&lt; endl; &#125; return 0;&#125;]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>图论</tag>
+        <tag>图的最短路</tag>
+        <tag>提高算法</tag>
+        <tag>差分约束</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[树链剖分]]></title>
+    <url>%2F2019%2F02%2F19%2F%E6%A0%91%E9%93%BE%E5%89%96%E5%88%86%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;树链剖分是树上的重要的算法，阅读本文需要先了解线段树。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;树链剖分主要解决维护并求树上最短路径和，子树和的问题，它的思想是将树划分为一条条链，再用数据结构来维护这些链。树链剖分需要保证每一个结点存在且仅存在于一条链中。下面用洛谷P3384来介绍树链剖分。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先需要清楚以下几个概念： 结点数size：这个结点对应子树的总结点数（含自己）。 父结点编号father：这个结点的父结点 重儿子son：某个结点所有子结点中size最大的一个。叶子结点没有重儿子，其余结点有且仅有一个重儿子。 重边：连接父结点和其重儿子的边。 重链：顺次连接重边所得到的链边 深度depth：结点深度 DFS序：结点在DFS中被首次访问的顺序编号 链顶编号top：该结点所在链的顶端（depth最小的结点）标号 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面介绍树链剖分步骤。 第一遍DFS：求father、size、son和depth&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第一遍DFS，求出基础数据，一遍DFS可以完成。12345678910void DFS1(int x, int fa) &#123; int maxn = -1, r = -1; for (int i = head[x]; i != -1; i = edge[i].next) &#123; if (edge[i].to != fa) &#123;//防止向父结点回溯 father[edge[i].to] = x, depth[edge[i].to] = depth[x] + 1, DFS1(edge[i].to, x), size[x] += size[edge[i].to]; if (size[edge[i].to] &gt; maxn)maxn = size[edge[i].to], r = edge[i].to;//更新son &#125; &#125; son[x] = r, size[x]++;//含自己，size要自加&#125; 第二遍DFS：求top、DFS序&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这一步是关键。这一步的主要目的是建立树链，规则如下： 如果结点存在重儿子，则优先连接重边，继承已有的树链。 所有轻儿子（除了重儿子就是轻儿子）均分别作一条新链的首端，继续向下延伸。 12345678void DFS2(int x, int t) &#123;//现在访问的结点编号、该结点所在树链的顶端编号 id[x] = dCnt, rk[dCnt] = x, dCnt++, top[x] = t;//构造双向映射（id和rk），进行DFS序重新编号并更新top值 if (size[x] == 1)return;//叶子结点直接return if (son[x])DFS2(son[x], t);//存在重儿子优先选重儿子 for (int i = head[x]; i != -1; i = edge[i].next) &#123; if (edge[i].to != son[x] &amp;&amp; edge[i].to != father[x])DFS2(edge[i].to, edge[i].to);//所有轻儿子作新的树链起点 &#125;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里可能会有一个疑惑，为什么要重新编号呢？其实这才是树链剖分的目的：将每一条树链上的点编号都变成连续的，这样就可以用数据结构（比如线段树）维护它们的和。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这一步完成后，可以发现，每一个结点（比如x）的所有子树结点编号都成为连续的了，它们的新编号区间为[id[x],id[x]+size[x]-1]。这样有利于我们用线段树解决子树修改求和问题。 最短路径的划分&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如何求两个结点之间最短路径和呢？在树链剖分后容易发现如果两个结点在同一条树链中，它们之间的结点新编号必然是连续的，这样求和和修改就转化为区间求和修改问题，用线段树维护即可。如果两个结点不在一条树链中，就需要采用下面的方法来将它们分到同一个树链中：（原题要取模，这里为了方便省略取模过程）1234567891011121314inline int queL(int x, int y) &#123; int tx = top[x], ty = top[y], ans = 0;//找到两条链的top while (tx != ty) &#123;//top不同说明不在一条链上 if (depth[tx] &gt;= depth[ty]) &#123;//对于更深的top ans += query(id[tx], id[x], 1, n, 1);//从top开始到这个结点的路径必然都在最短路径上，加上它的影响 x = father[tx], tx = top[x]; &#125; else &#123; ans += query(id[ty], id[y], 1, n, 1); y = father[ty], ty = top[y]; &#125; &#125; if (depth[x] &lt;= depth[y])return ans + query(id[x], id[y], 1, n, 1);//划分到同一条链上之后直接处理 return ans + query(id[y], id[x], 1, n, 1);&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;修改类比即可。这里可以发现树链剖分的本质是将树上的问题转化为区间上的问题。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面给出全部代码：123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127128129130131132133134135136137138139#include&lt;iostream&gt;#include&lt;cstdio&gt;#include&lt;algorithm&gt;#define MAX (100000+5)using namespace std;struct &#123; int to, next;&#125; edge[MAX * 2];int head[MAX], father[MAX], son[MAX] = &#123;0&#125;, size[MAX] = &#123;0&#125;;int top[MAX], depth[MAX], cnt = 1, dCnt = 1, n, m, root, mod, x, y, z;int id[MAX] = &#123;0&#125;, rk[MAX] = &#123;0&#125;, init[MAX], tree[4 * MAX], lazy[4 * MAX] = &#123;0&#125;;inline int read() &#123; char e = getchar(); while (e &lt; '0' || e &gt; '9')e = getchar(); int s = 0; while (e &gt;= '0' &amp;&amp; e &lt;= '9')s = s * 10 + e - '0', e = getchar(); return s;&#125;inline void add(int x, int y) &#123; edge[cnt].to = y, edge[cnt].next = head[x], head[x] = cnt++;&#125;void DFS1(int x, int fa) &#123; int maxn = -1, r = -1; for (int i = head[x]; i != -1; i = edge[i].next) &#123; if (edge[i].to != fa) &#123; father[edge[i].to] = x, depth[edge[i].to] = depth[x] + 1, DFS1(edge[i].to, x), size[x] += size[edge[i].to]; if (size[edge[i].to] &gt; maxn)maxn = size[edge[i].to], r = edge[i].to; &#125; &#125; son[x] = r, size[x]++;&#125;void DFS2(int x, int t) &#123; id[x] = dCnt, rk[dCnt] = x, dCnt++, top[x] = t; if (size[x] == 1)return; if (son[x])DFS2(son[x], t); for (int i = head[x]; i != -1; i = edge[i].next) &#123; if (edge[i].to != son[x] &amp;&amp; edge[i].to != father[x])DFS2(edge[i].to, edge[i].to); &#125;&#125;void make(int l, int r, int k) &#123; if (l == r) &#123; tree[k] = init[rk[l]]; return; &#125; int mid = (l + r) &gt;&gt; 1; make(l, mid, 2 * k), make(mid + 1, r, 2 * k + 1); tree[k] = (tree[2 * k] + tree[2 * k + 1]) % mod;&#125;inline void down(int k, int l, int r) &#123; int mid = (l + r) &gt;&gt; 1; tree[2 * k] = (tree[2 * k] + (mid - l + 1) * lazy[k] % mod) % mod; tree[2 * k + 1] = (tree[2 * k + 1] + (r - mid) * lazy[k] % mod) % mod; lazy[2 * k] += lazy[k], lazy[2 * k + 1] += lazy[k], lazy[2 * k] %= mod, lazy[2 * k + 1] %= mod, lazy[k] = 0;&#125;int query(int x, int y, int l, int r, int k) &#123; int mid = (l + r) &gt;&gt; 1; if (l &lt; r &amp;&amp; lazy[k] != 0)down(k, l, r); if (x == l &amp;&amp; y == r)return tree[k]; if (mid + 1 &lt;= x)return query(x, y, mid + 1, r, 2 * k + 1); if (mid &gt;= y)return query(x, y, l, mid, 2 * k); return (query(x, mid, l, mid, 2 * k) + query(mid + 1, y, mid + 1, r, 2 * k + 1)) % mod;&#125;void change(int x, int y, int l, int r, int s, int k) &#123; int mid = (l + r) &gt;&gt; 1; if (l &lt; r &amp;&amp; lazy[k] != 0)down(k, l, r); if (x == l &amp;&amp; y == r) &#123; tree[k] = (tree[k] + (r - l + 1) * s % mod) % mod; lazy[k] += s; return; &#125; if (mid + 1 &lt;= x)change(x, y, mid + 1, r, s, 2 * k + 1); else if (mid &gt;= y)change(x, y, l, mid, s, 2 * k); else change(x, mid, l, mid, s, 2 * k), change(mid + 1, y, mid + 1, r, s, 2 * k + 1); tree[k] = (tree[2 * k] + tree[2 * k + 1]) % mod;&#125;inline void addL(int x, int y, int s) &#123; int tx = top[x], ty = top[y]; while (tx != ty) &#123; if (depth[tx] &gt;= depth[ty]) &#123; change(id[tx], id[x], 1, n, s, 1); x = father[tx], tx = top[x]; &#125; else &#123; change(id[ty], id[y], 1, n, s, 1); y = father[ty], ty = top[y]; &#125; &#125; if (depth[x] &lt;= depth[y])change(id[x], id[y], 1, n, s, 1); else change(id[y], id[x], 1, n, s, 1);&#125;inline int queL(int x, int y) &#123; int tx = top[x], ty = top[y], ans = 0; while (tx != ty) &#123; if (depth[tx] &gt;= depth[ty]) &#123; ans += query(id[tx], id[x], 1, n, 1), ans %= mod; x = father[tx], tx = top[x]; &#125; else &#123; ans += query(id[ty], id[y], 1, n, 1), ans %= mod; y = father[ty], ty = top[y]; &#125; &#125; if (depth[x] &lt;= depth[y])return (ans + query(id[x], id[y], 1, n, 1)) % mod; return (ans + query(id[y], id[x], 1, n, 1)) % mod;&#125;int main() &#123; n = read(), m = read(), root = read(), mod = read(); for (int i = 1; i &lt;= n; i++)init[i] = read(), head[i] = -1; for (int i = 1; i &lt; n; i++)x = read(), y = read(), add(x, y), add(y, x); depth[root] = 1, DFS1(root, 0), DFS2(root, root), make(1, n, 1); int cmd; for (int i = 0; i &lt; m; i++) &#123; cmd = read(); if (cmd == 1) &#123; x = read(), y = read(), z = read(); addL(x, y, z); &#125; else if (cmd == 2) &#123; x = read(), y = read(); cout &lt;&lt; queL(x, y) &lt;&lt; endl; &#125; else if (cmd == 3) &#123; x = read(), y = read(); change(id[x], id[x] + size[x] - 1, 1, n, y, 1); &#125; else &#123; x = read(); cout &lt;&lt; query(id[x], id[x] + size[x] - 1, 1, n, 1) &lt;&lt; endl; &#125; &#125; return 0;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;后记：最短路径和也可以通过LCA来完成，做法是预处理每一个结点到根结点的前缀和，求出LCA后即可计算出。]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>提高算法</tag>
+        <tag>树</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Tarjan算法(LCA)]]></title>
+    <url>%2F2019%2F02%2F19%2FTarjan%E7%AE%97%E6%B3%95(LCA)%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本节介绍Tarjan算法求LCA的原理和过程。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LCA已经在之前的日志中提及，当时使用的倍增算法，见这篇文章。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tarjan算法是基于并查集求LCA的离线算法。所谓离线，是指读入所有的查询，然后在一次遍历中处理所有查询并得出结果。这种算法不能边读入查询边计算，遍历完成后不能再处理额外的查询。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tarjan算法巧妙地利用了树的遍历规律。在树的DFS遍历中，容易发现当我们在遍历一棵树时，如果它的所有子树结点尚未被完全访问，这棵子树的根结点状态是不能更新的。也就是说，只有访问了所有子结点后，该结点的状态才可以更新。Tarjan算法便是利用了这一点。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tarjan算法可以描述如下，从根结点开始： 遍历所有子结点，每遍历完一个，将子结点合并到该结点上（并查集操作），并标记该结点已被访问。 遍历完成后，找到与该结点有关的所有查询。如果另一个结点v已经被访问，那么这个查询的结果就是find(v)（并查集操作），否则忽略。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;算法正确性是易于理解的。对于一个刚刚完成访问操作的结点，我们找到所有与之相关的查询。如果此时另一个结点也被访问了，可以肯定两个结点在一个子树下，并且这棵子树的访问操作没有完全完成（毕竟我们正在访问的就是它的一个子结点或者孙子结点等等），根结点（也就是LCA）的并查集属性（也就是father）尚未被更改（如前文所说，只有遍历完所有子结点才能更改）。注意到每访问一个子结点后我们都将其与父结点合并，那么LCA就可以通过find()函数向上追溯的方法找到了，期间可以使用并查集的路径压缩算法。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tarjan算法中的并查集算法与普通的并查集几乎完全相同，唯一不同点是合并的顺序。普通并查集合并两个点时合并顺序是随意的，但是Tarjan算法中必须是子结点合并到父结点上。其实这里的并查集可以看做以前树上常用的记录父结点关系的parent数组。1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859#include&lt;iostream&gt;#include&lt;cstdio&gt;#define MAX (500000+5)using namespace std;struct &#123; int to, next;&#125; edge[MAX * 2];struct &#123;//将查询视为图 int to, next, r;//r是查询编号&#125; qEdge[MAX * 2];int head[MAX], qHead[MAX], father[MAX], ans[MAX] = &#123;0&#125;, cnt = 1, qCnt = 1, n, m, root;bool vis[MAX] = &#123;false&#125;;inline int read() &#123; char e = getchar(); while (e &lt; '0' || e &gt; '9')e = getchar(); int s = 0; while (e &gt;= '0' &amp;&amp; e &lt;= '9')s = s * 10 + e - '0', e = getchar(); return s;&#125;inline void add(int x, int y) &#123;//树的图构建 edge[cnt].to = y, edge[cnt].next = head[x], head[x] = cnt++;&#125;inline void qAdd(int x, int y, int r) &#123;//查询关系图构建 qEdge[qCnt].to = y, qEdge[qCnt].next = qHead[x], qEdge[qCnt].r = r, qHead[x] = qCnt++;&#125;int find(int x) &#123; if (father[x] == x)return x; return father[x] = find(father[x]);&#125;inline void merge(int x, int y) &#123;//x合并到它的父结点y上! father[x] = find(y);//就是father[find(x)]=find(y)，因为find(x)就是x //father[y]=find(x)是错的&#125;void Tarjan(int x, int fa) &#123; for (int i = head[x]; i != -1; i = edge[i].next) &#123;//访问所有子结点 if (edge[i].to != fa) Tarjan(edge[i].to, x), merge(edge[i].to, x), vis[edge[i].to] = true; &#125; for (int i = qHead[x]; i != -1; i = qEdge[i].next) &#123;//找到所有相关查询 if (!ans[qEdge[i].r] &amp;&amp; vis[qEdge[i].to])ans[qEdge[i].r] = find(qEdge[i].to); &#125;&#125;int main() &#123; int x, y; n = read(), m = read(), root = read(); for (int i = 1; i &lt;= n; i++)qHead[i] = head[i] = -1, father[i] = i; for (int i = 1; i &lt; n; i++)x = read(), y = read(), add(x, y), add(y, x); for (int i = 0; i &lt; m; i++)x = read(), y = read(), qAdd(x, y, i), qAdd(y, x, i); vis[root] = true, Tarjan(root, 0); for (int i = 0; i &lt; m; i++)cout &lt;&lt; ans[i] &lt;&lt; endl; return 0;&#125;]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>提高算法</tag>
+        <tag>LCA</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Tarjan算法(割点&割边)]]></title>
     <url>%2F2019%2F02%2F19%2FTarjan%E7%AE%97%E6%B3%95(%E5%89%B2%E7%82%B9%26%E5%89%B2%E8%BE%B9)%2F</url>
     <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本节探讨另一种Tarjan算法来求无向图的割点和割边。本文是这篇文章的延伸。 割点&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先认识什么是割点。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在一个连通无向图中，如果删去某一个点以及与其相连的边后图不再联通，则称这个点为一个割点。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tarjan算法可以用来求割点，它的步骤与求强联通分量的算法十分相似，只是多了下面几个判断： 如果该点为搜索树的根结点（一个连通图搜索树有且仅有一个根结点），判断其子结点数目。如果子结点数目多于一个，说明两个子树只能通过根结点来往，由此判断根结点为割点。也就是说，根结点为割点的充要条件是子结点多于一个。 对于非根结点u，如果其有子结点并且存在某个子结点v的LOW值满足LOW[v]≥DFN[u]，则说明该子树上的结点不能访问父结点以上的结点，即父结点为割点。也就是说，非根结点为割点的充要条件是存在至少一个子结点满足LOW[v]≥DFN[u]。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;求割点时不需要开栈，如果子结点已经被访问过，直接更新即可。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在求割点时，事实证明子结点是可以回溯到父结点的。但仍然建议在无向图中不允许子结点回溯父结点，这是为了与割边算法统一（见下文）。1234567891011void tarjan(int x, int last) &#123; DFN[x] = LOW[x] = cunt++; for (int i = head[x]; i != -1; i = edge[i].next) &#123; if (!DFN[edge[i].to]) &#123; tarjan(edge[i].to, x), LOW[x] = min(LOW[x], LOW[edge[i].to]); if (x != root &amp;&amp; LOW[edge[i].to] &gt;= DFN[x])Ans[x] = 1; else if (x == root)c++; &#125; else if (edge[i].to != last)LOW[x] = min(LOW[x], DFN[edge[i].to]); &#125; if (x == root &amp;&amp; c &gt;= 2)Ans[x] = 1;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意：Tarjan算法得出的割点可能会重复。 割边&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在一个连通无向图中，如果删去一条边后图不再连通，则该边为一条割边，也称为桥。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;找割边的算法比割点容易，因为它不需要考虑根结点的问题。对于一条边(u，v)，u为父结点，则该边是割边的充要条件是LOW[v]&gt;DFN[u]。这说明子结点不能通过其它边访问包含父结点在内的所有祖先结点，即父子边为割边。值得注意的是，判割边时，子结点不能回溯到父结点。123456789void tarjan(int x, int last) &#123; DFN[x] = LOW[x] = cunt++; for (int i = head[x]; i != -1; i = edge[i].next) &#123; if (!DFN[edge[i].to]) &#123; tarjan(edge[i].to, x), LOW[x] = min(LOW[x], LOW[edge[i].to]); if (LOW[edge[i].to] &gt; DFN[x])Ans[i] = 1;//标记边序号 &#125; else if (edge[i].to != last)LOW[x] = min(LOW[x], DFN[edge[i].to]); &#125;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意：如果一条边有重边，那么它一定不是割边。Tarjan算法不能排除重边的干扰，需要特判。]]></content>
@@ -9,6 +47,7 @@
       </categories>
       <tags>
         <tag>图论</tag>
+        <tag>基础算法</tag>
       </tags>
   </entry>
   <entry>
@@ -286,9 +325,9 @@
         <tag>基础算法</tag>
         <tag>区间最值</tag>
         <tag>数据结构</tag>
+        <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
-        <tag>区间</tag>
       </tags>
   </entry>
   <entry>
@@ -303,9 +342,9 @@
         <tag>区间最值</tag>
         <tag>ST表</tag>
         <tag>动态规划</tag>
+        <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
-        <tag>区间</tag>
         <tag>矩阵</tag>
       </tags>
   </entry>
@@ -549,9 +588,9 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
+        <tag>LCA</tag>
         <tag>倍增</tag>
         <tag>树</tag>
-        <tag>LCA</tag>
       </tags>
   </entry>
   <entry>
@@ -690,8 +729,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>动态规划</tag>
         <tag>数论</tag>
+        <tag>动态规划</tag>
         <tag>离散化</tag>
       </tags>
   </entry>

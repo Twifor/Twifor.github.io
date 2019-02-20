@@ -117,25 +117,25 @@
 
 
 
-  <meta name="description" content="难度：普及+/提高 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在一个圆形操场的四周摆放N堆石子，现要将石子有次序地合并成一堆。规定每次只能选相邻的2堆合并成新的一堆，并将新的一堆的石子数，记为该次合并的得分。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;试设计出1个算法，计算出将N堆石子">
-<meta name="keywords" content="基础算法,动态规划">
+  <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;差分约束系统是很多问题求解的模型，这一类问题可以转化为图的单源最短路径问题。">
+<meta name="keywords" content="图论,图的最短路,提高算法,差分约束">
 <meta property="og:type" content="article">
-<meta property="og:title" content="[洛谷P1008]石子合并">
-<meta property="og:url" content="https://twifor.github.io/2019/01/09/洛谷P1008-石子合并/index.html">
+<meta property="og:title" content="差分约束">
+<meta property="og:url" content="https://twifor.github.io/2019/02/20/差分约束/index.html">
 <meta property="og:site_name" content="Twifor~Liyh">
-<meta property="og:description" content="难度：普及+/提高 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在一个圆形操场的四周摆放N堆石子，现要将石子有次序地合并成一堆。规定每次只能选相邻的2堆合并成新的一堆，并将新的一堆的石子数，记为该次合并的得分。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;试设计出1个算法，计算出将N堆石子">
+<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;差分约束系统是很多问题求解的模型，这一类问题可以转化为图的单源最短路径问题。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-13T05:38:47.872Z">
+<meta property="og:updated_time" content="2019-02-20T04:06:24.424Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="[洛谷P1008]石子合并">
-<meta name="twitter:description" content="难度：普及+/提高 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在一个圆形操场的四周摆放N堆石子，现要将石子有次序地合并成一堆。规定每次只能选相邻的2堆合并成新的一堆，并将新的一堆的石子数，记为该次合并的得分。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;试设计出1个算法，计算出将N堆石子">
+<meta name="twitter:title" content="差分约束">
+<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;差分约束系统是很多问题求解的模型，这一类问题可以转化为图的单源最短路径问题。">
 
 
 
 
 
 
-  <link rel="canonical" href="https://twifor.github.io/2019/01/09/洛谷P1008-石子合并/">
+  <link rel="canonical" href="https://twifor.github.io/2019/02/20/差分约束/">
 
 
 
@@ -145,7 +145,7 @@
   };
 </script>
 
-  <title>[洛谷P1008]石子合并 | Twifor~Liyh</title>
+  <title>差分约束 | Twifor~Liyh</title>
   
 
 
@@ -361,7 +361,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://twifor.github.io/2019/01/09/洛谷P1008-石子合并/">
+    <link itemprop="mainEntityOfPage" href="https://twifor.github.io/2019/02/20/差分约束/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Twifor">
@@ -378,7 +378,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">[洛谷P1008]石子合并
+          <h1 class="post-title" itemprop="name headline">差分约束
 
               
             
@@ -404,7 +404,7 @@
                 
               
 
-              <time title="创建时间：2019-01-09 10:39:15" itemprop="dateCreated datePublished" datetime="2019-01-09T10:39:15+08:00">2019-01-09</time>
+              <time title="创建时间：2019-02-20 10:35:37" itemprop="dateCreated datePublished" datetime="2019-02-20T10:35:37+08:00">2019-02-20</time>
             
 
             
@@ -421,7 +421,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-13 13:38:47" itemprop="dateModified" datetime="2019-01-13T13:38:47+08:00">2019-01-13</time>
+                <time title="修改时间：2019-02-20 12:06:24" itemprop="dateModified" datetime="2019-02-20T12:06:24+08:00">2019-02-20</time>
               
             
           </span>
@@ -453,8 +453,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/01/09/洛谷P1008-石子合并/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/01/09/洛谷P1008-石子合并/" itemprop="commentCount"></span>
+                <a href="/2019/02/20/差分约束/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/02/20/差分约束/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -482,18 +482,16 @@
       
 
       
-        <p>难度：普及+/提高</p>
-<h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在一个圆形操场的四周摆放N堆石子，现要将石子有次序地合并成一堆。规定每次只能选相邻的2堆合并成新的一堆，并将新的一堆的石子数，记为该次合并的得分。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;试设计出1个算法，计算出将N堆石子合并成1堆的最小得分和最大得分。<br><a id="more"></a></p>
-<h3 id="输入输出格式"><a href="#输入输出格式" class="headerlink" title="输入输出格式"></a>输入输出格式</h3><h4 id="输入格式"><a href="#输入格式" class="headerlink" title="输入格式:"></a>输入格式:</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数据的第1行为正整数N，1≤N≤100，表示有N堆石子。第2行有N个数，分别表示每堆石子的个数。</p>
-<h4 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式:"></a>输出格式:</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输出共2行，第1行为最小得分，第2行为最大得分。</p>
-<h3 id="输入输出样例"><a href="#输入输出样例" class="headerlink" title="输入输出样例"></a>输入输出样例</h3><h4 id="Sample-input"><a href="#Sample-input" class="headerlink" title="Sample input"></a>Sample input</h4><blockquote>
-<p>4<br>4 5 9 4</p>
-</blockquote>
-<h4 id="Sample-output"><a href="#Sample-output" class="headerlink" title="Sample output"></a>Sample output</h4><blockquote>
-<p>43<br>54</p>
-</blockquote>
-<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;题目考察线性动态规划。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;与贪心算法不同的是，本题要求只能合并相邻的两堆石子，环形排布又加大了题目难度。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一种思路是将已知的序列首尾相接，从中截取长度为n的子序列，来模拟环形。这是因为在环形结构中，若只合并相邻的两个数，最后必有两个数待合并，从这两个数中间剪环为链，容易知这两者是等价的。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是期初我们并不知从何处剪环，故要将所有情况都考虑到，从每个剪环策略中选取最值即可。在这个思路中，从何处截取序列便是剪环的操作。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假定在一个剪环策略下，令左元素为l，右元素为r。设从x到y的序列合并得分最值为f(x，y)，那么可列出状态转移方程(设value(l，r)表示l到r的石子总和):</p>
-<script type="math/tex; mode=display">f(x，y)=\min/\max\{f(l，k)+f(k+1，r)\}+value(l，r),l \leq k<r</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;规定f(x，x)=0，开一个数组记忆化即可。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> n, minAns = <span class="number">1e9</span>, maxAns = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> op[<span class="number">250</span>] = &#123;<span class="number">0</span>&#125;, sum[<span class="number">250</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> vis1[<span class="number">250</span>][<span class="number">250</span>] = &#123;<span class="number">0</span>&#125;, vis2[<span class="number">250</span>][<span class="number">250</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">DP1</span><span class="params">(<span class="keyword">int</span> l, <span class="keyword">int</span> r)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (l == r)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (vis1[l][r] != <span class="number">0</span>)<span class="keyword">return</span> vis1[l][r];</span><br><span class="line">    <span class="keyword">int</span> minn = <span class="number">1e9</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">register</span> <span class="keyword">int</span> i = l; i &lt; r; i++)minn = min(DP1(l, i) + DP1(i + <span class="number">1</span>, r), minn);</span><br><span class="line">    <span class="keyword">return</span> vis1[l][r] = minn + sum[r] - sum[l - <span class="number">1</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">DP2</span><span class="params">(<span class="keyword">int</span> l, <span class="keyword">int</span> r)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (l == r)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (vis2[l][r] != <span class="number">0</span>)<span class="keyword">return</span> vis2[l][r];</span><br><span class="line">    <span class="keyword">int</span> maxn = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">register</span> <span class="keyword">int</span> i = l; i &lt; r; i++)maxn = max(DP2(l, i) + DP2(i + <span class="number">1</span>, r), maxn);</span><br><span class="line">    <span class="keyword">return</span> vis2[l][r] = maxn + sum[r] - sum[l - <span class="number">1</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">register</span> <span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; op[i];</span><br><span class="line">        op[i + n] = op[i];</span><br><span class="line">    &#125;</span><br><span class="line">    sum[<span class="number">1</span>] = op[<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">for</span> (</span><br><span class="line">            <span class="keyword">register</span> <span class="keyword">int</span> i = <span class="number">2</span>;</span><br><span class="line">            i &lt;= <span class="number">2</span> * n;</span><br><span class="line">            i++)</span><br><span class="line">        sum[i] = sum[i - <span class="number">1</span>] + op[i];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">register</span> <span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        minAns = min(minAns, DP1(i, i + n - <span class="number">1</span>));</span><br><span class="line">        maxAns = max(maxAns, DP2(i, i + n - <span class="number">1</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; minAns &lt;&lt; <span class="built_in">endl</span> &lt;&lt; maxAns;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;差分约束系统是很多问题求解的模型，这一类问题可以转化为图的单源最短路径问题。<br><a id="more"></a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所谓差分约束系统是指如下的若干不等式组成的约束系统：</p>
+<script type="math/tex; mode=display">x_i-x_j\leq w</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里的$x_i,x_j$均为变量，w为常数。不等式组要么无解要么有无数种解，这是因为如果存在一组解，易知它们分别加上同样的数d得到的仍是一组解。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将不等式变形：</p>
+<script type="math/tex; mode=display">x_i\leq x_j+w</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发现这与单源最短路径的松弛操作十分类似：</p>
+<script type="math/tex; mode=display">dict[i]\leq dict[j]+w(i,j)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由此可知，如果将每一个变量看做点，不等关系看做边建图，求单源最短路径，它们的最短路径值一定满足所有的不等关系。这样差分约束问题就可以转化为图的单源最短路径问题。对于不等式$x_i-x_j\leq w$，需要建立j到i，边权为w的有向边。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;源点如何找呢？我们需要引入一个新变量$x_0$，并建立$x_0$到其余所有变量的有向边，边权为0，这样相当于加了下面几个约束关系：</p>
+<script type="math/tex; mode=display">x_1-x_0\leq 0\\
+x_2-x_0\leq 0\\
+\cdots\\
+x_n-x_0\leq 0</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;显然加入这些不等式不会影响原不等式的实际结果，可以认为$x_0$是所有变量的上界。这样以$x_0$为源点求单源最短路径即可。在求单源最短路径时，通常令源点的路径长即dict[0]=0，这样相当于规定了$x_0=0$，所有变量的取值便成为非正数。同样地，如果规定dict[0]=p，这样所有变量取值都不会超过p。源点的dict值可以作为变量取值的上界。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;不等式组的无解判定：当单源最短路不存在时（即图中有负环），不等式组无解。基于此，常常用SPFA算法解决差分约束问题。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另外，当不等式给出$x_i-x_j\geq w$形式不等式时，两边乘一个-1，即可化为标准形式。如果给出$x_i-x_j&lt;w$形式，可以化为$x_i-x_j\leq w-1$（因为变量取值通常只取整数）。$x_i-x_j=w$可以化为$x_i-x_j\geq w$和$x_i-x_j\leq w$两个不等式。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最终得出的解只是一组特解，这组特解不一定符合题意，通常需要将所有值同时加上合适的d来使它们都达到合理的范围。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;差分约束还有另一种解决方法，就是求最长路，这种方法针对形如$x_i-x_j\geq w$的方程。仍然建立j到i边权为w的有向边，但是要求最长路，此时dict[0]是所有变量的下界。求最长路方法与最短路类似，都用SPFA算法。无解判定：当图中存在正权环时无解。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例题：<a href="http://acm.hdu.edu.cn/showproblem.php?pid=1384" target="_blank" rel="noopener">HDU1384 Intervals</a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一道裸的差分约束题目。规定$d_i$为0~i中已经被选的数的个数，那么可以列出不等式：</p>
+<script type="math/tex; mode=display">d_{b_i}-d_{a_i-1}\geq c_i</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;解决此类问题时需要善于找到隐藏不等关系，比如每一个数最多选一次，因此还有：</p>
+<script type="math/tex; mode=display">0\leq d_i-d_{i-1}\leq 1</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;建图跑最短（长）路即可，然后找到最小的合法解。题目特点决定了差分约束系统一定有解，不用判定无解情况。另外注意这题有多组测试样例，题干中未提及。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;queue&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX (50000+5)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> inf (int)1e9</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> to, next, v;</span><br><span class="line">&#125; edge[MAX * <span class="number">4</span> + <span class="number">10000</span>];</span><br><span class="line"><span class="keyword">int</span> head[MAX], cnt = <span class="number">1</span>, vis[MAX] = &#123;<span class="number">0</span>&#125;, n, a[MAX], b[MAX], c[MAX], dict[MAX], minn, maxn;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y, <span class="keyword">int</span> z)</span> </span>&#123;<span class="comment">//建边</span></span><br><span class="line">    edge[cnt].to = y, edge[cnt].next = head[x], edge[cnt].v = z, head[x] = cnt++;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">queue</span>&lt;<span class="keyword">int</span>&gt; que;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ios::sync_with_stdio(<span class="literal">false</span>);</span><br><span class="line">    <span class="keyword">while</span> (<span class="built_in">cin</span> &gt;&gt; n) &#123;</span><br><span class="line">        cnt = <span class="number">1</span>, minn = inf, maxn = -inf;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= <span class="number">50002</span>; i++)dict[i] = inf, head[i] = <span class="number">-1</span>, vis[i] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">            <span class="built_in">cin</span> &gt;&gt; a[i], <span class="built_in">cin</span> &gt;&gt; b[i], <span class="built_in">cin</span> &gt;&gt; c[i];</span><br><span class="line">            a[i] += <span class="number">2</span>, b[i] += <span class="number">2</span>;</span><br><span class="line">            add(b[i], a[i] - <span class="number">1</span>, -c[i]), maxn = max(maxn, b[i]), minn = min(minn, a[i] - <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= maxn; i++)add(i - <span class="number">1</span>, i, <span class="number">1</span>), add(i, i - <span class="number">1</span>, <span class="number">0</span>);<span class="comment">//补充约束关系</span></span><br><span class="line">        dict[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= maxn; i++)add(<span class="number">0</span>, i, <span class="number">0</span>);<span class="comment">//补充x0</span></span><br><span class="line">        que.push(<span class="number">0</span>), vis[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (!que.empty()) &#123;<span class="comment">//SPFA算法</span></span><br><span class="line">            <span class="keyword">int</span> p = que.front();</span><br><span class="line">            que.pop(), vis[p] = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = head[p]; ~i; i = edge[i].next) &#123;</span><br><span class="line">                <span class="keyword">if</span> (dict[edge[i].to] &gt; dict[p] + edge[i].v) &#123;</span><br><span class="line">                    dict[edge[i].to] = dict[p] + edge[i].v;</span><br><span class="line">                    <span class="keyword">if</span> (!vis[edge[i].to])que.push(edge[i].to), vis[edge[i].to] = <span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; -dict[minn] &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -517,9 +515,13 @@
       
         <div class="post-tags">
           
-            <a href="/tags/基础算法/" rel="tag"><i class="fa fa-tag"></i>基础算法</a>
+            <a href="/tags/图论/" rel="tag"><i class="fa fa-tag"></i>图论</a>
           
-            <a href="/tags/动态规划/" rel="tag"><i class="fa fa-tag"></i>动态规划</a>
+            <a href="/tags/图的最短路/" rel="tag"><i class="fa fa-tag"></i>图的最短路</a>
+          
+            <a href="/tags/提高算法/" rel="tag"><i class="fa fa-tag"></i>提高算法</a>
+          
+            <a href="/tags/差分约束/" rel="tag"><i class="fa fa-tag"></i>差分约束</a>
           
         </div>
       
@@ -532,8 +534,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/09/树状数组/" rel="next" title="树状数组">
-                <i class="fa fa-chevron-left"></i> 树状数组
+              <a href="/2019/02/19/树链剖分/" rel="next" title="树链剖分">
+                <i class="fa fa-chevron-left"></i> 树链剖分
               </a>
             
           </div>
@@ -541,10 +543,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/01/09/洛谷P1417-烹调方案/" rel="prev" title="[洛谷P1417]烹调方案">
-                [洛谷P1417]烹调方案 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -593,17 +591,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <div class="site-overview-wrap sidebar-panel">
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -620,7 +609,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">56</span>
+                    <span class="site-state-item-count">77</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -730,7 +719,19 @@
                     
                       
                     
-                    <span class="site-state-item-count">41</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">47</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -755,23 +756,6 @@
         </div>
       </div>
 
-      
-      <!--noindex-->
-        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-            
-            
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目描述"><span class="nav-number">1.</span> <span class="nav-text">题目描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输入输出格式"><span class="nav-number">2.</span> <span class="nav-text">输入输出格式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#输入格式"><span class="nav-number">2.1.</span> <span class="nav-text">输入格式:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#输出格式"><span class="nav-number">2.2.</span> <span class="nav-text">输出格式:</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输入输出样例"><span class="nav-number">3.</span> <span class="nav-text">输入输出样例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Sample-input"><span class="nav-number">3.1.</span> <span class="nav-text">Sample input</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Sample-output"><span class="nav-number">3.2.</span> <span class="nav-text">Sample output</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#题解"><span class="nav-number">4.</span> <span class="nav-text">题解</span></a></li></ol></div>
-            
-
-          </div>
-        </div>
-      <!--/noindex-->
       
 
       
