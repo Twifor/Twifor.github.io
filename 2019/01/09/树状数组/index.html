@@ -126,7 +126,7 @@
 <meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;这一次谈谈树状数组。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;先考虑一个问题，对于一个给定的数组，如何快速地求出其前缀和?&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;最通俗的做法是循环求出前n项和，">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://twifor.github.io/2019/01/09/树状数组/ph.png">
-<meta property="og:updated_time" content="2019-01-09T02:38:08.047Z">
+<meta property="og:updated_time" content="2019-02-21T05:44:28.138Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="树状数组">
 <meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;这一次谈谈树状数组。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;先考虑一个问题，对于一个给定的数组，如何快速地求出其前缀和?&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;最通俗的做法是循环求出前n项和，">
@@ -423,7 +423,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-09 10:38:08" itemprop="dateModified" datetime="2019-01-09T10:38:08+08:00">2019-01-09</time>
+                <time title="修改时间：2019-02-21 13:44:28" itemprop="dateModified" datetime="2019-02-21T13:44:28+08:00">2019-02-21</time>
               
             
           </span>
@@ -494,6 +494,18 @@
 <p>tree[10000000]储存[1，10000000]的数的和，<br>tree[10100000]储存[10000001，10100000]的和，<br>tree[10110000]储存[10100001，10110000]的和，<br>tree[10110010]储存[10110001，10110010]的和。</p>
 </blockquote>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;显然，10110010前缀和就是树状数组中这4项的和。并且这4项的下标都是重复进行运算y = y - lowbit(y)得到的，直到y=0。这样，计算10110010前缀和只需进行4次加法，比进行传统的10110010(=178)次运算相比，效率大大提升。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为何叫作树状数组?下图给出解释。<br><img src="/2019/01/09/树状数组/ph.png" title="树状数组解释"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;粗体表示树状数组中的值。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;易知lowbit(x)=x&amp;-x，这样就有了树状数组的完整编写思路：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> NUM = <span class="number">1000000</span>;</span><br><span class="line"><span class="keyword">int</span> op[NUM + <span class="number">1</span>], tree[NUM + <span class="number">1</span>] = &#123;<span class="number">0</span>&#125;, n;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (; x &lt;= n; x += (x &amp; -x))tree[x] += y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (; x &gt;= <span class="number">1</span>; x -= (x &amp; -x))res += tree[x];</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">register</span> <span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; op[i];</span><br><span class="line">        add(i, op[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> x;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; x;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; sum(x) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="树状数组进阶"><a href="#树状数组进阶" class="headerlink" title="树状数组进阶"></a>树状数组进阶</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;树状数组能很好地实现单点查询和前缀和维护，但对于区间求改却无能为力，此时多用线段树来代替。其实树状数组也可以进行区间修改。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;开数组c储存原数组差分，差分即：</p>
+<script type="math/tex; mode=display">c[i]=\begin{cases}
+a[i] & i=1\\
+a[i]-a[i-1] & i>1\\
+\end{cases}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用树状数组维护c数组，易知c数组前缀和就是原数组对应元素的值。在修改区间时，只需修改c数组两个点即可。比如需要将[l,r]上的数都加p，只需将c[l]加上p，c[r+1]减去p。结合树状数组即可快速原数组元素值。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那区间和如何求呢？注意到：</p>
+<script type="math/tex; mode=display">\sum_{i=1}^ka_i=\sum_{i=1}^k\sum_{j=1}^ic_j=k\sum_{i=1}^kc_i-\sum_{i=1}^k(i-1)c_i</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是开数组d记录(i-1)c[i]，并用树状数组维护。在修改c数组时同步修改d数组，结合上面公式即可求出区间和。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这种思路可以使树状数组代替线段树维护区间和，可以过<a href="https://www.luogu.org/problemnew/show/P3372" target="_blank" rel="noopener">线段树模板题</a>：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX 100000+5</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> op[MAX], tree1[MAX] = &#123;<span class="number">0</span>&#125;, tree2[MAX] = &#123;<span class="number">0</span>&#125;, n, m;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">long</span> <span class="keyword">long</span> <span class="title">read</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">char</span> e = getchar();</span><br><span class="line">    <span class="keyword">while</span>((e &lt; <span class="string">'0'</span> || e &gt; <span class="string">'9'</span>) &amp;&amp; (e != <span class="string">'-'</span>))e = getchar();</span><br><span class="line">    <span class="keyword">bool</span> k = <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> s = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (e == <span class="string">'-'</span>)k = <span class="literal">true</span>, e = getchar();</span><br><span class="line">    <span class="keyword">while</span> (e &gt;= <span class="string">'0'</span> &amp;&amp; e &lt;= <span class="string">'9'</span>)s = s * <span class="number">10</span> + e - <span class="string">'0'</span>, e = getchar();</span><br><span class="line">    <span class="keyword">return</span> k ? -s : s;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">long</span> <span class="keyword">long</span> z, <span class="keyword">long</span> <span class="keyword">long</span> tree[])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = x; i &lt;= n; i += (i &amp; -i))tree[i] += z;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">long</span> <span class="keyword">long</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">const</span> <span class="keyword">long</span> <span class="keyword">long</span> tree[])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> s = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = x; i &gt;= <span class="number">1</span>; i -= (i &amp; -i))s += tree[i];</span><br><span class="line">    <span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    n = read(), m = read();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        op[i] = read();</span><br><span class="line">        <span class="keyword">if</span> (i == <span class="number">1</span>)add(<span class="number">1</span>, op[i], tree1), add(<span class="number">1</span>, <span class="number">0</span>, tree2);</span><br><span class="line">        <span class="keyword">else</span> add(i, op[i] - op[i - <span class="number">1</span>], tree1), add(i, (i - <span class="number">1</span>) * (op[i] - op[i - <span class="number">1</span>]), tree2);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> x, a, b, c;</span><br><span class="line">        x = read();</span><br><span class="line">        <span class="keyword">if</span> (x == <span class="number">1</span>) &#123;<span class="comment">//区间修改</span></span><br><span class="line">            a = read(), b = read(), c = read();</span><br><span class="line">            add(a, c, tree1), add(a, (a - <span class="number">1</span>) * c, tree2);</span><br><span class="line">            <span class="keyword">if</span> (b != n)add(b + <span class="number">1</span>, -c, tree1), add(b + <span class="number">1</span>, -c * b, tree2);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;<span class="comment">//区间查询</span></span><br><span class="line">            a = read() - <span class="number">1</span>, b = read();</span><br><span class="line">            <span class="keyword">long</span> <span class="keyword">long</span> s1 = a * find(a, tree1) - find(a, tree2), s2 = b * find(b, tree1) - find(b, tree2);</span><br><span class="line">            <span class="built_in">cout</span> &lt;&lt; s2 - s1 &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;树状数组另一个作用是统计当前大于或小于某个数的元素个数，比如下题：</p>
+<blockquote>
+<p>给定一个包含N个整数的数组A = [A1, A2, … AN]，请你计算有多少个子数组B = [Ai, Ai+1, … Aj] (i ≤ j) 满足B中所有整数的和小于K。<br>1 ≤ N ≤ 100000 -100000 ≤ Ai ≤ 100000</p>
+</blockquote>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;枚举每一个子数组求和的$O(n^2)$做法一定会TLE，另一个思路是先预处理前缀和，然后从左到右顺次枚举，根据当前的前缀和推算出使子区间和小于k的前缀和范围，然后查找当前有多少前缀和满足这个条件，有几个合法前缀和便有几个合法的子数列。这个过程可以用树状数组维护。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为了方便起见，先将问题等价转化：将所有数变为其相反数，问题转化为有多少自数列和大于-k。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;求前缀和，然后从左到右枚举。如果当前的前缀和为s，那么合法的前缀和x应满足：</p>
+<script type="math/tex; mode=display">s-x>-k</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;也就是x &lt; s-k，我们找出之前有多少小于s-k的前缀和就可以了。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;开一个与数据范围一样大的树状数组，每找到一个前缀和q，我们令q处的元素加一，这样对于一个大于q的数p，它的前缀和就增大了一，从而达到计数目的。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是，数据范围确实过大（达到10^10）。可以采用离散化的方法：前缀和最多有100000种可能，给它们按照小大顺序重新编号，编号的相对大小就是原数据的相对大小。开100000大小的数组完全是可以的，本题便得以解决。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;map&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="built_in">map</span>&lt;<span class="keyword">long</span> <span class="keyword">long</span>, <span class="keyword">int</span>&gt; m;</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> sum[<span class="number">100000</span> + <span class="number">5</span>], sumCopy[<span class="number">100000</span> + <span class="number">5</span>], tree[<span class="number">100000</span> + <span class="number">5</span>] = &#123;<span class="number">0</span>&#125;, ans = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> id = <span class="number">1</span>, n, k;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">ID</span><span class="params">(<span class="keyword">long</span> <span class="keyword">long</span> x, <span class="keyword">int</span> l, <span class="keyword">int</span> r)</span> </span>&#123;<span class="comment">//[,)</span></span><br><span class="line">    <span class="keyword">if</span> (r == l + <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (sumCopy[l] &lt;= x)<span class="keyword">return</span> m[sumCopy[l]];</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> mid = (l + r) &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span> (sumCopy[mid] &lt;= x)<span class="keyword">return</span> ID(x, mid, r);</span><br><span class="line">    <span class="keyword">return</span> ID(x, l, mid);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">query</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> s = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = x; i &gt;= <span class="number">1</span>; i -= (i &amp; -i))s += tree[i];</span><br><span class="line">    <span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = x; i &lt;= n; i += (i &amp; -i))tree[i]++;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ios::sync_with_stdio(<span class="literal">false</span>);<span class="comment">//关掉同步，加速读入</span></span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n &gt;&gt; k;</span><br><span class="line">    k = -k;<span class="comment">//先对k取相反数</span></span><br><span class="line">    sumCopy[<span class="number">0</span>] = sum[<span class="number">0</span>] = <span class="number">0</span>;<span class="comment">//copy一下前缀和</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> x;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; x;</span><br><span class="line">        sumCopy[i] = sum[i] = sum[i - <span class="number">1</span>] - x;<span class="comment">//求前缀和</span></span><br><span class="line">    &#125;</span><br><span class="line">    sort(sumCopy + <span class="number">1</span>, sumCopy + n + <span class="number">1</span>);<span class="comment">//排序</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (m.count(sumCopy[i]) == <span class="number">0</span>) &#123;</span><br><span class="line">            m[sumCopy[i]] = id++;<span class="comment">//用map判重并重新编号</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)<span class="keyword">if</span> (sum[i] &gt; k)ans++;<span class="comment">//首先把前缀和本身对应的合法子数列加上</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> p = ID(sum[i] - k - <span class="number">1</span>, <span class="number">1</span>, n + <span class="number">1</span>);<span class="comment">//找到第一个不大于sum[i]-k-1的前缀和编号，二分</span></span><br><span class="line">        <span class="keyword">if</span> (p != <span class="number">-1</span>)ans += query(p);<span class="comment">//存在满足条件的前缀和编号，用树状数组找数量</span></span><br><span class="line">        add(m[sum[i]]);<span class="comment">//把这个前缀和加入树状数组</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; ans &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -595,8 +607,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -613,7 +634,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">79</span>
+                    <span class="site-state-item-count">80</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -764,6 +785,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#树状数组进阶"><span class="nav-number">1.</span> <span class="nav-text">树状数组进阶</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
@@ -964,6 +1002,48 @@
   
   
 
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+	  preview: 'none'
+    },
+	messageStyle: 'none',
+	"HTML-CSS": {
+      showMathMenu: false //关闭右击菜单显示
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style>
+
+    
   
 
 
