@@ -117,25 +117,25 @@
 
 
 
-  <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本节介绍一种求解有向图强联通分量的算法—Tarjan算法。">
-<meta name="keywords" content="图论,基础算法,强联通分量">
+  <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本节介绍一种求解有向图强连通分量的算法—Tarjan算法。">
+<meta name="keywords" content="图论,基础算法,强连通分量">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Tarjan算法(强联通)">
-<meta property="og:url" content="https://twifor.github.io/2019/02/18/Tarjan算法(强联通)/index.html">
+<meta property="og:title" content="Tarjan算法(强连通)">
+<meta property="og:url" content="https://twifor.github.io/2019/02/18/Tarjan算法(强连通)/index.html">
 <meta property="og:site_name" content="Twifor~Liyh">
-<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本节介绍一种求解有向图强联通分量的算法—Tarjan算法。">
+<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本节介绍一种求解有向图强连通分量的算法—Tarjan算法。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-02-19T02:20:50.460Z">
+<meta property="og:updated_time" content="2019-02-21T15:54:21.463Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Tarjan算法(强联通)">
-<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本节介绍一种求解有向图强联通分量的算法—Tarjan算法。">
+<meta name="twitter:title" content="Tarjan算法(强连通)">
+<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本节介绍一种求解有向图强连通分量的算法—Tarjan算法。">
 
 
 
 
 
 
-  <link rel="canonical" href="https://twifor.github.io/2019/02/18/Tarjan算法(强联通)/">
+  <link rel="canonical" href="https://twifor.github.io/2019/02/18/Tarjan算法(强连通)/">
 
 
 
@@ -145,7 +145,7 @@
   };
 </script>
 
-  <title>Tarjan算法(强联通) | Twifor~Liyh</title>
+  <title>Tarjan算法(强连通) | Twifor~Liyh</title>
   
 
 
@@ -361,7 +361,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://twifor.github.io/2019/02/18/Tarjan算法(强联通)/">
+    <link itemprop="mainEntityOfPage" href="https://twifor.github.io/2019/02/18/Tarjan算法(强连通)/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Twifor">
@@ -378,7 +378,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Tarjan算法(强联通)
+          <h1 class="post-title" itemprop="name headline">Tarjan算法(强连通)
 
               
             
@@ -421,7 +421,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-19 10:20:50" itemprop="dateModified" datetime="2019-02-19T10:20:50+08:00">2019-02-19</time>
+                <time title="修改时间：2019-02-21 23:54:21" itemprop="dateModified" datetime="2019-02-21T23:54:21+08:00">2019-02-21</time>
               
             
           </span>
@@ -453,8 +453,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/02/18/Tarjan算法(强联通)/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/02/18/Tarjan算法(强联通)/" itemprop="commentCount"></span>
+                <a href="/2019/02/18/Tarjan算法(强连通)/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/02/18/Tarjan算法(强连通)/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -482,10 +482,10 @@
       
 
       
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本节介绍一种求解有向图强联通分量的算法—Tarjan算法。<br><a id="more"></a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先是强联通分量的定义：一个有向图的满足强联通性的子图。所谓强联通性是指这个有向图中任意两点都可以相互联通的性质。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tarjan算法基于DFS，要理解这个算法需要先认清一个事实：在强联通图中一定存在一条回路能够遍历所有的点。这也是判定强联通图的充要条件。Tarjan算法就是通过找环来判定强联通性的。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面是Tarjan算法的实现过程。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用栈储存搜索树结点路径。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于图中每一个结点，它都有两个量：DFN与LOW。</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本节介绍一种求解有向图强连通分量的算法—Tarjan算法。<br><a id="more"></a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先是强连通分量的定义：一个有向图的满足强连通性的子图。所谓强连通性是指这个有向图中任意两点都可以相互联通的性质。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tarjan算法基于DFS，要理解这个算法需要先认清一个事实：在强连通图中一定存在一条回路能够遍历所有的点。这也是判定强连通图的充要条件。Tarjan算法就是通过找环来判定强连通性的。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面是Tarjan算法的实现过程。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用栈储存搜索树结点路径。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于图中每一个结点，它都有两个量：DFN与LOW。</p>
 <ul>
 <li>DFN ：这个结点被访问的次序编号，也就是时间戳。</li>
-<li>LOW ：在搜索树中，这个结点的子树中最小的结点编号（也就是最小的DFN值）。LOW保证了求出的是极大强联通子图。</li>
+<li>LOW ：在搜索树中，这个结点的子树中最小的结点编号（也就是最小的DFN值）。LOW保证了求出的是极大强连通子图。</li>
 </ul>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意：每访问一个新结点，首先进行初始化：DFN=LOW=cnt++（cnt是时间戳计数器）并入栈。这是因为新的结点尚未向下扩展，这个结点在搜索树中没有子树，LOW即为自身的DFN。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;每访问到一个结点，遍历该点所有的出边。这时对于每一个出点，有以下几种情况：</p>
 <ul>
@@ -493,7 +493,7 @@
 <li>该点已在栈中：直接更新原结点LOW值。需要注意的是，更新方法是LOW[u]=min(LOW[u],DFN[v])。这是因为出点已在栈中，但它也是搜索树的子结点，需要用它的DFN值来更新原结点。</li>
 <li>其余情况忽略该结点。</li>
 </ul>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;回溯后，如果一个结点的DFN=LOW，说明自己就在以自己为根的搜索树上，即为一个环。此时退栈，直到该点（含该点），得到的序列就是一个强联通分量。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">tarjan</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">    DFN[x] = LOW[x] = index++, vis[x] = <span class="number">1</span>, sta.push(x);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = head[x]; i != <span class="number">-1</span>; i = edge[i].next) &#123;</span><br><span class="line">        <span class="keyword">if</span> (vis[edge[i].to])LOW[x] = min(DFN[edge[i].to], LOW[x]);</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (!DFN[edge[i].to])tarjan(edge[i].to), LOW[x] = min(LOW[x], LOW[edge[i].to]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (DFN[x] == LOW[x]) &#123;</span><br><span class="line">        <span class="keyword">int</span> t;</span><br><span class="line">        <span class="keyword">do</span> <span class="built_in">cout</span> &lt;&lt; (t = sta.top()) &lt;&lt; <span class="string">" "</span>, vis[t] = <span class="number">0</span>, sta.pop();</span><br><span class="line">        <span class="keyword">while</span> (t != x);</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;回溯后，如果一个结点的DFN=LOW，说明自己就在以自己为根的搜索树上，即为一个环。此时退栈，直到该点（含该点），得到的序列就是一个强连通分量。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">tarjan</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">    DFN[x] = LOW[x] = index++, vis[x] = <span class="number">1</span>, sta.push(x);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = head[x]; i != <span class="number">-1</span>; i = edge[i].next) &#123;</span><br><span class="line">        <span class="keyword">if</span> (vis[edge[i].to])LOW[x] = min(DFN[edge[i].to], LOW[x]);</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (!DFN[edge[i].to])tarjan(edge[i].to), LOW[x] = min(LOW[x], LOW[edge[i].to]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (DFN[x] == LOW[x]) &#123;</span><br><span class="line">        <span class="keyword">int</span> t;</span><br><span class="line">        <span class="keyword">do</span> <span class="built_in">cout</span> &lt;&lt; (t = sta.top()) &lt;&lt; <span class="string">" "</span>, vis[t] = <span class="number">0</span>, sta.pop();</span><br><span class="line">        <span class="keyword">while</span> (t != x);</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -521,7 +521,7 @@
           
             <a href="/tags/基础算法/" rel="tag"><i class="fa fa-tag"></i>基础算法</a>
           
-            <a href="/tags/强联通分量/" rel="tag"><i class="fa fa-tag"></i>强联通分量</a>
+            <a href="/tags/强连通分量/" rel="tag"><i class="fa fa-tag"></i>强连通分量</a>
           
         </div>
       
@@ -640,6 +640,8 @@
                 <div class="site-state-item site-state-tags">
                   <a href="/tags/index.html">
                     
+                    
+                      
                     
                       
                     
