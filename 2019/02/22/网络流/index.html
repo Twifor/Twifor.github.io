@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<script>
+    (function () {
+        if ('') {
+            if (prompt('请输入文章密码') !== '') {
+                alert('密码错误！');
+                if (history.length === 1) {
+                    location.replace("http://twifor.github.io"); // 这里替换成你的首页
+                } else {
+                    history.back();
+                }
+            }
+        }
+    })();
+</script>
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本文介绍简单的网络流模型和相关算法。">
+<meta name="keywords" content="提高算法,网络流">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络流">
+<meta property="og:url" content="https://twifor.github.io/2019/02/22/网络流/index.html">
+<meta property="og:site_name" content="Twifor~Liyh">
+<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本文介绍简单的网络流模型和相关算法。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://twifor.github.io/2019/02/22/网络流/ph.bmp">
+<meta property="og:image" content="https://twifor.github.io/2019/02/22/网络流/ph2.bmp">
+<meta property="og:image" content="https://twifor.github.io/2019/02/22/网络流/ph3.bmp">
+<meta property="og:image" content="https://twifor.github.io/2019/02/22/网络流/ph4.bmp">
+<meta property="og:image" content="https://twifor.github.io/2019/02/22/网络流/ph5.bmp">
+<meta property="og:image" content="https://twifor.github.io/2019/02/22/网络流/ph6.bmp">
+<meta property="og:updated_time" content="2019-02-23T08:39:52.922Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网络流">
+<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本文介绍简单的网络流模型和相关算法。">
+<meta name="twitter:image" content="https://twifor.github.io/2019/02/22/网络流/ph.bmp">
+
+
+
+
+
+
+  <link rel="canonical" href="https://twifor.github.io/2019/02/22/网络流/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>网络流 | Twifor~Liyh</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+	<a href="https://github.com/Twifor" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Twifor~Liyh</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://twifor.github.io/2019/02/22/网络流/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Twifor">
+      <meta itemprop="description" content="一个打OI的弱鸡">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Twifor~Liyh">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">网络流
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-02-22 22:24:33" itemprop="dateCreated datePublished" datetime="2019-02-22T22:24:33+08:00">2019-02-22</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-02-23 16:39:52" itemprop="dateModified" datetime="2019-02-23T16:39:52+08:00">2019-02-23</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/算法与OI/" itemprop="url" rel="index"><span itemprop="name">算法与OI</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/02/22/网络流/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/02/22/网络流/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本文介绍简单的网络流模型和相关算法。<br><a id="more"></a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;给定源点s和汇点t，中间有若干条结点做中转，有向边表示转运方向，权值代表最大容量。在这样的图下，汇点最多能够接收到的流量最大值是多少？这就是网络流的最大流问题。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下图就是一个网络流的模型图（来自刘汝佳紫书，有改动）：<br><img src="/2019/02/22/网络流/ph.bmp"></p>
+<h4 id="网络流最大流问题的三个性质"><a href="#网络流最大流问题的三个性质" class="headerlink" title="网络流最大流问题的三个性质"></a>网络流最大流问题的三个性质</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于每一条边，它的最大流量转运上限称为容量（capacity），而这条边上的实际转运量称为流量（flow）。在最大流问题中，有三个基本性质：</p>
+<ul>
+<li>容量限制：对于任意一条边(u,v)，总是有f(u,v)≤c(u,v)，即流量不可大于容量。</li>
+<li>反对称性：f(u,v)=-f(v,u)。理解：把x个物品从u送到v就是把-x个物品从v送到u，-x可以用来描述有多少流量流到该结点。</li>
+<li>流量平衡：对于除了源点和汇点的点，总有$\sum f(u,v)=0$（流入流出均衡）。</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;任何一种转运方案都需要满足上面三个性质。</p>
+<h4 id="残量网络"><a href="#残量网络" class="headerlink" title="残量网络"></a>残量网络</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面给出了一种转运方案，红色代表实际流量：<br><img src="/2019/02/22/网络流/ph2.bmp"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;容易验证，这个流量设置满足前文提到的三个性质，这时汇点总流量为16，但是这不一定是最大流量。将每一条边权值变成容量与实际流量之差，可以得到：<br><img src="/2019/02/22/网络流/ph3.bmp"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在的边权代表“这条边还可以流过多少”，一个很直观的想法是：找到一条从s到t的路径，如果这条路上所有边的边权都大于0，那么总流量还可以加上路径上边权的最小值（注：这种路称为增广路）。比如我们发现走上面的三条边（边权为4、4、8）可以从s走到t，故总流量再加上4成为20，更新网络图，变成：<br><img src="/2019/02/22/网络流/ph4.bmp"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;不断这样找，直到找不到增广路，得到的就是最大流吗？事实证明这种方法是错的。这是因为，我们的思路是尽可能地利用每一条边的价值，让它的流量尽可能地接近容量。因此在某一条边的流量确定时，它的流量就只能只增不降了。比如，按照这个算法，我们不可能让V1-&gt;V3的流量减小（也就是残量增大）。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;问题来了，我们为什么要让好好的流量减小？让流量尽可能大不是更优吗？这只是直观上的感受，但事实上是错的，比如下面这个图（从网上找的图）：<br><img src="/2019/02/22/网络流/ph5.bmp"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最大流显然是沿s-&gt;V1-&gt;t和s-&gt;V2-&gt;t时得到的2。可以发现，V1-&gt;V2的边连用都没用上，如果我们上来就把这条边用了（也就是流量为１），而它不能被减小，就只能得到错误的答案。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所以应该有一个可以将边流量减小（也就是怼回去）的机制。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如何解决？方法是给每一条边引入对应的反向边，反向边权值就是正向边已用的流量。上文已经说明反对称性，可以把反向边权值理解成反向的残量（反向走不通，容量为0，而流量为负）。<strong>原边（原有的边）权值表示这条路还可以走多少流量，反边权值表示这条路最多可以“反悔”多少流量。走正向边就是给这条边增加流量，走反向边就是给这条边减少流量。</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;给每一条边建立与之对应的反向边，并规定正向边权值为容量与流量之差，反向边权值为正向边流量，就得到了<strong>残量网络(residual network)</strong>。对于重边，我们可以不将它们合并，得到的结果是一样的。一开始的例子可以建立如下的残量网络：<br><img src="/2019/02/22/网络流/ph6.bmp"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是有著名的增广路定理：</p>
+<blockquote>
+<p>【增广路定理】当且仅当残量网络中不存在增广路时，此时的流是s-&gt;t的最大流。</p>
+</blockquote>
+<h4 id="EK算法"><a href="#EK算法" class="headerlink" title="EK算法"></a>EK算法</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;给出一个图，我们建立它的残量网络图，不断寻找增广路更新最大流即可。如何寻求增广路？一个方法是BFS，这就是Edmonds-Karp算法（EK算法）。它的思想是不断用BFS找增广路，直到找不到为止。凡是找到一条，立即更新最大流和对应的边权。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面有一个小技巧：每找到一条边，立即建立它对应的反向边。将边从0开始标号，那么0和1是一对正向边和反向边，2和3也是一对…这样对于编号为x的边，它对应的反向边编号就是x^1，反向边找正向边也是这种方法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面给出<a href="https://www.luogu.org/problemnew/show/P3376" target="_blank" rel="noopener">洛谷P3376模板题</a>的EK算法代码，<del>不过会T的很惨</del>。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;queue&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> to, next, v;</span><br><span class="line">&#125; edge[<span class="number">100000</span> * <span class="number">2</span>];</span><br><span class="line"><span class="keyword">int</span> head[<span class="number">10005</span>], cnt = <span class="number">0</span>, n, m, b, e, pre[<span class="number">10005</span>], flow[<span class="number">10005</span>], ans = <span class="number">0</span>;<span class="comment">//pre是点的前导边标号</span></span><br><span class="line"><span class="built_in">queue</span>&lt;<span class="keyword">int</span>&gt; que;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y, <span class="keyword">int</span> z)</span> </span>&#123;</span><br><span class="line">    edge[cnt].to = y, edge[cnt].next = head[x], edge[cnt].v = z, head[x] = cnt++;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">BFS</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (!que.empty())que.pop();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)pre[i] = <span class="number">-1</span>;</span><br><span class="line">    pre[b] = <span class="number">0</span>;</span><br><span class="line">    que.push(b), flow[b] = <span class="number">0x7fffffff</span>;<span class="comment">//flow是到这个流的最小边权</span></span><br><span class="line">    <span class="keyword">while</span> (!que.empty()) &#123;<span class="comment">//BFS每次只找一个增广路</span></span><br><span class="line">        <span class="keyword">int</span> f = que.front();</span><br><span class="line">        <span class="keyword">if</span> (f == e)<span class="keyword">break</span>;<span class="comment">//到达汇点，立即结束</span></span><br><span class="line">        que.pop();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = head[f]; ~i; i = edge[i].next) &#123;</span><br><span class="line">            <span class="keyword">if</span> (edge[i].v &gt; <span class="number">0</span> &amp;&amp; pre[edge[i].to] == <span class="number">-1</span>) &#123;</span><br><span class="line">                pre[edge[i].to] = i, flow[edge[i].to] = min(flow[f], edge[i].v), que.push(edge[i].to);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (pre[e] == <span class="number">-1</span>)<span class="keyword">return</span> <span class="number">-1</span>;<span class="comment">//没有增广路</span></span><br><span class="line">    <span class="keyword">return</span> flow[e];<span class="comment">//返回途径的最小权值</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m &gt;&gt; b &gt;&gt; e;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)head[i] = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= m; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> u, v, w;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; u &gt;&gt; v &gt;&gt; w;</span><br><span class="line">        add(u, v, w), add(v, u, <span class="number">0</span>);<span class="comment">//加边，后边是反向边，权值为0</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> increase;</span><br><span class="line">    <span class="keyword">while</span> ((increase = BFS()) != <span class="number">-1</span>) &#123;<span class="comment">//直到找不到反向边</span></span><br><span class="line">        <span class="keyword">int</span> p = e;</span><br><span class="line">        <span class="keyword">while</span> (p != b) &#123;<span class="comment">//回退找路</span></span><br><span class="line">            edge[pre[p]].v -= increase, edge[pre[p] ^ <span class="number">1</span>].v += increase;</span><br><span class="line">            p = edge[pre[p] ^ <span class="number">1</span>].to;<span class="comment">//更新边权值：前导边减去流量，对应的反边加上流量</span></span><br><span class="line">        &#125;</span><br><span class="line">        ans += increase;<span class="comment">//更新答案</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; ans &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="Dinic算法"><a href="#Dinic算法" class="headerlink" title="Dinic算法"></a>Dinic算法</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可以发现EK算法效率的确不高，原因就在于进行了太多次BFS，每次只找一条增广路。这于是就有了Dinic算法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dinic算法基于分层图思想，它的算法步骤是：</p>
+<ol>
+<li>从源点开始给图用BFS分层。每一次只能走边权大于0的边，得到到源点的最小边距。（源点层次序号为0）</li>
+<li>从源点开始DFS，找到在当前分层图下的所有增广路。在当前分层图下的含义是：只能走边权大于0的边并且出点深度必须为该点深度加一。每找到一条更新权值和流量。</li>
+<li>回到第一步继续分层，直到汇点不再与源点连通（也就是没法从源点开始获得汇点深度）。</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;queue&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> N 10005</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> to, next, v;</span><br><span class="line">&#125; edge[<span class="number">100000</span> * <span class="number">2</span>];</span><br><span class="line"><span class="keyword">int</span> head[N], cnt = <span class="number">0</span>, n, m, b, e,  ans = <span class="number">0</span>, deep[N];</span><br><span class="line"><span class="built_in">queue</span>&lt;<span class="keyword">int</span>&gt; que;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y, <span class="keyword">int</span> z)</span> </span>&#123;</span><br><span class="line">    edge[cnt].to = y, edge[cnt].next = head[x], edge[cnt].v = z, head[x] = cnt++;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">DFS</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> limit)</span> </span>&#123;<span class="comment">//DFS找增广路，x是当前结点编号，limit是目前的最小边权。返回能够得到的流值（就是还可以扩展多少）</span></span><br><span class="line">    <span class="keyword">if</span> (limit == <span class="number">0</span> || x == e)<span class="keyword">return</span> limit;<span class="comment">//最小边权为0或者到汇点，不能再继续走，直接返回。</span></span><br><span class="line">    <span class="keyword">int</span> f, flow = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = head[x]; ~i; i = edge[i].next) &#123;</span><br><span class="line">        <span class="keyword">if</span> (deep[edge[i].to] == deep[x] + <span class="number">1</span> &amp;&amp; (f = DFS(edge[i].to, min(limit, edge[i].v)))) &#123;<span class="comment">//深度满足并且出点能够找到的流值非0，这里已经排除掉了权值为0的边</span></span><br><span class="line">            edge[i].v -= f, edge[i ^ <span class="number">1</span>].v += f, flow += f, limit -= f;<span class="comment">//修改限制，flow加上这个分枝的流值</span></span><br><span class="line">            <span class="keyword">if</span> (!limit)<span class="keyword">break</span>;<span class="comment">//最小值到0，无法再继续</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> flow;<span class="comment">//返回流值</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">BFS</span><span class="params">()</span> </span>&#123;<span class="comment">//用于分层</span></span><br><span class="line">    <span class="keyword">while</span> (!que.empty())que.pop();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)deep[i] = n;<span class="comment">//全部初始化为n</span></span><br><span class="line">    deep[b] = <span class="number">0</span>, que.push(b);<span class="comment">//源点入队，深度为0</span></span><br><span class="line">    <span class="keyword">while</span> (!que.empty()) &#123;</span><br><span class="line">        <span class="keyword">int</span> f = que.front();</span><br><span class="line">        que.pop();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = head[f]; ~i; i = edge[i].next) &#123;</span><br><span class="line">            <span class="keyword">if</span> (edge[i].v &gt; <span class="number">0</span> &amp;&amp; deep[edge[i].to] == n) &#123;</span><br><span class="line">                deep[edge[i].to] = deep[f] + <span class="number">1</span>, que.push(edge[i].to);</span><br><span class="line">                <span class="keyword">if</span> (edge[i].to == e)<span class="keyword">return</span> <span class="literal">true</span>;<span class="comment">//汇点找到，返回true</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> deep[e] != n;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m &gt;&gt; b &gt;&gt; e;</span><br><span class="line">    ans = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)head[i] = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= m; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> u, v, w;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; u &gt;&gt; v &gt;&gt; w;</span><br><span class="line">        add(u, v, w), add(v, u, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span> (BFS())ans += DFS(b, <span class="number">0x7fffffff</span>);<span class="comment">//每一次都加上可以得到的流值</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; ans;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dinic算法就比较高效了，它可以AC掉上面提到的网络流模板题。这里还有一个优化：当前弧优化。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可以发现上面DFS代码中的break条件是limit==0。如果循环成功地进入了下一条边，说明上一条边的limit没有用完！这说明上一条边“费尽全力”地找增广路已经达到了极限，那么从这条边再找就不可能有增广路了。于是这条边应该被“废弃”以提高效率。我们用cur记录应该从哪一条边开始以优化算法，注意每次BFS时应重置cur。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面是加入当前弧优化的Dinic算法代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;queue&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> N 10005</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> to, next, v;</span><br><span class="line">&#125; edge[<span class="number">100000</span> * <span class="number">2</span>];</span><br><span class="line"><span class="keyword">int</span> head[N], cnt = <span class="number">0</span>, n, m, b, e, ans = <span class="number">0</span>, deep[N], cur[N] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="built_in">queue</span>&lt;<span class="keyword">int</span>&gt; que;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y, <span class="keyword">int</span> z)</span> </span>&#123;</span><br><span class="line">    edge[cnt].to = y, edge[cnt].next = head[x], edge[cnt].v = z, head[x] = cnt++;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">DFS</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> limit)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (limit == <span class="number">0</span> || x == e)<span class="keyword">return</span> limit;</span><br><span class="line">    <span class="keyword">int</span> f, flow = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = cur[x]; ~i; i = edge[i].next) &#123;<span class="comment">//从cur开始</span></span><br><span class="line">        cur[x] = i;<span class="comment">//记录当前的边</span></span><br><span class="line">        <span class="keyword">if</span> (deep[edge[i].to] == deep[x] + <span class="number">1</span> &amp;&amp; (f = DFS(edge[i].to, min(limit, edge[i].v)))) &#123;</span><br><span class="line">            edge[i].v -= f, edge[i ^ <span class="number">1</span>].v += f, flow += f, limit -= f;</span><br><span class="line">            <span class="keyword">if</span> (!limit)<span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> flow;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">BFS</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (!que.empty())que.pop();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)deep[i] = n, cur[i] = head[i];<span class="comment">//重置cur</span></span><br><span class="line">    deep[b] = <span class="number">0</span>, que.push(b);</span><br><span class="line">    <span class="keyword">while</span> (!que.empty()) &#123;</span><br><span class="line">        <span class="keyword">int</span> f = que.front();</span><br><span class="line">        que.pop();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = head[f]; ~i; i = edge[i].next) &#123;</span><br><span class="line">            <span class="keyword">if</span> (edge[i].v &gt; <span class="number">0</span> &amp;&amp; deep[edge[i].to] == n) &#123;</span><br><span class="line">                deep[edge[i].to] = deep[f] + <span class="number">1</span>, que.push(edge[i].to);</span><br><span class="line">                <span class="keyword">if</span> (edge[i].to == e)<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> deep[e] != n;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m &gt;&gt; b &gt;&gt; e;</span><br><span class="line">    ans = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)head[i] = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= m; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> u, v, w;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; u &gt;&gt; v &gt;&gt; w;</span><br><span class="line">        add(u, v, w), add(v, u, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span> (BFS())ans += DFS(b, <span class="number">0x7fffffff</span>);</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; ans;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="ISAP算法"><a href="#ISAP算法" class="headerlink" title="ISAP算法"></a>ISAP算法</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面介绍另一种算法：ISAP算法。这也是一种高效的求最大流的方法。Dinic算法不停地进行BFS重新分层，能不能便DFS边更新深度呢？这就是ISAP算法的思想。它的算法步骤是：</p>
+<ol>
+<li>BFS分层（这里是从汇点开始），只能走<strong>其反向边权值非0</strong>的边，相当于逆着正边走，得到深度。</li>
+<li>从源点开始找增广路。事实上，我们经常用循环来进行这个过程。每次只能走边权非0并且深度为自身深度减一的出点，走到汇点时更新答案和边权。<strong>当该点没有任何合法出点时更新其深度。</strong></li>
+</ol>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当源点深度大于或等于n（n为总结点数）时，不存在增广路。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;更新深度的方法：找到该点所有边权非0的出点，在它们的深度中取最小值，那么点深度更新为这个最小值加一。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ISAP算法中有一个重要的优化：GAP优化。易知点的深度更新只能让深度不断变大，不可能变小。因此如果深度出现了断层（比如不存在深度为3的点，但是有深度为4和2的点），那么这个断层就不可能接上了（只有某深度为2的点找到一个深度也为2的出点并且边权非0才可能把深度更新成3，然而这种情况不可能发生）。根据我们点前进的顺序（深度递减）可知，源点必然在这个断层的前面，于是源点不可能再走到汇点了，判断出增广路不存在，直接break。这就是GAP优化。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;代码不理解就当板子记吧。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;queue&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> N 10005</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> inf 1000000</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> to, next, v;</span><br><span class="line">&#125; edge[<span class="number">100000</span> * <span class="number">2</span>];</span><br><span class="line"><span class="keyword">int</span> head[N], cnt = <span class="number">0</span>, n, m, b, e, ans = <span class="number">0</span>, deep[N], cur[N] = &#123;<span class="number">0</span>&#125;, pre[N] = &#123;<span class="number">0</span>&#125;, num[N] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="built_in">queue</span>&lt;<span class="keyword">int</span>&gt; que;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y, <span class="keyword">int</span> z)</span> </span>&#123;</span><br><span class="line">    edge[cnt].to = y, edge[cnt].next = head[x], edge[cnt].v = z, head[x] = cnt++;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">BFS</span><span class="params">()</span> </span>&#123;<span class="comment">//判深度</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)deep[i] = n, cur[i] = head[i];</span><br><span class="line">    que.push(e), deep[e] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (!que.empty()) &#123;</span><br><span class="line">        <span class="keyword">int</span> f = que.front();</span><br><span class="line">        que.pop();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = head[f]; ~i; i = edge[i].next) &#123;</span><br><span class="line">            <span class="keyword">if</span> (edge[i ^ <span class="number">1</span>].v &gt; <span class="number">0</span> &amp;&amp; deep[edge[i].to] == n)deep[edge[i].to] = deep[f] + <span class="number">1</span>, que.push(edge[i].to);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">maxFlow</span><span class="params">()</span> </span>&#123;<span class="comment">//最大流统计</span></span><br><span class="line">    <span class="keyword">int</span> flow = inf, p = e;</span><br><span class="line">    <span class="keyword">while</span> (p != b) &#123;</span><br><span class="line">        flow = min(flow, edge[pre[p]].v), p = edge[pre[p] ^ <span class="number">1</span>].to;</span><br><span class="line">    &#125;</span><br><span class="line">    p = e;</span><br><span class="line">    <span class="keyword">while</span> (p != b) &#123;</span><br><span class="line">        edge[pre[p]].v -= flow, edge[pre[p] ^ <span class="number">1</span>].v += flow, p = edge[pre[p] ^ <span class="number">1</span>].to;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> flow;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">ISPA</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> now = b;</span><br><span class="line">    BFS();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)num[deep[i]]++;<span class="comment">//深度数量统计</span></span><br><span class="line">    <span class="keyword">while</span> (deep[b] &lt; n) &#123;</span><br><span class="line">        <span class="keyword">if</span> (now == e) &#123;<span class="comment">//找到一条增广路</span></span><br><span class="line">            ans += maxFlow();<span class="comment">//更新</span></span><br><span class="line">            now = b;<span class="comment">//回到源点再找</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">bool</span> flag = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = cur[now]; ~i; i = edge[i].next) &#123;</span><br><span class="line">            <span class="keyword">if</span> (deep[edge[i].to] == deep[now] - <span class="number">1</span> &amp;&amp; edge[i].v &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                flag = <span class="literal">true</span>, cur[now] = i, pre[edge[i].to] = i, now = edge[i].to;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!flag) &#123;<span class="comment">//没有合法出点，更新深度</span></span><br><span class="line">            <span class="keyword">int</span> minn = n;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = head[now]; ~i; i = edge[i].next)<span class="keyword">if</span> (edge[i].v &gt; <span class="number">0</span>)minn = min(minn, deep[edge[i].to]);</span><br><span class="line">            num[deep[now]]--;</span><br><span class="line">            <span class="keyword">if</span> (num[deep[now]] == <span class="number">0</span>)<span class="keyword">break</span>;<span class="comment">//GAP优化！！</span></span><br><span class="line">            deep[now] = minn + <span class="number">1</span>, num[deep[now]]++, cur[now] = head[now];<span class="comment">//更新cur</span></span><br><span class="line">            <span class="keyword">if</span> (now != b)now = edge[pre[now] ^ <span class="number">1</span>].to;<span class="comment">//更新完深度，回退到这个点的前继，源点不用回退。</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m &gt;&gt; b &gt;&gt; e;</span><br><span class="line">    ans = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)head[i] = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= m; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> u, v, w;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; u &gt;&gt; v &gt;&gt; w;</span><br><span class="line">        add(u, v, w), add(v, u, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    ISPA();</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; ans;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;算出了最大流，怎么得到最佳方案？通过每一条原边（所有偶数边）的权值代表残量（也可以反向边直接得出流量），然后就可以得到最优时的流量分配方案了。</p>
+<h4 id="最小割问题"><a href="#最小割问题" class="headerlink" title="最小割问题"></a>最小割问题</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将网络流分成两个不相交点集S、T，使得s（源点）在S中，t（汇点）在T中。断开连接起点在S中终点在T中的所有原边，这时s和t不再连通，称这样的集合划分为一个割。割的容量定义为被断开边的容量之和，求最小割是一个与最大流联系紧密的问题。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;有定理：</p>
+<blockquote>
+<p>【最小割最大流定理】最小割容量等于最大流。</p>
+</blockquote>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;证明略。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样我们就可以求最小割容量了，但是如何求最小割呢？EK算法结束时，我们得到了很多flow，它们当中大于0的点就是S集，剩下的是T集。注意这种方法要求在每次BFS前要清空ｍｇ一下flow（全部初始化成0）。Dinic算法和ISAP算法的方案求法待以后更新。</p>
+<h4 id="费用流问题"><a href="#费用流问题" class="headerlink" title="费用流问题"></a>费用流问题</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在原有图的基础上加入“费用”，总费用为单位费用乘以这条边的流量。得到最大流的方案很多，但是其中有一种花费最少。最小费用最大流问题也是一类重要问题。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;解决方法是将EK算法中的BFS改成SPFA，根据最短路径（将费用看成边权）来找增广路。它和普通的EK算法相比，有以下几点区别：</p>
+<ul>
+<li>边的属性增加了一个费用，反边的费用是正边的相反数</li>
+<li>普通EK算法的BFS中，pre一旦确定便不再改变。但费用流下需要改变。</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样优先选择最短路增广，得到的一定是最优解。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面给出EK算法费用流问题的模板代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;queue&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> to, next, v, price;</span><br><span class="line">&#125; edge[<span class="number">100000</span> * <span class="number">2</span>];</span><br><span class="line"><span class="keyword">int</span> head[<span class="number">10005</span>], cnt = <span class="number">0</span>, n, m, b, e, pre[<span class="number">10005</span>], flow[<span class="number">10005</span>], ans = <span class="number">0</span>, dict[<span class="number">10005</span>], vis[<span class="number">10005</span>], minCost = <span class="number">0</span>;</span><br><span class="line"><span class="built_in">queue</span>&lt;<span class="keyword">int</span>&gt; que;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y, <span class="keyword">int</span> z, <span class="keyword">int</span> p)</span> </span>&#123;</span><br><span class="line">    edge[cnt].price = p, edge[cnt].to = y, edge[cnt].next = head[x], edge[cnt].v = z, head[x] = cnt++;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">SPFA</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (!que.empty())que.pop();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)flow[i] = dict[i] = <span class="number">0x7ffffff</span>, vis[i] = <span class="number">0</span>, pre[i] = <span class="number">-1</span>;<span class="comment">//初始化</span></span><br><span class="line">    pre[b] = <span class="number">-1</span>, vis[b] = <span class="number">1</span>, dict[b] = <span class="number">0</span>, que.push(b);</span><br><span class="line">    <span class="keyword">while</span> (!que.empty()) &#123;</span><br><span class="line">        <span class="keyword">int</span> f = que.front();</span><br><span class="line">        que.pop(), vis[f] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = head[f]; ~i; i = edge[i].next) &#123;</span><br><span class="line">            <span class="keyword">if</span> (edge[i].v &gt; <span class="number">0</span> &amp;&amp; dict[edge[i].to] &gt; dict[f] + edge[i].price) &#123;<span class="comment">//注意：这里没有要求pre[edge[i].to]==-1的限制，因为前导边需要根据最短路径的改变而改变</span></span><br><span class="line">                dict[edge[i].to] = edge[i].price + dict[f];</span><br><span class="line">                pre[edge[i].to] = i, flow[edge[i].to] = min(flow[f], edge[i].v);</span><br><span class="line">                <span class="keyword">if</span> (vis[edge[i].to] == <span class="number">0</span>)que.push(edge[i].to), vis[edge[i].to] = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (pre[e] == <span class="number">-1</span>)<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> flow[e];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ios::sync_with_stdio(<span class="literal">false</span>);</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m &gt;&gt; b &gt;&gt; e;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)head[i] = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= m; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> u, v, w, p;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; u &gt;&gt; v &gt;&gt; w &gt;&gt; p;</span><br><span class="line">        add(u, v, w, p), add(v, u, <span class="number">0</span>, -p);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> increase;</span><br><span class="line">    <span class="keyword">while</span> ((increase = SPFA()) != <span class="number">-1</span>) &#123;</span><br><span class="line">        <span class="keyword">int</span> p = e;</span><br><span class="line">        <span class="keyword">while</span> (p != b) &#123;</span><br><span class="line">            edge[pre[p]].v -= increase, edge[pre[p] ^ <span class="number">1</span>].v += increase;</span><br><span class="line">            p = edge[pre[p] ^ <span class="number">1</span>].to;</span><br><span class="line">        &#125;</span><br><span class="line">        ans += increase;</span><br><span class="line">        minCost += increase * dict[e];<span class="comment">//加上费用</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; ans &lt;&lt; <span class="string">" "</span> &lt;&lt; minCost;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其余方法待补充。</p>
+<h4 id="最大流与二分图匹配"><a href="#最大流与二分图匹配" class="headerlink" title="最大流与二分图匹配"></a>最大流与二分图匹配</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;之前的博客提到了二分图匹配的匈牙利算法，其实这种问题可以用网络流解决。</p>
+<h5 id="二分图最大基数匹配"><a href="#二分图最大基数匹配" class="headerlink" title="二分图最大基数匹配"></a>二分图最大基数匹配</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;二分图不带权值，只是单纯的匹配，既可以用网络流也可以用匈牙利算法解决。对于二分图的两个点集A、B，我们建立起点在A中，终点在B中的有向边，权值均为1（这里相当于改造原二分图）；再建立一个源点s，指向所有A中的点，权值为1，建立汇点t，所有B中的点都指向t，权值也为1。在这个图上求得的最大流就是最大匹配数。</p>
+<h5 id="二分图最大权完美匹配"><a href="#二分图最大权完美匹配" class="headerlink" title="二分图最大权完美匹配"></a>二分图最大权完美匹配</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;二分图带权值，需要找到权值和最大的匹配方案，完美匹配是指所有点都需要被匹配进去，这时匈牙利算法便不再适用了。这种问题可以用费用流解决：将原图的费用设置成权值的相反数，其余我们自己加的边费用设为0，求最小费用最大流即可。显然最小费用的相反数就是最大权值。如果从源点s出发的点不是全部满载，则完美匹配不存在，否则原图中流量为1的边为最佳匹配边。</p>
+<h5 id="二分图最大权匹配"><a href="#二分图最大权匹配" class="headerlink" title="二分图最大权匹配"></a>二分图最大权匹配</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;不要求完美匹配时（即对匹配数不要求）也可以用费用流解决。引入一个新结点P，所有A集合上的点增加一条指向P的边，容量为1，费用为0，同时P引一条边指向汇点t，容量无穷大，费用为0。建完图后求最小费用最大流。这样最大流一定是A中点的个数，但我们给了每个点一个不走B集合点的机会（即从P流向t），这样就得到了最大权。原图中流量为1的边为最佳匹配边。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/提高算法/" rel="tag"><i class="fa fa-tag"></i>提高算法</a>
+          
+            <a href="/tags/网络流/" rel="tag"><i class="fa fa-tag"></i>网络流</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/22/二分图匹配与匈牙利算法/" rel="next" title="二分图匹配与匈牙利算法">
+                <i class="fa fa-chevron-left"></i> 二分图匹配与匈牙利算法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/header.jpg" alt="Twifor">
+            
+              <p class="site-author-name" itemprop="name">Twifor</p>
+              <p class="site-description motion-element" itemprop="description">一个打OI的弱鸡</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">82</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">50</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#网络流最大流问题的三个性质"><span class="nav-number">1.</span> <span class="nav-text">网络流最大流问题的三个性质</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#残量网络"><span class="nav-number">2.</span> <span class="nav-text">残量网络</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#EK算法"><span class="nav-number">3.</span> <span class="nav-text">EK算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Dinic算法"><span class="nav-number">4.</span> <span class="nav-text">Dinic算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ISAP算法"><span class="nav-number">5.</span> <span class="nav-text">ISAP算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#最小割问题"><span class="nav-number">6.</span> <span class="nav-text">最小割问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#费用流问题"><span class="nav-number">7.</span> <span class="nav-text">费用流问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#最大流与二分图匹配"><span class="nav-number">8.</span> <span class="nav-text">最大流与二分图匹配</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#二分图最大基数匹配"><span class="nav-number">8.1.</span> <span class="nav-text">二分图最大基数匹配</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二分图最大权完美匹配"><span class="nav-number">8.2.</span> <span class="nav-text">二分图最大权完美匹配</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二分图最大权匹配"><span class="nav-number">8.3.</span> <span class="nav-text">二分图最大权匹配</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Twifor</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="255,255,255" '="" opacity="0.85" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+
+
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function (item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '2aSxA7Naxmi6lgfgVU1ulgcS-gzGzoHsz',
+    appKey: '6G9RDaS7lVtgyGKw8AxxkLyi',
+    placeholder: '写下评论吧~qwq',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+	  preview: 'none'
+    },
+	messageStyle: 'none',
+	"HTML-CSS": {
+      showMathMenu: false //关闭右击菜单显示
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style>
+
+    
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/koharu.model.json"},"display":{"position":"right","width":75,"height":150},"mobile":{"show":false},"log":false});</script></body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>

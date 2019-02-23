@@ -125,7 +125,7 @@
 <meta property="og:site_name" content="Twifor~Liyh">
 <meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本题是加权并查集模板题。  难度：提高+/省选-">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-02-20T08:59:37.817Z">
+<meta property="og:updated_time" content="2019-02-22T03:58:39.529Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[洛谷P2024]食物链">
 <meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本题是加权并查集模板题。  难度：提高+/省选-">
@@ -421,7 +421,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-20 16:59:37" itemprop="dateModified" datetime="2019-02-20T16:59:37+08:00">2019-02-20</time>
+                <time title="修改时间：2019-02-22 11:58:39" itemprop="dateModified" datetime="2019-02-22T11:58:39+08:00">2019-02-22</time>
               
             
           </span>
@@ -510,7 +510,7 @@
 <h4 id="Sample-output"><a href="#Sample-output" class="headerlink" title="Sample output"></a>Sample output</h4><blockquote>
 <p>3</p>
 </blockquote>
-<h3 id="说明"><a href="#说明" class="headerlink" title="　说明"></a>　说明</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 ≤ N ≤ 5 ∗ 10^4<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 ≤ K ≤ 10^5</p>
+<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 ≤ N ≤ 5 ∗ 10^4<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 ≤ K ≤ 10^5</p>
 <h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考察加权并查集。做法：按照每一句话进行操作，推出矛盾。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;并查集可以很好地处理相联性问题，在大多数情况下，这种关系是一定的。但是对于多种关系，正常的并查集就不能满足需求。加权并查集用于关系种类多于1时的情景。比如本题中有三个关系：同类、吃、被吃，并查集中的结点通过这三种关系中的任意一种联系起来，并用权值描述具体的关系种类。简单来说，普通并查集维护关系，加权并查集维护相对关系。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;权值通常描述该结点与父结点的关系。在路径压缩后结点指向根节点，这个法则同样成立，我们需要在路径压缩时修改结点关系值（毕竟父结点被修改了），修改模板如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">find</span><span class="params">(x)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (father[x] == x)<span class="keyword">return</span> x;</span><br><span class="line">    <span class="keyword">int</span> r = find(father[x]);<span class="comment">//获得根结点，此时父结点以上通过递归调用已经指向了根结点并更新了关系</span></span><br><span class="line">    <span class="comment">//更新关系...</span></span><br><span class="line">    <span class="keyword">return</span> father[x] = r;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果父结点与根结点关系是a，子结点与父结点关系为b，那么子结点和根结点关系是可以求得的（需要具体分析）。另外加权并查集只能来维护传递关系唯一的情景。这句话的意思是，如果我们知道A是B的子结点，关系为a，B是C的子结点，关系为b，那么A与C的关系应该是确定而唯一的。这种性质可以使我们通过任意一个第三者判别两个结点的关系，这是加权并查集的原理（第三者就是通过B和A的关系以及B和C的关系来推断A与C的关系，B就是第三者）。关系传递唯一性保证了路径压缩是等价变形，并且在加权并查集的一个等价类中，保证了任意两点的关系都可以推断出来。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;简单概括如下：</p>
 <ul>
@@ -644,7 +644,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">80</span>
+                    <span class="site-state-item-count">82</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -772,7 +772,7 @@
                     
                       
                     
-                    <span class="site-state-item-count">49</span>
+                    <span class="site-state-item-count">50</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -808,7 +808,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目描述"><span class="nav-number">1.</span> <span class="nav-text">题目描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输入输出格式"><span class="nav-number">2.</span> <span class="nav-text">输入输出格式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#输入格式："><span class="nav-number">2.1.</span> <span class="nav-text">输入格式：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#输出格式："><span class="nav-number">2.2.</span> <span class="nav-text">输出格式：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输入输出样例"><span class="nav-number">3.</span> <span class="nav-text">输入输出样例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Sample-input"><span class="nav-number">3.1.</span> <span class="nav-text">Sample input</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Sample-output"><span class="nav-number">3.2.</span> <span class="nav-text">Sample output</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#说明"><span class="nav-number">4.</span> <span class="nav-text">　说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#题解"><span class="nav-number">5.</span> <span class="nav-text">题解</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目描述"><span class="nav-number">1.</span> <span class="nav-text">题目描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输入输出格式"><span class="nav-number">2.</span> <span class="nav-text">输入输出格式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#输入格式："><span class="nav-number">2.1.</span> <span class="nav-text">输入格式：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#输出格式："><span class="nav-number">2.2.</span> <span class="nav-text">输出格式：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输入输出样例"><span class="nav-number">3.</span> <span class="nav-text">输入输出样例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Sample-input"><span class="nav-number">3.1.</span> <span class="nav-text">Sample input</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Sample-output"><span class="nav-number">3.2.</span> <span class="nav-text">Sample output</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#说明"><span class="nav-number">4.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#题解"><span class="nav-number">5.</span> <span class="nav-text">题解</span></a></li></ol></div>
             
 
           </div>

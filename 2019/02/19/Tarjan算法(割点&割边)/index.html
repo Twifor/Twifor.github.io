@@ -118,14 +118,14 @@
 
 
   <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本节探讨另一种Tarjan算法来求无向图的割点和割边。本文是这篇文章的延伸。">
-<meta name="keywords" content="图论,基础算法">
+<meta name="keywords" content="基础算法,图论">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Tarjan算法(割点&amp;割边)">
 <meta property="og:url" content="https://twifor.github.io/2019/02/19/Tarjan算法(割点&割边)/index.html">
 <meta property="og:site_name" content="Twifor~Liyh">
 <meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本节探讨另一种Tarjan算法来求无向图的割点和割边。本文是这篇文章的延伸。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-02-19T07:26:35.678Z">
+<meta property="og:updated_time" content="2019-02-23T02:55:33.194Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tarjan算法(割点&amp;割边)">
 <meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本节探讨另一种Tarjan算法来求无向图的割点和割边。本文是这篇文章的延伸。">
@@ -421,7 +421,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-19 15:26:35" itemprop="dateModified" datetime="2019-02-19T15:26:35+08:00">2019-02-19</time>
+                <time title="修改时间：2019-02-23 10:55:33" itemprop="dateModified" datetime="2019-02-23T10:55:33+08:00">2019-02-23</time>
               
             
           </span>
@@ -482,7 +482,7 @@
       
 
       
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本节探讨另一种Tarjan算法来求无向图的割点和割边。本文是<a href="https://twifor.github.io/2019/02/18/Tarjan%E7%AE%97%E6%B3%95%28%E5%BC%BA%E8%81%94%E9%80%9A%29">这篇文章</a>的延伸。<br><a id="more"></a></p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本节探讨另一种Tarjan算法来求无向图的割点和割边。本文是<a href="https://twifor.github.io/2019/02/18/Tarjan%E7%AE%97%E6%B3%95%28%E5%BC%BA%E8%BF%9E%E9%80%9A%29">这篇文章</a>的延伸。<br><a id="more"></a></p>
 <h3 id="割点"><a href="#割点" class="headerlink" title="割点"></a>割点</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先认识什么是割点。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在一个连通无向图中，如果删去某一个点以及与其相连的边后图不再联通，则称这个点为一个割点。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tarjan算法可以用来求割点，它的步骤与求强联通分量的算法十分相似，只是多了下面几个判断：</p>
 <ul>
 <li>如果该点为搜索树的根结点（一个连通图搜索树有且仅有一个根结点），判断其子结点数目。如果子结点数目多于一个，说明两个子树只能通过根结点来往，由此判断根结点为割点。也就是说，根结点为割点的充要条件是子结点多于一个。</li>
@@ -515,9 +515,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/图论/" rel="tag"><i class="fa fa-tag"></i>图论</a>
-          
             <a href="/tags/基础算法/" rel="tag"><i class="fa fa-tag"></i>基础算法</a>
+          
+            <a href="/tags/图论/" rel="tag"><i class="fa fa-tag"></i>图论</a>
           
         </div>
       
@@ -618,7 +618,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">80</span>
+                    <span class="site-state-item-count">82</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -746,7 +746,7 @@
                     
                       
                     
-                    <span class="site-state-item-count">49</span>
+                    <span class="site-state-item-count">50</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
