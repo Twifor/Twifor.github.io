@@ -1,15 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Splay（伸展树）]]></title>
+    <url>%2F2019%2F03%2F02%2FSplay%EF%BC%88%E4%BC%B8%E5%B1%95%E6%A0%91%EF%BC%89%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本节介绍Splay树的用法与实现。 二叉排序树&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Splay本质上是自平衡的二叉排序树（Binary Sort Tree，BST），是平衡树的一种。因此在了解Splay前必须先了解二叉排序树。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;二叉排序树是指满足以下性质的二叉树： 若左子树不空，则左子树上所有结点的值均小于根结点。 若右子树不空，则右子树上所有结点的值均大于根结点。 左右子树也是BST。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面给出了一个BST的例子：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BST中不允许有相同的数，因此每一个结点都有自己的计数变量（在本文中用s表示）来记录这个数的个数。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另外，BST的左右子树性质不同，因此不能向往常一样把树当图来存，必须基于一定储存结构。这里用结构体来定义树的每一个结点：1234567struct Node &#123; int v, ch[2], s, num, f; Node() : s(0), num(0) &#123; ch[0] = ch[1] = 0; &#125;&#125; node[500005]; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v表示该结点表示的数，ch[0]和ch[1]是左右子树根结点编号，s是数的重数，num是该树所有数的总数量（计入重数），f是其父结点编号。然后开一个数组储存这些结点。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;问题来了，BST有什么用呢？如果我们需要不断加入删除数据，不断地询问某个数的排序序号，查找某个数的前驱或者后继等操作，普通的顺序表效率过低，而链表查找效率硬伤，此时我们就需要BST来完成这些工作。平衡的BST可以在$O(logn)$复杂度下完成这些操作，这是容易理解的。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但如果不平衡呢？当二叉排序树退化成一条链时，各种操作都会退化成$O(n)$复杂度，这是我们不希望看到的，于是就有了各种使BST平衡的方法，Splay就是其中之一。 旋转操作&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;旋转操作是Splay中很重要的操作。旋转的意思就是：将某个结点移动到其父结点的位置，保持BST性质不变。旋转只是树的结构变形，没有实质性改变。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当目标结点是其父结点的左儿子时，需要右旋（称为Zig操作），若为右儿子，需要左旋（称为Zag操作）。下面以右旋为例探讨旋转规律。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;比如我们想把值为2的结点移动到其父结点位置。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发现4比5小，5应该接管以值为4的结点为根的子树，于是：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5比3大，将值为5的结点移动下来作值为3的结点的左儿子（父结点变儿子结点）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然后以3为值的结点替代原父结点位置：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;旋转完成，这就是一次zig操作。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;无论左旋还是右旋，都可以发现旋转分为三步。 父结点接管目标结点反边上的子树。（接管反边是指：若目标结点为左儿子，则接管右子树，右儿子反之）。 父结点作目标结点反边上的子树。 目标结点代替父结点位置（父结点是爷爷结点的什么儿子，目标结点就作什么儿子）。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在就来编写实现旋转操作的函数，在这之前先写一个重建父子关系的函数：123void change(int father, int son, int w) &#123; node[father].ch[w] = son, node[son].f = father;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;change函数的作用就是让son编号去作father编号结点的w儿子（0为左，1为右）。然后还需要一个判别父子关系的函数：1234int identify(int x) &#123; int f = node[x].f; return node[f].ch[0] == x ? 0 : 1;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个函数用来判断编号为x的结点是其父结点的什么儿子。最后需要一个update函数：123void update(int x) &#123; node[x].num = node[node[x].ch[0]].num + node[node[x].ch[1]].num + node[x].s;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这是更新一下编号为x的结点的num值。由于旋转后结点间关系发生改变，因此需要更新num。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可以写出旋转函数：123456void rotate(int x) &#123; if (x == root)return; int f = node[x].f, g = node[f].f, i = identify(x), j = identify(f); change(f, node[x].ch[i ^ 1], i), change(x, f, i ^ 1), change(g, x, j); update(f), update(x);&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;根结点不能旋转。根据三个步骤重建父子关系，然后更新目标结点和父结点的num。这里用i^1来取反边，这是一个技巧，在网络流中也用到了这个技巧。 伸展操作&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;伸展树之所以叫伸展树就是因为伸展。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所谓伸展，就是将某个结点（本文中称为at）通过一系列旋转移动到另一个结点（称为to）下方（也就是儿子）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果to本身就在at的下方怎么办？在常规的splay操作中不会碰到这种情况。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先需要认识到一个问题：如果需要移动到根结点位置怎么办？根结点不是任何结点的儿子，其实从上面的叙述中的确无法做到，因此有个东西叫虚拟根结点，它是根结点的父结点。在本文中，虚拟根结点编号为0，根结点作其右儿子。这样就可以通过移动到虚拟根结点下面来移动到根结点位置了。在后文中可以看到引入虚拟根结点的很多好处。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当at的父结点正好就是to时无需伸展。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;若at的爷爷结点正好是to时，一步旋转（zig或zag）就可以做到伸展效果。问题就是其余情况怎么处理。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当at的子结点性质和其父结点不同时（不同是指at是左儿子而父结点是右儿子或者反之）可以通过两次旋转（zig-zag或者zag-zig）at结点来将其旋转到爷爷结点的位置。这称为之字形旋转。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当at的子结点性质与其父结点相同时，同样两次旋转（zig-zig或者zag-zag）at结点来将其旋转到爷爷结点的位置。这称为一字形旋转。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但实际情况中可以发现，对于一字形旋转，树的结构并没有得到很好的改善。通常我们这样处理一子形旋转的情况：先旋转父结点再旋转at结点。这种用先旋转父结点再旋转子结点来代替旋转两次子结点的操作称为双旋，普通的一子形方法就称为单旋。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样就可以写出伸展操作的函数了：1234567891011void splay(int at, int to = 0) &#123;//to默认为0表示默认移动到根结点 while (node[at].f != to) &#123; int f = node[at].f, g = node[f].f; if (g != to) &#123; if (identify(at) == identify(f))rotate(f);//双旋操作 else rotate(at); &#125; rotate(at); &#125; if (to == 0)root = at;//不要忘记修改根结点&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;伸展有什么用呢？可以理解成保持树结构的随机性，也就是在一种平均意义上保持树的平衡。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;伸展的另一个作用是更新经过结点的num值，这是旋转时所做的。 插入元素&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个不用多说，直接看代码就可以：12345678910111213141516void insert(int x) &#123; if (root == 0)change(0, cnt, 1), node[cnt].v = x, node[cnt].s = 1, node[cnt].num = 1, root = cnt++;//无根要建根 else &#123; int cur = root, nxt = 0; while (true) &#123; if (x &gt; node[cur].v)nxt = node[cur].ch[1]; else if (x &lt; node[cur].v)nxt = node[cur].ch[0]; else break; if (nxt != 0)cur = nxt; else break; &#125; if (node[cur].v == x)node[cur].s++, splay(cur);//已经有了，s直接加一 else if (node[cur].v &gt; x)change(cur, cnt, 0), node[cnt].v = x, node[cnt].s = 1, node[cnt].num = 1, splay(cnt++); else change(cur, cnt, 1), node[cnt].v = x, node[cnt].s = 1, node[cnt].num = 1, splay(cnt++); &#125;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cnt是当出现新结点时的编号计数器，这样每有一个新的点加入都会分配一个新编号。这样导致的一个问题是不能重用空间，但是对于大多数情况空间都是够用的。如果希望重用空间可以选择每次重建根（为什么会多次重建根？因为可能会删元素啊）时重新从1编号，但是这样做一定要记得将已经被删除的结点完全清空（比如子结点编号设成0等等）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;每一次插入元素后都要把已经插入的元素对应结点伸展到根结点以保持结构随机性。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为什么没有看到更新num？伸展的时候顺便更新了，上文已经提到。 查找某数的编号123456789101112131415int find(int x) &#123; int cur = root, nxt = 0; while (true) &#123; if (node[cur].v &gt; x)nxt = node[cur].ch[0]; else if (node[cur].v &lt; x)nxt = node[cur].ch[1]; else break; if (nxt != 0)cur = nxt; else break; &#125; if (node[cur].v == x) &#123; splay(cur); return cur; &#125; return -1;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;很容易理解，没有返回-1，最后将该结点伸展到根结点。 查找第k大&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第k大就是指计入重数后的排序为k的数，直接看代码吧：12345678910111213int findNum(int x) &#123; int cur = root, nxt = 0; while (true) &#123; if (node[node[cur].ch[0]].num &gt;= x)nxt = node[cur].ch[0];//找左树 else if (x &gt; node[node[cur].ch[0]].num &amp;&amp; x &lt;= node[node[cur].ch[0]].num + node[cur].s) &#123; splay(cur); return cur; &#125; else nxt = node[cur].ch[1], x -= node[node[cur].ch[0]].num + node[cur].s;//找右树 if (nxt != 0)cur = nxt; else break; &#125; return -1;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个函数返回的是结点编号，如果没有返回-1。要把最后的结点伸展到根结点。 查询某元素排名&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于相同的元素，这里的排名是指最小的排名。123456789101112131415int findRank(int x) &#123; int cur = root, nxt = 0, ans = 0; while (true) &#123; if (node[cur].v &lt; x)nxt = node[cur].ch[1], ans += node[cur].num - node[nxt].num; else if (node[cur].v &gt; x)nxt = node[cur].ch[0]; else &#123; ans += node[node[cur].ch[0]].num; break; &#125; if (nxt != 0)cur = nxt; else break; &#125; splay(cur); return ans + 1;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;代码是容易理解的，最后仍然需要伸展。 查找前驱&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前驱是指小于某个数中的最大的那一个。值得注意的是该数不一定是已经插入的元素，即使之前没有插入也是可以查找前驱的。12345678910111213int preNum(int x) &#123; int cur = root, nxt = 0, maxn = -0x7fffffff, ans = -1; while (true) &#123; if (node[cur].v &gt; x)nxt = node[cur].ch[0]; else if (node[cur].v &lt; x) &#123; nxt = node[cur].ch[1]; if (node[cur].v &gt; maxn)maxn = node[cur].v, ans = cur; &#125; else nxt = node[cur].ch[0];//相等向小了找 if (nxt != 0)cur = nxt; else break; &#125; return ans;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;同样只返回编号，没有返回-1。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里没有伸展？其实也可以伸展的，但是我本人不喜欢在这里伸展。 查找后继12345678910111213int nextNum(int x) &#123; int cur = root, nxt = 0, minn = 0x7fffffff, ans = -1; while (true) &#123; if (node[cur].v &lt; x)nxt = node[cur].ch[1]; else if (node[cur].v &gt; x) &#123; nxt = node[cur].ch[0]; if (node[cur].v &lt; minn)minn = node[cur].v, ans = cur; &#125; else nxt = node[cur].ch[1]; if (nxt != 0)cur = nxt; else break; &#125; return ans;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;和前驱基本相同。 删除操作&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;删除是比较麻烦的一个，这里介绍两种实现方式。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第一种：通过前驱和后继删除。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将前驱伸展到根结点然后将后继伸展到根结点（就是前驱）下方（作右儿子），那么待删除结点一定是后继的右儿子并且它没有任何子树。从这个结点上删除即可。如果其s&gt;1那么直接s减去一，否则删除该结点，最后进行一步伸展，还可以顺便更新一下num。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;没有前驱或后继怎么办？需要手动加入无穷小和无穷大两个数，这样所有数就都有前驱和后继了。12345678int delNum(int x) &#123; if (find(x) == -1)return 0;//没有该数就不能删除，如果保证存在该数，则该句可以忽略以提高效率 int pre = preNum(x), nxt = nextNum(x); splay(pre), splay(nxt, pre);//作伸展 if (node[node[nxt].ch[0]].s &gt; 1)node[node[nxt].ch[0]].s--, splay(node[nxt].ch[0]); else node[nxt].ch[0] = 0, splay(nxt); return 1;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另一种方法就是分类讨论。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将待删除结点伸展到根结点，然后分类讨论（只探讨完全删除结点的情况，s自减一的情况不探讨）： 根结点没有子树，直接删除，重置root=0。 根结点有右子树无左子树，将右子树根作为根。仅有左子树相似操作。 既有左子树又有右子树，按照方法一进行（因为这时候该数一定有前驱和后继）。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际上没有前驱和后继的情况仅有删除最小值最大值的时候才会出现，所以第二种方法常常会比第一种方法多一次splay，效率低一些。12345678910111213141516171819int delNum(int x) &#123; splay(find(x));//默认有该数 if (!node[root].ch[0] &amp;&amp; !node[root].ch[1]) &#123; if (node[root].s &gt; 1)node[root].s--; else root = 0, node[0].ch[1] = 0; &#125; else if (!node[root].ch[0]) &#123; if (node[root].s &gt; 1)node[root].s--; else change(0, node[root].ch[1], 1), root = node[root].ch[1]; &#125; else if (!node[root].ch[1]) &#123; if (node[root].s &gt; 1)node[root].s--; else change(0, node[root].ch[0], 1), root = node[root].ch[0]; &#125; else &#123; int pre = preNum(x), nxt = nextNum(x); splay(pre), splay(nxt, pre); if (node[node[nxt].ch[0]].s &gt; 1)node[node[nxt].ch[0]].s--, splay(node[nxt].ch[0]); else node[nxt].ch[0] = 0, splay(nxt); &#125; return 1;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;推荐洛谷P3369模板题。AC代码就是上面的组合。]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>提高算法</tag>
+        <tag>Splay</tag>
+        <tag>数据结构</tag>
+        <tag>树</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[[洛谷P2634]聪聪可可]]></title>
+    <url>%2F2019%2F03%2F01%2F%E6%B4%9B%E8%B0%B7P2634-%E8%81%AA%E8%81%AA%E5%8F%AF%E5%8F%AF%2F</url>
+    <content type="text"><![CDATA[难度：省选/NOI- 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;聪聪和可可是兄弟俩，他们俩经常为了一些琐事打起来，例如家中只剩下最后一根冰棍而两人都想吃、两个人都想玩儿电脑（可是他们家只有一台电脑）……遇到这种问题，一般情况下石头剪刀布就好了，可是他们已经玩儿腻了这种低智商的游戏。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;他们的爸爸快被他们的争吵烦死了，所以他发明了一个新游戏：由爸爸在纸上画n个“点”，并用n-1条“边”把这n个“点”恰好连通（其实这就是一棵树）。并且每条“边”上都有一个数。接下来由聪聪和可可分别随即选一个点（当然他们选点时是看不到这棵树的），如果两个点之间所有边上数的和加起来恰好是3的倍数，则判聪聪赢，否则可可赢。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;聪聪非常爱思考问题，在每次游戏后都会仔细研究这棵树，希望知道对于这张图自己的获胜概率是多少。现请你帮忙求出这个值以验证聪聪的答案是否正确。 输入输出格式输入格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输入的第1行包含1个正整数n。后面n-1行，每行3个整数x、y、w，表示x号点和y号点之间有一条边，上面的数是w。 输出格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;以即约分数形式输出这个概率（即“a/b”的形式，其中a和b必须互质。如果概率为1，输出“1/1”）。 输入输出样例Sample input 51 2 11 3 21 4 12 5 3 Sample output 13/25 说明【样例说明】&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13组点对分别是(1,1) (2,2) (2,3) (2,5) (3,2) (3,3) (3,4) (3,5) (4,3) (4,4) (5,2) (5,3) (5,5)。【数据规模】&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于100%的数据，n≤20000。 题解&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;难度较低的省选题，考察点分治。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;题目实质上是求所有距离为3的倍数的点对数目，用点分治求即可，时间复杂度$O(nlog^2n)$。注意点分治时的距离都需要对3取模，这样直接根据距离为0即可判断合法的点对。另外每个点与自身形成的点对也是合法点对。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在操作中需要实现点分治的work函数，这里的work函数可以在线性时间内解决：统计距离为0、1、2的点的数目，再用排列组合来求点对数目。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;算出数量来，用欧几里得算法去一下最大公因数输出即可。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172#include&lt;bits/stdc++.h&gt;#define N 20005using namespace std;struct Edge &#123; int to, next, v;&#125; edge[N * 2];int n, head[N], cnt = 1, vis[N] = &#123;0&#125;, size[N], f[N], minn, root, ans = 0, num[3];inline void add(int x, int y, int z) &#123; edge[cnt].v = z, edge[cnt].to = y, edge[cnt].next = head[x], head[x] = cnt++;&#125;void DFS(int x, int fa, int p) &#123; size[x] = 1, f[x] = 0; for (int i = head[x]; i != -1; i = edge[i].next) &#123; if (vis[edge[i].to] || edge[i].to == fa)continue; DFS(edge[i].to, x, p), size[x] += size[edge[i].to], f[x] = max(f[x], size[edge[i].to]); &#125; f[x] = max(f[x], p - size[x]); if (f[x] &lt; minn)minn = f[x], root = x;&#125;void findRoot(int x, int s) &#123; minn = 0x7fffffff, DFS(x, 0, s);&#125;void DFS2(int x, int fa, int v) &#123; num[(v % 3 + 3) % 3]++; for (int i = head[x]; i != -1; i = edge[i].next) &#123; if (vis[edge[i].to] || edge[i].to == fa)continue; DFS2(edge[i].to, x, v + edge[i].v); &#125;&#125;void work(int x, int f, int w) &#123; num[0] = num[1] = num[2] = 0, DFS2(x, 0, 0); if (f == 0)ans += num[0] * (num[0] - 1) / 2 * w + num[1] * num[2] * w; else if (f == 1)ans += num[0] * num[1] * w + num[2] * (num[2] - 1) / 2 * w; else ans += num[0] * num[2] * w + num[1] * (num[1] - 1) / 2 * w;&#125;void divide(int x) &#123; vis[x] = 1, work(x, 0, 1); for (int i = head[x]; i != -1; i = edge[i].next) &#123; if (!vis[edge[i].to]) &#123; work(edge[i].to, (6 - 2 * edge[i].v) % 3, -1); findRoot(edge[i].to, size[edge[i].to]); divide(root); &#125; &#125;&#125;int gcd(int x, int y) &#123; if (y == 0)return x; return gcd(y, x % y);&#125;int main() &#123; ios::sync_with_stdio(false); cin &gt;&gt; n; for (int i = 1; i &lt;= n; i++)head[i] = -1; for (int i = 1; i &lt; n; i++) &#123; int x, y, z; cin &gt;&gt; x &gt;&gt; y &gt;&gt; z; add(x, y, (z % 3 + 3) % 3), add(y, x, (z % 3 + 3) % 3); &#125; findRoot(1, n), divide(root); int g = gcd(2 * ans + n, n * n); cout &lt;&lt; (2 * ans + n) / g &lt;&lt; "/" &lt;&lt; n * n / g; return 0;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本题还有一个更优雅的做法，那就是用树型DP。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;令dp(x,y)表示在以x为根的子树上，经过x并且距离总和对3的模为y的点对路径总数（每一个点对都要求两点互异），那么有状态转移方程： dp(x,y)=\sum^s_{i=1} \{dp[c_i,(y-v(x,c_i))mod\ 3]+\delta_{y,v(x,c_i)}\}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里的$c_1,\cdots ,c_s$是x结点的s个子结点，$v(x,c_i)$是两点连边的边权。$\delta_{i,j}$是克罗内克符号，它在i=j时为1，否则为0。克罗内克符号的作用就是计入父结点与子结点连边本身就成立的情况。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;树型DP也需要去重，去重方法与点分治类似。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354#include&lt;bits/stdc++.h&gt;#define N 20005using namespace std;struct Edge &#123; int to, next, v;&#125; edge[N * 2];int n, head[N], cnt = 1, dp[N][3], ans = 0;inline void add(int x, int y, int z) &#123; edge[cnt].v = z, edge[cnt].to = y, edge[cnt].next = head[x], head[x] = cnt++;&#125;int gcd(int x, int y) &#123; if (y == 0)return x; return gcd(y, x % y);&#125;int DP(int x, int p, int fa) &#123; if (dp[x][p] != -1)return dp[x][p]; dp[x][p] = 0; for (int i = head[x]; i != -1; i = edge[i].next) &#123; if (edge[i].to != fa)dp[x][p] += DP(edge[i].to, (p - edge[i].v + 3) % 3, x) + (edge[i].v == p ? 1 : 0); &#125; return dp[x][p];&#125;inline void solve(int x, int p, int fa) &#123;//用来去重的函数 if (p == 0)ans -= DP(x, 0, fa) * (DP(x, 0, fa) - 1) / 2 + DP(x, 1, fa) * DP(x, 2, fa) + DP(x, 0, fa); else if (p == 1)ans -= DP(x, 2, fa) * (DP(x, 2, fa) - 1) / 2 + DP(x, 0, fa) * DP(x, 1, fa) + DP(x, 1, fa); else ans -= DP(x, 1, fa) * (DP(x, 1, fa) - 1) / 2 + DP(x, 0, fa) * DP(x, 2, fa) + DP(x, 2, fa);&#125;void DFS(int x, int fa) &#123; ans += DP(x, 0, fa) * (DP(x, 0, fa) + 1) / 2 + DP(x, 1, fa) * DP(x, 2, fa); for (int i = head[x]; i != -1; i = edge[i].next) &#123; if (edge[i].to != fa)solve(edge[i].to, (6 - 2 * edge[i].v) % 3, x), DFS(edge[i].to, x); &#125;&#125;int main() &#123; ios::sync_with_stdio(false); cin &gt;&gt; n; for (int i = 1; i &lt;= n; i++)head[i] = -1, dp[i][0] = dp[i][1] = dp[i][2] = -1; for (int i = 1; i &lt; n; i++) &#123; int x, y, z; cin &gt;&gt; x &gt;&gt; y &gt;&gt; z; add(x, y, (z % 3 + 3) % 3), add(y, x, (z % 3 + 3) % 3); &#125; DFS(1, 0); int g = gcd(2 * ans + n, n * n); cout &lt;&lt; (2 * ans + n) / g &lt;&lt; "/" &lt;&lt; n * n / g; return 0;&#125;]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>树</tag>
+        <tag>动态规划</tag>
+        <tag>点分治</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[点分治]]></title>
     <url>%2F2019%2F02%2F28%2F%E7%82%B9%E5%88%86%E6%B2%BB%2F</url>
-    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点分治是一类解决树上路径问题的算法，下面以判断树中是否存在长度为k的路径这一问题来介绍点分治算法。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面是一棵树（边权未标出）：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于一个路径，我们可以把它归结为两类：经过根节点和不经过根节点。对于不经过根节点的路径，总可以找到一个新的根节点使之经过根节点。比如图中EBF这一路径没有经过根节点A，但是它经过了子树的根节点B。因此所有路径都可以归结到第一种（也就是经过根节点），于是可以通过不同根结点来判别各种路径。这里体现了分治的思想。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面来看看点分治的操作： 确定树根&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们一开始得到的树通常是无根树，即使是有根树也可以发现答案与树根的选取无关。不妨选取一个点为根使得树尽量平衡，递归次数尽量少。这个点显然是树的重心。重心可以通过一遍DFS求出。 从树根开始进行分治&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里就是点分治的核心了，先来看看代码模板：12345678910void divide(int x) &#123; work();//第一个work vis[x] = 1; for (int i = head[x]; i != -1; i = edge[i].next) &#123; if (vis[edge[i].to])continue; work();//第二个work findRoot(edge[i].to); divide(root); &#125;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;该函数中x为现在树的树根编号。vis[x]=1标记该点已经被使用，下面遍历出边。当前函数处理的是经过点x的路径，所以对于出点（也就是子树的树根），我们需要对其进行递归处理（也就是处理经过子树树根的路径），发现这与原树是一个性质的问题，因此可以递归处理：先找重心（这里就相当于对子树重新选根构造）再递归。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样分治会不会重呢？也就是同一条路径被多次处理？答案当然是不会，因为我们的路径处理只是在以该点为根的子树上。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;两个work函数做什么？这就是处理经过点x的路径的函数。此时可能会有疑问：按理说只需要开头有一个work函数处理就可以了，为什么还要对每一个子结点再work一次？后一个work函数并不是子树的递归处理，而是去重。work函数与问题的性质有关，需要自己设计。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;先来讨论本问题中如何处理work函数。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本问题中我们需要找有没有长度为k的路径。那么在work函数中先求出所有点（包括本身，路径长当然是0）到根节点x的路径长，然后如果两个互异点的路径长之和等于k，那么就可以判定存在长度为k的路径。求长度需要$O(n)$，互异点枚举需要$O(n^2)$。效率太低如何解决？先在$O(nlogn)$复杂度下对路径长进行排序，然后枚举每一个点进行二分，可以降低时间复杂度为$O(nlogn)$。当然还有更好的解决方法，那就是双指针扫描，时间复杂度$O(n)$，关于该技巧见本文末。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样就完了吗？当然不会，还有前面提到的去重操作！注意到上面给出的图中，当处理点A时，若E到A的距离和F到A的距离之和是k，我们会认为这是一条合法的路径，但事实上它有重边，并不合法，因此需要将这条非法边去除。在第一个work函数中肯定无法知晓哪些点对是合法的，哪些是非法的，因此只能通过容斥原理来将非法边去除，这就是第二个work所做的事情。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如何在第二个work中统计非法边个数呢？注意到非法点对一定在同一子树中，并且凡是来源于子树B的非法点对（x,y），它们都满足： dict[x]+dict[y]+2v(A,B)=k&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v(A,B)是A点与B点之间连边的权值。这样我们在B子树中找到距离和（这里的距离就是到B的距离了，需要重求）为k-2v(A,B)的点对数量，再在答案中减去就可以了。由于两个work拥有同样的功能（都是求符合条件的点对数），因此这两个work可以用一个函数去处理。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面给出洛谷P3806点分治模板题的示例代码：123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899#include&lt;bits/stdc++.h&gt;#define N 10005using namespace std;struct Edge &#123; int to, next, v;&#125; edge[N * 2];int head[N], vis[N], cnt = 1, n, m, ans[105], a, b, c, root, minn, size[N], f[N], dict[N], cntDFS;int query[105];inline int read() &#123; char e = getchar(); int s = 0; while (e &lt; '0' || e &gt; '9')e = getchar(); while (e &gt;= '0' &amp;&amp; e &lt;= '9')s = s * 10 + e - '0', e = getchar(); return s;&#125;inline void add(int x, int y, int z) &#123; edge[cnt].to = y, edge[cnt].v = z, edge[cnt].next = head[x], head[x] = cnt++;&#125;void DFS1(int x, int fa, int num) &#123; size[x] = 1, f[x] = 0; for (int i = head[x]; i != -1; i = edge[i].next) &#123; if (vis[edge[i].to] || edge[i].to == fa)continue; DFS1(edge[i].to, x, num), size[x] += size[edge[i].to], f[x] = max(f[x], size[edge[i].to]); &#125; f[x] = max(f[x], num - f[x]); if (f[x] &lt; minn)minn = f[x], root = x;&#125;inline void findRoot(int x, int num) &#123; minn = 0x7fffffff; DFS1(x, 0, num);&#125;void DFS2(int x, int fa, int v) &#123; dict[cntDFS++] = v; for (int i = head[x]; i != -1; i = edge[i].next) &#123; if (vis[edge[i].to] || edge[i].to == fa)continue; DFS2(edge[i].to, x, v + edge[i].v); &#125;&#125;int find1(int l, int r, int p) &#123;//(,] if (l + 1 &gt; r)return -1; if (r == l + 1) &#123; if (dict[r] == p)return r; return -1; &#125; int mid = (l + r) &gt;&gt; 1; if (dict[mid] &gt;= p)return find1(l, mid, p); return find1(mid, r, p);&#125;int find2(int l, int r, int p) &#123;//[,) if (l + 1 &gt; r)return -1; if (r == l + 1) &#123; if (dict[l] == p)return l; return -1; &#125; int mid = (l + r) &gt;&gt; 1; if (dict[mid] &lt;= p)return find2(mid, r, p); return find2(l, mid, p);&#125;inline void work(int x, int p, int w) &#123; cntDFS = 1, DFS2(x, 0, 0), sort(dict + 1, dict + cntDFS); for (int i = 1; i &lt;= m; i++) &#123; for (int j = 1; j &lt; cntDFS; j++) &#123; int l = find1(0, j - 1, query[i] - p - dict[j]), r = find2(1, j, query[i] - p - dict[j]); if (l != -1 &amp;&amp; r != -1)ans[i] += (r - l + 1) * w; &#125; &#125;&#125;void divide(int x) &#123; work(x, 0, 1), vis[x] = 1; for (int i = head[x]; i != -1; i = edge[i].next) &#123; if (vis[edge[i].to])continue; work(edge[i].to, 2 * edge[i].v, -1); findRoot(edge[i].to, size[edge[i].to]), divide(root); &#125;&#125;int main() &#123; n = read(), m = read(); for (int i = 1; i &lt;= n; i++)head[i] = -1; for (int i = 1; i &lt; n; i++)a = read(), b = read(), c = read(), add(a, b, c), add(b, a, c); for (int i = 1; i &lt;= m; i++)query[i] = read(); findRoot(1, n), divide(root); for (int i = 1; i &lt;= m; i++) &#123; if (ans[i] &gt; 0)cout &lt;&lt; "AYE" &lt;&lt; endl; else cout &lt;&lt; "NAY" &lt;&lt; endl; &#125; return 0;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前面提到了双指针扫描法，这其实是一种技巧。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;给定一串数，如何找是否存在某个数对之和为k？&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;先排序然后枚举二分在$O(nlogn)$下解决当然可以，但我们也可以这样做：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;先取两个指针l、r分别指向第一个元素和最后一个元素，然后判断： 若两个指针所指元素之和小于k，l++ 若两个指针所指元素之和大于k，r— 若两个指针所指元素之和等于k，找到答案 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这种方法对于是否存在的问题是很高效的，但计数并不易做到。快速排序中也有双指针的应用。]]></content>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点分治是一类解决树上路径问题的算法，下面以判断树中是否存在长度为k的路径这一问题来介绍点分治算法。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面是一棵树（边权未标出）：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于一个路径，我们可以把它归结为两类：经过根节点和不经过根节点。对于不经过根节点的路径，总可以找到一个新的根节点使之经过根节点。比如图中EBF这一路径没有经过根节点A，但是它经过了子树的根节点B。因此所有路径都可以归结到第一种（也就是经过根节点），于是可以通过不同根结点来判别各种路径。这里体现了分治的思想。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面来看看点分治的操作： 确定树根&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们一开始得到的树通常是无根树，即使是有根树也可以发现答案与树根的选取无关。不妨选取一个点为根使得树尽量平衡，递归次数尽量少。这个点显然是树的重心。重心可以通过一遍DFS求出。关于树的重心见这篇文章。 从树根开始进行分治&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里就是点分治的核心了，先来看看代码模板：12345678910void divide(int x) &#123; work();//第一个work vis[x] = 1; for (int i = head[x]; i != -1; i = edge[i].next) &#123; if (vis[edge[i].to])continue; work();//第二个work findRoot(edge[i].to); divide(root); &#125;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;该函数中x为现在树的树根编号。vis[x]=1标记该点已经被使用，下面遍历出边。当前函数处理的是经过点x的路径，所以对于出点（也就是子树的树根），我们需要对其进行递归处理（也就是处理经过子树树根的路径），发现这与原树是一个性质的问题，因此可以递归处理：先找重心（这里就相当于对子树重新选根构造）再递归。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样分治会不会重呢？也就是同一条路径被多次处理？答案当然是不会，因为我们的路径处理只是在以该点为根的子树上。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;两个work函数做什么？这就是处理经过点x的路径的函数。此时可能会有疑问：按理说只需要开头有一个work函数处理就可以了，为什么还要对每一个子结点再work一次？后一个work函数并不是子树的递归处理，而是去重。work函数与问题的性质有关，需要自己设计。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;先来讨论本问题中如何处理work函数。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本问题中我们需要找有没有长度为k的路径。那么在work函数中先求出所有点（包括本身，路径长当然是0）到根节点x的路径长，然后如果两个互异点的路径长之和等于k，那么就可以判定存在长度为k的路径。求长度需要$O(n)$，互异点枚举需要$O(n^2)$。效率太低如何解决？先在$O(nlogn)$复杂度下对路径长进行排序，然后枚举每一个点进行二分，可以降低时间复杂度为$O(nlogn)$。当然还有更好的解决方法，那就是双指针扫描，时间复杂度$O(n)$，关于该技巧见本文末。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样就完了吗？当然不会，还有前面提到的去重操作！注意到上面给出的图中，当处理点A时，若E到A的距离和F到A的距离之和是k，我们会认为这是一条合法的路径，但事实上它有重边，并不合法，因此需要将这条非法边去除。在第一个work函数中肯定无法知晓哪些点对是合法的，哪些是非法的，因此只能通过容斥原理来将非法边去除，这就是第二个work所做的事情。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如何在第二个work中统计非法边个数呢？注意到非法点对一定在同一子树中，并且凡是来源于子树B的非法点对（x,y），它们都满足： dict[x]+dict[y]+2v(A,B)=k&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v(A,B)是A点与B点之间连边的权值。这样我们在B子树中找到距离和（这里的距离就是到B的距离了，需要重求）为k-2v(A,B)的点对数量，再在答案中减去就可以了。由于两个work拥有同样的功能（都是求符合条件的点对数），因此这两个work可以用一个函数去处理。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面给出洛谷P3806点分治模板题的示例代码：123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899#include&lt;bits/stdc++.h&gt;#define N 10005using namespace std;struct Edge &#123; int to, next, v;&#125; edge[N * 2];int head[N], vis[N], cnt = 1, n, m, ans[105], a, b, c, root, minn, size[N], f[N], dict[N], cntDFS;int query[105];inline int read() &#123; char e = getchar(); int s = 0; while (e &lt; '0' || e &gt; '9')e = getchar(); while (e &gt;= '0' &amp;&amp; e &lt;= '9')s = s * 10 + e - '0', e = getchar(); return s;&#125;inline void add(int x, int y, int z) &#123; edge[cnt].to = y, edge[cnt].v = z, edge[cnt].next = head[x], head[x] = cnt++;&#125;void DFS1(int x, int fa, int num) &#123; size[x] = 1, f[x] = 0; for (int i = head[x]; i != -1; i = edge[i].next) &#123; if (vis[edge[i].to] || edge[i].to == fa)continue; DFS1(edge[i].to, x, num), size[x] += size[edge[i].to], f[x] = max(f[x], size[edge[i].to]); &#125; f[x] = max(f[x], num - f[x]); if (f[x] &lt; minn)minn = f[x], root = x;&#125;inline void findRoot(int x, int num) &#123; minn = 0x7fffffff; DFS1(x, 0, num);&#125;void DFS2(int x, int fa, int v) &#123; dict[cntDFS++] = v; for (int i = head[x]; i != -1; i = edge[i].next) &#123; if (vis[edge[i].to] || edge[i].to == fa)continue; DFS2(edge[i].to, x, v + edge[i].v); &#125;&#125;int find1(int l, int r, int p) &#123;//(,] if (l + 1 &gt; r)return -1; if (r == l + 1) &#123; if (dict[r] == p)return r; return -1; &#125; int mid = (l + r) &gt;&gt; 1; if (dict[mid] &gt;= p)return find1(l, mid, p); return find1(mid, r, p);&#125;int find2(int l, int r, int p) &#123;//[,) if (l + 1 &gt; r)return -1; if (r == l + 1) &#123; if (dict[l] == p)return l; return -1; &#125; int mid = (l + r) &gt;&gt; 1; if (dict[mid] &lt;= p)return find2(mid, r, p); return find2(l, mid, p);&#125;inline void work(int x, int p, int w) &#123; cntDFS = 1, DFS2(x, 0, 0), sort(dict + 1, dict + cntDFS); for (int i = 1; i &lt;= m; i++) &#123; for (int j = 1; j &lt; cntDFS; j++) &#123; int l = find1(0, j - 1, query[i] - p - dict[j]), r = find2(1, j, query[i] - p - dict[j]); if (l != -1 &amp;&amp; r != -1)ans[i] += (r - l + 1) * w; &#125; &#125;&#125;void divide(int x) &#123; work(x, 0, 1), vis[x] = 1; for (int i = head[x]; i != -1; i = edge[i].next) &#123; if (vis[edge[i].to])continue; work(edge[i].to, 2 * edge[i].v, -1); findRoot(edge[i].to, size[edge[i].to]), divide(root); &#125;&#125;int main() &#123; n = read(), m = read(); for (int i = 1; i &lt;= n; i++)head[i] = -1; for (int i = 1; i &lt; n; i++)a = read(), b = read(), c = read(), add(a, b, c), add(b, a, c); for (int i = 1; i &lt;= m; i++)query[i] = read(); findRoot(1, n), divide(root); for (int i = 1; i &lt;= m; i++) &#123; if (ans[i] &gt; 0)cout &lt;&lt; "AYE" &lt;&lt; endl; else cout &lt;&lt; "NAY" &lt;&lt; endl; &#125; return 0;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前面提到了双指针扫描法，这其实是一种技巧。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;给定一串数，如何找是否存在某个数对之和为k？&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;先排序然后枚举二分在$O(nlogn)$下解决当然可以，但我们也可以这样做：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;先取两个指针l、r分别指向第一个元素和最后一个元素，然后判断： 若两个指针所指元素之和小于k，l++ 若两个指针所指元素之和大于k，r— 若两个指针所指元素之和等于k，找到答案 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这种方法对于是否存在的问题是很高效的，但计数并不易做到。快速排序中也有双指针的应用。]]></content>
       <categories>
         <category>算法与OI</category>
       </categories>
       <tags>
         <tag>提高算法</tag>
         <tag>树</tag>
+        <tag>点分治</tag>
       </tags>
   </entry>
   <entry>
@@ -21,9 +49,9 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
-        <tag>动态规划</tag>
         <tag>数据结构</tag>
         <tag>树</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -35,8 +63,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>线段树</tag>
         <tag>数据结构</tag>
+        <tag>线段树</tag>
       </tags>
   </entry>
   <entry>
@@ -47,8 +75,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>网络流</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -59,8 +87,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>网络流</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -82,8 +110,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>字符串</tag>
         <tag>提高算法</tag>
+        <tag>字符串</tag>
       </tags>
   </entry>
   <entry>
@@ -117,9 +145,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
+        <tag>提高算法</tag>
         <tag>图论</tag>
         <tag>图的最短路</tag>
-        <tag>提高算法</tag>
         <tag>差分约束</tag>
       </tags>
   </entry>
@@ -155,8 +183,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>图论</tag>
         <tag>基础算法</tag>
+        <tag>图论</tag>
       </tags>
   </entry>
   <entry>
@@ -167,8 +195,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>图论</tag>
         <tag>基础算法</tag>
+        <tag>图论</tag>
         <tag>强连通分量</tag>
       </tags>
   </entry>
@@ -465,9 +493,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>字符串</tag>
         <tag>提高算法</tag>
         <tag>动态规划</tag>
+        <tag>字符串</tag>
       </tags>
   </entry>
   <entry>
@@ -515,8 +543,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>树</tag>
+        <tag>动态规划</tag>
         <tag>背包问题</tag>
       </tags>
   </entry>
@@ -566,9 +594,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
+        <tag>提高算法</tag>
         <tag>图论</tag>
         <tag>图的最短路</tag>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
         <tag>数学期望</tag>
       </tags>
@@ -697,9 +725,9 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>倍增</tag>
         <tag>树</tag>
         <tag>LCA</tag>
+        <tag>倍增</tag>
       </tags>
   </entry>
   <entry>
@@ -736,8 +764,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>图论</tag>
         <tag>基础算法</tag>
+        <tag>图论</tag>
         <tag>图的最短路</tag>
       </tags>
   </entry>
@@ -749,8 +777,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>图论</tag>
         <tag>基础算法</tag>
+        <tag>图论</tag>
         <tag>图的最短路</tag>
       </tags>
   </entry>
@@ -903,8 +931,8 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
-        <tag>线段树</tag>
         <tag>数据结构</tag>
+        <tag>线段树</tag>
       </tags>
   </entry>
   <entry>
