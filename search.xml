@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[FHQ Treap]]></title>
+    <url>%2F2019%2F03%2F03%2FFHQTreap%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本文介绍fhq Treap的相关内容，是Treap（树堆）的延伸。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另外本文仅涉及普通平衡树和文艺平衡树的内容，暂不涉及可持久化平衡树，关于可持久化会有单独的文章（以后更新）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fhq Treap是非旋的树堆，具有易实现，功能强大的优点，支持可持久化和文艺平衡树操作。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fhq Treap中允许有相同权值的两个结点，因此每个结点不再有标记数量的s，也可以理解成每个结点的s一定为1。此时BST可以定义为左子树结点的值都不大于该结点，右子树都不小于该结点。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在上一篇文章中提到了Treap（树堆）的原理：利用优先级的随机性来保持树结构的随机性。fhq Treap是非旋的树堆，它自然没有旋转操作，而有另外的两个核心操作：分离（split）和合并（merge）。 分离操作&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;分离是指将一个treap分成两个treap，常用的分离标准有两种：按值分离和按数量分离。 按值分离&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;按值分离常常用于普通平衡树（普通平衡树就是上一篇文章提到的那些操作）。给定一个值val，需要将treap分离成两个，其中一个树中所有点权值都不大于val（称树a），另一个全都大于val（称树b）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假如现在需要分离以rt结点为根的treap，分离后的treap的根是a和b（a和b一开始是未赋值的）。如果rt的权值不大于val，说明rt结点应该在树a中，容易知道rt结点的左子树也应该在树a中，那么不妨将rt作为树a的根结点。此时rt结点及其左子树已经得到了“归属”，下面的问题就是求树b的根，求树a的右子树，于是继续分离rt结点的右子树，这是一个递归过程。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是就可以得到下面的分离代码：123456789void split(int rt, int &amp;a, int &amp;b, int v) &#123; if (rt == 0) &#123;//不需分离时，a和b都是空树 a = b = 0; return; &#125; if (node[rt].v &lt;= v)a = rt, split(node[rt].ch[1], node[a].ch[1], b, v); else b = rt, split(node[rt].ch[0], a, node[b].ch[0], v); update(rt);&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这就是分离的函数实现，注意最后需要更新rt的num。split函数巧妙地利用了引用使得代码十分优雅。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;容易看出分离过程不会破坏BST的性质和堆的性质。 按数量分离&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;给定数量v，将treap中前v小的数分离到树a中，其余分离到树b中，这就是按数量分离。为什么还要学按数量分离呢？因为这是文艺平衡树的关键实现原理。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;和按值分离原理类似。假设现在需要分离以rt为根的treap，如果rt左子树的结点数量（由于s为1，故结点数量就是数的数量）小于v，那么易知rt结点及其左子树都应该分到树a中，然后进行递归分离。如果左子树结点数量不小于v，那么rt结点及其右子树应该分到树b中。123456789void split(int rt, int &amp;a, int &amp;b, int v) &#123; if (rt == 0) &#123; a = b = 0; return; &#125; if (node[node[rt].ch[0]].num &lt; v)a = rt, split(node[rt].ch[1], node[a].ch[1], b, v - node[node[rt].ch[0]].num - 1); else b = rt, split(node[rt].ch[0], a, node[b].ch[0], v); update(rt);&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里有一处需要注意：在分离右子树时，v需要进行更新。 合并操作&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;合并操作就是将树a和树b合并为一个treap，合并操作有一个前提：树a中的所有值不能大于树b中的值。无论采用按值分离方法还是按数量分离方法都是满足这个条件的。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于树b上的数一定不小于树a，那么也不小于树a的根结点，那么合并a和b的问题就是把b合并到a的右子树上。当然也可以选择把a合并到b的左子树上，这于是就是一个递归问题。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;选择任何一个都可以吗？显然不是，因为还要满足堆的性质。两棵树都是满足堆的性质的，此时如果树a的根节点优先级更高，则应合并a的右子树和b，否则合并b的左子树和a。123456789void merge(int &amp;rt, int a, int b) &#123;//rt是合并后的树根 if (a == 0 || b == 0) &#123;//其中任何一个为0直接赋值即可 rt = a + b;//赋值不为0的那一个，这是一处巧妙的写法 return; &#125; if (node[a].key &gt; node[b].key)rt = a, merge(node[rt].ch[1], node[a].ch[1], b); else rt = b, merge(node[rt].ch[0], a, node[b].ch[0]); update(rt);&#125; 插入元素&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;有了split和merge就可以很容易地实现插入、删除操作。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;要插入值为val的点，需要先新建一个值为val的点，假设新结点编号为p。在原treap上按val的值进行分离，分离成不大于val的treap和大于val的treap，然后合并树a和p，再合并树a和树b即可。1234567891011int addNode(int x) &#123;//分配新结点编号 node[++cnt].v = x, node[cnt].ch[0] = node[cnt].ch[1] = 0; node[cnt].num = 1, node[cnt].key = rand(); return cnt;&#125;void insert(int x) &#123;//插入元素 int p = addNode(x), a, b; split(root, a, b, x); merge(a, a, p); merge(root, a, b);&#125; 删除元素&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将原treap按val值分离成树a和树b，再将树a按值val-1分离成树c和树d。这样树d就是由全体val值结点组成的，合并树d的左子树和右子树（相当于删除根结点），再与树c和树b合并即可。12345678void delNum(int x) &#123; int a, b, c;//这里没有建变量d，为了重用变量 split(root, a, b, x);//分离root产生树a和树b split(a, a, c, x - 1);//分离a产生a和c（重用变量a） merge(c, node[c].ch[0], node[c].ch[1]);//合并c的左右子树到c中 merge(a, a, c);//将c合并到a中 merge(root, a, b);//将a、b合并到root中&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;之后的操作（如查找前驱后继等等）与普通treap相比没有变化。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面介绍fhq Treap的另一个功能：文艺平衡树。有洛谷模板题。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所谓文艺平衡树就是实现这样一个功能：给定一个区间，不断翻转其中的某一段子区间，求最后的区间序列。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当我们需要翻转[l,r]区间时，首先按数量分离原有treap，分离成[1,l-1]、[l,r]、[r+1,n]三段区间，然后给[l,r]打上翻转标记，再将它们合并。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;翻转标记如同线段树中的lazy标记，表示以这个点为根的树需要翻转，该标记仅有0和1两种取值。它同时也有down函数来完成下压标记操作：123456inline void down(int x) &#123; swap(node[x].ch[0], node[x].ch[1]);//交换左右子树 node[node[x].ch[0]].lazy ^= 1;//打上标记 node[node[x].ch[1]].lazy ^= 1; node[x].lazy = 0;//清空标记&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样我们的split和merge函数也应该带上下压操作：12345678910111213141516171819202122232425void split(int rt, int &amp;a, int &amp;b, int v) &#123; if (rt == 0) &#123; a = b = 0; return; &#125; if (node[rt].lazy)down(rt);//下压标记 if (node[node[rt].ch[0]].num &lt; v)a = rt, split(node[rt].ch[1], node[a].ch[1], b, v - node[node[rt].ch[0]].num - 1); else b = rt, split(node[rt].ch[0], a, node[b].ch[0], v); update(rt);&#125;void merge(int &amp;rt, int a, int b) &#123; if (a == 0 || b == 0) &#123; rt = a + b; return; &#125; if (node[a].key &gt; node[b].key) &#123; if (node[a].lazy)down(a);//下压标记 rt = a, merge(node[a].ch[1], node[a].ch[1], b); &#125; else &#123; if (node[b].lazy)down(b);//下压标记 rt = b, merge(node[b].ch[0], a, node[b].ch[0]); &#125; update(rt);&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;问题来了：交换左右子树难道不会违反BST性质？答案是肯定会违反的，但我们应该从一个更高的高度去理解BST。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BST左子树权值不大于该结点实质上是左子树结点的权重不大于该结点，权值不一定代表权重。因此翻转左右子树实质上就是认为左右结点的权重发生了调换。我们的merge函数和按数量分离的split函数不会改变原有的权重关系，而不是权值关系，因此翻转后再进行split或者merge等操作并不会影响翻转的结果。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但容易看出，按值分离函数是按照权值关系进行的，所以在文艺平衡树进行中不能有按值分离操作。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输出最后的结果相当容易，只需一次中序遍历即可，记得下压标记：1234567void print(int x) &#123; if (!x)return; if (node[x].lazy)down(x); print(node[x].ch[0]); cout &lt;&lt; node[x].v &lt;&lt; " "; print(node[x].ch[1]);&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;扩展：洛谷模板题中原有的序列是1~n，这个序列很特殊以至于我们可以先插入这几个元素再按文艺平衡树进行操作。但是如果原有序列是随机的呢？由于插入操作需要按值分离split函数，这个函数基于权值关系，插入后原有序列关系就被打乱了。洛谷模板题之所以可以直接插入是因为权值正好就是权重。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一种方法是构造1~n到原有序列的映射，再将1~n插入treap中，进行区间操作，输出时映射回来即可。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下附洛谷模板题AC代码：123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105#include&lt;bits/stdc++.h&gt;using namespace std;struct Node &#123; int ch[2], v, num, key, lazy; Node() : num(0) &#123; lazy = ch[0] = ch[1] = 0; &#125;&#125; node[100005];int root = 0, cnt = 0;inline void update(int x) &#123; node[x].num = node[node[x].ch[0]].num + node[node[x].ch[1]].num + 1;&#125;inline int addNode(int x) &#123; node[++cnt].v = x, node[cnt].ch[0] = node[cnt].ch[1] = 0; node[cnt].num = 1, node[cnt].key = rand(); return cnt;&#125;inline void down(int x) &#123; swap(node[x].ch[0], node[x].ch[1]); node[node[x].ch[0]].lazy ^= 1; node[node[x].ch[1]].lazy ^= 1; node[x].lazy = 0;&#125;void split(int rt, int &amp;a, int &amp;b, int v) &#123;//按数量分离 if (rt == 0) &#123; a = b = 0; return; &#125; if (node[rt].lazy)down(rt); if (node[node[rt].ch[0]].num &lt; v)a = rt, split(node[rt].ch[1], node[a].ch[1], b, v - node[node[rt].ch[0]].num - 1); else b = rt, split(node[rt].ch[0], a, node[b].ch[0], v); update(rt);&#125;void merge(int &amp;rt, int a, int b) &#123; if (a == 0 || b == 0) &#123; rt = a + b; return; &#125; if (node[a].key &gt; node[b].key) &#123; if (node[a].lazy)down(a); rt = a, merge(node[a].ch[1], node[a].ch[1], b); &#125; else &#123; if (node[b].lazy)down(b); rt = b, merge(node[b].ch[0], a, node[b].ch[0]); &#125; update(rt);&#125;void solve(int l, int r) &#123;//翻转函数 int a, b, c; split(root, a, b, l - 1); split(b, b, c, r - l + 1); node[b].lazy ^= 1; merge(a, a, b), merge(root, a, c);&#125;void split2(int rt, int &amp;a, int &amp;b, int v) &#123;//按值分离 if (rt == 0) &#123; a = b = 0; return; &#125; if (node[rt].v &lt;= v)a = rt, split2(node[rt].ch[1], node[a].ch[1], b, v); else b = rt, split2(node[rt].ch[0], a, node[b].ch[0], v); update(rt);&#125;inline void insert(int x) &#123;//插入 int p = addNode(x), a, b; split2(root, a, b, x); merge(a, a, p); merge(root, a, b);&#125;void print(int x) &#123;//输出 if (!x)return; if (node[x].lazy)down(x); print(node[x].ch[0]); cout &lt;&lt; node[x].v &lt;&lt; " "; print(node[x].ch[1]);&#125;int main() &#123; ios::sync_with_stdio(false); srand(static_cast&lt;unsigned int&gt;(time(nullptr))); int n, m; cin &gt;&gt; n &gt;&gt; m; for (int i = 1; i &lt;= n; i++)insert(i);//把1~n插入到treap中 for (int i = 1; i &lt;= m; i++) &#123; int x, y; cin &gt;&gt; x &gt;&gt; y; solve(x, y); &#125; print(root); return 0;&#125;]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>提高算法</tag>
+        <tag>数据结构</tag>
+        <tag>平衡树</tag>
+        <tag>树</tag>
+        <tag>文艺平衡树</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Treap（树堆）]]></title>
     <url>%2F2019%2F03%2F03%2FTreap%EF%BC%88%E6%A0%91%E5%A0%86%EF%BC%89%2F</url>
     <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本文是Splay（伸展树）的后续。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在介绍Splay时，已经提及了BST的概念。BST在最坏情况下会达到$O(n)$复杂度，于是有各种使其平衡的方法，Treap就是一种，它也属于平衡树，比Splay要更易实现。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Splay是通过伸展操作来使树的结构随机化，以达到均摊$O(logn)$的复杂度。Treap是通过在维护BST时同时维护堆来实现结构的随机化。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所谓Treap就是Tree+Heap，故称树堆。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;先来看看Treap的结点结构体定义，和Splay类似：1234567struct Node &#123; int v&#123;&#125;, key&#123;&#125;, ch[2]&#123;&#125;, s, num; Node() : num(0), s(0) &#123; ch[0] = ch[1] = 0; &#125;&#125; node[100005]; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;没记录父结点？是的，在Treap中不需要记录父结点信息。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另外还可以发现多了一个key，key记录这个结点的优先级。刚才已经提到，Treap是树与堆的结合（这里的堆不再是完全二叉树，只要有堆的性质即可），所谓堆的性质就是：所有结点的优先级不得小于其子结点优先级。这当然是大根堆，用小根堆也是可以的，本文中使用大根堆。我们在维护BST的同时还要满足堆的要求。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;key应该如何赋值？在插入一个新结点时，会给它分配一个随机的优先值，这个可以通过rand()函数来实现。从这里就可以看出Treap的原理：通过优先级的随机性来保持树结构的随机性。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面的函数，若无特殊说明，函数都采用与Splay中相同的命名。 旋转操作&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Treap中同样有旋转操作。当某结点不满足堆的性质时（比如它的优先级大于父结点），就需要进行一次旋转，将其旋转到父结点的位置。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Treap中只有左旋和右旋，没有Splay中双旋的概念。1234void rotate(int &amp;x, int w) &#123; int c1 = node[x].ch[w], c2 = node[c1].ch[w ^ 1]; node[x].ch[w] = c2, node[c1].ch[w ^ 1] = x, node[c1].num = node[x].num, update(x), x = c1;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面就是旋转函数的定义，它的作用是将编号为x的结点旋转下去，方向为w（1为左旋），这和splay中的旋转上去有所不同。但事实上将子结点旋转上去就是把父结点旋转下来。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里有一些值得注意的细节。一处是node[c1].num = node[x].num，这其实就是update(c1)的简略写法。另外还有x=c1，这里巧妙地使用引用来实现我们在Splay中旋转的第三步。 插入操作&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Treap中的插入是基于递归的，代码如下：1234567891011121314151617void insert(int &amp;x, int v) &#123; if (!x) &#123;//空结点，新建结点 x = cnt++; node[x].v = v, node[x].s = 1, node[x].num = 1, node[x].key = rand(); node[x].ch[0] = node[x].ch[1] = 0; return; &#125; node[x].num++;//路过的结点都要更新num if (node[x].v == v)node[x].s++;//找到直接更新s else if (node[x].v &lt; v) &#123;//找右树 insert(node[x].ch[1], v); if (node[node[x].ch[1]].key &gt; node[x].key)rotate(x, 1);//旋转，维护堆的性质 &#125; else &#123;//找左树 insert(node[x].ch[0], v); if (node[node[x].ch[0]].key &gt; node[x].key)rotate(x, 0); &#125;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;它的作用是在以结点x为根的子树上插入值为v的结点。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当x为0时，说明这里是一个空结点，此时新建结点，更新信息，分配优先级。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另外，所有经过的结点都需要更新num。其次在递归回溯后需要检查堆的性质是否满足，如果不满足就需要旋转来调整。从这里可以看出引用的技巧性。 删除操作1234567891011121314void del(int &amp;x, int v) &#123; if (!x)return;//空结点无需继续 if (node[x].v == v) &#123;//找到该结点 if (node[x].s &gt; 1) node[x].num--, node[x].s--;//直接更新值 else &#123;//需要删除结点 if (!node[x].ch[0] &amp;&amp; !node[x].ch[1])x = 0;//没有儿子，直接赋值0 else if (!node[x].ch[0])x = node[x].ch[1];//有右儿子，将右儿子移过来 else if (!node[x].ch[1])x = node[x].ch[0];//有左儿子，将左儿子移过来 else if (node[node[x].ch[0]].key &lt; node[node[x].ch[1]].key)rotate(x, 1), del(x, v);//将优先级大的旋转上去，递归 else rotate(x, 0), del(x, v); &#125; &#125; else if (node[x].v &gt; v)node[x].num--, del(node[x].ch[0], v);//找左树 else node[x].num--, del(node[x].ch[1], v);//找右树&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Treap的删除操作基于分类讨论，有这几种情况（只考虑完全删除的情况，s自减一不考虑）： 若该结点没有儿子，直接删除 若结点仅有右儿子，则左儿子代替其位置。仅有左儿子同理。 若结点有两个儿子，则将优先级大的一个旋转到该结点位置，再递归进行删除。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里的一个易错点是每一个经过的结点需要更新num，但是上面的分类讨论中不需要更新，因为上面的分类讨论过程只是更改了一下树的结构。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其余的操作与Splay完全相同。]]></content>
@@ -8,9 +23,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>平衡树</tag>
         <tag>提高算法</tag>
         <tag>数据结构</tag>
+        <tag>平衡树</tag>
         <tag>树</tag>
       </tags>
   </entry>
@@ -22,9 +37,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>平衡树</tag>
         <tag>提高算法</tag>
         <tag>数据结构</tag>
+        <tag>平衡树</tag>
         <tag>树</tag>
       </tags>
   </entry>
@@ -89,8 +104,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>网络流</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -101,8 +116,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>网络流</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -474,11 +489,11 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
-        <tag>数据结构</tag>
         <tag>区间最值</tag>
-        <tag>区间</tag>
+        <tag>数据结构</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
+        <tag>区间</tag>
       </tags>
   </entry>
   <entry>
@@ -493,9 +508,9 @@
         <tag>区间最值</tag>
         <tag>ST表</tag>
         <tag>动态规划</tag>
-        <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
+        <tag>区间</tag>
         <tag>矩阵</tag>
       </tags>
   </entry>
@@ -753,8 +768,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>数据结构</tag>
         <tag>区间最值</tag>
+        <tag>数据结构</tag>
         <tag>ST表</tag>
       </tags>
   </entry>
