@@ -117,25 +117,25 @@
 
 
 
-  <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;这篇文章是简单博弈论和SG定理的延伸。本次介绍博弈论中阶梯Nim游戏及其转化性质。">
-<meta name="keywords" content="博弈论">
+  <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本文是Splay（伸展树）的后续。">
+<meta name="keywords" content="平衡树,提高算法,数据结构,树">
 <meta property="og:type" content="article">
-<meta property="og:title" content="阶梯Nim">
-<meta property="og:url" content="https://twifor.github.io/2019/01/23/阶梯Nim/index.html">
+<meta property="og:title" content="Treap（树堆）">
+<meta property="og:url" content="https://twifor.github.io/2019/03/03/Treap（树堆）/index.html">
 <meta property="og:site_name" content="Twifor~Liyh">
-<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;这篇文章是简单博弈论和SG定理的延伸。本次介绍博弈论中阶梯Nim游戏及其转化性质。">
+<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本文是Splay（伸展树）的后续。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-23T15:21:01.851Z">
+<meta property="og:updated_time" content="2019-03-03T09:02:17.238Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="阶梯Nim">
-<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;这篇文章是简单博弈论和SG定理的延伸。本次介绍博弈论中阶梯Nim游戏及其转化性质。">
+<meta name="twitter:title" content="Treap（树堆）">
+<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本文是Splay（伸展树）的后续。">
 
 
 
 
 
 
-  <link rel="canonical" href="https://twifor.github.io/2019/01/23/阶梯Nim/">
+  <link rel="canonical" href="https://twifor.github.io/2019/03/03/Treap（树堆）/">
 
 
 
@@ -145,7 +145,7 @@
   };
 </script>
 
-  <title>阶梯Nim | Twifor~Liyh</title>
+  <title>Treap（树堆） | Twifor~Liyh</title>
   
 
 
@@ -361,7 +361,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://twifor.github.io/2019/01/23/阶梯Nim/">
+    <link itemprop="mainEntityOfPage" href="https://twifor.github.io/2019/03/03/Treap（树堆）/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Twifor">
@@ -378,7 +378,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">阶梯Nim
+          <h1 class="post-title" itemprop="name headline">Treap（树堆）
 
               
             
@@ -404,7 +404,7 @@
                 
               
 
-              <time title="创建时间：2019-01-23 22:56:32" itemprop="dateCreated datePublished" datetime="2019-01-23T22:56:32+08:00">2019-01-23</time>
+              <time title="创建时间：2019-03-03 14:23:34" itemprop="dateCreated datePublished" datetime="2019-03-03T14:23:34+08:00">2019-03-03</time>
             
 
             
@@ -421,7 +421,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-23 23:21:01" itemprop="dateModified" datetime="2019-01-23T23:21:01+08:00">2019-01-23</time>
+                <time title="修改时间：2019-03-03 17:02:17" itemprop="dateModified" datetime="2019-03-03T17:02:17+08:00">2019-03-03</time>
               
             
           </span>
@@ -453,8 +453,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/01/23/阶梯Nim/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/01/23/阶梯Nim/" itemprop="commentCount"></span>
+                <a href="/2019/03/03/Treap（树堆）/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/03/03/Treap（树堆）/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -482,12 +482,20 @@
       
 
       
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这篇文章是<a href="https://twifor.github.io/2019/01/22/%E7%AE%80%E5%8D%95%E5%8D%9A%E5%BC%88%E8%AE%BA%E5%92%8CSG%E5%AE%9A%E7%90%86/">简单博弈论和SG定理</a>的延伸。本次介绍博弈论中阶梯Nim游戏及其转化性质。<br><a id="more"></a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先认识什么是阶梯Nim游戏。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;给定几个阶梯，编号为1~n，每一个阶梯上有若干个石子。你和队手轮流任意选取一个有石子的阶梯，将任意数量（至少为1）个石子移动到下一个阶梯上（从编号为i的阶梯拿到i-1阶梯上，如果i=1，则直接拿走石子），首先拿走所有石子的一方胜利。给定阶梯数和每一个阶梯上的石子数，若你先手，如何判断你是否必胜策略？<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;阶梯Nim游戏有一个简洁的性质：阶梯Nim游戏的必胜必败性质（P/N性质）与在奇数编号阶梯上做Nim游戏的性质相同。以操作为证明：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果在奇数阶梯上Nim游戏必胜，那么你可以采取以下策略：</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本文是<a href="https://twifor.github.io/2019/03/02/Splay%EF%BC%88%E4%BC%B8%E5%B1%95%E6%A0%91%EF%BC%89/">Splay（伸展树）</a>的后续。<br><a id="more"></a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在介绍Splay时，已经提及了BST的概念。BST在最坏情况下会达到$O(n)$复杂度，于是有各种使其平衡的方法，Treap就是一种，它也属于平衡树，比Splay要更易实现。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Splay是通过伸展操作来使树的结构随机化，以达到均摊$O(logn)$的复杂度。Treap是通过在维护BST时同时维护堆来实现结构的随机化。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所谓Treap就是Tree+Heap，故称树堆。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;先来看看Treap的结点结构体定义，和Splay类似：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> v&#123;&#125;, key&#123;&#125;, ch[<span class="number">2</span>]&#123;&#125;, s, num;</span><br><span class="line"></span><br><span class="line">    Node() : num(<span class="number">0</span>), s(<span class="number">0</span>) &#123;</span><br><span class="line">        ch[<span class="number">0</span>] = ch[<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; node[<span class="number">100005</span>];</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;没记录父结点？是的，在Treap中不需要记录父结点信息。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另外还可以发现多了一个key，key记录这个结点的优先级。刚才已经提到，Treap是树与堆的结合（这里的堆不再是完全二叉树，只要有堆的性质即可），所谓堆的性质就是：<strong>所有结点的优先级不得小于其子结点优先级</strong>。这当然是大根堆，用小根堆也是可以的，本文中使用大根堆。我们在维护BST的同时还要满足堆的要求。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;key应该如何赋值？在插入一个新结点时，会给它分配一个随机的优先值，这个可以通过rand()函数来实现。从这里就可以看出Treap的原理：通过优先级的随机性来保持树结构的随机性。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面的函数，若无特殊说明，函数都采用与Splay中相同的命名。</p>
+<h4 id="旋转操作"><a href="#旋转操作" class="headerlink" title="旋转操作"></a>旋转操作</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Treap中同样有旋转操作。当某结点不满足堆的性质时（比如它的优先级大于父结点），就需要进行一次旋转，将其旋转到父结点的位置。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Treap中只有左旋和右旋，没有Splay中双旋的概念。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">rotate</span><span class="params">(<span class="keyword">int</span> &amp;x, <span class="keyword">int</span> w)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> c1 = node[x].ch[w], c2 = node[c1].ch[w ^ <span class="number">1</span>];</span><br><span class="line">    node[x].ch[w] = c2, node[c1].ch[w ^ <span class="number">1</span>] = x, node[c1].num = node[x].num, update(x), x = c1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面就是旋转函数的定义，它的作用是<strong>将编号为x的结点旋转下去，方向为w（1为左旋）</strong>，这和splay中的旋转上去有所不同。但事实上将子结点旋转上去就是把父结点旋转下来。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里有一些值得注意的细节。一处是node[c1].num = node[x].num，这其实就是update(c1)的简略写法。另外还有x=c1，这里巧妙地使用引用来实现我们在Splay中旋转的第三步。</p>
+<h4 id="插入操作"><a href="#插入操作" class="headerlink" title="插入操作"></a>插入操作</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Treap中的插入是基于递归的，代码如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="keyword">int</span> &amp;x, <span class="keyword">int</span> v)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!x) &#123;<span class="comment">//空结点，新建结点</span></span><br><span class="line">        x = cnt++;</span><br><span class="line">        node[x].v = v, node[x].s = <span class="number">1</span>, node[x].num = <span class="number">1</span>, node[x].key = rand();</span><br><span class="line">        node[x].ch[<span class="number">0</span>] = node[x].ch[<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    node[x].num++;<span class="comment">//路过的结点都要更新num</span></span><br><span class="line">    <span class="keyword">if</span> (node[x].v == v)node[x].s++;<span class="comment">//找到直接更新s</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (node[x].v &lt; v) &#123;<span class="comment">//找右树</span></span><br><span class="line">        insert(node[x].ch[<span class="number">1</span>], v);</span><br><span class="line">        <span class="keyword">if</span> (node[node[x].ch[<span class="number">1</span>]].key &gt; node[x].key)rotate(x, <span class="number">1</span>);<span class="comment">//旋转，维护堆的性质</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;<span class="comment">//找左树</span></span><br><span class="line">        insert(node[x].ch[<span class="number">0</span>], v);</span><br><span class="line">        <span class="keyword">if</span> (node[node[x].ch[<span class="number">0</span>]].key &gt; node[x].key)rotate(x, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;它的作用是在以结点x为根的子树上插入值为v的结点。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当x为0时，说明这里是一个空结点，此时新建结点，更新信息，分配优先级。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另外，所有经过的结点都需要更新num。其次在递归回溯后需要检查堆的性质是否满足，如果不满足就需要旋转来调整。从这里可以看出引用的技巧性。</p>
+<h4 id="删除操作"><a href="#删除操作" class="headerlink" title="删除操作"></a>删除操作</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">del</span><span class="params">(<span class="keyword">int</span> &amp;x, <span class="keyword">int</span> v)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!x)<span class="keyword">return</span>;<span class="comment">//空结点无需继续</span></span><br><span class="line">    <span class="keyword">if</span> (node[x].v == v) &#123;<span class="comment">//找到该结点</span></span><br><span class="line">        <span class="keyword">if</span> (node[x].s &gt; <span class="number">1</span>) node[x].num--, node[x].s--;<span class="comment">//直接更新值</span></span><br><span class="line">        <span class="keyword">else</span> &#123;<span class="comment">//需要删除结点</span></span><br><span class="line">            <span class="keyword">if</span> (!node[x].ch[<span class="number">0</span>] &amp;&amp; !node[x].ch[<span class="number">1</span>])x = <span class="number">0</span>;<span class="comment">//没有儿子，直接赋值0</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (!node[x].ch[<span class="number">0</span>])x = node[x].ch[<span class="number">1</span>];<span class="comment">//有右儿子，将右儿子移过来</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (!node[x].ch[<span class="number">1</span>])x = node[x].ch[<span class="number">0</span>];<span class="comment">//有左儿子，将左儿子移过来</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (node[node[x].ch[<span class="number">0</span>]].key &lt; node[node[x].ch[<span class="number">1</span>]].key)rotate(x, <span class="number">1</span>), del(x, v);<span class="comment">//将优先级大的旋转上去，递归</span></span><br><span class="line">            <span class="keyword">else</span> rotate(x, <span class="number">0</span>), del(x, v);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (node[x].v &gt; v)node[x].num--, del(node[x].ch[<span class="number">0</span>], v);<span class="comment">//找左树</span></span><br><span class="line">    <span class="keyword">else</span> node[x].num--, del(node[x].ch[<span class="number">1</span>], v);<span class="comment">//找右树</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Treap的删除操作基于分类讨论，有这几种情况（只考虑完全删除的情况，s自减一不考虑）：</p>
 <ul>
-<li>按照Nim游戏的必胜策略将某一奇数阶梯上的一些石子移动到其下的偶数阶梯上（相当于丢弃）。</li>
-<li>若对手也移动奇数阶梯上的石子，他的做法也相当于“配合你做Nim游戏”，即将奇数堆上的石子“丢弃”。</li>
+<li>若该结点没有儿子，直接删除</li>
+<li>若结点仅有右儿子，则左儿子代替其位置。仅有左儿子同理。</li>
+<li>若结点有两个儿子，则将优先级大的一个旋转到该结点位置，再递归进行删除。</li>
 </ul>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;几轮后，你一定可以移动走某个奇数堆上的最后若干颗石子，这时如果偶数堆上没有石子，那么你已经获胜了，否则所有石子都应该在偶数堆上。对于后者的情况，由于之后对手要再进行操作，他只能将某偶数堆上的石子移动到其下的奇数堆上，你只需要把它们再移动到再其下的偶数堆上即可，若如此做，则游戏又回到仅有偶数堆上有石子的局面，然后对手继续移动……经过这样的操作，对手只能将石子从偶数堆移到奇数堆，而你一直将石子从奇数堆移动到偶数堆。而获胜的局面是什么呢？显然是仅有第一堆上有石子，然后将它们拿走（相当于移动到第0堆），这是一个从奇数堆移动石子到偶数堆的操作，这个操作显然只有你（先手）能做，因此先手必胜。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果对手在操作中将偶数堆石子移到奇数堆中又如何做呢？这时只需要将这些石子再移动到再其下的偶数堆即可。两次操作没有影响奇数堆的石子数量，只是影响了偶数堆上石子数目，最终仍可化为上文所述的局面。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;必败的等价性质类似证明即可。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里的一个易错点是每一个经过的结点需要更新num，但是上面的分类讨论中不需要更新，因为上面的分类讨论过程只是更改了一下树的结构。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其余的操作与Splay完全相同。</p>
 
       
     </div>
@@ -511,7 +519,13 @@
       
         <div class="post-tags">
           
-            <a href="/tags/博弈论/" rel="tag"><i class="fa fa-tag"></i>博弈论</a>
+            <a href="/tags/平衡树/" rel="tag"><i class="fa fa-tag"></i>平衡树</a>
+          
+            <a href="/tags/提高算法/" rel="tag"><i class="fa fa-tag"></i>提高算法</a>
+          
+            <a href="/tags/数据结构/" rel="tag"><i class="fa fa-tag"></i>数据结构</a>
+          
+            <a href="/tags/树/" rel="tag"><i class="fa fa-tag"></i>树</a>
           
         </div>
       
@@ -524,8 +538,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/23/洛谷P2575-高手过招/" rel="next" title="[洛谷P2575]高手过招">
-                <i class="fa fa-chevron-left"></i> [洛谷P2575]高手过招
+              <a href="/2019/03/02/Splay（伸展树）/" rel="next" title="Splay（伸展树）">
+                <i class="fa fa-chevron-left"></i> Splay（伸展树）
               </a>
             
           </div>
@@ -533,10 +547,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/01/25/洛谷P1357-花园/" rel="prev" title="[洛谷P1357]花园">
-                [洛谷P1357]花园 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -585,8 +595,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -760,6 +779,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#旋转操作"><span class="nav-number">1.</span> <span class="nav-text">旋转操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#插入操作"><span class="nav-number">2.</span> <span class="nav-text">插入操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除操作"><span class="nav-number">3.</span> <span class="nav-text">删除操作</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
@@ -960,6 +996,48 @@
   
   
 
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+	  preview: 'none'
+    },
+	messageStyle: 'none',
+	"HTML-CSS": {
+      showMathMenu: false //关闭右击菜单显示
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style>
+
+    
   
 
 

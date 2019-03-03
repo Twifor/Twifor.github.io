@@ -1,15 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[Splay（伸展树）]]></title>
-    <url>%2F2019%2F03%2F02%2FSplay%EF%BC%88%E4%BC%B8%E5%B1%95%E6%A0%91%EF%BC%89%2F</url>
-    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本节介绍Splay树的用法与实现。 二叉排序树&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Splay本质上是自平衡的二叉排序树（Binary Sort Tree，BST），是平衡树的一种。因此在了解Splay前必须先了解二叉排序树。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;二叉排序树是指满足以下性质的二叉树： 若左子树不空，则左子树上所有结点的值均小于根结点。 若右子树不空，则右子树上所有结点的值均大于根结点。 左右子树也是BST。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面给出了一个BST的例子：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BST中不允许有相同的数，因此每一个结点都有自己的计数变量（在本文中用s表示）来记录这个数的个数。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另外，BST的左右子树性质不同，因此不能向往常一样把树当图来存，必须基于一定储存结构。这里用结构体来定义树的每一个结点：1234567struct Node &#123; int v, ch[2], s, num, f; Node() : s(0), num(0) &#123; ch[0] = ch[1] = 0; &#125;&#125; node[500005]; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v表示该结点表示的数，ch[0]和ch[1]是左右子树根结点编号，s是数的重数，num是该树所有数的总数量（计入重数），f是其父结点编号。然后开一个数组储存这些结点。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;问题来了，BST有什么用呢？如果我们需要不断加入删除数据，不断地询问某个数的排序序号，查找某个数的前驱或者后继等操作，普通的顺序表效率过低，而链表查找效率硬伤，此时我们就需要BST来完成这些工作。平衡的BST可以在$O(logn)$复杂度下完成这些操作，这是容易理解的。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但如果不平衡呢？当二叉排序树退化成一条链时，各种操作都会退化成$O(n)$复杂度，这是我们不希望看到的，于是就有了各种使BST平衡的方法，Splay就是其中之一。 旋转操作&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;旋转操作是Splay中很重要的操作。旋转的意思就是：将某个结点移动到其父结点的位置，保持BST性质不变。旋转只是树的结构变形，没有实质性改变。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当目标结点是其父结点的左儿子时，需要右旋（称为Zig操作），若为右儿子，需要左旋（称为Zag操作）。下面以右旋为例探讨旋转规律。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;比如我们想把值为2的结点移动到其父结点位置。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发现4比5小，5应该接管以值为4的结点为根的子树，于是：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5比3大，将值为5的结点移动下来作值为3的结点的左儿子（父结点变儿子结点）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然后以3为值的结点替代原父结点位置：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;旋转完成，这就是一次zig操作。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;无论左旋还是右旋，都可以发现旋转分为三步。 父结点接管目标结点反边上的子树。（接管反边是指：若目标结点为左儿子，则接管右子树，右儿子反之）。 父结点作目标结点反边上的子树。 目标结点代替父结点位置（父结点是爷爷结点的什么儿子，目标结点就作什么儿子）。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在就来编写实现旋转操作的函数，在这之前先写一个重建父子关系的函数：123void change(int father, int son, int w) &#123; node[father].ch[w] = son, node[son].f = father;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;change函数的作用就是让son编号去作father编号结点的w儿子（0为左，1为右）。然后还需要一个判别父子关系的函数：1234int identify(int x) &#123; int f = node[x].f; return node[f].ch[0] == x ? 0 : 1;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个函数用来判断编号为x的结点是其父结点的什么儿子。最后需要一个update函数：123void update(int x) &#123; node[x].num = node[node[x].ch[0]].num + node[node[x].ch[1]].num + node[x].s;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这是更新一下编号为x的结点的num值。由于旋转后结点间关系发生改变，因此需要更新num。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可以写出旋转函数：123456void rotate(int x) &#123; if (x == root)return; int f = node[x].f, g = node[f].f, i = identify(x), j = identify(f); change(f, node[x].ch[i ^ 1], i), change(x, f, i ^ 1), change(g, x, j); update(f), update(x);&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;根结点不能旋转。根据三个步骤重建父子关系，然后更新目标结点和父结点的num。这里用i^1来取反边，这是一个技巧，在网络流中也用到了这个技巧。 伸展操作&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;伸展树之所以叫伸展树就是因为伸展。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所谓伸展，就是将某个结点（本文中称为at）通过一系列旋转移动到另一个结点（称为to）下方（也就是儿子）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果to本身就在at的下方怎么办？在常规的splay操作中不会碰到这种情况。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先需要认识到一个问题：如果需要移动到根结点位置怎么办？根结点不是任何结点的儿子，其实从上面的叙述中的确无法做到，因此有个东西叫虚拟根结点，它是根结点的父结点。在本文中，虚拟根结点编号为0，根结点作其右儿子。这样就可以通过移动到虚拟根结点下面来移动到根结点位置了。在后文中可以看到引入虚拟根结点的很多好处。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当at的父结点正好就是to时无需伸展。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;若at的爷爷结点正好是to时，一步旋转（zig或zag）就可以做到伸展效果。问题就是其余情况怎么处理。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当at的子结点性质和其父结点不同时（不同是指at是左儿子而父结点是右儿子或者反之）可以通过两次旋转（zig-zag或者zag-zig）at结点来将其旋转到爷爷结点的位置。这称为之字形旋转。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当at的子结点性质与其父结点相同时，同样两次旋转（zig-zig或者zag-zag）at结点来将其旋转到爷爷结点的位置。这称为一字形旋转。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但实际情况中可以发现，对于一字形旋转，树的结构并没有得到很好的改善。通常我们这样处理一子形旋转的情况：先旋转父结点再旋转at结点。这种用先旋转父结点再旋转子结点来代替旋转两次子结点的操作称为双旋，普通的一子形方法就称为单旋。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样就可以写出伸展操作的函数了：1234567891011void splay(int at, int to = 0) &#123;//to默认为0表示默认移动到根结点 while (node[at].f != to) &#123; int f = node[at].f, g = node[f].f; if (g != to) &#123; if (identify(at) == identify(f))rotate(f);//双旋操作 else rotate(at); &#125; rotate(at); &#125; if (to == 0)root = at;//不要忘记修改根结点&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;伸展有什么用呢？可以理解成保持树结构的随机性，也就是在一种平均意义上保持树的平衡。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;伸展的另一个作用是更新经过结点的num值，这是旋转时所做的。 插入元素&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个不用多说，直接看代码就可以：12345678910111213141516void insert(int x) &#123; if (root == 0)change(0, cnt, 1), node[cnt].v = x, node[cnt].s = 1, node[cnt].num = 1, root = cnt++;//无根要建根 else &#123; int cur = root, nxt = 0; while (true) &#123; if (x &gt; node[cur].v)nxt = node[cur].ch[1]; else if (x &lt; node[cur].v)nxt = node[cur].ch[0]; else break; if (nxt != 0)cur = nxt; else break; &#125; if (node[cur].v == x)node[cur].s++, splay(cur);//已经有了，s直接加一 else if (node[cur].v &gt; x)change(cur, cnt, 0), node[cnt].v = x, node[cnt].s = 1, node[cnt].num = 1, splay(cnt++); else change(cur, cnt, 1), node[cnt].v = x, node[cnt].s = 1, node[cnt].num = 1, splay(cnt++); &#125;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cnt是当出现新结点时的编号计数器，这样每有一个新的点加入都会分配一个新编号。这样导致的一个问题是不能重用空间，但是对于大多数情况空间都是够用的。如果希望重用空间可以选择每次重建根（为什么会多次重建根？因为可能会删元素啊）时重新从1编号，但是这样做一定要记得将已经被删除的结点完全清空（比如子结点编号设成0等等）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;每一次插入元素后都要把已经插入的元素对应结点伸展到根结点以保持结构随机性。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为什么没有看到更新num？伸展的时候顺便更新了，上文已经提到。 查找某数的编号123456789101112131415int find(int x) &#123; int cur = root, nxt = 0; while (true) &#123; if (node[cur].v &gt; x)nxt = node[cur].ch[0]; else if (node[cur].v &lt; x)nxt = node[cur].ch[1]; else break; if (nxt != 0)cur = nxt; else break; &#125; if (node[cur].v == x) &#123; splay(cur); return cur; &#125; return -1;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;很容易理解，没有返回-1，最后将该结点伸展到根结点。 查找第k大&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第k大就是指计入重数后的排序为k的数，直接看代码吧：12345678910111213int findNum(int x) &#123; int cur = root, nxt = 0; while (true) &#123; if (node[node[cur].ch[0]].num &gt;= x)nxt = node[cur].ch[0];//找左树 else if (x &gt; node[node[cur].ch[0]].num &amp;&amp; x &lt;= node[node[cur].ch[0]].num + node[cur].s) &#123; splay(cur); return cur; &#125; else nxt = node[cur].ch[1], x -= node[node[cur].ch[0]].num + node[cur].s;//找右树 if (nxt != 0)cur = nxt; else break; &#125; return -1;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个函数返回的是结点编号，如果没有返回-1。要把最后的结点伸展到根结点。 查询某元素排名&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于相同的元素，这里的排名是指最小的排名。123456789101112131415int findRank(int x) &#123; int cur = root, nxt = 0, ans = 0; while (true) &#123; if (node[cur].v &lt; x)nxt = node[cur].ch[1], ans += node[cur].num - node[nxt].num; else if (node[cur].v &gt; x)nxt = node[cur].ch[0]; else &#123; ans += node[node[cur].ch[0]].num; break; &#125; if (nxt != 0)cur = nxt; else break; &#125; splay(cur); return ans + 1;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;代码是容易理解的，最后仍然需要伸展。 查找前驱&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前驱是指小于某个数中的最大的那一个。值得注意的是该数不一定是已经插入的元素，即使之前没有插入也是可以查找前驱的。12345678910111213int preNum(int x) &#123; int cur = root, nxt = 0, maxn = -0x7fffffff, ans = -1; while (true) &#123; if (node[cur].v &gt; x)nxt = node[cur].ch[0]; else if (node[cur].v &lt; x) &#123; nxt = node[cur].ch[1]; if (node[cur].v &gt; maxn)maxn = node[cur].v, ans = cur; &#125; else nxt = node[cur].ch[0];//相等向小了找 if (nxt != 0)cur = nxt; else break; &#125; return ans;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;同样只返回编号，没有返回-1。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里没有伸展？其实也可以伸展的，但是我本人不喜欢在这里伸展。 查找后继12345678910111213int nextNum(int x) &#123; int cur = root, nxt = 0, minn = 0x7fffffff, ans = -1; while (true) &#123; if (node[cur].v &lt; x)nxt = node[cur].ch[1]; else if (node[cur].v &gt; x) &#123; nxt = node[cur].ch[0]; if (node[cur].v &lt; minn)minn = node[cur].v, ans = cur; &#125; else nxt = node[cur].ch[1]; if (nxt != 0)cur = nxt; else break; &#125; return ans;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;和前驱基本相同。 删除操作&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;删除是比较麻烦的一个，这里介绍两种实现方式。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第一种：通过前驱和后继删除。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将前驱伸展到根结点然后将后继伸展到根结点（就是前驱）下方（作右儿子），那么待删除结点一定是后继的右儿子并且它没有任何子树。从这个结点上删除即可。如果其s&gt;1那么直接s减去一，否则删除该结点，最后进行一步伸展，还可以顺便更新一下num。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;没有前驱或后继怎么办？需要手动加入无穷小和无穷大两个数，这样所有数就都有前驱和后继了。12345678int delNum(int x) &#123; if (find(x) == -1)return 0;//没有该数就不能删除，如果保证存在该数，则该句可以忽略以提高效率 int pre = preNum(x), nxt = nextNum(x); splay(pre), splay(nxt, pre);//作伸展 if (node[node[nxt].ch[0]].s &gt; 1)node[node[nxt].ch[0]].s--, splay(node[nxt].ch[0]); else node[nxt].ch[0] = 0, splay(nxt); return 1;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另一种方法就是分类讨论。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将待删除结点伸展到根结点，然后分类讨论（只探讨完全删除结点的情况，s自减一的情况不探讨）： 根结点没有子树，直接删除，重置root=0。 根结点有右子树无左子树，将右子树根作为根。仅有左子树相似操作。 既有左子树又有右子树，按照方法一进行（因为这时候该数一定有前驱和后继）。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际上没有前驱和后继的情况仅有删除最小值最大值的时候才会出现，所以第二种方法常常会比第一种方法多一次splay，效率低一些。12345678910111213141516171819int delNum(int x) &#123; splay(find(x));//默认有该数 if (!node[root].ch[0] &amp;&amp; !node[root].ch[1]) &#123; if (node[root].s &gt; 1)node[root].s--; else root = 0, node[0].ch[1] = 0; &#125; else if (!node[root].ch[0]) &#123; if (node[root].s &gt; 1)node[root].s--; else change(0, node[root].ch[1], 1), root = node[root].ch[1]; &#125; else if (!node[root].ch[1]) &#123; if (node[root].s &gt; 1)node[root].s--; else change(0, node[root].ch[0], 1), root = node[root].ch[0]; &#125; else &#123; int pre = preNum(x), nxt = nextNum(x); splay(pre), splay(nxt, pre); if (node[node[nxt].ch[0]].s &gt; 1)node[node[nxt].ch[0]].s--, splay(node[nxt].ch[0]); else node[nxt].ch[0] = 0, splay(nxt); &#125; return 1;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;推荐洛谷P3369模板题。AC代码就是上面的组合。]]></content>
+    <title><![CDATA[Treap（树堆）]]></title>
+    <url>%2F2019%2F03%2F03%2FTreap%EF%BC%88%E6%A0%91%E5%A0%86%EF%BC%89%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本文是Splay（伸展树）的后续。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在介绍Splay时，已经提及了BST的概念。BST在最坏情况下会达到$O(n)$复杂度，于是有各种使其平衡的方法，Treap就是一种，它也属于平衡树，比Splay要更易实现。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Splay是通过伸展操作来使树的结构随机化，以达到均摊$O(logn)$的复杂度。Treap是通过在维护BST时同时维护堆来实现结构的随机化。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所谓Treap就是Tree+Heap，故称树堆。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;先来看看Treap的结点结构体定义，和Splay类似：1234567struct Node &#123; int v&#123;&#125;, key&#123;&#125;, ch[2]&#123;&#125;, s, num; Node() : num(0), s(0) &#123; ch[0] = ch[1] = 0; &#125;&#125; node[100005]; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;没记录父结点？是的，在Treap中不需要记录父结点信息。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另外还可以发现多了一个key，key记录这个结点的优先级。刚才已经提到，Treap是树与堆的结合（这里的堆不再是完全二叉树，只要有堆的性质即可），所谓堆的性质就是：所有结点的优先级不得小于其子结点优先级。这当然是大根堆，用小根堆也是可以的，本文中使用大根堆。我们在维护BST的同时还要满足堆的要求。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;key应该如何赋值？在插入一个新结点时，会给它分配一个随机的优先值，这个可以通过rand()函数来实现。从这里就可以看出Treap的原理：通过优先级的随机性来保持树结构的随机性。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面的函数，若无特殊说明，函数都采用与Splay中相同的命名。 旋转操作&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Treap中同样有旋转操作。当某结点不满足堆的性质时（比如它的优先级大于父结点），就需要进行一次旋转，将其旋转到父结点的位置。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Treap中只有左旋和右旋，没有Splay中双旋的概念。1234void rotate(int &amp;x, int w) &#123; int c1 = node[x].ch[w], c2 = node[c1].ch[w ^ 1]; node[x].ch[w] = c2, node[c1].ch[w ^ 1] = x, node[c1].num = node[x].num, update(x), x = c1;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面就是旋转函数的定义，它的作用是将编号为x的结点旋转下去，方向为w（1为左旋），这和splay中的旋转上去有所不同。但事实上将子结点旋转上去就是把父结点旋转下来。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里有一些值得注意的细节。一处是node[c1].num = node[x].num，这其实就是update(c1)的简略写法。另外还有x=c1，这里巧妙地使用引用来实现我们在Splay中旋转的第三步。 插入操作&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Treap中的插入是基于递归的，代码如下：1234567891011121314151617void insert(int &amp;x, int v) &#123; if (!x) &#123;//空结点，新建结点 x = cnt++; node[x].v = v, node[x].s = 1, node[x].num = 1, node[x].key = rand(); node[x].ch[0] = node[x].ch[1] = 0; return; &#125; node[x].num++;//路过的结点都要更新num if (node[x].v == v)node[x].s++;//找到直接更新s else if (node[x].v &lt; v) &#123;//找右树 insert(node[x].ch[1], v); if (node[node[x].ch[1]].key &gt; node[x].key)rotate(x, 1);//旋转，维护堆的性质 &#125; else &#123;//找左树 insert(node[x].ch[0], v); if (node[node[x].ch[0]].key &gt; node[x].key)rotate(x, 0); &#125;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;它的作用是在以结点x为根的子树上插入值为v的结点。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当x为0时，说明这里是一个空结点，此时新建结点，更新信息，分配优先级。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另外，所有经过的结点都需要更新num。其次在递归回溯后需要检查堆的性质是否满足，如果不满足就需要旋转来调整。从这里可以看出引用的技巧性。 删除操作1234567891011121314void del(int &amp;x, int v) &#123; if (!x)return;//空结点无需继续 if (node[x].v == v) &#123;//找到该结点 if (node[x].s &gt; 1) node[x].num--, node[x].s--;//直接更新值 else &#123;//需要删除结点 if (!node[x].ch[0] &amp;&amp; !node[x].ch[1])x = 0;//没有儿子，直接赋值0 else if (!node[x].ch[0])x = node[x].ch[1];//有右儿子，将右儿子移过来 else if (!node[x].ch[1])x = node[x].ch[0];//有左儿子，将左儿子移过来 else if (node[node[x].ch[0]].key &lt; node[node[x].ch[1]].key)rotate(x, 1), del(x, v);//将优先级大的旋转上去，递归 else rotate(x, 0), del(x, v); &#125; &#125; else if (node[x].v &gt; v)node[x].num--, del(node[x].ch[0], v);//找左树 else node[x].num--, del(node[x].ch[1], v);//找右树&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Treap的删除操作基于分类讨论，有这几种情况（只考虑完全删除的情况，s自减一不考虑）： 若该结点没有儿子，直接删除 若结点仅有右儿子，则左儿子代替其位置。仅有左儿子同理。 若结点有两个儿子，则将优先级大的一个旋转到该结点位置，再递归进行删除。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里的一个易错点是每一个经过的结点需要更新num，但是上面的分类讨论中不需要更新，因为上面的分类讨论过程只是更改了一下树的结构。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其余的操作与Splay完全相同。]]></content>
       <categories>
         <category>算法与OI</category>
       </categories>
       <tags>
+        <tag>平衡树</tag>
         <tag>提高算法</tag>
-        <tag>Splay</tag>
+        <tag>数据结构</tag>
+        <tag>树</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Splay（伸展树）]]></title>
+    <url>%2F2019%2F03%2F02%2FSplay%EF%BC%88%E4%BC%B8%E5%B1%95%E6%A0%91%EF%BC%89%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本节介绍Splay树的用法与实现。 二叉排序树&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Splay本质上是平衡二叉排序树（Binary Sort Tree，BST），是平衡树的一种。因此在了解Splay前必须先了解二叉排序树。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;二叉排序树是指满足以下性质的二叉树： 若左子树不空，则左子树上所有结点的值均小于根结点。 若右子树不空，则右子树上所有结点的值均大于根结点。 左右子树也是BST。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面给出了一个BST的例子：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BST中不允许有相同的数，因此每一个结点都有自己的计数变量（在本文中用s表示）来记录这个数的个数。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另外，BST的左右子树性质不同，因此不能向往常一样把树当图来存，必须基于一定储存结构。这里用结构体来定义树的每一个结点：1234567struct Node &#123; int v, ch[2], s, num, f; Node() : s(0), num(0) &#123; ch[0] = ch[1] = 0; &#125;&#125; node[500005]; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v表示该结点表示的数，ch[0]和ch[1]是左右子树根结点编号，s是数的重数，num是该树所有数的总数量（计入重数），f是其父结点编号。然后开一个数组储存这些结点。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;问题来了，BST有什么用呢？如果我们需要不断加入删除数据，不断地询问某个数的排序序号，查找某个数的前驱或者后继等操作，普通的顺序表效率过低，而链表查找效率硬伤，此时我们就需要BST来完成这些工作。平衡的BST可以在$O(logn)$复杂度下完成这些操作，这是容易理解的。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但如果不平衡呢？当二叉排序树退化成一条链时，各种操作都会退化成$O(n)$复杂度，这是我们不希望看到的，于是就有了各种使BST平衡的方法，Splay就是其中之一。 旋转操作&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;旋转操作是Splay中很重要的操作。旋转的意思就是：将某个结点移动到其父结点的位置，保持BST性质不变。旋转只是树的结构变形，没有实质性改变。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当目标结点是其父结点的左儿子时，需要右旋（称为Zig操作），若为右儿子，需要左旋（称为Zag操作）。下面以右旋为例探讨旋转规律。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;比如我们想把值为2的结点移动到其父结点位置。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发现4比5小，5应该接管以值为4的结点为根的子树，于是：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5比3大，将值为5的结点移动下来作值为3的结点的左儿子（父结点变儿子结点）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然后以3为值的结点替代原父结点位置：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;旋转完成，这就是一次zig操作。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;无论左旋还是右旋，都可以发现旋转分为三步。 父结点接管目标结点反边上的子树。（接管反边是指：若目标结点为左儿子，则接管右子树，右儿子反之）。 父结点作目标结点反边上的子树。 目标结点代替父结点位置（父结点是爷爷结点的什么儿子，目标结点就作什么儿子）。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在就来编写实现旋转操作的函数，在这之前先写一个重建父子关系的函数：123void change(int father, int son, int w) &#123; node[father].ch[w] = son, node[son].f = father;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;change函数的作用就是让son编号去作father编号结点的w儿子（0为左，1为右）。然后还需要一个判别父子关系的函数：1234int identify(int x) &#123; int f = node[x].f; return node[f].ch[0] == x ? 0 : 1;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个函数用来判断编号为x的结点是其父结点的什么儿子。最后需要一个update函数：123void update(int x) &#123; node[x].num = node[node[x].ch[0]].num + node[node[x].ch[1]].num + node[x].s;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这是更新一下编号为x的结点的num值。由于旋转后结点间关系发生改变，因此需要更新num。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可以写出旋转函数：123456void rotate(int x) &#123; if (x == root)return; int f = node[x].f, g = node[f].f, i = identify(x), j = identify(f); change(f, node[x].ch[i ^ 1], i), change(x, f, i ^ 1), change(g, x, j); update(f), update(x);&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;根结点不能旋转。根据三个步骤重建父子关系，然后更新目标结点和父结点的num。这里用i^1来取反边，这是一个技巧，在网络流中也用到了这个技巧。 伸展操作&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;伸展树之所以叫伸展树就是因为伸展。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所谓伸展，就是将某个结点（本文中称为at）通过一系列旋转移动到另一个结点（称为to）下方（也就是儿子）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果to本身就在at的下方怎么办？在常规的splay操作中不会碰到这种情况。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先需要认识到一个问题：如果需要移动到根结点位置怎么办？根结点不是任何结点的儿子，其实从上面的叙述中的确无法做到，因此有个东西叫虚拟根结点，它是根结点的父结点。在本文中，虚拟根结点编号为0，根结点作其右儿子。这样就可以通过移动到虚拟根结点下面来移动到根结点位置了。在后文中可以看到引入虚拟根结点的很多好处。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当at的父结点正好就是to时无需伸展。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;若at的爷爷结点正好是to时，一步旋转（zig或zag）就可以做到伸展效果。问题就是其余情况怎么处理。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当at的子结点性质和其父结点不同时（不同是指at是左儿子而父结点是右儿子或者反之）可以通过两次旋转（zig-zag或者zag-zig）at结点来将其旋转到爷爷结点的位置。这称为之字形旋转。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当at的子结点性质与其父结点相同时，同样两次旋转（zig-zig或者zag-zag）at结点来将其旋转到爷爷结点的位置。这称为一字形旋转。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但实际情况中可以发现，对于一字形旋转，树的结构并没有得到很好的改善。通常我们这样处理一子形旋转的情况：先旋转父结点再旋转at结点。这种用先旋转父结点再旋转子结点来代替旋转两次子结点的操作称为双旋，普通的一子形方法就称为单旋。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样就可以写出伸展操作的函数了：1234567891011void splay(int at, int to = 0) &#123;//to默认为0表示默认移动到根结点 while (node[at].f != to) &#123; int f = node[at].f, g = node[f].f; if (g != to) &#123; if (identify(at) == identify(f))rotate(f);//双旋操作 else rotate(at); &#125; rotate(at); &#125; if (to == 0)root = at;//不要忘记修改根结点&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;伸展有什么用呢？可以理解成保持树结构的随机性，也就是在一种平均意义上保持树的平衡。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;伸展的另一个作用是更新经过结点的num值，这是旋转时所做的。 插入元素&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个不用多说，直接看代码就可以：12345678910111213141516void insert(int x) &#123; if (root == 0)change(0, cnt, 1), node[cnt].v = x, node[cnt].s = 1, node[cnt].num = 1, root = cnt++;//无根要建根 else &#123; int cur = root, nxt = 0; while (true) &#123; if (x &gt; node[cur].v)nxt = node[cur].ch[1]; else if (x &lt; node[cur].v)nxt = node[cur].ch[0]; else break; if (nxt != 0)cur = nxt; else break; &#125; if (node[cur].v == x)node[cur].s++, splay(cur);//已经有了，s直接加一 else if (node[cur].v &gt; x)change(cur, cnt, 0), node[cnt].v = x, node[cnt].s = 1, node[cnt].num = 1, splay(cnt++); else change(cur, cnt, 1), node[cnt].v = x, node[cnt].s = 1, node[cnt].num = 1, splay(cnt++); &#125;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cnt是当出现新结点时的编号计数器，这样每有一个新的点加入都会分配一个新编号。这样导致的一个问题是不能重用空间，但是对于大多数情况空间都是够用的。如果希望重用空间可以选择每次重建根（为什么会多次重建根？因为可能会删元素啊）时重新从1编号，但是这样做一定要记得将已经被删除的结点完全清空（比如子结点编号设成0等等）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;每一次插入元素后都要把已经插入的元素对应结点伸展到根结点以保持结构随机性。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为什么没有看到更新num？伸展的时候顺便更新了，上文已经提到。 查找某数的编号123456789101112131415int find(int x) &#123; int cur = root, nxt = 0; while (true) &#123; if (node[cur].v &gt; x)nxt = node[cur].ch[0]; else if (node[cur].v &lt; x)nxt = node[cur].ch[1]; else break; if (nxt != 0)cur = nxt; else break; &#125; if (node[cur].v == x) &#123; splay(cur); return cur; &#125; return -1;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;很容易理解，没有返回-1，最后将该结点伸展到根结点。 查找第k大&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第k大就是指计入重数后的排序为k的数，直接看代码吧：12345678910111213int findNum(int x) &#123; int cur = root, nxt = 0; while (true) &#123; if (node[node[cur].ch[0]].num &gt;= x)nxt = node[cur].ch[0];//找左树 else if (x &gt; node[node[cur].ch[0]].num &amp;&amp; x &lt;= node[node[cur].ch[0]].num + node[cur].s) &#123; splay(cur); return cur; &#125; else nxt = node[cur].ch[1], x -= node[node[cur].ch[0]].num + node[cur].s;//找右树 if (nxt != 0)cur = nxt; else break; &#125; return -1;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个函数返回的是结点编号，如果没有返回-1。要把最后的结点伸展到根结点。 查询某元素排名&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于相同的元素，这里的排名是指最小的排名。123456789101112131415int findRank(int x) &#123; int cur = root, nxt = 0, ans = 0; while (true) &#123; if (node[cur].v &lt; x)nxt = node[cur].ch[1], ans += node[cur].num - node[nxt].num; else if (node[cur].v &gt; x)nxt = node[cur].ch[0]; else &#123; ans += node[node[cur].ch[0]].num; break; &#125; if (nxt != 0)cur = nxt; else break; &#125; splay(cur); return ans + 1;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;代码是容易理解的，最后仍然需要伸展。 查找前驱&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前驱是指小于某个数中的最大的那一个。值得注意的是该数不一定是已经插入的元素，即使之前没有插入也是可以查找前驱的。12345678910111213int preNum(int x) &#123; int cur = root, nxt = 0, maxn = -0x7fffffff, ans = -1; while (true) &#123; if (node[cur].v &gt; x)nxt = node[cur].ch[0]; else if (node[cur].v &lt; x) &#123; nxt = node[cur].ch[1]; if (node[cur].v &gt; maxn)maxn = node[cur].v, ans = cur; &#125; else nxt = node[cur].ch[0];//相等向小了找 if (nxt != 0)cur = nxt; else break; &#125; return ans;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;同样只返回编号，没有返回-1。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里没有伸展？其实也可以伸展的，但是我本人不喜欢在这里伸展。 查找后继12345678910111213int nextNum(int x) &#123; int cur = root, nxt = 0, minn = 0x7fffffff, ans = -1; while (true) &#123; if (node[cur].v &lt; x)nxt = node[cur].ch[1]; else if (node[cur].v &gt; x) &#123; nxt = node[cur].ch[0]; if (node[cur].v &lt; minn)minn = node[cur].v, ans = cur; &#125; else nxt = node[cur].ch[1]; if (nxt != 0)cur = nxt; else break; &#125; return ans;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;和前驱基本相同。 删除操作&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;删除是比较麻烦的一个，这里介绍两种实现方式。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第一种：通过前驱和后继删除。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将前驱伸展到根结点然后将后继伸展到根结点（就是前驱）下方（作右儿子），那么待删除结点一定是后继的右儿子并且它没有任何子树。从这个结点上删除即可。如果其s&gt;1那么直接s减去一，否则删除该结点，最后进行一步伸展，还可以顺便更新一下num。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;没有前驱或后继怎么办？需要手动加入无穷小和无穷大两个数，这样所有数就都有前驱和后继了。12345678int delNum(int x) &#123; if (find(x) == -1)return 0;//没有该数就不能删除，如果保证存在该数，则该句可以忽略以提高效率 int pre = preNum(x), nxt = nextNum(x); splay(pre), splay(nxt, pre);//作伸展 if (node[node[nxt].ch[0]].s &gt; 1)node[node[nxt].ch[0]].s--, splay(node[nxt].ch[0]); else node[nxt].ch[0] = 0, splay(nxt); return 1;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另一种方法就是分类讨论。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将待删除结点伸展到根结点，然后分类讨论（只探讨完全删除结点的情况，s自减一的情况不探讨）： 根结点没有子树，直接删除，重置root=0。 根结点有右子树无左子树，将右子树根作为根。仅有左子树相似操作。 既有左子树又有右子树，按照方法一进行（因为这时候该数一定有前驱和后继）。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际上没有前驱和后继的情况仅有删除最小值最大值的时候才会出现，所以第二种方法常常会比第一种方法多一次splay，效率低一些。12345678910111213141516171819int delNum(int x) &#123; splay(find(x));//默认有该数 if (!node[root].ch[0] &amp;&amp; !node[root].ch[1]) &#123; if (node[root].s &gt; 1)node[root].s--; else root = 0, node[0].ch[1] = 0; &#125; else if (!node[root].ch[0]) &#123; if (node[root].s &gt; 1)node[root].s--; else change(0, node[root].ch[1], 1), root = node[root].ch[1]; &#125; else if (!node[root].ch[1]) &#123; if (node[root].s &gt; 1)node[root].s--; else change(0, node[root].ch[0], 1), root = node[root].ch[0]; &#125; else &#123; int pre = preNum(x), nxt = nextNum(x); splay(pre), splay(nxt, pre); if (node[node[nxt].ch[0]].s &gt; 1)node[node[nxt].ch[0]].s--, splay(node[nxt].ch[0]); else node[nxt].ch[0] = 0, splay(nxt); &#125; return 1;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;推荐洛谷P3369模板题。AC代码就是上面的组合。]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>平衡树</tag>
+        <tag>提高算法</tag>
         <tag>数据结构</tag>
         <tag>树</tag>
       </tags>
@@ -75,8 +89,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>网络流</tag>
         <tag>提高算法</tag>
+        <tag>网络流</tag>
       </tags>
   </entry>
   <entry>
@@ -87,8 +101,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>网络流</tag>
         <tag>提高算法</tag>
+        <tag>网络流</tag>
       </tags>
   </entry>
   <entry>
@@ -145,9 +159,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>图论</tag>
         <tag>图的最短路</tag>
+        <tag>提高算法</tag>
         <tag>差分约束</tag>
       </tags>
   </entry>
@@ -183,8 +197,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>图论</tag>
+        <tag>基础算法</tag>
       </tags>
   </entry>
   <entry>
@@ -195,8 +209,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>图论</tag>
+        <tag>基础算法</tag>
         <tag>强连通分量</tag>
       </tags>
   </entry>
@@ -432,8 +446,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>动态规划</tag>
         <tag>ST表</tag>
+        <tag>动态规划</tag>
         <tag>矩阵</tag>
       </tags>
   </entry>
@@ -476,9 +490,9 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
-        <tag>动态规划</tag>
         <tag>区间最值</tag>
         <tag>ST表</tag>
+        <tag>动态规划</tag>
         <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
@@ -494,8 +508,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>动态规划</tag>
         <tag>字符串</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -594,9 +608,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>图论</tag>
         <tag>图的最短路</tag>
+        <tag>提高算法</tag>
         <tag>动态规划</tag>
         <tag>数学期望</tag>
       </tags>
@@ -764,8 +778,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>图论</tag>
+        <tag>基础算法</tag>
         <tag>图的最短路</tag>
       </tags>
   </entry>
@@ -777,8 +791,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>图论</tag>
+        <tag>基础算法</tag>
         <tag>图的最短路</tag>
       </tags>
   </entry>
