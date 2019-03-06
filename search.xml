@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[莫队算法]]></title>
+    <url>%2F2019%2F03%2F06%2F%E8%8E%AB%E9%98%9F%E7%AE%97%E6%B3%95%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本文介绍简单的莫队算法。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;莫队算法是一种优雅的暴力方法，由前国家队队长莫涛提出，故称莫队算法。本文只探讨基本的莫队算法。值得注意的是，莫队算法必须离线，而且最好用来处理查询问题（尽可能不修改）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考虑一个问题：给定一个区间，求子区间中互异数的个数。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最暴力的方法是每一次都遍历一遍子区间，求出互异数，时间复杂度为$O(nm)$，效率很低。莫队算法就是在暴力方法的基础上改进提出的。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于不变的序列和m个询问，考虑离线。置两个指针指向某个区间的首末位置，对于每一个询问区间，将两个指针移动到询问区间的两端，移动过程中修改答案数据。这样在指针移动到目标位置时就得到了答案。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;很明显，这样并没有多少效率的提升。指针有可能从头指向尾，再从尾指向头，时间复杂度还是$O(nm)$，效率可能比暴力还低。这时，莫队算法的一个重要思想就体现出来了。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先对区间分块，分成t块。通常置每一块的长度为$\sqrt n$，这样t就大致为$\sqrt n$。当最后的序列长度不足组成一个块时，将它们视为一个。比如对于长度为10的序列，可将其分成3+3+3+1四个块。12int base = static_cast&lt;int&gt;(sqrt(n));for (int i = 1; i &lt;= n; i++)belong[i] = (i - 1) / base + 1; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面的代码可以来完成分块操作。belong存每一个点所处块的位置。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接下来，对所有询问进行排序。当询问区间的左端点在同一块中时，按右端点升序排列，否则按左端点升序排列。1234bool operator&lt;(Node x) &#123; if (belong[l] == belong[x.l])return r &lt; x.r; return l &lt; x.l;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面是结点重载&lt;的形式。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样排序有什么好处？下面分析排序后指针移动次数。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在同一块中时，左指针最大移动$\sqrt n$，右指针只能升序移动，最大移动$n$；当跨块时，左指针最大移动$2\sqrt n$，右指针仍然为$n$。这样来看，对于每一次询问，左指针平均移动$\sqrt n$次；对于每一个块，右指针移动n次，于是时间复杂度为$O((n+m)\sqrt n)$，相比$O(nm)效率得到很大提升$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例题：洛谷P1972。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这道题目就是本文一开始提出的问题，值得注意的是，莫队算法在本题中可得80分左右，思想很重要的，文末介绍本题正解。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172#include&lt;bits/stdc++.h&gt;using namespace std;int belong[500005], n, vis[1000000], op[500005], ans, m;struct Node &#123; int l, r, rk, ans; bool operator&lt;(Node x) &#123; if (belong[l] == belong[x.l])return r &lt; x.r; return l &lt; x.l; &#125;&#125; node[500005];inline int read() &#123; char e = getchar(); int s = 0; while (e &lt; '-')e = getchar(); while (e &gt; '-')s = (s &lt;&lt; 1) + (s &lt;&lt; 3) + (e &amp; 15), e = getchar();//神奇的读入优化 return s;&#125;bool cmp(Node x, Node y) &#123; return x.rk &lt; y.rk;&#125;inline void moveL(int &amp;p, int to) &#123;//移动左指针 if (p &lt; to) &#123; do &#123; vis[op[p]]--; if (vis[op[p]] == 0)ans--; p++; &#125; while (p &lt; to); &#125; else if (p &gt; to) &#123; do &#123; p--; vis[op[p]]++; if (vis[op[p]] == 1)ans++; &#125; while (p &gt; to); &#125;&#125;inline void moveR(int &amp;p, int to) &#123;//移动右指针 if (p &lt; to) &#123; do &#123; p++; vis[op[p]]++; if (vis[op[p]] == 1)ans++; &#125; while (p &lt; to); &#125; else if (p &gt; to) &#123; do &#123; vis[op[p]]--; if (vis[op[p]] == 0)ans--; p--; &#125; while (p &gt; to); &#125;&#125;int main() &#123; n = read(); for (int i = 1; i &lt;= n; i++)op[i] = read(); int base = static_cast&lt;int&gt;(sqrt(n)), l = 1, r = 1; for (int i = 1; i &lt;= n; i++)belong[i] = (i - 1) / base + 1; m = read(); for (int i = 1; i &lt;= m; i++)node[i].l = read(), node[i].r = read(), node[i].rk = i; sort(node + 1, node + m + 1); vis[op[1]] = 1, ans = 1; for (int i = 1; i &lt;= m; i++)moveL(l, node[i].l), moveR(r, node[i].r), node[i].ans = ans; sort(node + 1, node + m + 1, cmp); for (int i = 1; i &lt;= m; i++)cout &lt;&lt; node[i].ans &lt;&lt; endl; return 0;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第二道例题：TJU某ACM冬季训练竞赛最后一题。 【排队接水】有n个小朋友需要接水，其中第i个小朋友接水需要ai分钟。由于水龙头有限，小Hi需要知道如果为第l个到第r个小朋友分配一个水龙头，如何安排他们的接水顺序才能使得他们等待加接水的时间总和最小。小Hi总共会有m次询问，你能帮助他解决这个问题吗？假设3个小朋友接水的时间分别是2，3，4。如果他们依次接水，第一位小朋友等待加接水的时间是2，第二位小朋友是5，第三位小朋友是9。时间总和是16。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;贪心策略很容易知道将这些结点排序，求前缀和相加就是答案，本质上是构造哈夫曼树。本题用莫队算法可以比较容易地解决。一个难点是如何在指针移动时更新答案，这个过程需要维护两个树状数组。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384#include&lt;bits/stdc++.h&gt;using namespace std;inline int read() &#123; char e = getchar(); int s = 0; while (e &lt; '-')e = getchar(); while (e &gt; '-')s = (s &lt;&lt; 3) + (s &lt;&lt; 1) + (e &amp; 15), e = getchar(); return s;&#125;int n, m, op[20005], belong[20005], l, r;long long tree[20005], tree2[20005], ans;struct Node &#123; int l, r, rk; long long ans; bool operator&lt;(Node x) &#123; if (belong[l] == belong[x.l])return r &lt; x.r; return l &lt; x.l; &#125;&#125; node[20005];inline void add(int x, int y, long long *tr) &#123; for (; x &lt;= n; x += (x &amp; -x))tr[x] += y;&#125;inline long long sum(int x, const long long *tr) &#123; long long s = 0; for (; x &gt;= 1; x -= (x &amp; -x))s += tr[x]; return s;&#125;inline void moveL(int &amp;at, int to) &#123; long long p, s = r - l + 1; if (at &lt; to) &#123; do &#123; p = sum(op[at], tree), ans -= sum(op[at], tree2) + (s - p) * op[at]; add(op[at], -1, tree), add(op[at], -op[at], tree2), at++, s--; &#125; while (at &lt; to); &#125; else if (at &gt; to) &#123; do &#123; at--, p = sum(op[at], tree), ans += (s - p) * op[at] + sum(op[at], tree2) + op[at]; add(op[at], 1, tree), add(op[at], op[at], tree2), s++; &#125; while (at &gt; to); &#125;&#125;inline void moveR(int &amp;at, int to) &#123; long long p, s = r - l + 1; if (at &lt; to) &#123; do &#123; at++, p = sum(op[at], tree), ans += (s - p) * op[at] + sum(op[at], tree2) + op[at]; add(op[at], 1, tree), add(op[at], op[at], tree2), s++; &#125; while (at &lt; to); &#125; else if (at &gt; to) &#123; do &#123; p = sum(op[at], tree), ans -= sum(op[at], tree2) + (s - p) * op[at]; add(op[at], -1, tree), add(op[at], -op[at], tree2), at--, s--; &#125; while (at &gt; to); &#125;&#125;bool cmp(Node x, Node y) &#123; return x.rk &lt; y.rk;&#125;int main() &#123; int t = read(); while (t--) &#123; n = read(), m = read(); int base = static_cast&lt;int&gt;(sqrt(n)); for (int i = 1; i &lt;= n; i++)op[i] = read(), tree2[i] = tree[i] = 0, belong[i] = (i - 1) / base + 1; for (int i = 1; i &lt;= m; i++)node[i].l = read(), node[i].r = read(), node[i].rk = i; sort(node + 1, node + m + 1); l = r = 1, ans = op[1], add(op[1], 1, tree), add(op[1], op[1], tree2); for (int i = 1; i &lt;= m; i++)moveL(l, node[i].l), moveR(r, node[i].r), node[i].ans = ans; sort(node + 1, node + m + 1, cmp); for (int i = 1; i &lt;= m; i++)cout &lt;&lt; node[i].ans &lt;&lt; endl; &#125; return 0;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;文末补充洛谷P1972正解。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;方法仍然是离线。将所有询问按右结点升序排列，用树状数组维护最右侧某个数出现的第一个位置，使该位置+1，答案就是树状数组的区间和。12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152#include&lt;bits/stdc++.h&gt;#define N 500005using namespace std;int last[1000005];int tree[N], n, m, op[N];struct Node &#123; int l, r, rk, ans; bool operator&lt;(Node x) &#123; return r &lt; x.r; &#125;&#125; node[N];bool cmp(Node x, Node y) &#123; return x.rk &lt; y.rk;&#125;inline void add(int x, int y) &#123; for (int i = x; i &lt;= n; i += (i &amp; -i))tree[i] += y;&#125;inline int sum(int x) &#123; int s = 0; for (int i = x; i &gt;= 1; i -= (i &amp; -i))s += tree[i]; return s;&#125;int main() &#123; ios::sync_with_stdio(false); cin &gt;&gt; n; for (int i = 1; i &lt;= n; i++) &#123; cin &gt;&gt; op[i]; last[op[i]] = -1; &#125; cin &gt;&gt; m; for (int i = 1; i &lt;= m; i++)cin &gt;&gt; node[i].l &gt;&gt; node[i].r, node[i].rk = i; sort(node + 1, node + m + 1); for (int i = node[1].r; i &gt;= 1; i--)if (last[op[i]] == -1)last[op[i]] = i, add(i, 1); node[1].ans = sum(node[1].r) - sum(node[1].l - 1); for (int i = 2; i &lt;= m; i++) &#123; for (int j = node[i].r; j &gt; node[i - 1].r; j--) &#123; if (last[op[j]] == -1)last[op[j]] = j, add(j, 1); else if (last[op[j]] &lt;= node[i - 1].r)add(last[op[j]], -1), last[op[j]] = j, add(j, 1); &#125; node[i].ans = sum(node[i].r) - sum(node[i].l - 1); &#125; sort(node + 1, node + m + 1, cmp); for (int i = 1; i &lt;= m; i++)cout &lt;&lt; node[i].ans &lt;&lt; endl; return 0;&#125;]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>提高算法</tag>
+        <tag>莫队算法</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[替罪羊树]]></title>
     <url>%2F2019%2F03%2F05%2F%E6%9B%BF%E7%BD%AA%E7%BE%8A%E6%A0%91%2F</url>
     <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;替罪羊树是博客里提到的第三种平衡树，前两种分别是Splay和Treap（含fhq Treap）。它更易写，也容易理解。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;替罪羊树的目的同样是使树尽可能平衡，它的思路很简单粗暴：当某棵树不平衡时，拍掉重建。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;国际惯例，先看结点结构体定义：1234struct Node &#123; int size, ch[2], v, s, num;&#125; node[500005]; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里有很多已经熟悉的变量，只是多了一个size。size记录子树中的有效结点数目，下文会提到。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为什么会有有效结点这种说法呢？替罪羊树中删除某个结点，并不是直接删除，而是打上标记（即允许s=0的结点存在）。此时这个结点就是无效结点，不能计入size。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;何为拍掉重建？首先需要知道如何判定一棵树已经不平衡，这就需要引入平衡因子的概念。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当左子树的size或着右子树的size大于整棵树的size乘以平衡因子时，我们认为这棵树不平衡。很明显左子树size和右子树size中一定有一个不小于整棵树size的一半，即平衡因子至少为0.5，而最大显然为1。平均来看，我们取平衡因子为0.75，记alpha=0.75。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;update定义：1234void update(int x) &#123; node[x].num = node[node[x].ch[0]].num + node[node[x].ch[1]].num + node[x].s; node[x].size = node[node[x].ch[0]].size + node[node[x].ch[1]].size + (node[x].s &gt; 0);&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;检验函数：123bool check(int x) &#123; return node[node[x].ch[0]].size &gt; node[x].size * alpha || node[node[x].ch[1]].size &gt; node[x].size * alpha;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如何重建？首先对树进行一次中序遍历，记得要剔除所有无效结点，将遍历编号序列存在数组中。然后新树的树根就是这个序列的中点，两棵子树递归进行，易知这样建树符合BST定义。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;中序遍历代码：123456void serach(int x) &#123; if (x == 0)return; serach(node[x].ch[0]); if (node[x].s &gt; 0)temp[++ct] = x; serach(node[x].ch[1]);&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;重建函数：1234void rebuild(int &amp;x) &#123;//引用！！因为要修改值 ct = 0, serach(x); solve(x, 1, ct);&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;solve就是负责建树的递归函数，这里记得传进来的x是引用。1234567891011void solve(int &amp;x, int l, int r) &#123;//引用！！ if (r &lt; l) &#123; x = 0; return; &#125; int mid = (l + r) / 2; x = temp[mid]; solve(node[x].ch[0], l, mid - 1); solve(node[x].ch[1], mid + 1, r); update(x);&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;插入元素与BST基本相同：123456789101112void insert(int &amp;x, int y) &#123;//仍然是引用，与treap的思想类似 if (x == 0) &#123; x = ++cnt;//新建一个点 node[x].v = y, node[x].s = node[x].size = node[x].num = 1, node[x].ch[0] = node[x].ch[1] = 0; return; &#125; if (node[x].v == y)node[x].s++;//直接更新 else if (node[x].v &lt; y)insert(node[x].ch[1], y); else insert(node[x].ch[0], y); update(x);//更新信息 if (check(x))rebuild(x);//重建&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;删除函数：12345678void del(int &amp;x, int y) &#123;//也是引用 if (x == 0)return; if (node[x].v &lt; y) del(node[x].ch[1], y); else if (node[x].v &gt; y)del(node[x].ch[0], y); else node[x].s--;//不需要检验s&gt;1，s=0就意味着这个点无效 update(x);//更新 if (check(x))rebuild(x);//重建&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;找排名和根据排名找元素与Splay和Treap都相同，但是求前驱后继的方法有所不同。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于无效结点的存在，无法判定前驱后继究竟在左子树上还是右子树上（以往是确定的，但替罪羊树上可能某一侧全部是无效结点），这就造成了麻烦。在替罪羊树中，可以用下面的思路求前驱和后继： 求x的前驱：插入x，找到x的排名p，删掉x，找到排名p-1的值即为前驱。 求x的后继：插入x+1，找到x+1的排名p，删掉x+1，找到排名p的值即为后继。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个算法很容易理解，代码如下：12345678910111213int preNum(int x) &#123; insert(root, x); int p = findRank(x); del(root, x); return findNum(p - 1);&#125;int nextNum(int x) &#123; insert(root, x + 1); int p = findRank(x + 1); del(root, x + 1); return findNum(p);&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下附模板题AC代码：123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125#include&lt;bits/stdc++.h&gt;using namespace std;const double alpha = 0.75;struct Node &#123; int size, ch[2], v, s, num;&#125; node[500005];int root = 0, cnt = 0, ct = 0, temp[100005];void update(int x) &#123; node[x].num = node[node[x].ch[0]].num + node[node[x].ch[1]].num + node[x].s; node[x].size = node[node[x].ch[0]].size + node[node[x].ch[1]].size + (node[x].s &gt; 0);&#125;bool check(int x) &#123; return node[node[x].ch[0]].size &gt; node[x].size * alpha || node[node[x].ch[1]].size &gt; node[x].size * alpha;&#125;void serach(int x) &#123; if (x == 0)return; serach(node[x].ch[0]); if (node[x].s &gt; 0)temp[++ct] = x; serach(node[x].ch[1]);&#125;void solve(int &amp;x, int l, int r) &#123; if (r &lt; l) &#123; x = 0; return; &#125; int mid = (l + r) / 2; x = temp[mid]; solve(node[x].ch[0], l, mid - 1); solve(node[x].ch[1], mid + 1, r); update(x);&#125;void rebuild(int &amp;x) &#123; ct = 0, serach(x); solve(x, 1, ct);&#125;void insert(int &amp;x, int y) &#123; if (x == 0) &#123; x = ++cnt; node[x].v = y, node[x].s = node[x].size = node[x].num = 1, node[x].ch[0] = node[x].ch[1] = 0; return; &#125; if (node[x].v == y)node[x].s++; else if (node[x].v &lt; y)insert(node[x].ch[1], y); else insert(node[x].ch[0], y); update(x); if (check(x))rebuild(x);&#125;void del(int &amp;x, int y) &#123; if (x == 0)return; if (node[x].v &lt; y) del(node[x].ch[1], y); else if (node[x].v &gt; y)del(node[x].ch[0], y); else node[x].s--; update(x); if (check(x))rebuild(x);&#125;inline int findNum(int x) &#123; int cur = root, nxt = 0; while (true) &#123; if (node[node[cur].ch[0]].num &gt;= x)nxt = node[cur].ch[0]; else if (x &gt; node[node[cur].ch[0]].num &amp;&amp; x &lt;= node[node[cur].ch[0]].num + node[cur].s) &#123; return cur; &#125; else nxt = node[cur].ch[1], x -= node[node[cur].ch[0]].num + node[cur].s; if (nxt != 0)cur = nxt; else break; &#125; return -1;&#125;inline int findRank(int x) &#123; int cur = root, nxt = 0, ans = 0; while (true) &#123; if (node[cur].v &lt; x)nxt = node[cur].ch[1], ans += node[cur].num - node[nxt].num; else if (node[cur].v &gt; x)nxt = node[cur].ch[0]; else &#123; ans += node[node[cur].ch[0]].num; break; &#125; if (nxt != 0)cur = nxt; else break; &#125; return ans + 1;&#125;inline int preNum(int x) &#123; insert(root, x); int p = findRank(x); del(root, x); return findNum(p - 1);&#125;inline int nextNum(int x) &#123; insert(root, x + 1); int p = findRank(x + 1); del(root, x + 1); return findNum(p);&#125;int main() &#123; ios::sync_with_stdio(false); int n; cin &gt;&gt; n; for (int i = 1; i &lt;= n; i++) &#123; int opt, x; cin &gt;&gt; opt &gt;&gt; x; if (opt == 1)insert(root, x); else if (opt == 2)del(root, x); else if (opt == 3)cout &lt;&lt; findRank(x) &lt;&lt; endl; else if (opt == 4)cout &lt;&lt; node[findNum(x)].v &lt;&lt; endl; else if (opt == 5)cout &lt;&lt; node[preNum(x)].v &lt;&lt; endl; else cout &lt;&lt; node[nextNum(x)].v &lt;&lt; endl; &#125; return 0;&#125;]]></content>
@@ -8,9 +20,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>平衡树</tag>
-        <tag>数据结构</tag>
         <tag>提高算法</tag>
+        <tag>数据结构</tag>
+        <tag>平衡树</tag>
       </tags>
   </entry>
   <entry>
@@ -21,10 +33,10 @@
         <category>算法与OI</category>
       </categories>
       <tags>
+        <tag>提高算法</tag>
+        <tag>数据结构</tag>
         <tag>平衡树</tag>
         <tag>文艺平衡树</tag>
-        <tag>数据结构</tag>
-        <tag>提高算法</tag>
         <tag>树</tag>
       </tags>
   </entry>
@@ -36,9 +48,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>平衡树</tag>
-        <tag>数据结构</tag>
         <tag>提高算法</tag>
+        <tag>数据结构</tag>
+        <tag>平衡树</tag>
         <tag>树</tag>
       </tags>
   </entry>
@@ -50,10 +62,10 @@
         <category>算法与OI</category>
       </categories>
       <tags>
+        <tag>提高算法</tag>
+        <tag>数据结构</tag>
         <tag>平衡树</tag>
         <tag>文艺平衡树</tag>
-        <tag>数据结构</tag>
-        <tag>提高算法</tag>
         <tag>树</tag>
       </tags>
   </entry>
@@ -65,8 +77,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>树</tag>
         <tag>动态规划</tag>
+        <tag>树</tag>
         <tag>点分治</tag>
       </tags>
   </entry>
@@ -93,8 +105,8 @@
       <tags>
         <tag>基础算法</tag>
         <tag>数据结构</tag>
-        <tag>树</tag>
         <tag>动态规划</tag>
+        <tag>树</tag>
       </tags>
   </entry>
   <entry>
@@ -105,8 +117,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数据结构</tag>
         <tag>提高算法</tag>
+        <tag>数据结构</tag>
         <tag>线段树</tag>
       </tags>
   </entry>
@@ -503,11 +515,11 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
-        <tag>数据结构</tag>
         <tag>区间最值</tag>
+        <tag>数据结构</tag>
         <tag>区间</tag>
-        <tag>队列</tag>
         <tag>单调队列</tag>
+        <tag>队列</tag>
       </tags>
   </entry>
   <entry>
@@ -523,8 +535,8 @@
         <tag>ST表</tag>
         <tag>动态规划</tag>
         <tag>区间</tag>
-        <tag>队列</tag>
         <tag>单调队列</tag>
+        <tag>队列</tag>
         <tag>矩阵</tag>
       </tags>
   </entry>
@@ -586,8 +598,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>树</tag>
         <tag>动态规划</tag>
+        <tag>树</tag>
         <tag>背包问题</tag>
       </tags>
   </entry>
@@ -768,8 +780,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>树</tag>
         <tag>LCA</tag>
+        <tag>树</tag>
         <tag>倍增</tag>
       </tags>
   </entry>
@@ -781,9 +793,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数据结构</tag>
-        <tag>提高算法</tag>
         <tag>区间最值</tag>
+        <tag>提高算法</tag>
+        <tag>数据结构</tag>
         <tag>ST表</tag>
       </tags>
   </entry>
@@ -909,8 +921,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>数论</tag>
         <tag>动态规划</tag>
+        <tag>数论</tag>
         <tag>离散化</tag>
       </tags>
   </entry>
