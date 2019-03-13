@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[倍增算法]]></title>
+    <url>%2F2019%2F03%2F13%2F%E5%80%8D%E5%A2%9E%E7%AE%97%E6%B3%95%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;介绍倍增算法+三道例题，题目来自洛谷，难度至少提高+/省选-。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;倍增算法在之前的快速幂、求LCA算法、ST表中都有体现，它基于下面的基本原理： \forall x\in \mathbb {N},x=2^{p_1}+2^{p_2}+\cdots +2^{p_n},0\leq p_1]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>基础算法</tag>
+        <tag>倍增算法</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[莫队算法]]></title>
     <url>%2F2019%2F03%2F06%2F%E8%8E%AB%E9%98%9F%E7%AE%97%E6%B3%95%2F</url>
     <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本文介绍简单的莫队算法。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;莫队算法是一种优雅的暴力方法，由前国家队队长莫涛提出，故称莫队算法。本文只探讨基本的莫队算法。值得注意的是，莫队算法必须离线，而且最好用来处理查询问题（尽可能不修改）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考虑一个问题：给定一个区间，求子区间中互异数的个数。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最暴力的方法是每一次都遍历一遍子区间，求出互异数，时间复杂度为$O(nm)$，效率很低。莫队算法就是在暴力方法的基础上改进提出的。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于不变的序列和m个询问，考虑离线。置两个指针指向某个区间的首末位置，对于每一个询问区间，将两个指针移动到询问区间的两端，移动过程中修改答案数据。这样在指针移动到目标位置时就得到了答案。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;很明显，这样并没有多少效率的提升。指针有可能从头指向尾，再从尾指向头，时间复杂度还是$O(nm)$，效率可能比暴力还低。这时，莫队算法的一个重要思想就体现出来了。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先对区间分块，分成t块。通常置每一块的长度为$\sqrt n$，这样t就大致为$\sqrt n$。当最后的序列长度不足组成一个块时，将它们视为一个。比如对于长度为10的序列，可将其分成3+3+3+1四个块。12int base = static_cast&lt;int&gt;(sqrt(n));for (int i = 1; i &lt;= n; i++)belong[i] = (i - 1) / base + 1; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面的代码可以来完成分块操作。belong存每一个点所处块的位置。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接下来，对所有询问进行排序。当询问区间的左端点在同一块中时，按右端点升序排列，否则按左端点升序排列。1234bool operator&lt;(Node x) &#123; if (belong[l] == belong[x.l])return r &lt; x.r; return l &lt; x.l;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面是结点重载&lt;的形式。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样排序有什么好处？下面分析排序后指针移动次数。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在同一块中时，左指针最大移动$\sqrt n$，右指针只能升序移动，最大移动$n$；当跨块时，左指针最大移动$2\sqrt n$，右指针仍然为$n$。这样来看，对于每一次询问，左指针平均移动$\sqrt n$次；对于每一个块，右指针移动n次，于是时间复杂度为$O((n+m)\sqrt n)$，相比$O(nm)效率得到很大提升$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例题：洛谷P1972。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这道题目就是本文一开始提出的问题，值得注意的是，莫队算法在本题中可得80分左右，思想很重要的，文末介绍本题正解。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172#include&lt;bits/stdc++.h&gt;using namespace std;int belong[500005], n, vis[1000000], op[500005], ans, m;struct Node &#123; int l, r, rk, ans; bool operator&lt;(Node x) &#123; if (belong[l] == belong[x.l])return r &lt; x.r; return l &lt; x.l; &#125;&#125; node[500005];inline int read() &#123; char e = getchar(); int s = 0; while (e &lt; '-')e = getchar(); while (e &gt; '-')s = (s &lt;&lt; 1) + (s &lt;&lt; 3) + (e &amp; 15), e = getchar();//神奇的读入优化 return s;&#125;bool cmp(Node x, Node y) &#123; return x.rk &lt; y.rk;&#125;inline void moveL(int &amp;p, int to) &#123;//移动左指针 if (p &lt; to) &#123; do &#123; vis[op[p]]--; if (vis[op[p]] == 0)ans--; p++; &#125; while (p &lt; to); &#125; else if (p &gt; to) &#123; do &#123; p--; vis[op[p]]++; if (vis[op[p]] == 1)ans++; &#125; while (p &gt; to); &#125;&#125;inline void moveR(int &amp;p, int to) &#123;//移动右指针 if (p &lt; to) &#123; do &#123; p++; vis[op[p]]++; if (vis[op[p]] == 1)ans++; &#125; while (p &lt; to); &#125; else if (p &gt; to) &#123; do &#123; vis[op[p]]--; if (vis[op[p]] == 0)ans--; p--; &#125; while (p &gt; to); &#125;&#125;int main() &#123; n = read(); for (int i = 1; i &lt;= n; i++)op[i] = read(); int base = static_cast&lt;int&gt;(sqrt(n)), l = 1, r = 1; for (int i = 1; i &lt;= n; i++)belong[i] = (i - 1) / base + 1; m = read(); for (int i = 1; i &lt;= m; i++)node[i].l = read(), node[i].r = read(), node[i].rk = i; sort(node + 1, node + m + 1); vis[op[1]] = 1, ans = 1; for (int i = 1; i &lt;= m; i++)moveL(l, node[i].l), moveR(r, node[i].r), node[i].ans = ans; sort(node + 1, node + m + 1, cmp); for (int i = 1; i &lt;= m; i++)cout &lt;&lt; node[i].ans &lt;&lt; endl; return 0;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第二道例题：TJU某ACM冬季训练竞赛最后一题。 【排队接水】有n个小朋友需要接水，其中第i个小朋友接水需要ai分钟。由于水龙头有限，小Hi需要知道如果为第l个到第r个小朋友分配一个水龙头，如何安排他们的接水顺序才能使得他们等待加接水的时间总和最小。小Hi总共会有m次询问，你能帮助他解决这个问题吗？假设3个小朋友接水的时间分别是2，3，4。如果他们依次接水，第一位小朋友等待加接水的时间是2，第二位小朋友是5，第三位小朋友是9。时间总和是16。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;贪心策略很容易知道将这些结点排序，求前缀和相加就是答案，本质上是构造哈夫曼树。本题用莫队算法可以比较容易地解决。一个难点是如何在指针移动时更新答案，这个过程需要维护两个树状数组。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384#include&lt;bits/stdc++.h&gt;using namespace std;inline int read() &#123; char e = getchar(); int s = 0; while (e &lt; '-')e = getchar(); while (e &gt; '-')s = (s &lt;&lt; 3) + (s &lt;&lt; 1) + (e &amp; 15), e = getchar(); return s;&#125;int n, m, op[20005], belong[20005], l, r;long long tree[20005], tree2[20005], ans;struct Node &#123; int l, r, rk; long long ans; bool operator&lt;(Node x) &#123; if (belong[l] == belong[x.l])return r &lt; x.r; return l &lt; x.l; &#125;&#125; node[20005];inline void add(int x, int y, long long *tr) &#123; for (; x &lt;= n; x += (x &amp; -x))tr[x] += y;&#125;inline long long sum(int x, const long long *tr) &#123; long long s = 0; for (; x &gt;= 1; x -= (x &amp; -x))s += tr[x]; return s;&#125;inline void moveL(int &amp;at, int to) &#123; long long p, s = r - l + 1; if (at &lt; to) &#123; do &#123; p = sum(op[at], tree), ans -= sum(op[at], tree2) + (s - p) * op[at]; add(op[at], -1, tree), add(op[at], -op[at], tree2), at++, s--; &#125; while (at &lt; to); &#125; else if (at &gt; to) &#123; do &#123; at--, p = sum(op[at], tree), ans += (s - p) * op[at] + sum(op[at], tree2) + op[at]; add(op[at], 1, tree), add(op[at], op[at], tree2), s++; &#125; while (at &gt; to); &#125;&#125;inline void moveR(int &amp;at, int to) &#123; long long p, s = r - l + 1; if (at &lt; to) &#123; do &#123; at++, p = sum(op[at], tree), ans += (s - p) * op[at] + sum(op[at], tree2) + op[at]; add(op[at], 1, tree), add(op[at], op[at], tree2), s++; &#125; while (at &lt; to); &#125; else if (at &gt; to) &#123; do &#123; p = sum(op[at], tree), ans -= sum(op[at], tree2) + (s - p) * op[at]; add(op[at], -1, tree), add(op[at], -op[at], tree2), at--, s--; &#125; while (at &gt; to); &#125;&#125;bool cmp(Node x, Node y) &#123; return x.rk &lt; y.rk;&#125;int main() &#123; int t = read(); while (t--) &#123; n = read(), m = read(); int base = static_cast&lt;int&gt;(sqrt(n)); for (int i = 1; i &lt;= n; i++)op[i] = read(), tree2[i] = tree[i] = 0, belong[i] = (i - 1) / base + 1; for (int i = 1; i &lt;= m; i++)node[i].l = read(), node[i].r = read(), node[i].rk = i; sort(node + 1, node + m + 1); l = r = 1, ans = op[1], add(op[1], 1, tree), add(op[1], op[1], tree2); for (int i = 1; i &lt;= m; i++)moveL(l, node[i].l), moveR(r, node[i].r), node[i].ans = ans; sort(node + 1, node + m + 1, cmp); for (int i = 1; i &lt;= m; i++)cout &lt;&lt; node[i].ans &lt;&lt; endl; &#125; return 0;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;文末补充洛谷P1972正解。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;方法仍然是离线。将所有询问按右结点升序排列，用树状数组维护最右侧某个数出现的第一个位置，使该位置+1，答案就是树状数组的区间和。12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152#include&lt;bits/stdc++.h&gt;#define N 500005using namespace std;int last[1000005];int tree[N], n, m, op[N];struct Node &#123; int l, r, rk, ans; bool operator&lt;(Node x) &#123; return r &lt; x.r; &#125;&#125; node[N];bool cmp(Node x, Node y) &#123; return x.rk &lt; y.rk;&#125;inline void add(int x, int y) &#123; for (int i = x; i &lt;= n; i += (i &amp; -i))tree[i] += y;&#125;inline int sum(int x) &#123; int s = 0; for (int i = x; i &gt;= 1; i -= (i &amp; -i))s += tree[i]; return s;&#125;int main() &#123; ios::sync_with_stdio(false); cin &gt;&gt; n; for (int i = 1; i &lt;= n; i++) &#123; cin &gt;&gt; op[i]; last[op[i]] = -1; &#125; cin &gt;&gt; m; for (int i = 1; i &lt;= m; i++)cin &gt;&gt; node[i].l &gt;&gt; node[i].r, node[i].rk = i; sort(node + 1, node + m + 1); for (int i = node[1].r; i &gt;= 1; i--)if (last[op[i]] == -1)last[op[i]] = i, add(i, 1); node[1].ans = sum(node[1].r) - sum(node[1].l - 1); for (int i = 2; i &lt;= m; i++) &#123; for (int j = node[i].r; j &gt; node[i - 1].r; j--) &#123; if (last[op[j]] == -1)last[op[j]] = j, add(j, 1); else if (last[op[j]] &lt;= node[i - 1].r)add(last[op[j]], -1), last[op[j]] = j, add(j, 1); &#125; node[i].ans = sum(node[i].r) - sum(node[i].l - 1); &#125; sort(node + 1, node + m + 1, cmp); for (int i = 1; i &lt;= m; i++)cout &lt;&lt; node[i].ans &lt;&lt; endl; return 0;&#125;]]></content>
@@ -21,8 +33,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>数据结构</tag>
         <tag>平衡树</tag>
+        <tag>数据结构</tag>
       </tags>
   </entry>
   <entry>
@@ -34,9 +46,9 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>数据结构</tag>
         <tag>平衡树</tag>
         <tag>文艺平衡树</tag>
+        <tag>数据结构</tag>
         <tag>树</tag>
       </tags>
   </entry>
@@ -49,8 +61,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>数据结构</tag>
         <tag>平衡树</tag>
+        <tag>数据结构</tag>
         <tag>树</tag>
       </tags>
   </entry>
@@ -63,9 +75,9 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>数据结构</tag>
         <tag>平衡树</tag>
         <tag>文艺平衡树</tag>
+        <tag>数据结构</tag>
         <tag>树</tag>
       </tags>
   </entry>
@@ -77,8 +89,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>树</tag>
+        <tag>动态规划</tag>
         <tag>点分治</tag>
       </tags>
   </entry>
@@ -105,8 +117,8 @@
       <tags>
         <tag>基础算法</tag>
         <tag>数据结构</tag>
-        <tag>动态规划</tag>
         <tag>树</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -165,8 +177,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>字符串</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -515,10 +527,10 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
-        <tag>区间最值</tag>
         <tag>数据结构</tag>
-        <tag>区间</tag>
+        <tag>区间最值</tag>
         <tag>单调队列</tag>
+        <tag>区间</tag>
         <tag>队列</tag>
       </tags>
   </entry>
@@ -534,8 +546,8 @@
         <tag>区间最值</tag>
         <tag>ST表</tag>
         <tag>动态规划</tag>
-        <tag>区间</tag>
         <tag>单调队列</tag>
+        <tag>区间</tag>
         <tag>队列</tag>
         <tag>矩阵</tag>
       </tags>
@@ -548,8 +560,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>字符串</tag>
+        <tag>提高算法</tag>
         <tag>动态规划</tag>
       </tags>
   </entry>
@@ -598,8 +610,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>树</tag>
+        <tag>动态规划</tag>
         <tag>背包问题</tag>
       </tags>
   </entry>
@@ -780,8 +792,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>LCA</tag>
         <tag>树</tag>
+        <tag>LCA</tag>
         <tag>倍增</tag>
       </tags>
   </entry>
@@ -793,9 +805,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>区间最值</tag>
         <tag>提高算法</tag>
         <tag>数据结构</tag>
+        <tag>区间最值</tag>
         <tag>ST表</tag>
       </tags>
   </entry>
@@ -921,8 +933,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>动态规划</tag>
         <tag>数论</tag>
+        <tag>动态规划</tag>
         <tag>离散化</tag>
       </tags>
   </entry>
