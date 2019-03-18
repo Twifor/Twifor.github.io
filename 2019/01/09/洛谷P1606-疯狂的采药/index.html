@@ -125,7 +125,7 @@
 <meta property="og:site_name" content="Twifor~Liyh">
 <meta property="og:description" content="难度：普及/提高- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;LiYuxiang是个天资聪颖的孩子，他的梦想是成为世界上最伟大的医师。为此，他想拜附近最有威望的医师为师。医师为了判断他的资质，给他出了一个难题。医师把他带到一个到处都是草药的山洞里对他说:“孩子，这个山洞里有一些不同种类的草药，采每一种都需要一些时间，每一种也有它自身的价">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-13T04:58:57.596Z">
+<meta property="og:updated_time" content="2019-03-18T13:12:57.192Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[洛谷P1606]疯狂的采药">
 <meta name="twitter:description" content="难度：普及/提高- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;LiYuxiang是个天资聪颖的孩子，他的梦想是成为世界上最伟大的医师。为此，他想拜附近最有威望的医师为师。医师为了判断他的资质，给他出了一个难题。医师把他带到一个到处都是草药的山洞里对他说:“孩子，这个山洞里有一些不同种类的草药，采每一种都需要一些时间，每一种也有它自身的价">
@@ -421,7 +421,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-13 12:58:57" itemprop="dateModified" datetime="2019-01-13T12:58:57+08:00">2019-01-13</time>
+                <time title="修改时间：2019-03-18 21:12:57" itemprop="dateModified" datetime="2019-03-18T21:12:57+08:00">2019-03-18</time>
               
             
           </span>
@@ -488,7 +488,9 @@
 <h4 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式:"></a>输出格式:</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输出一行，这一行只包含一个整数，表示在规定的时间内，可以采到的草药的最大总价值。</p>
 <h3 id="输入输出样例"><a href="#输入输出样例" class="headerlink" title="输入输出样例"></a>输入输出样例</h3><h4 id="Sample-input"><a href="#Sample-input" class="headerlink" title="Sample input"></a>Sample input</h4><blockquote>
 <p>70 3<br>71 100<br>69 1<br>1 2</p>
-<h4 id="Sample-output"><a href="#Sample-output" class="headerlink" title="Sample output"></a>Sample output</h4><p>140</p>
+</blockquote>
+<h4 id="Sample-output"><a href="#Sample-output" class="headerlink" title="Sample output"></a>Sample output</h4><blockquote>
+<p>140</p>
 </blockquote>
 <h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;无限背包问题，属于经典的线型动态规划。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;与01背包不同的是，无限背包允许每个物品无穷次加入背包。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设f(x，y)表示在容量剩余y时，将x~m物品加入背包的最大价值。则可列出状态转移方程:</p>
 <script type="math/tex; mode=display">f(x，y)=\begin{cases}
