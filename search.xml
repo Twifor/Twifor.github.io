@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[单调栈与最大矩形面积]]></title>
+    <url>%2F2019%2F03%2F19%2F%E5%8D%95%E8%B0%83%E6%A0%88%E4%B8%8E%E6%9C%80%E5%A4%A7%E7%9F%A9%E5%BD%A2%E9%9D%A2%E7%A7%AF%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最近博客比较高能，然而突然来了一个单调栈2333，其实这是为了补充之前的知识漏洞。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;栈是什么就不说了。单调栈是指满足严格单调性的栈，它的元素满足递增或者递减的性质，与单调队列一样，单调栈也可以进行优化操作。现在来看一道经典问题：最大矩形面积。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;给定若干矩形如图一（来源网络，侵删）：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;求其中最大面积的矩形，图二中阴影部分便是答案。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如何求解呢？如果$O(n^2)$扫一遍效率太低，可以考虑单调栈的做法。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于一个矩形，它向左向右延伸的最大距离就是它的高度能够延伸的最大宽度，如果向左能够延伸到l，那么l的下一个矩形高度一定小于该矩形高度，否则就可以继续延伸。我们的重点就是利用这个性质来求出每一个矩形向左、向右的最大延伸距离，这个过程可以用单调栈来完成。这和悬线法有些类似，但又有所不同。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;和单调队列一样，栈中存的是下标。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;求最左位置和最右位置分别需要一个单调递增的栈，具体做法如下（以最左位置为例）： 假设第x个矩形要进栈。 若栈顶元素下标所对应的矩形高度不小于x的高度，弹出该元素，直到栈空或栈顶元素对应高度小于x高度。 若此时栈已空，令l[x]=1，否则l[x]置为栈顶元素加一。 x进栈。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;算法正确性证明：只需证明l求解的正确性即可。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于栈非空的情况，由于此时栈顶元素对应高度已经小于x的高度，栈顶元素以及其左方的元素都不能成为l值，这时栈顶元素v的右侧第一个元素p一定为x的最左值。倘若p的高度小于x的高度，如果p没有被弹出，那么栈顶元素应该是p而不是v，矛盾。如果p已经被弹出，这说明在p到x之间有一个比p更小的元素q进栈，这样栈顶元素应该为q而非v，矛盾。因此p的高度不小于x的高度，即p是x的最左值。如果栈为空，说明之前没有出现过比x高度更小的元素，l显然为1，得证。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;求最右值时反方向进栈，r[x]要置为栈顶元素减一，证明同上。单调栈时间复杂度可达到$O(n)$。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面例题一道：洛谷(P3804)。 给定一个只包含小写字母的字符串S,请你求出 S 的所有出现次数不为 1 的子串的出现次数乘上该子串长度的最大值。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;咦？这好像是后缀自动机的模板题？这里选此题便是为了用后缀数组和单调栈来解决后缀自动机的问题，后缀自动机以后的博客更新。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;根据后缀数组中的有关性质可以发现，出现次数不止一次的子串必然是至少两个后缀的公共前驱，为了得到最大值，我们应该取最长公共前驱，这个可以用height数组来完成。对于height值组成的序列，容易知道答案就是： \max\{(b-a+2)\min\{height[k]\}\},a\leq k \leq b,2\leq a\leq b\leq n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这恰好就是上面所说的最大矩形面积问题，用单调栈解决即可。1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071#include&lt;bits/stdc++.h&gt;#define N 1000000+20using namespace std;int n, sa[N], tp[N], rk[N], tax[N], h[N], M, L[N], R[N];long long ans;char op[N] = &#123;'\0'&#125;;stack&lt;int&gt; sta1, sta2;inline void mySort() &#123; for (int i = 0; i &lt;= M; i++)tax[i] = 0; for (int i = 1; i &lt;= n; i++)tax[rk[i]]++; for (int i = 1; i &lt;= M; i++)tax[i] += tax[i - 1]; for (int i = n; i &gt;= 1; i--)sa[tax[rk[tp[i]]]--] = tp[i];&#125;inline void solve() &#123; M = 30; for (int i = 1; i &lt;= n; i++)rk[i] = op[i] - 'a' + 1, tp[i] = i; mySort(); for (int w = 1, p = 0; p &lt; n; M = p, w &lt;&lt;= 1) &#123; p = 0; for (int i = 1; i &lt;= w; i++)tp[++p] = n - w + i; for (int i = 1; i &lt;= n; i++)if (sa[i] &gt; w)tp[++p] = sa[i] - w; mySort(); for (int i = 1; i &lt;= n; i++)tp[i] = rk[i]; rk[sa[1]] = p = 1; for (int i = 2; i &lt;= n; i++) &#123; rk[sa[i]] = (tp[sa[i - 1]] == tp[sa[i]] &amp;&amp; tp[sa[i - 1] + w] == tp[sa[i] + w]) ? p : ++p; &#125; &#125;&#125;inline void getHeight() &#123; int k = 0, j; for (int i = 1; i &lt;= n; i++) &#123; if (rk[i] == 1)h[rk[i]] = k = 0; else &#123; if (k)k--; j = sa[rk[i] - 1]; while (j + k &lt;= n &amp;&amp; i + k &lt;= n &amp;&amp; op[j + k] == op[i + k])++k; h[rk[i]] = k; &#125; &#125;&#125;inline void add1(int x) &#123; while (!sta1.empty() &amp;&amp; h[sta1.top()] &gt;= h[x])sta1.pop(); if (sta1.empty())L[x] = 2; else L[x] = sta1.top() + 1; sta1.push(x);&#125;inline void add2(int x) &#123; while (!sta2.empty() &amp;&amp; h[sta2.top()] &gt;= h[x])sta2.pop(); if (sta2.empty())R[x] = n; else R[x] = sta2.top() - 1; sta2.push(x);&#125;int main() &#123; ios::sync_with_stdio(false); cin &gt;&gt; (op + 1); n = strlen(op + 1); solve(), getHeight(); for (int i = 2; i &lt;= n; i++)add1(i); for (int i = n; i &gt;= 2; i--)add2(i); for (int i = 2; i &lt;= n; i++)ans = max(ans, (long long) (R[i] - L[i] + 2) * h[i]); cout &lt;&lt; ans; return 0;&#125;]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>基础算法</tag>
+        <tag>数据结构</tag>
+        <tag>栈</tag>
+        <tag>单调栈</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[后缀数组]]></title>
+    <url>%2F2019%2F03%2F19%2F%E5%90%8E%E7%BC%80%E6%95%B0%E7%BB%84%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;后缀数组是一类应用在字符串中的算法。本文改自这篇博客，下面的代码基于这个题目。 后缀&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在KMP匹配算法中已经提及。对于字符串abcde，它的后缀为abcde、bcde、…、de、e，这里的后缀是可以含本身的。 后缀字典序&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;字典序排列是两个字符串之间进行排列比较的手段，它的做法是从左到右依次比较两个字符串的对应位置，ascii码较小的一个字典序更小。如果到某一个字符串已经比较到结尾，则长度较小的一个字典序更小。例如ab&lt;ac，ab&lt;abc。 后缀数组及其求法&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先认识什么是后缀数组。对于一个字符串的所有后缀，我们将它们按照字典序从小到大排列，并开一个数组sa使得sa[i]为排名为i的后缀在原字符串中的起始位置（为简便起见，在下文中称为位置。排名从1开始，原字符串下标也从1开始），这个sa数组就称为后缀数组（Suffix Array ，SA）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于后缀的长度各不相同，它们的字典序序号必然各不相同。此时构造一个数组rk为sa数组的反射，即rk[i]表示位置为i的后缀的排名。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面探讨后缀数组的构造方法，这里只介绍倍增方法。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一种简单粗暴的方法就是直接快排，时间复杂度为$O(n^2logn)$，显然不可行，倍增算法可以将其优化到$O(nlogn)$复杂度。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;倍增的思想：将字符串看成两部分：前半部分和后半部分。这样字符串就成为了一个二元组，前半部分为第一关键字，后半部分为第二关键字。如果我们已经求出第一关键字的排名，并求出了第二关键字的相对位置，那么总的排序序列就可以被求出了。之后再将前后两部分看成一个整体，作为下一次运算的前半部分，依次递归进行。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在这里，采用数组tp来当做第二关键字，它的作用与sa类似：tp[i]表示第二关键字排名为i的后缀的位置。第一关键字用rk数组来充当。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先第一步：将每一个后缀按首位字符排序，第一关键字为首字符ascii码，第二关键字为首字符的下标。这里的第二关键字就是tp数组，事实上只要tp数组构成{1..n}-&gt;{1..n}的双射即可，为方便起见，这里进行tp[i]=i的构造。1for (int i = 1; i &lt;= n; i++)rk[i] = op[i] - '0', tp[i] = n - i + 1;//op是原字符串 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面进行排序，排序即是根据rk和tp数组对sa数组进行修改。对于排序的详细操作留在文末，继续看倍增操作。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;到这里sa中已经记录了按照首字符排列的序列信息，下面考虑倍增。123for (int w = 1, p = 0; p &lt; n;w &lt;&lt;= 1) &#123; //...&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w是指目前已经按照w大小进行排序（比如一开始只按首字符排序，故w=1），p暂且不用管它。每一次循环之后都需要w自乘2。123p = 0;for (int i = 1; i &lt;= w; i++)tp[++p] = n - w + i;for (int i = 1; i &lt;= n; i++)if (sa[i] &gt; w)tp[++p] = sa[i] - w; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面是循环体中的第一部分代码，这里p用来记录排名。这三行代码的作用是求出第二关键字的相对排名，根据倍增思想，充当第二关键字的字符串长度也应为w。对于一个后缀，我们已经求出了它前w的字符作为关键字的排名，现在要求再向后w个字符的相对排名。这时可以发现有些后缀是没有第二关键字的，比如位置为n、n-1、…、n-w+1的后缀就没有第二关键字。这里的没有是指完全没有，部分没有的后缀不计入其中。对于这些没有第二关键字的后缀，根据字典序的定义，它们在按照第二关键字排序时应该排到前面，因次第一个for循环将末尾那些不存在第二关键字的后缀首先进行了排名。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第二步是很精妙的操作。容易发现位置为i的后缀的第二关键字恰好就是位置为i+w的后缀的第一关键字，而后者的相对位置已经确定，那么不妨就根据这个关系更新第二关键字的相对位置。第二个for循环中，从排名第1的后缀开始遍历，凡是满足sa[i]&gt;w的后缀（sa[i]&gt;w表示这个后缀的前面必有一个第二关键字与它第一关键字相同的后缀），更新它的第二关键字排名。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样第二关键字的tp数组也被求出，在利用已经求出的rk数组，可以再进行一步排序来更新sa，排序的详细步骤仍然留到最后。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是下一次倍增中需要rk数组，rk数组还没有更新，因此下面需要更新rk数组。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面已经提到，rk数组是sa数组的反射，其实这种说法并不准确。在整个过程结束后，rk数组确实是sa数组的反射，但在求解过程中并不是。sa数组储存排名为i的后缀的位置，这是一个从排名到后缀的双射。也就是说，对于我们目前的排序关键字，可能存在“完全相同”的两个后缀，它们在sa数组中是得不到体现的（虽然排名一定靠着），在更新rk数组时要留意这一点。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;更新rk数组时需要留意相同的后缀，并给它们相同的排名，即两个后缀的rk值可能相同。容易发现，当所有后缀的rk值两两不同时，说明后缀数组构造完毕，此时结束循环，这也是判断后缀数组构造完成的指标。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;判定两个后缀相同可以用如下方法判定：第一关键字排名（rk）值相同并且第二关键字排名（rk）值相同，这样就可以判定它们第一关键字和第二关键字都相同，两个后缀在当前关键字下便相同。这里需要上一次的rk数组，但同时又要更新rk数组，为了防止混淆，我们将rk数组复制到tp中，此时tp数组已经没用了。1for (int i = 1; i &lt;= n; i++)tp[i] = rk[i]; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面是更新rk的核心代码：1234rk[sa[1]] = p = 1;//初始化for (int i = 2; i &lt;= n; i++) &#123; rk[sa[i]] = (tp[sa[i - 1]] == tp[sa[i]] &amp;&amp; tp[sa[i - 1] + w] == tp[sa[i] + w]) ? p : ++p;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里p的意义是记录互不相同的排名数量，当p=n时所有后缀排名互不相同，结束循环，这也是上文中for循环的终止条件。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面的for循环利用相同后缀排名必相同的性质，将每一个后缀都与前一个后缀进行比较，如果第一关键字排名相同并且第二关键字排名相同则与上一个后缀的排名相同，否则分配一个新排名。这里的第二关键字排名仍然用上文所说的性质。 基数排序&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在可以来探讨排序的方法，这里采用基数排序。123456void mySort() &#123; for (int i = 0; i &lt;= M; i++)tax[i] = 0; for (int i = 1; i &lt;= n; i++)tax[rk[i]]++; for (int i = 1; i &lt;= M; i++)tax[i] += tax[i - 1]; for (int i = n; i &gt;= 1; i--)sa[tax[rk[tp[i]]]--] = tp[i];&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tax是基数排序用的桶，M是第一关键字的最大取值，由于第一关键字是排名信息，可以设置成1e6+5（按照题目条件）。第一个for循环将桶清空。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第二个for循环将第一关键字的信息放入桶中，统计数目。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第三个for循环求前缀和，这是为了方便求排名。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第四个for循环较难理解。倒序遍历后缀，由于已经求了前缀和，这时的tax值就是排名，之后用自减一的方式将其从桶中取出。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另外这里有一处优化。M由于是第一关键字的最大值，因此可以根据每一次循环的p值来修改M，以降低时间复杂度。注意一开始第一关键字的最大值是’z’-‘0’。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样就得到了求后缀数组的完整步骤，下面给出模板题代码：12345678910111213141516171819202122232425262728293031323334353637383940#include&lt;bits/stdc++.h&gt;#define N 1000000+20using namespace std;int n, sa[N], tp[N], rk[N], tax[N], M;char op[N];inline void mySort() &#123; for (int i = 0; i &lt;= M; i++)tax[i] = 0; for (int i = 1; i &lt;= n; i++)tax[rk[i]]++; for (int i = 1; i &lt;= M; i++)tax[i] += tax[i - 1]; for (int i = n; i &gt;= 1; i--)sa[tax[rk[tp[i]]]--] = tp[i];&#125;inline void solve() &#123; M = 80; for (int i = 1; i &lt;= n; i++)rk[i] = op[i] - '0' + 1, tp[i] = i; mySort(); for (int w = 1, p = 0; p &lt; n; M = p, w &lt;&lt;= 1) &#123; p = 0; for (int i = 1; i &lt;= w; i++)tp[++p] = n - w + i; for (int i = 1; i &lt;= n; i++)if (sa[i] &gt; w)tp[++p] = sa[i] - w; mySort(); for (int i = 1; i &lt;= n; i++)tp[i] = rk[i]; rk[sa[1]] = p = 1; for (int i = 2; i &lt;= n; i++) &#123; rk[sa[i]] = (tp[sa[i - 1]] == tp[sa[i]] &amp;&amp; tp[sa[i - 1] + w] == tp[sa[i] + w]) ? p : ++p; &#125; &#125; for (int i = 1; i &lt;= n; i++) &#123; cout &lt;&lt; sa[i] &lt;&lt; " "; &#125;&#125;int main() &#123; cin &gt;&gt; op + 1; n = strlen(op + 1); solve(); return 0;&#125; height数组&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;height数组是应用后缀数组的利器。首先定义最长公共前缀lcp(i,j)：位置为i和位置为j的后缀的最长公共前缀长度。于是有height数组： height[i]=lcp(sa[i],sa[i-1])&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;也就是说，height[i]表示排名为i和排名为i-1的后缀的最长公共前缀长度。规定height[1]=0。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如何求height数组？这需要利用一个重要性质（证明略）： height[rk[i]]\geq height[rk[i-1]]-1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;以此递推，不难写出代码：123456789101112inline void getHeight() &#123; int k = 0, j; for (int i = 1; i &lt;= n; i++) &#123; if (rk[i] == 1)h[rk[i]] = k = 0; else &#123; if (k)k--; j = sa[rk[i] - 1]; while (j + k &lt;= n &amp;&amp; i + k &lt;= n &amp;&amp; op[j + k] == op[i + k])++k; h[rk[i]] = k; &#125; &#125;&#125; 后缀数组的应用&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对后缀进行字典序排序实质上是利用了排序后相邻后缀差异尽可能小的性质，利用这个性质可以解决很多问题。 两个后缀的最大公共前缀&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于位置为i、j的两个后缀，其最大公共前缀长度为： \min\{height[rk[i]+1],height[rk[i]+2],...,height[rk[j]]\},rk[i]]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>提高算法</tag>
+        <tag>字符串</tag>
+        <tag>后缀数组</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[倍增算法]]></title>
     <url>%2F2019%2F03%2F13%2F%E5%80%8D%E5%A2%9E%E7%AE%97%E6%B3%95%2F</url>
     <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;介绍倍增算法+三道例题，题目来自洛谷，难度至少提高+/省选-。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;倍增算法在之前的快速幂、求LCA算法、ST表中都有体现，它基于下面的基本原理： \forall x\in \mathbb {N},x=2^{p_1}+2^{p_2}+\cdots +2^{p_n},0\leq p_1 < p_2 < \cdots < p_n,p_i\in \mathbb {N}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;也就是说，对于任意一个自然数，它都可以唯一地表示成若干个互异的2的方幂相加的形式。利用这个原理，我们可以将x的求得过程降至对数级别。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在实际操作中，通常采用“跳跃式行进”的方法去应用倍增，具体做法是：从2的高幂次方幂开始进行跳跃，如果越过目标，则将方幂减少一倍（即下一个方幂）；如果未越过，可以证明该方幂一定在上面给出的二进制拆分表达式中，进行跳跃操作，之后也需要将方幂减少一倍。重复这个过程直到取尽2的所有自然数方幂，此时就已经跳跃到目标位置。这样可以在$O(logn)$复杂度下完成跳跃操作。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面三道例题，点击题目标题可进行跳转。样例及说明略，见洛谷原题。 例题一 货车运输(P1967)难度：提高+/省选- 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A国有n座城市，编号从1到n，城市之间有m条双向道路。每一条道路对车辆都有重量限制，简称限重。现在有q辆货车在运输货物， 司机们想知道每辆车在不超过车辆限重的情况下，最多能运多重的货物。 输入输出格式输入格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第一行有两个用一个空格隔开的整数 n,m，表示A国有n座城市和 m 条道路。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接下来m行每行 3 个整数 x, y, z，每两个整数之间用一个空格隔开，表示从 x 号城市到y号城市有一条限重为z的道路。注意： x 不等于 y，两座城市之间可能有多条道路 。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接下来一行有一个整数 q，表示有 q 辆货车需要运货。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接下来 q 行，每行两个整数 x、y，之间用一个空格隔开，表示一辆货车需要从 x 城市运输货物到 y 城市，注意： x 不等于 y 。 输出格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;共有 q 行，每行一个整数，表示对于每一辆货车，它的最大载重是多少。如果货车不能到达目的地，输出-1。 题解&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这题本质上是求图中任意两点可能路径中最小边权值的最大值。看到最小值的最大值首先想到二分答案，二分答案比暴力快，但是免不了每次都要遍历一遍图，效率低下一定TLE。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考虑其它方法。可以证明任意两点最大值出现的路径一定在该图的最大生成树上，于是用Kruskal算法配合并查集求出最大生成树。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;树构造完毕后，两点的路径显然就是经过两个点LCA的路径，这里改一下倍增法求LCA的步骤就可以轻易求出答案。查询时间复杂度$O(logn)$。1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192939495#include&lt;bits/stdc++.h&gt;#define N 10005#define inf 0x7ffffffusing namespace std;inline int read() &#123;//神奇的读入优化 char e = getchar(); int s = 0; while (e &lt; '-')e = getchar(); while (e &gt; '-')s = (s &lt;&lt; 1) + (s &lt;&lt; 3) + (e &amp; 15), e = getchar(); return s;&#125;struct Edge &#123; int to, v, next;&#125; edge[N];struct Temp &#123; int from, to, v; bool operator&lt;(Temp t) &#123; return v &gt; t.v; &#125;&#125; temp[5 * N];int n, m, head[N], cnt = 1, father[N], grand[N][16], minn[N][16], depth[N];inline void add(int x, int y, int z) &#123; edge[cnt].v = z, edge[cnt].to = y, edge[cnt].next = head[x], head[x] = cnt++;&#125;int find(int x) &#123; return father[x] == x ? x : father[x] = find(father[x]);&#125;void DFS(int x) &#123; for (int i = head[x]; i; i = edge[i].next) if (!depth[edge[i].to]) &#123; grand[edge[i].to][0] = x, minn[edge[i].to][0] = edge[i].v, depth[edge[i].to] = depth[x] + 1; for (int j = 1; j &lt;= 15; j++) &#123; grand[edge[i].to][j] = grand[grand[edge[i].to][j - 1]][j - 1]; minn[edge[i].to][j] = min(minn[edge[i].to][j - 1], minn[grand[edge[i].to][j - 1]][j - 1]); &#125; DFS(edge[i].to); &#125;&#125;int findAns(int x, int y) &#123; if (x == y)return inf; if (find(x) != find(y))return -1; int ans = inf; if (depth[x] == depth[y]) &#123; for (int i = 15; i &gt;= 0; i--) &#123; if (grand[x][i] != grand[y][i]) ans = min(ans, min(minn[x][i], minn[y][i])), x = grand[x][i], y = grand[y][i]; &#125; return min(ans, min(minn[x][0], minn[y][0])); &#125; else &#123; if (depth[x] &lt; depth[y]) &#123; for (int i = 15; i &gt;= 0; i--) &#123; if (depth[grand[y][i]] &gt;= depth[x])ans = min(ans, minn[y][i]), y = grand[y][i]; &#125; return min(ans, findAns(x, y)); &#125; else &#123; for (int i = 15; i &gt;= 0; i--) &#123; if (depth[grand[x][i]] &gt;= depth[y])ans = min(ans, minn[x][i]), x = grand[x][i]; &#125; return min(ans, findAns(x, y)); &#125; &#125;&#125;int main() &#123; n = read(), m = read(); for (int i = 1; i &lt;= n; i++) &#123; father[i] = i; for (int j = 0; j &lt;= 15; j++)minn[i][j] = inf; &#125; for (int i = 1; i &lt;= m; i++)temp[i].from = read(), temp[i].to = read(), temp[i].v = read(); sort(temp + 1, temp + m + 1); for (int i = 1; i &lt;= m; i++) if (find(temp[i].from) != find(temp[i].to)) &#123; father[find(temp[i].from)] = find(temp[i].to); add(temp[i].from, temp[i].to, temp[i].v); add(temp[i].to, temp[i].from, temp[i].v); &#125; for (int i = 1; i &lt;= n; i++)if (!depth[i])depth[i] = 1, DFS(i); int q = read(); for (int i = 1; i &lt;= q; i++) &#123; int x = read(), y = read(); cout &lt;&lt; findAns(x, y) &lt;&lt; endl; &#125; return 0;&#125; 例题二 开车旅行(P1081)难度：省选/NOI- 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小A和小B决定利用假期外出旅行，他们将想去的城市从1到N编号，且编号较小的城市在编号较大的城市的西边，已知各个城市的海拔高度互不相同，记城市i的海拔高度为$H_i$ ，城市i和城市j之间的距离$d_{ij}$恰好是这两个城市海拔高度之差的绝对值，即$d_{ij}=|H_i-H_j|$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;旅行过程中，小 A和小B 轮流开车，第一天小 A 开车，之后每天轮换一次。他们计划选择一个城市 S 作为起点，一直向东行驶，并且最多行驶 X公里就结束旅行。小 A 和小 B的驾驶风格不同，小 B总是沿着前进方向选择一个最近的城市作为目的地，而小 A总是沿着前进方向选择第二近的城市作为目的地（注意：本题中如果当前城市到两个城市的距离相同，则认为离海拔低的那个城市更近）。如果其中任何一人无法按照自己的原则选择目的城市，或者到达目的地会使行驶的总距离超出 X 公里，他们就会结束旅行。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在启程之前，小 A想知道两个问题：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于一个给定的 $X=X_0$，从哪一个城市出发，小 A开车行驶的路程总数与小 B 行驶的路程总数的比值最小（如果小 B 的行驶路程为 0，此时的比值可视为无穷大，且两个无穷大视为相等）。如果从多个城市出发，小 A 开车行驶的路程总数与小 B 行驶的路程总数的比值都最小，则输出海拔最高的那个城市。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对任意给定的 $X=X_i$和出发城市 $S_i$，小 A开车行驶的路程总数以及小 B 行驶的路程总数。 输入输出格式输入格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第一行包含一个整数N，表示城市的数目。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第二行有 N个整数，每两个整数之间用一个空格隔开，依次表示城市 1 到城市 N的海拔高度，即$H_1,H_2,\cdots,H_n$，且每个$H_i$都是不同的。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第三行包含一个整数$X_0$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第四行为一个整数M，表示给定M组$S_i$和$X_i$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接下来的 M 行，每行包含 2 个整数$S_i$和$X_i$，表示从城市$S_i$出发，最多行驶$X_i$公里。 输出格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输出共 M+1行。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第一行包含一个整数$S_0$ ，表示对于给定的$X_0$，从编号为$S_0$的城市出发，小A开车行驶的路程总数与小B行驶的路程总数的比值最小。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接下来的M行，每行包含 2个整数，之间用一个空格隔开，依次表示在给定的$S_i$和$X_i$下小 A 行驶的里程总数和小 B 行驶的里程总数。 题解&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本题有一定难度。首先应该考虑预处理出每一个城市小A的目标和小B的目标。最直接的方法是暴力扫一遍找出最小和第二小，时间复杂度$O(n^2)$。在这样的数据量下，仅这个步骤就已经TLE了，显然不可取。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一个较好的方法是从右向左进行预处理，每一次保证待求城市右侧的城市的高度升序（降序也可），然后二分求最小和次小。这样需要向有序序列中不断插入元素，还要保证能够二分，可以选择用平衡树这个数据结构完成这个操作，这里用fhq treap。平衡树操作求第二小可以先求最小再将其最小值删除，再求的最小值就是实际的第二小，紧接着把最小值重新插入即可。预处理时间复杂度$O(nlogn)$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然后考虑后面的操作。对于小A的第一个问题，一种想法是遍历出发城市进行判断，这样做的时间复杂度仍然为$O(n^2)$，会TLE，于是采用倍增算法将其优化至$O(nlogn)$。预处理出从某个城市开始走$2^k$步的目标城市和小A、小B的驾驶距离，进行倍增即可。第二个问题也可以用倍增的方法解决。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115#include&lt;bits/stdc++.h&gt;#define N 100005#define ABS(x) ((x)&gt;=0?(x):-(x))using namespace std;struct Node &#123; int v, ch[2], key, rk;&#125; node[N &lt;&lt; 1];int cnt = 1, root, to[N][2], op[N], n;int A[N][2][19], B[N][2][19], TO[N][2][19];inline int read() &#123; char e = getchar(); int s = 0, f = 0; while (e &lt; '-')e = getchar(); if (e == '-')f = 1, e = getchar(); while (e &gt; '-')s = (s &lt;&lt; 1) + (s &lt;&lt; 3) + (e &amp; 15), e = getchar(); return f ? -s : s;&#125;void split(int rt, int &amp;a, int &amp;b, int k) &#123; if (rt == 0)a = b = 0; else &#123; if (node[rt].v &lt;= k)a = rt, split(node[rt].ch[1], node[a].ch[1], b, k); else b = rt, split(node[rt].ch[0], a, node[b].ch[0], k); &#125;&#125;void merge(int &amp;rt, int a, int b) &#123; if (a == 0 || b == 0)rt = a + b; else if (node[a].key &lt; node[b].key)rt = b, merge(node[rt].ch[0], a, node[b].ch[0]); else rt = a, merge(node[rt].ch[1], node[a].ch[1], b);&#125;int newNode(int x, int rk) &#123; node[cnt].v = x, node[cnt].key = rand(), node[cnt].rk = rk; return cnt++;&#125;void insert(int x, int rk) &#123; int p = newNode(x, rk), a, b; split(root, a, b, x), merge(a, a, p), merge(root, a, b);&#125;void del(int x) &#123; int a, b, c; split(root, a, b, x), split(a, a, c, x - 1), merge(root, a, b);&#125;int findMin(int rt, int x) &#123; if (rt == 0)return 0; int ans; if (node[rt].v &lt; x)ans = findMin(node[rt].ch[1], x); else ans = findMin(node[rt].ch[0], x); if (ans == 0)return rt; if (ABS(node[ans].v - x) &lt; ABS(node[rt].v - x))return ans; else if (ABS(node[ans].v - x) &gt; ABS(node[rt].v - x))return rt; else return node[ans].v &lt; node[rt].v ? ans : rt;&#125;int findMin2(int x, int a) &#123; del(node[a].v); int ans = findMin(root, x); insert(node[a].v, node[a].rk); return ans;&#125;inline void solve() &#123; int x0 = read(), ans = 1, m; double minn = 1e9, tp; for (int i = 1; i &lt;= n; i++) &#123; int p = i, a = 0, b = 0; for (int j = 18; j &gt;= 0; j--) if (TO[p][0][j] != 0 &amp;&amp; a + b + A[p][0][j] + B[p][0][j] &lt;= x0) a += A[p][0][j], b += B[p][0][j], p = TO[p][0][j]; tp = (b == 0 ? 1e9 : (double) a / b); if (tp &lt; minn)ans = i, minn = tp; else if (tp == minn &amp;&amp; op[i] &gt; op[ans])ans = i; &#125; cout &lt;&lt; ans &lt;&lt; endl; m = read(); for (int i = 1; i &lt;= m; i++) &#123; int S = read(), X = read(), a = 0, b = 0; for (int j = 18; j &gt;= 0; j--) &#123; if (TO[S][0][j] != 0 &amp;&amp; a + b + A[S][0][j] + B[S][0][j] &lt;= X) &#123; a += A[S][0][j], b += B[S][0][j], S = TO[S][0][j]; &#125; &#125; cout &lt;&lt; a &lt;&lt; " " &lt;&lt; b &lt;&lt; endl; &#125;&#125;int main() &#123; srand(time(NULL)); n = read(); for (int i = 1; i &lt;= n; i++)op[i] = read(); insert(op[n], n); for (int i = n - 1; i &gt;= 1; i--) to[i][1] = findMin(root, op[i]), to[i][0] = findMin2(op[i], to[i][1]), insert(op[i], i); for (int i = 1; i &lt;= n; i++)to[i][0] = node[to[i][0]].rk, to[i][1] = node[to[i][1]].rk; for (int i = n - 1; i &gt;= 1; i--) &#123; A[i][0][0] = ABS(op[i] - op[to[i][0]]), B[i][1][0] = ABS(op[i] - op[to[i][1]]); TO[i][0][0] = to[i][0], TO[i][1][0] = to[i][1]; for (int j = 1; j &lt;= 18; j++) &#123; TO[i][0][j] = TO[TO[i][0][j - 1]][j == 1][j - 1]; TO[i][1][j] = TO[TO[i][0][j - 1]][j != 1][j - 1]; A[i][0][j] = A[i][0][j - 1] + (j == 1 ? 0 : A[TO[i][0][j - 1]][0][j - 1]); B[i][1][j] = B[i][1][j - 1] + (j == 1 ? 0 : B[TO[i][1][j - 1]][1][j - 1]); A[i][1][j] = A[i][1][j - 1] + (j == 1 ? A[TO[i][1][0]][0][0] : A[TO[i][1][j - 1]][1][j - 1]); B[i][0][j] = B[i][0][j - 1] + (j == 1 ? B[TO[i][0][0]][1][0] : B[TO[i][0][j - 1]][0][j - 1]); &#125; &#125; solve(); return 0;&#125; 例题三 跑路(P1613)难度：提高+/省选- 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小A的工作不仅繁琐，更有苛刻的规定，要求小A每天早上在6：00之前到达公司，否则这个月工资清零。可是小A偏偏又有赖床的坏毛病。于是为了保住自己的工资，小A买了一个十分牛B的空间跑路器，每秒钟可以跑2^k千米（k是任意自然数）。当然，这个机器是用longint存的，所以总跑路长度不能超过maxlongint千米。小A的家到公司的路可以看做一个有向图，小A家为点1，公司为点n，每条边长度均为一千米。小A想每天能醒地尽量晚，所以让你帮他算算，他最少需要几秒才能到公司。数据保证1到n至少有一条路径。 输入输出格式输入格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第一行两个整数n，m，表示点的个数和边的个数。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接下来m行每行两个数字u，v，表示一条u到v的边。 输出格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一行一个数字，表示到公司的最少秒数。 题解&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其实是一道水题，能想出来方法则这题很简单，想不出来…就想不出来了。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预处理任意两点间是否存在长度为$2^k$的路径，可以使用邻接矩阵快速幂。对于存在该路径的点对，显然可以用1s的时间在两点间“穿越”，相当于两点间有一条权为1的有向边。以此加边构图，最后结点1到结点n的最短路径就是答案，这里可以用Floyd算法求出。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748#include&lt;iostream&gt;using namespace std;int n, m;long long dict[51][51];struct Matrix &#123; int op[51][51]; void operator*=(Matrix p) &#123; int t[51][51] = &#123;0&#125;; for (int i = 1; i &lt;= n; i++) for (int j = 1; j &lt;= n; j++) for (int z = 1; z &lt;= n; z++)t[i][j] += this-&gt;op[i][z] * p.op[z][j]; for (int i = 1; i &lt;= n; i++) for (int j = 1; j &lt;= n; j++)this-&gt;op[i][j] = t[i][j] &gt;= 1; &#125;&#125;a;int main() &#123; ios::sync_with_stdio(false); cin &gt;&gt; n &gt;&gt; m; for (int i = 1; i &lt;= n; i++) &#123; for (int j = 1; j &lt;= n; j++)dict[i][j] = i == j ? 0 : (1l &lt;&lt; 52); &#125; for (int i = 1; i &lt;= m; i++) &#123; int x, y; cin &gt;&gt; x &gt;&gt; y; a.op[x][y] = 1, dict[x][y] = 1; &#125; for (int i = 2; i &lt;= 63; i++) &#123; a *= a; for (int j = 1; j &lt;= n; j++) &#123; for (int z = 1; z &lt;= n; z++)if (a.op[j][z])dict[j][z] = 1; &#125; &#125; for (int k = 1; k &lt;= n; k++) &#123; for (int i = 1; i &lt;= n; i++) &#123; for (int j = 1; j &lt;= n; j++) &#123; if (k != i &amp;&amp; i != j &amp;&amp; k != j) &#123; dict[i][j] = min(dict[i][k] + dict[k][j], dict[i][j]); &#125; &#125; &#125; &#125; cout &lt;&lt; dict[1][n]; return 0;&#125;]]></content>
@@ -89,8 +116,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>树</tag>
         <tag>动态规划</tag>
+        <tag>树</tag>
         <tag>点分治</tag>
       </tags>
   </entry>
@@ -116,9 +143,9 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
+        <tag>动态规划</tag>
         <tag>数据结构</tag>
         <tag>树</tag>
-        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -142,8 +169,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>网络流</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -154,8 +181,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>网络流</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -177,8 +204,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>字符串</tag>
         <tag>提高算法</tag>
+        <tag>字符串</tag>
       </tags>
   </entry>
   <entry>
@@ -499,8 +526,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>ST表</tag>
         <tag>动态规划</tag>
+        <tag>ST表</tag>
         <tag>矩阵</tag>
       </tags>
   </entry>
@@ -529,8 +556,8 @@
         <tag>基础算法</tag>
         <tag>数据结构</tag>
         <tag>区间最值</tag>
-        <tag>单调队列</tag>
         <tag>区间</tag>
+        <tag>单调队列</tag>
         <tag>队列</tag>
       </tags>
   </entry>
@@ -543,11 +570,11 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
+        <tag>动态规划</tag>
         <tag>区间最值</tag>
         <tag>ST表</tag>
-        <tag>动态规划</tag>
-        <tag>单调队列</tag>
         <tag>区间</tag>
+        <tag>单调队列</tag>
         <tag>队列</tag>
         <tag>矩阵</tag>
       </tags>
@@ -560,8 +587,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>字符串</tag>
         <tag>提高算法</tag>
+        <tag>字符串</tag>
         <tag>动态规划</tag>
       </tags>
   </entry>
@@ -610,8 +637,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>树</tag>
         <tag>动态规划</tag>
+        <tag>树</tag>
         <tag>背包问题</tag>
       </tags>
   </entry>
@@ -933,8 +960,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>数论</tag>
         <tag>动态规划</tag>
+        <tag>数论</tag>
         <tag>离散化</tag>
       </tags>
   </entry>

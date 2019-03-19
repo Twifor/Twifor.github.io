@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<script>
+    (function () {
+        if ('') {
+            if (prompt('请输入文章密码') !== '') {
+                alert('密码错误！');
+                if (history.length === 1) {
+                    location.replace("http://twifor.github.io"); // 这里替换成你的首页
+                } else {
+                    history.back();
+                }
+            }
+        }
+    })();
+</script>
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;后缀数组是一类应用在字符串中的算法。本文改自这篇博客，下面的代码基于这个题目。">
+<meta name="keywords" content="提高算法,字符串,后缀数组">
+<meta property="og:type" content="article">
+<meta property="og:title" content="后缀数组">
+<meta property="og:url" content="https://twifor.github.io/2019/03/19/后缀数组/index.html">
+<meta property="og:site_name" content="Twifor~Liyh">
+<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;后缀数组是一类应用在字符串中的算法。本文改自这篇博客，下面的代码基于这个题目。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-03-19T13:59:36.370Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="后缀数组">
+<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;后缀数组是一类应用在字符串中的算法。本文改自这篇博客，下面的代码基于这个题目。">
+
+
+
+
+
+
+  <link rel="canonical" href="https://twifor.github.io/2019/03/19/后缀数组/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>后缀数组 | Twifor~Liyh</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+	<a href="https://github.com/Twifor" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Twifor~Liyh</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://twifor.github.io/2019/03/19/后缀数组/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Twifor">
+      <meta itemprop="description" content="一个打OI的弱鸡">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Twifor~Liyh">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">后缀数组
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-19 16:37:35" itemprop="dateCreated datePublished" datetime="2019-03-19T16:37:35+08:00">2019-03-19</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-19 21:59:36" itemprop="dateModified" datetime="2019-03-19T21:59:36+08:00">2019-03-19</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/算法与OI/" itemprop="url" rel="index"><span itemprop="name">算法与OI</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/19/后缀数组/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/03/19/后缀数组/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;后缀数组是一类应用在字符串中的算法。本文改自<a href="http://www.cnblogs.com/zwfymqz/p/8413523.html" target="_blank" rel="noopener">这篇博客</a>，下面的代码基于<a href="https://www.luogu.org/problemnew/show/P3809" target="_blank" rel="noopener">这个题目</a>。<br><a id="more"></a></p>
+<h4 id="后缀"><a href="#后缀" class="headerlink" title="后缀"></a>后缀</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在KMP匹配算法中已经提及。对于字符串abcde，它的后缀为abcde、bcde、…、de、e，这里的后缀是可以含本身的。</p>
+<h4 id="后缀字典序"><a href="#后缀字典序" class="headerlink" title="后缀字典序"></a>后缀字典序</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;字典序排列是两个字符串之间进行排列比较的手段，它的做法是从左到右依次比较两个字符串的对应位置，ascii码较小的一个字典序更小。如果到某一个字符串已经比较到结尾，则长度较小的一个字典序更小。例如ab&lt;ac，ab&lt;abc。</p>
+<h4 id="后缀数组及其求法"><a href="#后缀数组及其求法" class="headerlink" title="后缀数组及其求法"></a>后缀数组及其求法</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先认识什么是后缀数组。对于一个字符串的所有后缀，我们将它们按照字典序从小到大排列，并开一个数组sa使得sa[i]为排名为i的后缀在原字符串中的起始位置（为简便起见，在下文中称为位置。排名从1开始，原字符串下标也从1开始），这个sa数组就称为后缀数组（Suffix Array ，SA）。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于后缀的长度各不相同，它们的字典序序号必然各不相同。此时构造一个数组rk为sa数组的反射，即rk[i]表示位置为i的后缀的排名。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面探讨后缀数组的构造方法，这里只介绍倍增方法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一种简单粗暴的方法就是直接快排，时间复杂度为$O(n^2logn)$，显然不可行，倍增算法可以将其优化到$O(nlogn)$复杂度。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;倍增的思想：将字符串看成两部分：前半部分和后半部分。这样字符串就成为了一个二元组，前半部分为第一关键字，后半部分为第二关键字。如果我们已经求出第一关键字的排名，并求出了第二关键字的相对位置，那么总的排序序列就可以被求出了。之后再将前后两部分看成一个整体，作为下一次运算的前半部分，依次递归进行。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在这里，采用数组tp来当做第二关键字，它的作用与sa类似：tp[i]表示第二关键字排名为i的后缀的位置。第一关键字用rk数组来充当。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先第一步：将每一个后缀按首位字符排序，第一关键字为首字符ascii码，第二关键字为首字符的下标。这里的第二关键字就是tp数组，事实上只要tp数组构成{1..n}-&gt;{1..n}的双射即可，为方便起见，这里进行tp[i]=i的构造。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)rk[i] = op[i] - <span class="string">'0'</span>, tp[i] = n - i + <span class="number">1</span>;<span class="comment">//op是原字符串</span></span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面进行排序，<strong>排序即是根据rk和tp数组对sa数组进行修改</strong>。对于排序的详细操作留在文末，继续看倍增操作。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;到这里sa中已经记录了按照首字符排列的序列信息，下面考虑倍增。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> w = <span class="number">1</span>, p = <span class="number">0</span>; p &lt; n;w &lt;&lt;= <span class="number">1</span>) &#123;</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w是指目前已经按照w大小进行排序（比如一开始只按首字符排序，故w=1），p暂且不用管它。每一次循环之后都需要w自乘2。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">p = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= w; i++)tp[++p] = n - w + i;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)<span class="keyword">if</span> (sa[i] &gt; w)tp[++p] = sa[i] - w;</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面是循环体中的第一部分代码，这里p用来记录排名。这三行代码的作用是求出第二关键字的相对排名，根据倍增思想，充当第二关键字的字符串长度也应为w。对于一个后缀，我们已经求出了它前w的字符作为关键字的排名，现在要求再向后w个字符的相对排名。这时可以发现有些后缀是没有第二关键字的，比如位置为n、n-1、…、n-w+1的后缀就没有第二关键字。这里的没有是指完全没有，部分没有的后缀不计入其中。对于这些没有第二关键字的后缀，根据字典序的定义，它们在按照第二关键字排序时应该排到前面，因次第一个for循环将末尾那些不存在第二关键字的后缀首先进行了排名。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第二步是很精妙的操作。容易发现位置为i的后缀的第二关键字恰好就是位置为i+w的后缀的第一关键字，而后者的相对位置已经确定，那么不妨就根据这个关系更新第二关键字的相对位置。第二个for循环中，从排名第1的后缀开始遍历，凡是满足sa[i]&gt;w的后缀（sa[i]&gt;w表示这个后缀的前面必有一个第二关键字与它第一关键字相同的后缀），更新它的第二关键字排名。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样第二关键字的tp数组也被求出，在利用已经求出的rk数组，可以再进行一步排序来更新sa，排序的详细步骤仍然留到最后。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是下一次倍增中需要rk数组，rk数组还没有更新，因此下面需要更新rk数组。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面已经提到，rk数组是sa数组的反射，其实这种说法并不准确。在整个过程结束后，rk数组确实是sa数组的反射，但在求解过程中并不是。sa数组储存排名为i的后缀的位置，这是一个从排名到后缀的双射。也就是说，对于我们目前的排序关键字，可能存在“完全相同”的两个后缀，它们在sa数组中是得不到体现的（虽然排名一定靠着），在更新rk数组时要留意这一点。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>更新rk数组时需要留意相同的后缀，并给它们相同的排名</strong>，即两个后缀的rk值可能相同。容易发现，当所有后缀的rk值两两不同时，说明后缀数组构造完毕，此时结束循环，这也是判断后缀数组构造完成的指标。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;判定两个后缀相同可以用如下方法判定：第一关键字排名（rk）值相同并且第二关键字排名（rk）值相同，这样就可以判定它们第一关键字和第二关键字都相同，两个后缀在当前关键字下便相同。这里需要上一次的rk数组，但同时又要更新rk数组，为了防止混淆，我们将rk数组复制到tp中，此时tp数组已经没用了。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)tp[i] = rk[i];</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面是更新rk的核心代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">rk[sa[<span class="number">1</span>]] = p = <span class="number">1</span>;<span class="comment">//初始化</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= n; i++) &#123;</span><br><span class="line">     rk[sa[i]] = (tp[sa[i - <span class="number">1</span>]] == tp[sa[i]] &amp;&amp; tp[sa[i - <span class="number">1</span>] + w] == tp[sa[i] + w]) ? p : ++p;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里p的意义是记录互不相同的排名数量，当p=n时所有后缀排名互不相同，结束循环，这也是上文中for循环的终止条件。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面的for循环利用相同后缀排名必相同的性质，将每一个后缀都与前一个后缀进行比较，如果第一关键字排名相同并且第二关键字排名相同则与上一个后缀的排名相同，否则分配一个新排名。这里的第二关键字排名仍然用上文所说的性质。</p>
+<h4 id="基数排序"><a href="#基数排序" class="headerlink" title="基数排序"></a>基数排序</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在可以来探讨排序的方法，这里采用基数排序。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">mySort</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= M; i++)tax[i] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)tax[rk[i]]++;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= M; i++)tax[i] += tax[i - <span class="number">1</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = n; i &gt;= <span class="number">1</span>; i--)sa[tax[rk[tp[i]]]--] = tp[i];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tax是基数排序用的桶，<strong>M是第一关键字的最大取值</strong>，由于第一关键字是排名信息，可以设置成1e6+5（按照题目条件）。第一个for循环将桶清空。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第二个for循环将第一关键字的信息放入桶中，统计数目。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第三个for循环求前缀和，这是为了方便求排名。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第四个for循环较难理解。倒序遍历后缀，由于已经求了前缀和，这时的tax值就是排名，之后用自减一的方式将其从桶中取出。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另外这里有一处优化。M由于是第一关键字的最大值，因此可以根据每一次循环的p值来修改M，以降低时间复杂度。注意一开始第一关键字的最大值是’z’-‘0’。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样就得到了求后缀数组的完整步骤，下面给出模板题代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> N 1000000+20</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> n, sa[N], tp[N], rk[N], tax[N], M;</span><br><span class="line"><span class="keyword">char</span> op[N];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">mySort</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= M; i++)tax[i] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)tax[rk[i]]++;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= M; i++)tax[i] += tax[i - <span class="number">1</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = n; i &gt;= <span class="number">1</span>; i--)sa[tax[rk[tp[i]]]--] = tp[i];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">solve</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    M = <span class="number">80</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)rk[i] = op[i] - <span class="string">'0'</span> + <span class="number">1</span>, tp[i] = i;</span><br><span class="line">    mySort();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> w = <span class="number">1</span>, p = <span class="number">0</span>; p &lt; n; M = p, w &lt;&lt;= <span class="number">1</span>) &#123;</span><br><span class="line">        p = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= w; i++)tp[++p] = n - w + i;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)<span class="keyword">if</span> (sa[i] &gt; w)tp[++p] = sa[i] - w;</span><br><span class="line">        mySort();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)tp[i] = rk[i];</span><br><span class="line">        rk[sa[<span class="number">1</span>]] = p = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= n; i++) &#123;</span><br><span class="line">            rk[sa[i]] = (tp[sa[i - <span class="number">1</span>]] == tp[sa[i]] &amp;&amp; tp[sa[i - <span class="number">1</span>] + w] == tp[sa[i] + w]) ? p : ++p;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; sa[i] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; op + <span class="number">1</span>;</span><br><span class="line">    n = <span class="built_in">strlen</span>(op + <span class="number">1</span>);</span><br><span class="line">    solve();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="height数组"><a href="#height数组" class="headerlink" title="height数组"></a>height数组</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;height数组是应用后缀数组的利器。首先定义最长公共前缀lcp(i,j)：位置为i和位置为j的后缀的最长公共前缀长度。于是有height数组：</p>
+<script type="math/tex; mode=display">height[i]=lcp(sa[i],sa[i-1])</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;也就是说，height[i]表示排名为i和排名为i-1的后缀的最长公共前缀长度。规定height[1]=0。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如何求height数组？这需要利用一个重要性质（证明略）：</p>
+<script type="math/tex; mode=display">height[rk[i]]\geq height[rk[i-1]]-1</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;以此递推，不难写出代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">getHeight</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> k = <span class="number">0</span>, j;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (rk[i] == <span class="number">1</span>)h[rk[i]] = k = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (k)k--;</span><br><span class="line">            j = sa[rk[i] - <span class="number">1</span>];</span><br><span class="line">            <span class="keyword">while</span> (j + k &lt;= n &amp;&amp; i + k &lt;= n &amp;&amp; op[j + k] == op[i + k])++k;</span><br><span class="line">            h[rk[i]] = k;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="后缀数组的应用"><a href="#后缀数组的应用" class="headerlink" title="后缀数组的应用"></a>后缀数组的应用</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对后缀进行字典序排序实质上是利用了排序后相邻后缀差异尽可能小的性质，利用这个性质可以解决很多问题。</p>
+<h6 id="两个后缀的最大公共前缀"><a href="#两个后缀的最大公共前缀" class="headerlink" title="两个后缀的最大公共前缀"></a>两个后缀的最大公共前缀</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于位置为i、j的两个后缀，其最大公共前缀长度为：</p>
+<script type="math/tex; mode=display">\min\{height[rk[i]+1],height[rk[i]+2],...,height[rk[j]]\},rk[i]<rk[j]</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可以用ST表去维护。</p>
+<h6 id="可重叠最长重复子串"><a href="#可重叠最长重复子串" class="headerlink" title="可重叠最长重复子串"></a>可重叠最长重复子串</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果子串p在主串s中出现多次，则称p为重复子串，如果两个p可以有所重叠，在此基础上可以得到最长重复子串。该长度就是height数组的最大值。</p>
+<h6 id="不可重叠最长重复子串"><a href="#不可重叠最长重复子串" class="headerlink" title="不可重叠最长重复子串"></a>不可重叠最长重复子串</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考虑二分答案。对于答案k，可以将排序后的后缀分成若干组，其中每一组相邻的后缀间height都不小于k。这里的后缀分组必定是连续的分组。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;容易知道可以使答案可行的后缀必存在与同一组中，但还要满足不重叠的性质。此时遍历每一个组，找到该组中最大的sa值和最小的sa值，如果存在一组最大值最小值的差不小于k，则k可行，否则不可行。时间复杂度$O(nlogn)$。</p>
+<h6 id="本质不相同的子串数量"><a href="#本质不相同的子串数量" class="headerlink" title="本质不相同的子串数量"></a>本质不相同的子串数量</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一个字符串有很多子串，求它们其中本质不同的子串数目可以用后缀数组轻松解决。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一个子串必然是某个后缀的前缀，因此问题等价于所有后缀的本质不同的前缀数量。按字典序从小到大遍历所有后缀，这个后缀对答案的贡献为$len-sa[i]+1-height[i]$。这里$len-sa[i]+1$是这个后缀的所有前缀数目，减去height是减去重复的公共前缀数量。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/提高算法/" rel="tag"><i class="fa fa-tag"></i>提高算法</a>
+          
+            <a href="/tags/字符串/" rel="tag"><i class="fa fa-tag"></i>字符串</a>
+          
+            <a href="/tags/后缀数组/" rel="tag"><i class="fa fa-tag"></i>后缀数组</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/13/倍增算法/" rel="next" title="倍增算法">
+                <i class="fa fa-chevron-left"></i> 倍增算法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/19/单调栈与最大矩形面积/" rel="prev" title="单调栈与最大矩形面积">
+                单调栈与最大矩形面积 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/header.jpg" alt="Twifor">
+            
+              <p class="site-author-name" itemprop="name">Twifor</p>
+              <p class="site-description motion-element" itemprop="description">一个打OI的弱鸡</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">95</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">57</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#后缀"><span class="nav-number">1.</span> <span class="nav-text">后缀</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#后缀字典序"><span class="nav-number">2.</span> <span class="nav-text">后缀字典序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#后缀数组及其求法"><span class="nav-number">3.</span> <span class="nav-text">后缀数组及其求法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基数排序"><span class="nav-number">4.</span> <span class="nav-text">基数排序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#height数组"><span class="nav-number">5.</span> <span class="nav-text">height数组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#后缀数组的应用"><span class="nav-number">6.</span> <span class="nav-text">后缀数组的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#两个后缀的最大公共前缀"><span class="nav-number">6.0.1.</span> <span class="nav-text">两个后缀的最大公共前缀</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#可重叠最长重复子串"><span class="nav-number">6.0.2.</span> <span class="nav-text">可重叠最长重复子串</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#不可重叠最长重复子串"><span class="nav-number">6.0.3.</span> <span class="nav-text">不可重叠最长重复子串</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#本质不相同的子串数量"><span class="nav-number">6.0.4.</span> <span class="nav-text">本质不相同的子串数量</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Twifor</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="255,255,255" '="" opacity="0.85" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+
+
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function (item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '2aSxA7Naxmi6lgfgVU1ulgcS-gzGzoHsz',
+    appKey: '6G9RDaS7lVtgyGKw8AxxkLyi',
+    placeholder: '写下评论吧~qwq',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+	  preview: 'none'
+    },
+	messageStyle: 'none',
+	"HTML-CSS": {
+      showMathMenu: false //关闭右击菜单显示
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style>
+
+    
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/koharu.model.json"},"display":{"position":"right","width":75,"height":150},"mobile":{"show":false},"log":false});</script></body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
