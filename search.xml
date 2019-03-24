@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Manacher算法]]></title>
+    <url>%2F2019%2F03%2F24%2FManacher%E7%AE%97%E6%B3%95%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Manacher算法是一种求字符串中最长回文子串的高效算法。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;回文字符串，就是将字符串倒置后与原字符串完全相同的字符串，如a、aba、abcba等等。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;传统的求回文子串的方法是$O(n^2)$的，那样的算法比较低效。Mnacher可以在线性时间内求出最长回文子串，这个算法充分利用了回文的性质。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意到回文子串有奇数个和偶数个之分，这为我们的算法造成了困难，因此在算法进行之前，先对字符串进行一步预处理。预处理的方法就是在每两个相邻字符之间和字符串首尾加一个新的字符。注意这个字符不能在原字符串中出现过，这里我们选择’%’为例。对于字符串abcd，预处理后得到%a%b%c%d%。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样做的好处是，无论奇数个还是偶数个数目的回文子串，都可以找到一个对称中心。也就是说，预处理后的字符串的回文子串都是以某个字符为对称中心轴对称的，这样我们求出每一个字符的最长对称长度即可。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用p[i]表示第i个字符的最长对称长度（对称长度是指这个字符向右或者向左最大能延伸的距离，含该字符本身）。并且容易知道实际的回文串长度为p[i]-1。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;若下标从0开始，则初始化p[0]=1，接下来就是Manacher算法核心步骤。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从小到大枚举下标i，这个过程中用一个变量r表示目前回文串最右延伸位置的下一个位置，pos记录这个最右延伸位置回文串所对应的对称中心在字符串中的下标，然后分情况讨论。r初始化为1，pos初始化为0。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果i &lt; r。找到i关于pos的对称点2pos-i，易知2pos-i这个字符位于pos对应的回文串中，因此有两段字符串相同：$[2pos-r+1,2pos-i]=[i,r-1]$，当然也有$[2pos-i,pos]=[pos,i]$。这说明i的临近部分与2pos-i的临近部分是相同的，若$p[2pos-i]≤r-i$，则p[i]至少为p[2pos-i]，这是一个显然的结论；如果$p[2pos-i] &gt;r-i$，p[i]应至少为r-i，这是因为我们并不清楚r右侧的情况，只能得到r左侧回文串的长度。综合来看，有$p[i]=\min(p[2pos-i],r-i)$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面只是得到了“至少”的长度，还需扩展，下面用for循环延伸这个长度。对于i≥r的情况直接令p[i]=1，然后for循环延伸。最后要注意更新r和pos。12345678int pos = 0, r = 1;p[0] = 1;for (int i = 1; i &lt; l; i++) &#123; if (i &lt; r)p[i] = min(p[2 * pos - i], r - i); else p[i] = 1; for (; i - p[i] &gt;= 0 &amp;&amp; i + p[i] &lt; l &amp;&amp; op1[i - p[i]] == op1[i + p[i]]; ++p[i]); if (p[i] + i &gt; r)r = p[i] + i, pos = i;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最后统计答案即可，完整代码，洛谷模板题：1234567891011121314151617181920212223242526272829#include&lt;bits/stdc++.h&gt;using namespace std;char op1[(11000000 &lt;&lt; 1) + 5], op2[11000000];int p[(11000000 &lt;&lt; 1) + 5];int l;int main() &#123; ios::sync_with_stdio(false); cin &gt;&gt; op2; l = strlen(op2); for (int j = 0, i = 0, k = 0; j &lt; l; k ^= 1) &#123; if (!k)op1[i++] = '%'; else op1[i++] = op2[j++]; &#125; l = strlen(op1), op1[l++] = '%'; int pos = 0, r = 1; p[0] = 1; for (int i = 1; i &lt; l; i++) &#123; if (i &lt; r)p[i] = min(p[2 * pos - i], r - i); else p[i] = 1; for (; i - p[i] &gt;= 0 &amp;&amp; i + p[i] &lt; l &amp;&amp; op1[i - p[i]] == op1[i + p[i]]; ++p[i]); if (p[i] + i &gt; r)r = p[i] + i, pos = i; &#125; int ans = -1; for (int i = 0; i &lt; l; i++)ans = max(ans, p[i] - 1); cout &lt;&lt; ans; return 0;&#125;]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>提高算法</tag>
+        <tag>字符串</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[AC自动机]]></title>
     <url>%2F2019%2F03%2F22%2FAC%E8%87%AA%E5%8A%A8%E6%9C%BA%2F</url>
     <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本文探讨AC自动机的相关内容，注意AC自动机并不能自动让你AC。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AC自动机在1975年诞生于贝尔实验室的多模匹配算法。之前的文章曾介绍过KMP匹配算法，它用于单模式串匹配。对于多模式串匹配，我们当然可以多次用KMP匹配算法去解决，但那样时间复杂度为$O(m+kn))$，k为模式串数量，比较低效。而在多模匹配中应用AC自动机可以达到$O(m+n)$，m为所有模式串长度之和。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在介绍AC自动机前，需要有trie树的前缀知识，最好了解KMP算法原理。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么先来看什么是trie树（字典树）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上图便是一棵字典树，它储存字符串”he”、”she”、”is”和”shr”。注意在trie树中，根结点是不用的。trie树可以很好地将字符串按字典序排列，也可以储存很多字符串，AC自动机便是建立在trie树之上的。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里注意一个问题，如果想要同时储存s和she怎么办？s和she共用结点s，每一个结点都有一个标记，它表示该结点是不是一个字符串的结尾，这样就可以通过标记来找字符串了。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是有trie树的结构体定义：12345678910struct Node &#123; Node *fail, *next[26];//fail为失配指针，next是孩子结点指针 int cnt;//cnt表示以这个结点为结尾的字符串数量 Node() &#123; cnt = 0; fail = NULL; for (int i = 0; i &lt; 26; i++)next[i] = NULL; &#125;&#125;; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;失配指针是AC自动机使用的，这里先不用管它。next数组有26个是针对仅有26个小写字母的情况。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AC自动机中要进行的第一步，就是将所有模式串构建出一棵trie树。123456789void insert(const char *p) &#123; int i = 0; Node *ptr = root;//根结点，需要事先预处理出来 while (p[i]) &#123; if (ptr-&gt;next[p[i] - 'a'] == NULL)ptr-&gt;next[p[i] - 'a'] = new Node();//没有就新建 ptr = ptr-&gt;next[p[i] - 'a'], i++;//有就继续向下找 &#125; ptr-&gt;cnt++;//末尾结点的cnt加一&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样就得到了模式串的trie树，下面就是AC自动机的第二步：构建失配指针。这一步用队列实现。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;KMP算法中有next数组的概念，这里的失配指针其实与next数组有着类似的地方。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;trie树根结点下面的所有结点，如果它们失配，是无法找到之前相同的部分的，它们的失配指针需要指向根结点，之后这些结点入队。1for (int i = 0; i &lt; 26; i++)if (root-&gt;next[i] != NULL)root-&gt;next[i]-&gt;fail = root, que.push(root-&gt;next[i]); &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于其余的结点，按照以下方法处理：找到该结点的父结点的失配指针指向，若指向的结点存在与该结点相同字符的子结点，则该结点失配指针指向这个子结点。否则找到指向结点的失配结点，递归进行，直到存在与该结点表示字符相同的子结点或没有失配指针（root没有失配指针）为止。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个可以用归纳法去证明正确性，这里省略。过程可以用队列实现。123456789101112131415161718while (!que.empty()) &#123; Node *p = que.front(), *f; que.pop(); for (int i = 0; i &lt; 26; i++) &#123; if (p-&gt;next[i] != NULL) &#123; f = p-&gt;fail; while (f != NULL) &#123; if (f-&gt;next[i] != NULL) &#123; p-&gt;next[i]-&gt;fail = f-&gt;next[i]; break; &#125; f = f-&gt;fail; &#125; if (f == NULL)p-&gt;next[i]-&gt;fail = root;//都不成立就指向root que.push(p-&gt;next[i]); &#125; &#125; &#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;失配指针建立的关系最后会呈链状，形成链型结构。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最后一步便是检索匹配过程。当当前匹配过程位于第i个元素，trie树中结点位于p处时，若p不存在表示字符str[i]的子结点，表示此处失配，更新p=p-&gt;fail，表示进行失配跳转，这个过程需要递归操作。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;若存在表示str[i]的子结点，则更新p=p-&gt;next表示指针的移动。值得注意的是，这时仍然需要进行失配跳转，这是因为其它字符串也可能在此处匹配，所以我们需要先假定“下一处失配”。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面的匹配代码是统计匹配的模式串数量的代码，即对于m个模式串，有多少个可以匹配。12345678910111213141516void solve() &#123; Node *p = root, *tmp; int i = 0; while (str[i]) &#123; while (p-&gt;next[str[i] - 'a'] == NULL &amp;&amp; p != root)p = p-&gt;fail;//失配跳转 p = p-&gt;next[str[i] - 'a'];//找到下一处指针 if (p == NULL)p = root;//若仍为空，则完全失配，不再进行匹配，要令p=root回到最开始。这里可以直接i++然后continue tmp = p;//临时指针 while (tmp != root &amp;&amp; tmp-&gt;cnt != -1) &#123;//临时指针负责假设的失配跳转，找其它匹配的字符串，cnt=-1表示这里已经找过了，直接剪枝 ans += tmp-&gt;cnt;//加上它的数量 tmp-&gt;cnt = -1;//更新cnt=-1表示已经找过了，防止重复找同一个字符串 tmp = tmp-&gt;fail;//失配跳转 &#125; i++; &#125;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这就是洛谷简单版AC自动机模板题的原理，全代码如下：12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879#include&lt;bits/stdc++.h&gt;#define N 1000000+10using namespace std;char str[N];int ans;struct Node &#123; Node *fail, *next[26]; int cnt; Node() &#123; cnt = 0; fail = NULL; for (int i = 0; i &lt; 26; i++)next[i] = NULL; &#125;&#125; *root = new Node;queue&lt;Node *&gt; que;void insert(const char *p) &#123; int i = 0; Node *ptr = root; while (p[i]) &#123; if (ptr-&gt;next[p[i] - 'a'] == NULL)ptr-&gt;next[p[i] - 'a'] = new Node(); ptr = ptr-&gt;next[p[i] - 'a'], i++; &#125; ptr-&gt;cnt++;&#125;void solve() &#123; Node *p = root, *tmp; int i = 0; while (str[i]) &#123; while (p-&gt;next[str[i] - 'a'] == NULL &amp;&amp; p != root)p = p-&gt;fail; p = p-&gt;next[str[i] - 'a']; if (p == NULL)p = root; tmp = p; while (tmp != root &amp;&amp; tmp-&gt;cnt != -1) &#123; ans += tmp-&gt;cnt; tmp-&gt;cnt = -1; tmp = tmp-&gt;fail; &#125; i++; &#125;&#125;int main() &#123; ios::sync_with_stdio(false); int n; cin &gt;&gt; n; for (int i = 1; i &lt;= n; i++) &#123; cin &gt;&gt; str; insert(str); &#125; for (int i = 0; i &lt; 26; i++)if (root-&gt;next[i] != NULL)root-&gt;next[i]-&gt;fail = root, que.push(root-&gt;next[i]); while (!que.empty()) &#123; Node *p = que.front(), *f; que.pop(); for (int i = 0; i &lt; 26; i++) &#123; if (p-&gt;next[i] != NULL) &#123; f = p-&gt;fail; while (f != NULL) &#123; if (f-&gt;next[i] != NULL) &#123; p-&gt;next[i]-&gt;fail = f-&gt;next[i]; break; &#125; f = f-&gt;fail; &#125; if (f == NULL)p-&gt;next[i]-&gt;fail = root; que.push(p-&gt;next[i]); &#125; &#125; &#125; cin &gt;&gt; str; solve(); cout &lt;&lt; ans; return 0;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果想统计每一个模式串出现的次数又该如何做呢？匹配代码如下：123456789101112void solve() &#123; Node *p = root, *tmp; int i = 0; while (str[i]) &#123; while (p-&gt;next[str[i] - 'a'] == NULL &amp;&amp; p != root)p = p-&gt;fail; p = p-&gt;next[str[i] - 'a']; if (p == NULL)p = root; tmp = p; while (tmp != root)vis[tmp-&gt;to]++, tmp = tmp-&gt;fail;//这里的to指向字符串的编号，进行统计 i++; &#125;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在结点结构体中加入to这一个变量指向表示该字符串种类的编号，每一次访问到就用vis数组来计数一次。可见这样的匹配相比上文中的匹配方法相比允许重复匹配，效率自然低一些。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样就是洛谷加强版AC自动机模板题的代码了：12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788#include&lt;bits/stdc++.h&gt;#define N 1000000+10using namespace std;char str[N], op[152][80];int vis[N], num[N];struct Node &#123; Node *fail, *next[26]; int to; Node() &#123; to = 0; fail = NULL; for (int i = 0; i &lt; 26; i++)next[i] = NULL; &#125;&#125; *root;queue&lt;Node *&gt; que;void insert(const char *p, int j) &#123; int i = 0; Node *ptr = root; while (p[i]) &#123; if (ptr-&gt;next[p[i] - 'a'] == NULL)ptr-&gt;next[p[i] - 'a'] = new Node(); ptr = ptr-&gt;next[p[i] - 'a'], i++; &#125; if (ptr-&gt;to == 0)ptr-&gt;to = j; num[ptr-&gt;to]++;&#125;void solve() &#123; Node *p = root, *tmp; int i = 0; while (str[i]) &#123; while (p-&gt;next[str[i] - 'a'] == NULL &amp;&amp; p != root)p = p-&gt;fail; p = p-&gt;next[str[i] - 'a']; if (p == NULL)p = root; tmp = p; while (tmp != root)vis[tmp-&gt;to]++, tmp = tmp-&gt;fail; i++; &#125;&#125;void del(Node *p) &#123; for (int i = 0; i &lt; 26; i++)if (p-&gt;next[i] != NULL)del(p-&gt;next[i]); delete p;&#125;int main() &#123; ios::sync_with_stdio(false); int n; while (cin &gt;&gt; n) &#123; if (n == 0)return 0; root = new Node(); for (int i = 1; i &lt;= n; i++)num[i] = vis[i] = 0; for (int i = 1; i &lt;= n; i++) &#123; cin &gt;&gt; op[i]; num[i] = vis[i] = 0, insert(op[i], i); &#125; for (int i = 0; i &lt; 26; i++)if (root-&gt;next[i] != NULL)root-&gt;next[i]-&gt;fail = root, que.push(root-&gt;next[i]); while (!que.empty()) &#123; Node *p = que.front(), *f; que.pop(); for (int i = 0; i &lt; 26; i++) &#123; if (p-&gt;next[i] != NULL) &#123; f = p-&gt;fail; while (f != NULL) &#123; if (f-&gt;next[i] != NULL) &#123; p-&gt;next[i]-&gt;fail = f-&gt;next[i]; break; &#125; f = f-&gt;fail; &#125; if (f == NULL)p-&gt;next[i]-&gt;fail = root; que.push(p-&gt;next[i]); &#125; &#125; &#125; cin &gt;&gt; str; solve(); int maxn = -1; for (int i = 1; i &lt;= n; i++)if (maxn &lt; vis[i])maxn = vis[i]; cout &lt;&lt; maxn &lt;&lt; endl; for (int i = 1; i &lt;= n; i++)if (vis[i] == maxn)while (num[i])cout &lt;&lt; op[i] &lt;&lt; endl, num[i]--; del(root); &#125;&#125;]]></content>
@@ -72,8 +84,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>数据结构</tag>
         <tag>平衡树</tag>
+        <tag>数据结构</tag>
       </tags>
   </entry>
   <entry>
@@ -85,9 +97,9 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>数据结构</tag>
         <tag>平衡树</tag>
         <tag>文艺平衡树</tag>
+        <tag>数据结构</tag>
         <tag>树</tag>
       </tags>
   </entry>
@@ -100,8 +112,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>数据结构</tag>
         <tag>平衡树</tag>
+        <tag>数据结构</tag>
         <tag>树</tag>
       </tags>
   </entry>
@@ -114,9 +126,9 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>数据结构</tag>
         <tag>平衡树</tag>
         <tag>文艺平衡树</tag>
+        <tag>数据结构</tag>
         <tag>树</tag>
       </tags>
   </entry>
@@ -128,8 +140,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>树</tag>
+        <tag>动态规划</tag>
         <tag>点分治</tag>
       </tags>
   </entry>
@@ -155,9 +167,9 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
-        <tag>动态规划</tag>
         <tag>数据结构</tag>
         <tag>树</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -289,8 +301,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>图论</tag>
+        <tag>基础算法</tag>
       </tags>
   </entry>
   <entry>
@@ -301,8 +313,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>图论</tag>
+        <tag>基础算法</tag>
         <tag>强连通分量</tag>
       </tags>
   </entry>
@@ -538,8 +550,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>动态规划</tag>
         <tag>ST表</tag>
+        <tag>动态规划</tag>
         <tag>矩阵</tag>
       </tags>
   </entry>
@@ -566,8 +578,8 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
-        <tag>区间最值</tag>
         <tag>数据结构</tag>
+        <tag>区间最值</tag>
         <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
@@ -582,9 +594,9 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
-        <tag>动态规划</tag>
         <tag>区间最值</tag>
         <tag>ST表</tag>
+        <tag>动态规划</tag>
         <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
@@ -649,8 +661,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>树</tag>
+        <tag>动态规划</tag>
         <tag>背包问题</tag>
       </tags>
   </entry>
@@ -845,8 +857,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>区间最值</tag>
         <tag>数据结构</tag>
+        <tag>区间最值</tag>
         <tag>ST表</tag>
       </tags>
   </entry>
@@ -870,8 +882,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>图论</tag>
+        <tag>基础算法</tag>
         <tag>图的最短路</tag>
       </tags>
   </entry>
@@ -883,8 +895,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>图论</tag>
+        <tag>基础算法</tag>
         <tag>图的最短路</tag>
       </tags>
   </entry>
@@ -972,8 +984,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>动态规划</tag>
         <tag>数论</tag>
+        <tag>动态规划</tag>
         <tag>离散化</tag>
       </tags>
   </entry>
