@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[AC自动机]]></title>
+    <url>%2F2019%2F03%2F22%2FAC%E8%87%AA%E5%8A%A8%E6%9C%BA%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本文探讨AC自动机的相关内容，注意AC自动机并不能自动让你AC。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AC自动机在1975年诞生于贝尔实验室的多模匹配算法。之前的文章曾介绍过KMP匹配算法，它用于单模式串匹配。对于多模式串匹配，我们当然可以多次用KMP匹配算法去解决，但那样时间复杂度为$O(m+kn))$，k为模式串数量，比较低效。而在多模匹配中应用AC自动机可以达到$O(m+n)$，m为所有模式串长度之和。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在介绍AC自动机前，需要有trie树的前缀知识，最好了解KMP算法原理。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么先来看什么是trie树（字典树）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上图便是一棵字典树，它储存字符串”he”、”she”、”is”和”shr”。注意在trie树中，根结点是不用的。trie树可以很好地将字符串按字典序排列，也可以储存很多字符串，AC自动机便是建立在trie树之上的。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里注意一个问题，如果想要同时储存s和she怎么办？s和she共用结点s，每一个结点都有一个标记，它表示该结点是不是一个字符串的结尾，这样就可以通过标记来找字符串了。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是有trie树的结构体定义：12345678910struct Node &#123; Node *fail, *next[26];//fail为失配指针，next是孩子结点指针 int cnt;//cnt表示以这个结点为结尾的字符串数量 Node() &#123; cnt = 0; fail = NULL; for (int i = 0; i &lt; 26; i++)next[i] = NULL; &#125;&#125;; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;失配指针是AC自动机使用的，这里先不用管它。next数组有26个是针对仅有26个小写字母的情况。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AC自动机中要进行的第一步，就是将所有模式串构建出一棵trie树。123456789void insert(const char *p) &#123; int i = 0; Node *ptr = root;//根结点，需要事先预处理出来 while (p[i]) &#123; if (ptr-&gt;next[p[i] - 'a'] == NULL)ptr-&gt;next[p[i] - 'a'] = new Node();//没有就新建 ptr = ptr-&gt;next[p[i] - 'a'], i++;//有就继续向下找 &#125; ptr-&gt;cnt++;//末尾结点的cnt加一&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样就得到了模式串的trie树，下面就是AC自动机的第二步：构建失配指针。这一步用队列实现。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;KMP算法中有next数组的概念，这里的失配指针其实与next数组有着类似的地方。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;trie树根结点下面的所有结点，如果它们失配，是无法找到之前相同的部分的，它们的失配指针需要指向根结点，之后这些结点入队。1for (int i = 0; i &lt; 26; i++)if (root-&gt;next[i] != NULL)root-&gt;next[i]-&gt;fail = root, que.push(root-&gt;next[i]); &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于其余的结点，按照以下方法处理：找到该结点的父结点的失配指针指向，若指向的结点存在与该结点相同字符的子结点，则该结点失配指针指向这个子结点。否则找到指向结点的失配结点，递归进行，直到存在与该结点表示字符相同的子结点或没有失配指针（root没有失配指针）为止。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个可以用归纳法去证明正确性，这里省略。过程可以用队列实现。123456789101112131415161718while (!que.empty()) &#123; Node *p = que.front(), *f; que.pop(); for (int i = 0; i &lt; 26; i++) &#123; if (p-&gt;next[i] != NULL) &#123; f = p-&gt;fail; while (f != NULL) &#123; if (f-&gt;next[i] != NULL) &#123; p-&gt;next[i]-&gt;fail = f-&gt;next[i]; break; &#125; f = f-&gt;fail; &#125; if (f == NULL)p-&gt;next[i]-&gt;fail = root;//都不成立就指向root que.push(p-&gt;next[i]); &#125; &#125; &#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;失配指针建立的关系最后会呈链状，形成链型结构。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最后一步便是检索匹配过程。当当前匹配过程位于第i个元素，trie树中结点位于p处时，若p不存在表示字符str[i]的子结点，表示此处失配，更新p=p-&gt;fail，表示进行失配跳转，这个过程需要递归操作。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;若存在表示str[i]的子结点，则更新p=p-&gt;next表示指针的移动。值得注意的是，这时仍然需要进行失配跳转，这是因为其它字符串也可能在此处匹配，所以我们需要先假定“下一处失配”。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面的匹配代码是统计匹配的模式串数量的代码，即对于m个模式串，有多少个可以匹配。12345678910111213141516void solve() &#123; Node *p = root, *tmp; int i = 0; while (str[i]) &#123; while (p-&gt;next[str[i] - 'a'] == NULL &amp;&amp; p != root)p = p-&gt;fail;//失配跳转 p = p-&gt;next[str[i] - 'a'];//找到下一处指针 if (p == NULL)p = root;//若仍为空，则完全失配，不再进行匹配，要令p=root回到最开始。这里可以直接i++然后continue tmp = p;//临时指针 while (tmp != root &amp;&amp; tmp-&gt;cnt != -1) &#123;//临时指针负责假设的失配跳转，找其它匹配的字符串，cnt=-1表示这里已经找过了，直接剪枝 ans += tmp-&gt;cnt;//加上它的数量 tmp-&gt;cnt = -1;//更新cnt=-1表示已经找过了，防止重复找同一个字符串 tmp = tmp-&gt;fail;//失配跳转 &#125; i++; &#125;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这就是洛谷简单版AC自动机模板题的原理，全代码如下：12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879#include&lt;bits/stdc++.h&gt;#define N 1000000+10using namespace std;char str[N];int ans;struct Node &#123; Node *fail, *next[26]; int cnt; Node() &#123; cnt = 0; fail = NULL; for (int i = 0; i &lt; 26; i++)next[i] = NULL; &#125;&#125; *root = new Node;queue&lt;Node *&gt; que;void insert(const char *p) &#123; int i = 0; Node *ptr = root; while (p[i]) &#123; if (ptr-&gt;next[p[i] - 'a'] == NULL)ptr-&gt;next[p[i] - 'a'] = new Node(); ptr = ptr-&gt;next[p[i] - 'a'], i++; &#125; ptr-&gt;cnt++;&#125;void solve() &#123; Node *p = root, *tmp; int i = 0; while (str[i]) &#123; while (p-&gt;next[str[i] - 'a'] == NULL &amp;&amp; p != root)p = p-&gt;fail; p = p-&gt;next[str[i] - 'a']; if (p == NULL)p = root; tmp = p; while (tmp != root &amp;&amp; tmp-&gt;cnt != -1) &#123; ans += tmp-&gt;cnt; tmp-&gt;cnt = -1; tmp = tmp-&gt;fail; &#125; i++; &#125;&#125;int main() &#123; ios::sync_with_stdio(false); int n; cin &gt;&gt; n; for (int i = 1; i &lt;= n; i++) &#123; cin &gt;&gt; str; insert(str); &#125; for (int i = 0; i &lt; 26; i++)if (root-&gt;next[i] != NULL)root-&gt;next[i]-&gt;fail = root, que.push(root-&gt;next[i]); while (!que.empty()) &#123; Node *p = que.front(), *f; que.pop(); for (int i = 0; i &lt; 26; i++) &#123; if (p-&gt;next[i] != NULL) &#123; f = p-&gt;fail; while (f != NULL) &#123; if (f-&gt;next[i] != NULL) &#123; p-&gt;next[i]-&gt;fail = f-&gt;next[i]; break; &#125; f = f-&gt;fail; &#125; if (f == NULL)p-&gt;next[i]-&gt;fail = root; que.push(p-&gt;next[i]); &#125; &#125; &#125; cin &gt;&gt; str; solve(); cout &lt;&lt; ans; return 0;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果想统计每一个模式串出现的次数又该如何做呢？匹配代码如下：123456789101112void solve() &#123; Node *p = root, *tmp; int i = 0; while (str[i]) &#123; while (p-&gt;next[str[i] - 'a'] == NULL &amp;&amp; p != root)p = p-&gt;fail; p = p-&gt;next[str[i] - 'a']; if (p == NULL)p = root; tmp = p; while (tmp != root)vis[tmp-&gt;to]++, tmp = tmp-&gt;fail;//这里的to指向字符串的编号，进行统计 i++; &#125;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在结点结构体中加入to这一个变量指向表示该字符串种类的编号，每一次访问到就用vis数组来计数一次。可见这样的匹配相比上文中的匹配方法相比允许重复匹配，效率自然低一些。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样就是洛谷加强版AC自动机模板题的代码了：12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788#include&lt;bits/stdc++.h&gt;#define N 1000000+10using namespace std;char str[N], op[152][80];int vis[N], num[N];struct Node &#123; Node *fail, *next[26]; int to; Node() &#123; to = 0; fail = NULL; for (int i = 0; i &lt; 26; i++)next[i] = NULL; &#125;&#125; *root;queue&lt;Node *&gt; que;void insert(const char *p, int j) &#123; int i = 0; Node *ptr = root; while (p[i]) &#123; if (ptr-&gt;next[p[i] - 'a'] == NULL)ptr-&gt;next[p[i] - 'a'] = new Node(); ptr = ptr-&gt;next[p[i] - 'a'], i++; &#125; if (ptr-&gt;to == 0)ptr-&gt;to = j; num[ptr-&gt;to]++;&#125;void solve() &#123; Node *p = root, *tmp; int i = 0; while (str[i]) &#123; while (p-&gt;next[str[i] - 'a'] == NULL &amp;&amp; p != root)p = p-&gt;fail; p = p-&gt;next[str[i] - 'a']; if (p == NULL)p = root; tmp = p; while (tmp != root)vis[tmp-&gt;to]++, tmp = tmp-&gt;fail; i++; &#125;&#125;void del(Node *p) &#123; for (int i = 0; i &lt; 26; i++)if (p-&gt;next[i] != NULL)del(p-&gt;next[i]); delete p;&#125;int main() &#123; ios::sync_with_stdio(false); int n; while (cin &gt;&gt; n) &#123; if (n == 0)return 0; root = new Node(); for (int i = 1; i &lt;= n; i++)num[i] = vis[i] = 0; for (int i = 1; i &lt;= n; i++) &#123; cin &gt;&gt; op[i]; num[i] = vis[i] = 0, insert(op[i], i); &#125; for (int i = 0; i &lt; 26; i++)if (root-&gt;next[i] != NULL)root-&gt;next[i]-&gt;fail = root, que.push(root-&gt;next[i]); while (!que.empty()) &#123; Node *p = que.front(), *f; que.pop(); for (int i = 0; i &lt; 26; i++) &#123; if (p-&gt;next[i] != NULL) &#123; f = p-&gt;fail; while (f != NULL) &#123; if (f-&gt;next[i] != NULL) &#123; p-&gt;next[i]-&gt;fail = f-&gt;next[i]; break; &#125; f = f-&gt;fail; &#125; if (f == NULL)p-&gt;next[i]-&gt;fail = root; que.push(p-&gt;next[i]); &#125; &#125; &#125; cin &gt;&gt; str; solve(); int maxn = -1; for (int i = 1; i &lt;= n; i++)if (maxn &lt; vis[i])maxn = vis[i]; cout &lt;&lt; maxn &lt;&lt; endl; for (int i = 1; i &lt;= n; i++)if (vis[i] == maxn)while (num[i])cout &lt;&lt; op[i] &lt;&lt; endl, num[i]--; del(root); &#125;&#125;]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>提高算法</tag>
+        <tag>字符串</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[单调栈与最大矩形面积]]></title>
     <url>%2F2019%2F03%2F19%2F%E5%8D%95%E8%B0%83%E6%A0%88%E4%B8%8E%E6%9C%80%E5%A4%A7%E7%9F%A9%E5%BD%A2%E9%9D%A2%E7%A7%AF%2F</url>
     <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最近博客比较高能，然而突然来了一个单调栈2333，其实这是为了补充之前的知识漏洞。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;栈是什么就不说了。单调栈是指满足严格单调性的栈，它的元素满足递增或者递减的性质，与单调队列一样，单调栈也可以进行优化操作。现在来看一道经典问题：最大矩形面积。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;给定若干矩形如图一（来源网络，侵删）：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;求其中最大面积的矩形，图二中阴影部分便是答案。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如何求解呢？如果$O(n^2)$扫一遍效率太低，可以考虑单调栈的做法。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于一个矩形，它向左向右延伸的最大距离就是它的高度能够延伸的最大宽度，如果向左能够延伸到l，那么l的下一个矩形高度一定小于该矩形高度，否则就可以继续延伸。我们的重点就是利用这个性质来求出每一个矩形向左、向右的最大延伸距离，这个过程可以用单调栈来完成。这和悬线法有些类似，但又有所不同。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;和单调队列一样，栈中存的是下标。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;求最左位置和最右位置分别需要一个单调递增的栈，具体做法如下（以最左位置为例）： 假设第x个矩形要进栈。 若栈顶元素下标所对应的矩形高度不小于x的高度，弹出该元素，直到栈空或栈顶元素对应高度小于x高度。 若此时栈已空，令l[x]=1，否则l[x]置为栈顶元素加一。 x进栈。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;算法正确性证明：只需证明l求解的正确性即可。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于栈非空的情况，由于此时栈顶元素对应高度已经小于x的高度，栈顶元素以及其左方的元素都不能成为l值，这时栈顶元素v的右侧第一个元素p一定为x的最左值。倘若p的高度小于x的高度，如果p没有被弹出，那么栈顶元素应该是p而不是v，矛盾。如果p已经被弹出，这说明在p到x之间有一个比p更小的元素q进栈，这样栈顶元素应该为q而非v，矛盾。因此p的高度不小于x的高度，即p是x的最左值。如果栈为空，说明之前没有出现过比x高度更小的元素，l显然为1，得证。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;求最右值时反方向进栈，r[x]要置为栈顶元素减一，证明同上。单调栈时间复杂度可达到$O(n)$。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面例题一道：洛谷(P3804)。 给定一个只包含小写字母的字符串S,请你求出 S 的所有出现次数不为 1 的子串的出现次数乘上该子串长度的最大值。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;咦？这好像是后缀自动机的模板题？这里选此题便是为了用后缀数组和单调栈来解决后缀自动机的问题，后缀自动机以后的博客更新。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;根据后缀数组中的有关性质可以发现，出现次数不止一次的子串必然是至少两个后缀的公共前驱，为了得到最大值，我们应该取最长公共前驱，这个可以用height数组来完成。对于height值组成的序列，容易知道答案就是： \max\{(b-a+2)\min\{height[k]\}\},a\leq k \leq b,2\leq a\leq b\leq n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这恰好就是上面所说的最大矩形面积问题，用单调栈解决即可。1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071#include&lt;bits/stdc++.h&gt;#define N 1000000+20using namespace std;int n, sa[N], tp[N], rk[N], tax[N], h[N], M, L[N], R[N];long long ans;char op[N] = &#123;'\0'&#125;;stack&lt;int&gt; sta1, sta2;inline void mySort() &#123; for (int i = 0; i &lt;= M; i++)tax[i] = 0; for (int i = 1; i &lt;= n; i++)tax[rk[i]]++; for (int i = 1; i &lt;= M; i++)tax[i] += tax[i - 1]; for (int i = n; i &gt;= 1; i--)sa[tax[rk[tp[i]]]--] = tp[i];&#125;inline void solve() &#123; M = 30; for (int i = 1; i &lt;= n; i++)rk[i] = op[i] - 'a' + 1, tp[i] = i; mySort(); for (int w = 1, p = 0; p &lt; n; M = p, w &lt;&lt;= 1) &#123; p = 0; for (int i = 1; i &lt;= w; i++)tp[++p] = n - w + i; for (int i = 1; i &lt;= n; i++)if (sa[i] &gt; w)tp[++p] = sa[i] - w; mySort(); for (int i = 1; i &lt;= n; i++)tp[i] = rk[i]; rk[sa[1]] = p = 1; for (int i = 2; i &lt;= n; i++) &#123; rk[sa[i]] = (tp[sa[i - 1]] == tp[sa[i]] &amp;&amp; tp[sa[i - 1] + w] == tp[sa[i] + w]) ? p : ++p; &#125; &#125;&#125;inline void getHeight() &#123; int k = 0, j; for (int i = 1; i &lt;= n; i++) &#123; if (rk[i] == 1)h[rk[i]] = k = 0; else &#123; if (k)k--; j = sa[rk[i] - 1]; while (j + k &lt;= n &amp;&amp; i + k &lt;= n &amp;&amp; op[j + k] == op[i + k])++k; h[rk[i]] = k; &#125; &#125;&#125;inline void add1(int x) &#123; while (!sta1.empty() &amp;&amp; h[sta1.top()] &gt;= h[x])sta1.pop(); if (sta1.empty())L[x] = 2; else L[x] = sta1.top() + 1; sta1.push(x);&#125;inline void add2(int x) &#123; while (!sta2.empty() &amp;&amp; h[sta2.top()] &gt;= h[x])sta2.pop(); if (sta2.empty())R[x] = n; else R[x] = sta2.top() - 1; sta2.push(x);&#125;int main() &#123; ios::sync_with_stdio(false); cin &gt;&gt; (op + 1); n = strlen(op + 1); solve(), getHeight(); for (int i = 2; i &lt;= n; i++)add1(i); for (int i = n; i &gt;= 2; i--)add2(i); for (int i = 2; i &lt;= n; i++)ans = max(ans, (long long) (R[i] - L[i] + 2) * h[i]); cout &lt;&lt; ans; return 0;&#125;]]></content>
@@ -10,8 +22,8 @@
       <tags>
         <tag>基础算法</tag>
         <tag>数据结构</tag>
-        <tag>栈</tag>
         <tag>单调栈</tag>
+        <tag>栈</tag>
       </tags>
   </entry>
   <entry>
@@ -60,8 +72,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>平衡树</tag>
         <tag>数据结构</tag>
+        <tag>平衡树</tag>
       </tags>
   </entry>
   <entry>
@@ -73,9 +85,9 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
+        <tag>数据结构</tag>
         <tag>平衡树</tag>
         <tag>文艺平衡树</tag>
-        <tag>数据结构</tag>
         <tag>树</tag>
       </tags>
   </entry>
@@ -88,8 +100,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>平衡树</tag>
         <tag>数据结构</tag>
+        <tag>平衡树</tag>
         <tag>树</tag>
       </tags>
   </entry>
@@ -102,9 +114,9 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
+        <tag>数据结构</tag>
         <tag>平衡树</tag>
         <tag>文艺平衡树</tag>
-        <tag>数据结构</tag>
         <tag>树</tag>
       </tags>
   </entry>
@@ -169,8 +181,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>网络流</tag>
         <tag>提高算法</tag>
+        <tag>网络流</tag>
       </tags>
   </entry>
   <entry>
@@ -181,8 +193,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>网络流</tag>
         <tag>提高算法</tag>
+        <tag>网络流</tag>
       </tags>
   </entry>
   <entry>
@@ -239,9 +251,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
+        <tag>提高算法</tag>
         <tag>图论</tag>
         <tag>图的最短路</tag>
-        <tag>提高算法</tag>
         <tag>差分约束</tag>
       </tags>
   </entry>
@@ -277,8 +289,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>图论</tag>
         <tag>基础算法</tag>
+        <tag>图论</tag>
       </tags>
   </entry>
   <entry>
@@ -289,8 +301,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>图论</tag>
         <tag>基础算法</tag>
+        <tag>图论</tag>
         <tag>强连通分量</tag>
       </tags>
   </entry>
@@ -334,7 +346,7 @@
   <entry>
     <title><![CDATA[[洛谷P2154]虔诚的墓主人]]></title>
     <url>%2F2019%2F01%2F27%2F%E6%B4%9B%E8%B0%B7P2154-%E8%99%94%E8%AF%9A%E7%9A%84%E5%A2%93%E4%B8%BB%E4%BA%BA%2F</url>
-    <content type="text"><![CDATA[难度：省选/NOI- 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小W是一片新造公墓的管理人。公墓可以看成一块N×M的矩形，矩形的每个格点，要么种着一棵常青树，要么是一块还没有归属的墓地。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当地的居民都是非常虔诚的基督徒，他们愿意提前为自己找一块合适墓地。为了体现自己对主的真诚，他们希望自己的墓地拥有着较高的虔诚度。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一块墓地的虔诚度是指以这块墓地为中心的十字架的数目。一个十字架可以看成中间是墓地，墓地的正上、正下、正左、正右都有恰好k棵常青树。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小W希望知道他所管理的这片公墓中所有墓地的虔诚度总和是多少。 输入输出格式输入格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输入文件religious.in的第一行包含两个用空格分隔的正整数N和M，表示公墓的宽和长，因此这个矩形公墓共有(N+1) ×(M+1)个格点，左下角的坐标为(0, 0)，右上角的坐标为(N, M)。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第二行包含一个正整数W，表示公墓中常青树的个数。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第三行起共W行，每行包含两个用空格分隔的非负整数xi和yi，表示一棵常青树的坐标。输入保证没有两棵常青树拥有相同的坐标。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最后一行包含一个正整数k，意义如题目所示。 输出格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输出文件religious.out仅包含一个非负整数，表示这片公墓中所有墓地的虔诚度总和。为了方便起见，答案对2,147,483,648取模。 输入输出样例Sample input 5 6130 20 31 21 32 02 12 42 52 63 23 34 35 22 Sample output 6 说明&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;图中，以墓地(2, 2)和(2, 3)为中心的十字架各有3个，即它们的虔诚度均为3。其他墓地的虔诚度为0。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于30%的数据，满足1 ≤ N, M ≤ 1,000。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于60%的数据，满足1 ≤ N, M ≤ 1,000,000。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于100%的数据，满足1 ≤ N, M ≤ 1,000,000,000，0 ≤ xi ≤ N，0 ≤ yi ≤ M，1 ≤ W ≤ 100,000，1 ≤ k ≤ 10。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;存在50%的数据，满足1 ≤ k ≤ 2。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;存在25%的数据，满足1 ≤ W ≤ 10000。 题解&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先认识到如果一个墓地上、下、左、右各有a、b、c、d棵常青树，则虔诚度为$C_a^kC_b^kC_c^kC_d^k$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从数据范围想思路。发现N和M特别大，所以需要离散化坐标。具体做法是将没有树的行列去除，再对坐标重新编号，这样N，M就降至1e5。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;即使经过了离散化，如果枚举每一个墓地坐标，也需要相当的时间消耗。注意到如果一个墓地的上方或下方没有常青树，那么这个墓地的虔诚度一定为0，不用考虑。所以只需要考虑第一棵常青树和最后一棵常青树之间的部分即可。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;做这个题的思想是：固定一维（横坐标），移动另一位（纵坐标）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先预处理出组合数。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;离散化之后，将常青树坐标按横坐标为第一关键字，纵坐标为第二关键字升序排序。这样坐标点就按照横坐标进行了分类，并且每一类中纵坐标升序。用数组记录当前每一个纵坐标已经有的树的数量，再用一个变量记录当前横坐标已经有的树的数量，还需要记录每一个纵坐标横坐标的常青树总数。在每一类中，找到相邻的两个坐标点，枚举它们中间部分的墓地坐标点，依次求它们的虔诚度，最后再求和即可。对于每一个遍历到的常青树，更新其纵坐标横坐标已有的常青藤数量。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但这样仍不是最佳策略。注意到两个相邻常青树之间的所有墓地上下的树的数量是不变的，只有左右的树的数量在随纵坐标的变化而变化。对于每一个纵坐标，它都有自己的$C_c^kC_d^k$值，这样求两个相邻常青树之间墓地虔诚度的和就相当于求一个区间和，再乘以一个$C_a^kC_b^k$。每遍历到一棵常青树，需要更新这个节点的值，因此需要一种可以修改节点值又能求区间和的数据结构，肯定首选树状数组。于是用树状数组维护前缀和，这样时间复杂度降至O(wlogw)。1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768#include&lt;iostream&gt;#include &lt;algorithm&gt;#define MAX 100000using namespace std;struct Point &#123; int x, y, t;&#125; op[MAX];int n, m, w, k, C[MAX + 1][11] = &#123;0&#125;, ySum[MAX + 1] = &#123;0&#125;, xSum[MAX + 1] = &#123;0&#125;, now[MAX + 1] = &#123;0&#125;;int cnt = 0;int tree[MAX + 1] = &#123;0&#125;;//树状数组bool cmp1(Point x, Point y) &#123; if (x.x == y.x)return x.y &lt; y.y; return x.x &lt; y.x;&#125;bool cmp2(Point x, Point y) &#123; return x.y &lt; y.y;&#125;inline void add(int x, int y) &#123; for (int i = x; i &lt;= m; i += (i &amp; -i))tree[i] += y;&#125;inline int get(int x) &#123; int s = 0; for (int i = x; i &gt; 0; i -= (i &amp; -i))s += tree[i]; return s;&#125;int main() &#123; ios::sync_with_stdio(false); cin &gt;&gt; n &gt;&gt; m &gt;&gt; w; for (int i = 0; i &lt; w; i++)cin &gt;&gt; op[i].x &gt;&gt; op[i].y; cin &gt;&gt; k; C[1][0] = C[1][1] = 1; for (int i = 2; i &lt;= w; i++) &#123;//求组合数 C[i][0] = 1; for (int j = 1; j &lt;= min(k, i); j++)C[i][j] = C[i - 1][j - 1] + C[i - 1][j]; &#125; sort(op, op + w, cmp2);//y升序排序，离散化纵坐标 for (int i = 0; i &lt; w; i++) &#123; if (i == 0 || op[i].y != op[i - 1].y)cnt++; op[i].t = cnt; ySum[cnt]++; &#125; m = cnt; for (int i = 0; i &lt; w; i++)op[i].y = op[i].t; sort(op, op + w, cmp1), cnt = 0;//离散化横坐标 for (int i = 0; i &lt; w; i++) &#123; if (i == 0 || op[i].x != op[i - 1].x)cnt++; op[i].t = cnt; xSum[cnt]++; &#125; n = cnt; for (int i = 0; i &lt; w; i++)op[i].x = op[i].t; int ans = 0, np = 0; for (int i = 0; i &lt; w; i++) &#123; add(op[i].y, C[now[op[i].y] + 1][k] * C[ySum[op[i].y] - now[op[i].y] - 1][k] - C[now[op[i].y]][k] * C[ySum[op[i].y] - now[op[i].y]][k]); now[op[i].y]++; if (i == 0 || op[i].x != op[i - 1].x)np = 0; else ans += (get(op[i].y - 1) - get(op[i - 1].y)) * C[np][k] * C[xSum[op[i].x] - np][k]; np++; &#125; cout &lt;&lt; (ans &amp; ((1 &lt;&lt; 31) - 1)); return 0;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里有一个小技巧：如果结果是通过加减乘三种运算得到的并且需要对2147483648（即232）取模，可以利用int的自然溢出来完成这个操作。具体做法是不用每一步都取模，最后让答案与(1&lt;&lt;31)-1取按位与，这是一个优化常数的常用方法。该方法可行性可用补码性质证明。]]></content>
+    <content type="text"><![CDATA[难度：省选/NOI- 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小W是一片新造公墓的管理人。公墓可以看成一块N×M的矩形，矩形的每个格点，要么种着一棵常青树，要么是一块还没有归属的墓地。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当地的居民都是非常虔诚的基督徒，他们愿意提前为自己找一块合适墓地。为了体现自己对主的真诚，他们希望自己的墓地拥有着较高的虔诚度。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一块墓地的虔诚度是指以这块墓地为中心的十字架的数目。一个十字架可以看成中间是墓地，墓地的正上、正下、正左、正右都有恰好k棵常青树。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小W希望知道他所管理的这片公墓中所有墓地的虔诚度总和是多少。 输入输出格式输入格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输入文件religious.in的第一行包含两个用空格分隔的正整数N和M，表示公墓的宽和长，因此这个矩形公墓共有(N+1) ×(M+1)个格点，左下角的坐标为(0, 0)，右上角的坐标为(N, M)。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第二行包含一个正整数W，表示公墓中常青树的个数。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第三行起共W行，每行包含两个用空格分隔的非负整数xi和yi，表示一棵常青树的坐标。输入保证没有两棵常青树拥有相同的坐标。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最后一行包含一个正整数k，意义如题目所示。 输出格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输出文件religious.out仅包含一个非负整数，表示这片公墓中所有墓地的虔诚度总和。为了方便起见，答案对2,147,483,648取模。 输入输出样例Sample input 5 6130 20 31 21 32 02 12 42 52 63 23 34 35 22 Sample output 6 说明&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;图中，以墓地(2, 2)和(2, 3)为中心的十字架各有3个，即它们的虔诚度均为3。其他墓地的虔诚度为0。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于30%的数据，满足1 ≤ N, M ≤ 1,000。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于60%的数据，满足1 ≤ N, M ≤ 1,000,000。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于100%的数据，满足1 ≤ N, M ≤ 1,000,000,000，0 ≤ xi ≤ N，0 ≤ yi ≤ M，1 ≤ W ≤ 100,000，1 ≤ k ≤ 10。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;存在50%的数据，满足1 ≤ k ≤ 2。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;存在25%的数据，满足1 ≤ W ≤ 10000。 题解&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先认识到如果一个墓地上、下、左、右各有a、b、c、d棵常青树，则虔诚度为$C_a^kC_b^kC_c^kC_d^k$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从数据范围想思路。发现N和M特别大，所以需要离散化坐标。具体做法是将没有树的行列去除，再对坐标重新编号，这样N，M就降至1e5。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;即使经过了离散化，如果枚举每一个墓地坐标，也需要相当的时间消耗。注意到如果一个墓地的上方或下方没有常青树，那么这个墓地的虔诚度一定为0，不用考虑。所以只需要考虑第一棵常青树和最后一棵常青树之间的部分即可。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;做这个题的思想是：固定一维（横坐标），移动另一位（纵坐标）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先预处理出组合数。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;离散化之后，将常青树坐标按横坐标为第一关键字，纵坐标为第二关键字升序排序。这样坐标点就按照横坐标进行了分类，并且每一类中纵坐标升序。用数组记录当前每一个纵坐标已经有的树的数量，再用一个变量记录当前横坐标已经有的树的数量，还需要记录每一个纵坐标横坐标的常青树总数。在每一类中，找到相邻的两个坐标点，枚举它们中间部分的墓地坐标点，依次求它们的虔诚度，最后再求和即可。对于每一个遍历到的常青树，更新其纵坐标横坐标已有的常青藤数量。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但这样仍不是最佳策略。注意到两个相邻常青树之间的所有墓地上下的树的数量是不变的，只有左右的树的数量在随纵坐标的变化而变化。对于每一个纵坐标，它都有自己的$C_c^kC_d^k$值，这样求两个相邻常青树之间墓地虔诚度的和就相当于求一个区间和，再乘以一个$C_a^kC_b^k$。每遍历到一棵常青树，需要更新这个节点的值，因此需要一种可以修改节点值又能求区间和的数据结构，肯定首选树状数组。于是用树状数组维护前缀和，这样时间复杂度降至O(wlogw)。1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768#include&lt;iostream&gt;#include &lt;algorithm&gt;#define MAX 100000using namespace std;struct Point &#123; int x, y, t;&#125; op[MAX];int n, m, w, k, C[MAX + 1][11] = &#123;0&#125;, ySum[MAX + 1] = &#123;0&#125;, xSum[MAX + 1] = &#123;0&#125;, now[MAX + 1] = &#123;0&#125;;int cnt = 0;int tree[MAX + 1] = &#123;0&#125;;//树状数组bool cmp1(Point x, Point y) &#123; if (x.x == y.x)return x.y &lt; y.y; return x.x &lt; y.x;&#125;bool cmp2(Point x, Point y) &#123; return x.y &lt; y.y;&#125;inline void add(int x, int y) &#123; for (int i = x; i &lt;= m; i += (i &amp; -i))tree[i] += y;&#125;inline int get(int x) &#123; int s = 0; for (int i = x; i &gt; 0; i -= (i &amp; -i))s += tree[i]; return s;&#125;int main() &#123; ios::sync_with_stdio(false); cin &gt;&gt; n &gt;&gt; m &gt;&gt; w; for (int i = 0; i &lt; w; i++)cin &gt;&gt; op[i].x &gt;&gt; op[i].y; cin &gt;&gt; k; C[1][0] = C[1][1] = 1; for (int i = 2; i &lt;= w; i++) &#123;//求组合数 C[i][0] = 1; for (int j = 1; j &lt;= min(k, i); j++)C[i][j] = C[i - 1][j - 1] + C[i - 1][j]; &#125; sort(op, op + w, cmp2);//y升序排序，离散化纵坐标 for (int i = 0; i &lt; w; i++) &#123; if (i == 0 || op[i].y != op[i - 1].y)cnt++; op[i].t = cnt; ySum[cnt]++; &#125; m = cnt; for (int i = 0; i &lt; w; i++)op[i].y = op[i].t; sort(op, op + w, cmp1), cnt = 0;//离散化横坐标 for (int i = 0; i &lt; w; i++) &#123; if (i == 0 || op[i].x != op[i - 1].x)cnt++; op[i].t = cnt; xSum[cnt]++; &#125; n = cnt; for (int i = 0; i &lt; w; i++)op[i].x = op[i].t; int ans = 0, np = 0; for (int i = 0; i &lt; w; i++) &#123; add(op[i].y, C[now[op[i].y] + 1][k] * C[ySum[op[i].y] - now[op[i].y] - 1][k] - C[now[op[i].y]][k] * C[ySum[op[i].y] - now[op[i].y]][k]); now[op[i].y]++; if (i == 0 || op[i].x != op[i - 1].x)np = 0; else ans += (get(op[i].y - 1) - get(op[i - 1].y)) * C[np][k] * C[xSum[op[i].x] - np][k]; np++; &#125; cout &lt;&lt; (ans &amp; ((1 &lt;&lt; 31) - 1)); return 0;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里有一个小技巧：如果结果是通过加减乘三种运算得到的并且需要对2147483648（即231）取模，可以利用int的自然溢出来完成这个操作。具体做法是不用每一步都取模，最后让答案与(1&lt;&lt;31)-1取按位与，这是一个优化常数的常用方法。该方法可行性可用补码性质证明。]]></content>
       <categories>
         <category>算法与OI</category>
       </categories>
@@ -500,8 +512,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>模拟</tag>
         <tag>栈</tag>
+        <tag>模拟</tag>
       </tags>
   </entry>
   <entry>
@@ -554,11 +566,11 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
-        <tag>数据结构</tag>
         <tag>区间最值</tag>
+        <tag>数据结构</tag>
         <tag>区间</tag>
-        <tag>单调队列</tag>
         <tag>队列</tag>
+        <tag>单调队列</tag>
       </tags>
   </entry>
   <entry>
@@ -574,8 +586,8 @@
         <tag>区间最值</tag>
         <tag>ST表</tag>
         <tag>区间</tag>
-        <tag>单调队列</tag>
         <tag>队列</tag>
+        <tag>单调队列</tag>
         <tag>矩阵</tag>
       </tags>
   </entry>
@@ -688,9 +700,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
+        <tag>提高算法</tag>
         <tag>图论</tag>
         <tag>图的最短路</tag>
-        <tag>提高算法</tag>
         <tag>动态规划</tag>
         <tag>数学期望</tag>
       </tags>
@@ -805,8 +817,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>字符串</tag>
+        <tag>基础算法</tag>
         <tag>哈希</tag>
       </tags>
   </entry>
@@ -833,8 +845,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>数据结构</tag>
         <tag>区间最值</tag>
+        <tag>数据结构</tag>
         <tag>ST表</tag>
       </tags>
   </entry>
@@ -858,8 +870,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>图论</tag>
         <tag>基础算法</tag>
+        <tag>图论</tag>
         <tag>图的最短路</tag>
       </tags>
   </entry>
@@ -871,8 +883,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>图论</tag>
         <tag>基础算法</tag>
+        <tag>图论</tag>
         <tag>图的最短路</tag>
       </tags>
   </entry>
