@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[LCT（动态树）]]></title>
+    <url>%2F2019%2F04%2F05%2FLCT%EF%BC%88%E5%8A%A8%E6%80%81%E6%A0%91%EF%BC%89%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本文介绍超强数据结构：LCT，这也是博客中目前为止最高级的数据结构。LCT需要前缀知识：树链剖分、Splay。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;树链剖分可以很好地维护树中两条链之间的路径信息，但是它的前提是树是静态的。如果树中有断边，连边和换根操作，那么树链剖分就不能再起它的作用。这时就需要动态树（Link-Cut-Tree，LCT）来解决这个问题。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LCT的思想仍然是链的划分。在树链剖分中，曾经根据儿子的轻重关系来进行划分，LCT中也有类似的操作。在LCT中，边分为实边和虚边，其中实边所成的链称为实链。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实边中，父子都保留彼此的信息，但是虚边中仅有儿子保留父结点的信息，但父结点不保留儿子的信息，即认父不认子。实链和虚边满足以下性质： 每一个结点存在且仅存在一个实链中。 不同的实链之间通过虚边相连，对于一棵splay，它的根结点会与另一棵splay树上的某个结点建立虚边关系。 实边和虚边是可以动态修改的。 LCT中的结点信息&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;与认识平衡树相同，这里当然也有LCT结点的结构定义。但是为了方便起见，不再使用结构体定义，直接应用数组。1int son[N][2], fa[N];//N是事先定义好的结点数目 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;只有两个信息：son表示结点的儿子，其中son[x][0]表示x的左儿子，son[x][1]为右儿子。fa[x]为结点x的父结点。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这时就有疑问：为什么这时一棵二叉树的结点定义？显然给定的树并不一定为二叉树。这里就是LCT的一个思想：将树中的所有实链变成一棵splay树，并让这些splay树通过虚边相连。splay树是二叉树，那么这里的结点定义就是二叉树的定义形式。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;说到这里，需要引入LCT中splay的性质：LCT中，任何splay树中的结点相对根结点的深度必定互不相同，而且是连续的，并且splay树上左结点深度小于该结点深度，该结点深度小于右结点深度，即满足二叉查找树的性质。这样一来，splay的前序遍历序列就是按深度排列的树链结点序列。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接下来是一些基本操作函数的定义，这些都是splay上面的操作。1234567inline int identify(int x) &#123;//判别儿子性质 return son[fa[x]][1] == x;&#125;inline void change(int f, int s, int w) &#123;//建立父子关系，即连一条实边 fa[s] = f, son[f][w] = s;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里还需要一个特别的函数：isNotRoot()函数，它的作用是判断某一个结点是否为该结点所在的splay树的根结点。由前文可知，每一个结点都在唯一的实链中，并且这个实链用一棵splay树维护。123inline bool isNotRoot(int x) &#123; return son[fa[x]][0] == x || son[fa[x]][1] == x;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;判别方法比较简单，如果该结点的父结点不认这个儿子结点，就说明这是一条虚边，那么该结点就是splay上的根结点。在这个问题上，不推荐定义等价的isRoot()函数，这是因为LCT中判别非根的操作更多，而频繁逻辑取反相当费时。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;了解了上面的内容，可能一个很大的疑惑是：实边和虚边究竟是什么？它们对应原树上的什么？对于后者，前文已经提及，所有实边集和虚边集加起来就是树上的所有边的集合，即每一条边唯一地划分为虚边和实边中的一种。对于一棵splay树，有许多其它splay的根结点与该splay树上的某一结点建立虚边关系，该splay树的根结点也会与另一棵splay树上的结点建立虚边关系。如果结点x和结点y建立了虚边关系，并有fa[x]=y，那么在原树上y是x所在splay树上深度最小的结点的父结点。 ratote和splay操作&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;splay树上的旋转和伸展操作与普通splay类似。1234567891011121314151617inline void rotate(int x) &#123;//旋转 int f = fa[x], g = fa[f], i = identify(x), j = identify(f); if (!isNotRoot(f))fa[x] = g;//注意这里！！f为根时不能直接建立父子关系，因为这是虚边 else change(g, x, j);//否则建立实边关系 change(f, son[x][i ^ 1], i), change(x, f, i ^ 1);&#125;inline void splay(int x) &#123;//伸展，这不是LCT的最终版splay操作，需要修改，下面会继续介绍。默认旋转到根，因此仅有一个参数 while (isNotRoot(x)) &#123; int f = fa[x]; if (isNotRoot(f)) &#123; if (identify(x) == identify(y))rotate(f);//双旋 else rotate(x); &#125; rotate(x); &#125;&#125; access操作&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;access操作是LCT的核心操作，它的作用是将整棵树的根结点到某个结点之间的路径转变为实边，其余边断为虚边。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在原树中对于任意一个结点，它到根结点的路径必然是唯一的。access操作就是将这个唯一路径上的结点单独剥离出来形成一条实链，原先与该链上结点连接的实边断为虚边。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;比如我们要access(x)。首先将x结点splay到其所在splay树的根结点位置，这时结点x的右子树上的结点深度大于x，必然不在路径中，直接将边断为虚边；而对于左子树上的结点，其深度都小于结点x，必然都在结点x到根结点的路径上。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是找到结点x的父结点（虚边连接），继续递归操作。这样就可以得到下面的代码：123inline void access(int x) &#123; for (int i = 0; x; x = fa[i = x])splay(x), son[x][1] = i;//换儿子，即不认子，断实边为虚边&#125; makeRoot操作&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;换根操作。它的作用是更换原树的树根，并保持LCT的性质不变。换根也是重要操作。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果想让x变成树根，那么需要先access(x)打通根结点到x的路径，然后splay(x)，将x伸展到根，这时x必定没有右儿子。如果需要将变为根，那么只需要将这棵splay左右翻转过来即可。这里就需要用到文艺平衡树中的翻转标记，它的作用是标记以某一个结点为根的splay树需要翻转，注意打标记时这个结点的左右子树已经交换了。123inline void pushr(int x) &#123;//翻转函数 swap(son[x][0], son[x][1]), lazy[x] ^= 1;//交换左右儿子，并且更新标记&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lazy就是翻转标记，是一种懒操作。那么makeRoot函数就可以写出了：123inline void makeRoot(int x) &#123; access(x), splay(x), pushr(x);&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么如何下压标记？注意到在splay时，如果我们想要将x伸展到根位置，但是其到根的路径上有一些翻转标记，那么此时直接splay一定会出问题。于是在splay之前，我们需要把从splay的根结点到该结点之间路径上的所有结点从上到下依次下压标记，之后再进行伸展操作。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先需要一个下压标记的函数。123inline void pushdown(int x) &#123; if (lazy[x])pushr(son[x][0]), pushr(son[x][1]), lazy[x] = 0;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然后splay函数需要修改成这样：1234567891011121314inline void splay(int x) &#123; int i = 0, y = x; sta[++i] = y;//手写一个栈 while (isNotRoot(y))sta[++i] = y = fa[y];//将路径结点记录下来 while (i)pushdown(sta[i--]);//利用栈的性质，从上而下依次放标记 while (isNotRoot(x)) &#123; int f = fa[x]; if (isNotRoot(f)) &#123; if (identify(x) == identify(y))rotate(f); else rotate(x); &#125; rotate(x); &#125;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;问题来了：换根后能不能保证所有splay仍然满足对于新的树根，其深度互不相同？答案是可以保证，请读者自行思考。 findRoot操作&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;作用：通过某一个结点x找到整棵树的根。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;做法比较简单。首先access(x)，然后在这一棵splay上不断找左儿子即可，最左侧的结点深度最小，就是整棵树的根结点。123456inline int findRoot(int x) &#123; access(x), splay(x); while (son[x][0])pushdown(x), x = son[x][0]; splay(x);//保证复杂度 return x;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意到这里有下压标记操作，这是使用LCT中需要特别注意的一个地方：任何情况下，只要在splay树上通过左右儿子结点来找某一个结点，都不能保证标记成功下放。于是需要不断下压标记。 link操作&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;link作用：当两个结点不在同一棵树上时连接两个结点。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假设要连接x和y。首先将x变成其所在树的根，然后从x向y连一条虚边。1234inline void link(int x, int y) &#123; makeRoot(x); if (x != findRoot(y))fa[x] = y;//之前要判别是否在一棵树中，根据相同的根结点判断&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果保证连边合法，则可以简化为：1234inline void link(int x, int y) &#123; makeRoot(x); fa[x] = y;&#125; cut操作&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cut作用：当两个结点相连时，断开两点之间的边。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假设要断开x和y。首先将x变成根，然后access(y)，并且将x伸展到根，断开实边即可。12345inline void cut(int x, int y) &#123; makeRoot(x); if (findRoot(y) == x &amp;&amp; fa[y] == x &amp;&amp; !son[y][0])fa[y] = 0, son[x][1] = 0;//断实边 //判定合法三要素：在同一棵树中，父结点是x并且y没有左儿子（没有中间的结点）&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里findRoot操作内含了splay和access，不用再重复写出来。如果保证合法，则代码简化为：1234inline void cut(int x, int y) &#123; makeRoot(x), access(y), splay(x); fa[y] = 0, son[x][1] = 0;&#125; split操作&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;split作用：将x到y的路径剥离出来，形成一棵splay树。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;方法比较容易，先换根，再access，最后splay。123inline void split(int x, int y) &#123; makeRoot(x), access(y), splay(y);//最后splay(x)也是可以的&#125; 关于LCT的构造&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;经过上面的讨论，可能还会有一个疑惑：给定一棵树，按照link进行操作，此时没有指定哪一个结点是根，怎么理解？这里需要注意到一个问题，起初未连任何边时，可以认为每一个结点都是一个独立的splay树，它们自己就是自己所在树的根。不断link后，整棵树的根结点就会隐式确定，也就是说，虽然我们没有指定谁是根结点，但是根结点已经在link中确定了。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果确定根结点，并且可以按照点的深度排布给出点的连接次序，那么我们可以采用另一种不换根的方式来进行link。比如说指定1为根结点，与结点2相连，那么直接fa[2]=1就可以完成link操作。同样地，此时如果2与3相连，可以直接fa[3]=2。这样的link操作没有出现任何换根和access操作，但同样可以构造出合法的LCT。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可以看出，LCT的构造相当灵活。只要满足上面所说的LCT性质，构造出的LCT就是合法的。通常情况下，可以通过朴素的link操作来构造LCT，某些特殊情况下可以通过直接连虚边的方式进行构造。 用LCT维护路径信息&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上文这么多东西，还没有具体描述LCT维护路径信息的方法！这里其实就有各种搞法了，需要根据待维护的信息来进行变换。这里先以模板题为例，它需要维护路径上点权的异或值，并且需要单点修改。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;定义v[x]为结点x的点权，val[x]表示以x为根的splay树上所有结点的异或值，然后可以得到更新函数：123inline void update(int x) &#123;//在其它地方也称为pushup函数 val[x] = v[x] ^ val[son[x][0]] ^ val[son[x][1]];&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这一步update需要在rotate函数中体现出来：1234567inline void rotate(int x) &#123; int f = fa[x], g = fa[f], i = identify(x), j = identify(f); if (!isNotRoot(f))fa[x] = g; else change(g, x, j); change(f, son[x][i ^ 1], i), change(x, f, i ^ 1); update(f), update(x);//由于修改了结点连接，需要进行更新&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;还有哪些函数需要修改呢？注意到access函数重新划分了实边，需要进行update：123inline void access(int x) &#123; for (int i = 0; x; x = fa[i = x])splay(x), son[x][1] = i, update(x);&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当然还有cut函数：1234inline void cut(int x, int y) &#123; makeRoot(x); if (findRoot(y) == x &amp;&amp; fa[y] == x &amp;&amp; !son[y][0])fa[y] = 0, son[x][1] = 0, update(x);&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;link函数是不需要的。这是因为link函数连的是虚边，不影响splay树上的结果。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样似乎就比较完美了，那如何查询结果？如果需要查询x到y的异或结果，需要先split(x,y)，然后val[y]就是答案。（如果split最后一步是splay(x)，那么答案是val[x]）&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;需要单点修改时，需要先splay(x)，然后直接修改v[x]的值，然后update(x)。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面给出模板题全部代码：123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103#include&lt;bits/stdc++.h&gt;#define N 300005using namespace std;inline int read() &#123; char e = getchar(); int s = 0; while (e &lt; '-')e = getchar(); while (e &gt; '-')s = (s &lt;&lt; 1) + (s &lt;&lt; 3) + (e &amp; 15), e = getchar(); return s;&#125;int n, m, v[N], son[N][2], fa[N], lazy[N], sta[N], val[N];inline void update(int x) &#123; val[x] = v[x] ^ val[son[x][0]] ^ val[son[x][1]];&#125;inline bool isNotRoot(int x) &#123; return son[fa[x]][0] == x || son[fa[x]][1] == x;&#125;inline int identify(int x) &#123; return son[fa[x]][1] == x;&#125;inline void change(int f, int s, int w) &#123; fa[s] = f, son[f][w] = s;&#125;inline void rotate(int x) &#123; int f = fa[x], g = fa[f], i = identify(x), j = identify(f); if (!isNotRoot(f))fa[x] = g; else change(g, x, j); change(f, son[x][i ^ 1], i), change(x, f, i ^ 1); update(f), update(x);&#125;inline void pushr(int x) &#123; swap(son[x][0], son[x][1]), lazy[x] ^= 1;&#125;inline void pushdown(int x) &#123; if (lazy[x])pushr(son[x][0]), pushr(son[x][1]), lazy[x] = 0;&#125;inline void splay(int x) &#123; int i = 0, y = x; sta[++i] = y; while (isNotRoot(y))sta[++i] = y = fa[y]; while (i)pushdown(sta[i--]); while (isNotRoot(x)) &#123; int f = fa[x]; if (isNotRoot(f)) &#123; if (identify(x) == identify(y))rotate(f); else rotate(x); &#125; rotate(x); &#125;&#125;inline void access(int x) &#123; for (int i = 0; x; x = fa[i = x])splay(x), son[x][1] = i, update(x);&#125;inline void makeRoot(int x) &#123; access(x), splay(x), pushr(x);&#125;inline int findRoot(int x) &#123; access(x), splay(x); while (son[x][0])pushdown(x), x = son[x][0]; splay(x); return x;&#125;inline void link(int x, int y) &#123; makeRoot(x); if (x != findRoot(y))fa[x] = y;&#125;inline void cut(int x, int y) &#123; makeRoot(x); if (findRoot(y) == x &amp;&amp; fa[y] == x &amp;&amp; !son[y][0])fa[y] = 0, son[x][1] = 0, update(x);&#125;inline void split(int x, int y) &#123; makeRoot(x), access(y), splay(y);&#125;int main() &#123; n = read(), m = read(); for (int i = 1; i &lt;= n; i++)v[i] = read(); for (int i = 1; i &lt;= m; i++) &#123; int p = read(), x = read(), y = read(); if (p == 0)split(x, y), printf("%d\n", val[y]); else if (p == 1)link(x, y); else if (p == 2)cut(x, y); else splay(x), v[x] = y, update(x); &#125; return 0;&#125; 其它重要的事&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LCT中如果需要修改区间怎么办？仍然先split，然后利用懒标记思想打上标记即可。下压操作可以合并到pushdown中。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LCT中各种修改，换根，下压标记，怎样才能知道通过访问val[x]得到的结果是已经得到更新的？这是一个很实用而且重要的问题。为了简化这个问题，我们记住并遵循下面的一些规则即可： 对点彻底更新。当我们下压标记（pushdown函数）或者直接更新（update函数）时，做到彻底更新。对于单点修改，要将所有需要修改的地方都修改过来，对于链上修改，需要彻底修改点，然后打上标记。 经过split得到的splay树的根结点信息是最新的。 不要轻易修改0号结点的点权。0号结点表示没有结点，在更新时常常用到，如果盲目修改，很可能会出问题。 经过split得到的splay树除了根结点外的结点不一定是最新的（即可能有标记未下压）。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;反观上面单点修改的过程，这里就做到了对点彻底更新：将x的val值同样进行更新，不更新就会出错。另外必须先经过splay，才能修改，这是因为splay后只需要修改那一个点即可，否则不能做到完全修改。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面看一道洛谷P2486 染色。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本题涉及链上信息查询和链信息修改两个操作，定义val[x]表示该splay树上颜色段的数目，并定义修改颜色懒标记cl。用c[x]表示结点x的颜色，l[x]表示该splay树上深度最小点的颜色，r[x]为深度最大点的颜色。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;更换颜色操作：123inline void color_pushdown(int x, int y) &#123; if (x)c[x] = l[x] = r[x] = y, val[x] = 1, cl[x] = y;//注意彻底更新：l和r、val也同时得到了更新，并且不要修改0结点，事实证明这是全部WA和AC的区别&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另外翻转操作：123inline void pushdown(int x) &#123; swap(l[x], r[x]), swap(son[x][0], son[x][1]), lazy[x] ^= 1;//注意第一个swap&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下压操作：1234inline void down(int x) &#123; if (lazy[x])pushdown(son[x][0]), pushdown(son[x][1]), lazy[x] = 0; if (cl[x])color_pushdown(son[x][0], cl[x]), color_pushdown(son[x][1], cl[x]), cl[x] = 0;//多一个颜色下压&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从上面三步可以看出，所有点信息的更新都是彻底更新。然后实际操作中：12if (e == 'Q')scanf("%d%d", &amp;x, &amp;y), split(x, y), printf("%d\n", val[y]);//split得到的splay树根结点信息是得到更新的 else scanf("%d%d%d", &amp;x, &amp;y, &amp;z), split(x, y), color_pushdown(y, z);//对点进行彻底修改并打上标记 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关于LCT应用，另外的文章来介绍。]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>提高算法</tag>
+        <tag>数据结构</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[矩阵求逆]]></title>
     <url>%2F2019%2F04%2F03%2F%E7%9F%A9%E9%98%B5%E6%B1%82%E9%80%86%2F</url>
     <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;介绍矩阵求逆算法。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于两个方阵$A$和$B$，若有$AB=E$，$E$为单位阵，则称$A$与$B$互为逆矩阵。一个方阵不一定有逆矩阵，它可逆的充要条件是矩阵满秩。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;容易知道，若公式$AB=E$成立，则这里的A与B必定满秩，且A可以看做一系列初等矩阵的乘积，它左乘矩阵B，相当于对B做了初等行变换。于是可以构造矩阵： P=\begin{bmatrix} B&E\end{bmatrix}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么有： AP=A\begin{bmatrix}B&E\end{bmatrix}=\begin{bmatrix}AB&AE\end{bmatrix}=\begin{bmatrix}E&A\end{bmatrix}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是可以构造矩阵P，对其进行初等行变换，使其前n列部分成为单位矩阵，则剩下的部分就是逆矩阵。这种方法称为初等行变换法，算法上可以通过高斯消元实现。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;模板题。注意这里需要求模，于是可以在进行除法时利用乘法逆元来进行计算，乘法逆元可以通过费马小定理来求。12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849#include&lt;bits/stdc++.h&gt;#define MOD static_cast&lt;long long&gt;(1e9+7)using namespace std;long long op[450][850];int n;long long qPow(long long x, long long y = MOD - 2) &#123; long long ans = 1l, s = x; while (y) &#123; if (y &amp; 1)ans *= s, ans %= MOD; s *= s, s %= MOD, y &gt;&gt;= 1; &#125; return ans;&#125;int main() &#123; ios::sync_with_stdio(false); cin &gt;&gt; n; for (int i = 1; i &lt;= n; i++) for (int j = 1; j &lt;= n; j++)cin &gt;&gt; op[i][j]; for (int i = n + 1; i &lt;= (n &lt;&lt; 1); i++)op[i - n][i] = 1;//补充矩阵 for (int i = 1; i &lt;= n; i++) &#123; int maxn = i; for (int j = i + 1; j &lt;= n; j++)if (abs(op[j][i]) &gt; abs(op[maxn][i]))maxn = j; if (!op[maxn][i]) &#123;//不满秩，输出不可逆 cout &lt;&lt; "No Solution"; return 0; &#125; swap(op[maxn], op[i]); long long div = qPow(op[i][i]);//费马小定理+快速幂求乘法逆元 for (int j = i; j &lt;= (n &lt;&lt; 1); j++)op[i][j] = op[i][j] * div % MOD;//处理本行 for (int j = i + 1; j &lt;= n; j++) &#123; div = op[j][i]; for (int p = i; p &lt;= (n &lt;&lt; 1); p++)op[j][p] = (op[j][p] - div * op[i][p]) % MOD;//处理其它行 &#125; &#125; for (int i = n; i &gt;= 1; i--) &#123;//化为单位阵 for (int j = 1; j &lt; i; j++) &#123; long long div = op[j][i]; for (int p = 1; p &lt;= (n &lt;&lt; 1); p++)op[j][p] = (op[j][p] - div * op[i][p]) % MOD; &#125; &#125; for (int i = 1; i &lt;= n; i++) &#123;//输出结果 for (int j = n + 1; j &lt;= (n &lt;&lt; 1); j++)cout &lt;&lt; (op[i][j] % MOD + MOD) % MOD &lt;&lt; " "; cout &lt;&lt; endl; &#125; return 0;&#125;]]></content>
@@ -511,8 +523,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数论</tag>
         <tag>矩阵</tag>
+        <tag>数论</tag>
         <tag>快速幂</tag>
       </tags>
   </entry>
@@ -599,9 +611,9 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
+        <tag>矩阵</tag>
         <tag>ST表</tag>
         <tag>动态规划</tag>
-        <tag>矩阵</tag>
       </tags>
   </entry>
   <entry>
@@ -629,9 +641,9 @@
         <tag>基础算法</tag>
         <tag>数据结构</tag>
         <tag>区间最值</tag>
-        <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
+        <tag>区间</tag>
       </tags>
   </entry>
   <entry>
@@ -643,13 +655,13 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
+        <tag>矩阵</tag>
         <tag>区间最值</tag>
         <tag>ST表</tag>
         <tag>动态规划</tag>
-        <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
-        <tag>矩阵</tag>
+        <tag>区间</tag>
       </tags>
   </entry>
   <entry>
@@ -878,8 +890,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>字符串</tag>
+        <tag>基础算法</tag>
         <tag>哈希</tag>
       </tags>
   </entry>
@@ -893,8 +905,8 @@
       <tags>
         <tag>提高算法</tag>
         <tag>树</tag>
-        <tag>LCA</tag>
         <tag>倍增</tag>
+        <tag>LCA</tag>
       </tags>
   </entry>
   <entry>
@@ -982,8 +994,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>动态规划</tag>
         <tag>矩阵</tag>
+        <tag>动态规划</tag>
         <tag>DFS</tag>
       </tags>
   </entry>
