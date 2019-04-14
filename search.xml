@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[可持久化01Trie树]]></title>
+    <url>%2F2019%2F04%2F14%2F%E5%8F%AF%E6%8C%81%E4%B9%85%E5%8C%9601Trie%E6%A0%91%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;介绍01trie树及其可持久化。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;trie树（字典树）在AC自动机中已经有过介绍。01trie树是一种trie树的变种：存很多二进制数。01trie树可以很好地解决异或问题。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;给定很多数，现判断哪一个数与给定的数x异或值最大。这个问题可以用01trie树快速解决。方法是将所有数化为二进制，存入trie树中，再根据给定的数从高位开始进行贪心，从而得到最大值。 异或运算的基本性质&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在此之前，先来了解异或运算的基本性质。 0是异或运算中的幺元，即对于任意x，有$x \oplus 0=x$ 任何数是其本身的逆元，即有$x \oplus x=0$ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这些性质使得连续区间的异或和可以用前缀和维护。 01Trie树&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一道例题：P4551。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这是一道经典的异或问题。如果要求最长路径和的话，这就是求树的直径问题了。对于最大异或和，考虑如何将其与trie树联系起来。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先无根树转有根树，一遍DFS求出所有点到根结点路径的异或和。这时，任意两个点这个异或和的异或值就是它们路径上的异或值。根据异或的运算性质，两点LCA到根的重叠路径部分会抵消，异或后得到的就是两点路径异或和。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475#include&lt;bits/stdc++.h&gt;using namespace std;inline int read() &#123;//读优 char e = getchar(); int s = 0; while (e &lt; '-')e = getchar(); while (e &gt; '-')s = (s &lt;&lt; 1) + (s &lt;&lt; 3) + (e &amp; 15), e = getchar(); return s;&#125;struct Node &#123;//trie树结点定义，只存左右儿子 int ch[2];&#125; node[100005 * 31];struct Edge &#123;//存边 int to, next, v;&#125; edge[100005 &lt;&lt; 1];int head[100005], cnt = 1, n, tp[100005];inline void add(int x, int y, int v) &#123; edge[cnt].to = y, edge[cnt].next = head[x], edge[cnt].v = v, head[x] = cnt++;&#125;inline int newNode() &#123;//分配新结点，1为根 static int cnt = 2; return cnt++;&#125;inline void insert(int x) &#123;//插入元素 int now = 1; for (int i = 31; i &gt;= 0; i--) &#123;//从高位开始 if ((1 &lt;&lt; i) &amp; x) &#123; if (node[now].ch[1] == 0)node[now].ch[1] = newNode();//没有就新建 now = node[now].ch[1]; &#125; else &#123; if (node[now].ch[0] == 0)node[now].ch[0] = newNode(); now = node[now].ch[0]; &#125; &#125;&#125;inline int find(int x) &#123; int now = 1, ans = 0; for (int i = 31; i &gt;= 0; i--) &#123; if ((1 &lt;&lt; i) &amp; x) &#123; if (node[now].ch[0])now = node[now].ch[0], ans |= (1 &lt;&lt; i);//向反方向找 else now = node[now].ch[1]; &#125; else &#123; if (node[now].ch[1])now = node[now].ch[1], ans |= (1 &lt;&lt; i); else now = node[now].ch[0]; &#125; &#125; return ans;&#125;void DFS(int fa, int x, int y) &#123;//预处理 insert(y), tp[x] = y; for (int i = head[x]; i; i = edge[i].next) &#123; if (edge[i].to != fa)DFS(x, edge[i].to, y ^ edge[i].v); &#125;&#125;int main() &#123; n = read(); for (int i = 1; i &lt; n; i++) &#123; int x = read(), y = read(), z = read(); add(x, y, z), add(y, x, z); &#125; DFS(0, 1, 0); int ans = -1; for (int i = 1; i &lt;= n; i++)ans = max(ans, find(tp[i])); cout &lt;&lt; ans; return 0;&#125; 可持久化01Trie树&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面就是可持久化01Trie树的部分，例题一道：P4735。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先后缀转前缀。注意到$a[p]\oplus a[p+1]\oplus…\oplus a[N]\oplus x=sum[p-1]\oplus sum[N]\oplus x$。sum是异或前缀和，这样问题转化为找一个值$sum[p-1]$使得与$sum[N]\oplus x$异或值最大。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是容易发现p的选取有限制（为[l-1，r-1]），普通的01trie树不能加上这个限制。这里需要借鉴主席树维护区间第k大的思想。在trie树的结点上增加指标num，记录数量。然后对于每一个i（$1\leq i\leq N$）分别建立一棵存1~i这些数的01trie树，查询时作差即可。这样需要建立N棵树，空间消耗过大，于是需要用主席树的思想来重用空间，降低空间复杂度，这一步与主席树类似。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于插入操作，由于只是末尾插入，建立一棵新版本的trie树即可。对于查询操作，本质上就是找到一个$p（l-1\leq p\leq r-1）$使得$sum[p]$与$sum[N]\oplus x$异或值最大。找到r-1和l-2这两个trie树，作差即可判断。注意当l=1时需要特判。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可持久化01trie树不要向主席树那样建立空树，否则空间开销达到指数级。对于那些空的结点，统一用0号结点代替。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另外，本题卡常，需要尽可能减小常数。1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162#include&lt;bits/stdc++.h&gt;using namespace std;int root[300005 &lt;&lt; 2], n, m, la;struct Node &#123; int ch[2], num;&#125; node[300005 &lt;&lt; 6];inline int newNode() &#123; static int cnt = 1; return cnt++;&#125;inline int newTree(int pre, int x, int p) &#123;//新建一棵树 register int rt = newNode(); if (p == -1) &#123; node[rt].num = node[pre].num + 1; return rt; &#125; node[rt].ch[0] = node[pre].ch[0], node[rt].ch[1] = node[pre].ch[1], node[rt].num = node[pre].num + 1;//继承和修改 if ((1 &lt;&lt; p) &amp; x)node[rt].ch[1] = newTree(node[pre].ch[1], x, p - 1); else node[rt].ch[0] = newTree(node[pre].ch[0], x, p - 1); return rt;&#125;inline int query(int a, int b, int x) &#123; register int p = 25, ans = 0; while (p &gt;= 0) &#123; if ((1 &lt;&lt; p) &amp; x) &#123; if (node[node[b].ch[0]].num &gt; node[node[a].ch[0]].num) &#123; b = node[b].ch[0], a = node[a].ch[0], ans |= (1 &lt;&lt; p); &#125; else b = node[b].ch[1], a = node[a].ch[1]; &#125; else &#123; if (node[node[b].ch[1]].num &gt; node[node[a].ch[1]].num) &#123; b = node[b].ch[1], a = node[a].ch[1], ans |= (1 &lt;&lt; p); &#125; else b = node[b].ch[0], a = node[a].ch[0]; &#125; p--; &#125; return ans;&#125;int main() &#123; scanf("%d%d", &amp;n, &amp;m); for (int i = 1; i &lt;= n; i++) &#123; register int x; scanf("%d", &amp;x), la ^= x; root[i] = newTree(root[i - 1], la, 25); &#125; for (register int i = 0; i &lt; m; i++) &#123; char e; register int a, b, c; scanf(" %c", &amp;e); if (e == 'A')scanf("%d", &amp;a), la ^= a, root[n + 1] = newTree(root[n], la, 25), n++; else &#123; scanf("%d%d%d", &amp;a, &amp;b, &amp;c); register int p = query(a != 1 ? root[a - 2] : 0, root[b - 1], c ^ la); printf("%d\n", a == 1 ? max(p, c ^ la) : p);//a=1时特判一步 &#125; &#125; return 0;&#125;]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>提高算法</tag>
+        <tag>数据结构</tag>
+        <tag>树</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[可持久化平衡树]]></title>
     <url>%2F2019%2F04%2F11%2F%E5%8F%AF%E6%8C%81%E4%B9%85%E5%8C%96%E5%B9%B3%E8%A1%A1%E6%A0%91%2F</url>
     <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可持久化数据结构第二部分：可持久化平衡树和文艺平衡树。阅读本文需要前缀知识FHQ Treap。 可持久化平衡树&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可持久化数据结构在前一篇文章中已经提到。fhq Treap是非旋的树堆，可以很好地实现可持久化平衡树。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;根据前一篇文章的铺垫，可以初步理解可持久化数据结构的实现原理，那就是只要需要修改原有结点，就重建一个。旋转操作很容易破坏原树的结构，而fhq Threap没有旋转操作，在实现可持久化时有天然优势。一个模板题。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fhq Treap的核心操作为split和merge。只要修改这两个函数就可以实现可持久化。具体实现过程如下：1234567891011121314inline int newNode(Node *p) &#123;//通过传入指针来构造一个相同内容的新结点 static int cnt = 1; node[cnt] = *p; return cnt++;&#125;void split(int rt, int &amp;a, int &amp;b, int v) &#123;//注意newNode函数的使用 if (rt == 0) &#123; a = b = 0; return; &#125; if (node[rt].v &lt;= v)a = newNode(node + rt), split(node[rt].ch[1], node[a].ch[1], b, v), update(a); else b = newNode(node + rt), split(node[rt].ch[0], a, node[b].ch[0], v), update(b);&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;split中实现可持久化的原则是不能修改rt树上的结点。因此，当需要修改时，a和b总是需要拷贝一份rt结点，再进行修改操作。注意这里的update需要在两个分枝分别进行调用，这与普通的fhq Treap中一步update(rt)有所不同。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那merge函数是不是也需要不断拷贝结点？从道理上讲，这样做完全没有问题，可以得到下面的代码：123456789void merge(int &amp;rt, int a, int b) &#123; if (a == 0 || b == 0) &#123; rt = a + b; return; &#125; if (node[a].key &gt; node[b].key)rt = newNode(node + a), merge(node[rt].ch[1], node[a].ch[1], b); else rt = newNode(node + b), merge(node[rt].ch[0], a, node[b].ch[0]); update(rt);&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里merge可持久化的原则是不能修改a和b上的结点。因此，当需要修改时，rt总是拷贝一份a或b的结点，再进行更新。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样做没有什么错，只是浪费了空间。注意到我们在fhq Treap上的操作总是先split再merge，这样在merge之前，需要新建的结点已经被split过程新建出来了。可以这样做的不严格证明：split总是要按照一定指标来进行，譬如本题需要按值分离。那些新建结点与原有结点之间的交界部分姑且称之为断层，断层处体现了split的依据。无论是插入结点还是删除结点，后来merge的操作总是在断层上进行。比如插入值为x的结点，需要先将不大于x的结点树split出来，这样新的结点必然是接在这棵树的断层上的，因此原有的结点不会被修改，仅有split时新建的结点被修改。merge操作的树与之前的split均为同一版本，于是就可以省略复制结点的过程。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样merge过程保留原有的函数不变即可，从而降低空间消耗。后面的操作也没有什么大的变动，全代码如下：123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127128129130131132133134135#include&lt;bits/stdc++.h&gt;#define N 500005using namespace std;struct Node &#123; int v&#123;&#125;, key&#123;&#125;, ch[2]&#123;&#125;, num; Node() : num(0) &#123; ch[0] = ch[1] = 0; &#125;&#125; node[N &lt;&lt; 6];inline void read(int &amp;s) &#123; char e = getchar(); int p = 0; s = 0; while (e &lt; '-')e = getchar(); if (e == '-')e = getchar(), p = 1; while (e &gt; '-')s = (s &lt;&lt; 1) + (s &lt;&lt; 3) + (e &amp; 15), e = getchar(); if (p)s = -s;&#125;int root[N], ver[N], n, a, b, c, rcnt = 1;inline int newNode(Node *p) &#123; static int cnt = 1; node[cnt] = *p; return cnt++;&#125;inline void update(int x) &#123; node[x].num = node[node[x].ch[0]].num + node[node[x].ch[1]].num + 1;&#125;void split(int rt, int &amp;a, int &amp;b, int v) &#123; if (rt == 0) &#123; a = b = 0; return; &#125; if (node[rt].v &lt;= v)a = newNode(node + rt), split(node[rt].ch[1], node[a].ch[1], b, v), update(a); else b = newNode(node + rt), split(node[rt].ch[0], a, node[b].ch[0], v), update(b);&#125;void merge(int &amp;rt, int a, int b) &#123; if (a == 0 || b == 0) &#123; rt = a + b; return; &#125; if (node[a].key &gt; node[b].key)rt = a, merge(node[rt].ch[1], node[a].ch[1], b); else rt = b, merge(node[rt].ch[0], a, node[b].ch[0]); update(rt);&#125;inline int insert(int v, int x) &#123; int p = newNode(node), a, b, c; node[p].key = rand(), node[p].v = x, node[p].num = 1, split(root[ver[v]], a, b, x); merge(a, a, p), merge(c, a, b); return c;&#125;inline int delNum(int v, int x) &#123; int a, b, c; split(root[ver[v]], a, b, x), split(a, a, c, x - 1); merge(c, node[c].ch[0], node[c].ch[1]), merge(a, a, c), merge(c, a, b); return c;&#125;inline int findRank(int v, int x) &#123; int cur = root[ver[v]], nxt = 0, ans = 0; while (true) &#123; if (node[cur].v &lt; x)nxt = node[cur].ch[1], ans += node[cur].num - node[nxt].num; else if (node[cur].v &gt; x)nxt = node[cur].ch[0]; else &#123; ans += node[node[cur].ch[0]].num; break; &#125; if (nxt != 0)cur = nxt; else break; &#125; return ans + 1;&#125;inline int preNum(int v, int x) &#123; int cur = root[ver[v]], nxt = 0, maxn = -2147483647, ans = -1; while (true) &#123; if (node[cur].v &gt; x)nxt = node[cur].ch[0]; else if (node[cur].v &lt; x) &#123; nxt = node[cur].ch[1]; if (node[cur].v &gt; maxn)maxn = node[cur].v, ans = cur; &#125; else nxt = node[cur].ch[0]; if (nxt != 0)cur = nxt; else break; &#125; return ans == -1 ? -2147483647 : node[ans].v;&#125;inline int nextNum(int v, int x) &#123; int cur = root[ver[v]], nxt = 0, minn = 2147483647, ans = -1; while (true) &#123; if (node[cur].v &lt; x)nxt = node[cur].ch[1]; else if (node[cur].v &gt; x) &#123; nxt = node[cur].ch[0]; if (node[cur].v &lt;= minn)minn = node[cur].v, ans = cur; &#125; else nxt = node[cur].ch[1]; if (nxt != 0)cur = nxt; else break; &#125; return ans == -1 ? 2147483647 : node[ans].v;&#125;inline int findNum(int v, int x) &#123; int cur = root[ver[v]], nxt = 0; while (true) &#123; if (node[node[cur].ch[0]].num &gt;= x)nxt = node[cur].ch[0]; else if (x &gt; node[node[cur].ch[0]].num &amp;&amp; x &lt;= node[node[cur].ch[0]].num + 1)return node[cur].v; else nxt = node[cur].ch[1], x -= node[node[cur].ch[0]].num + 1; if (nxt != 0)cur = nxt; else break; &#125; return -1;&#125;int main() &#123; srand(time(NULL)), read(n); for (int i = 1; i &lt;= n; i++) &#123; read(a), read(b), read(c); if (b == 1)root[rcnt] = insert(a, c), ver[i] = rcnt++; else if (b == 2)root[rcnt] = delNum(a, c), ver[i] = rcnt++; else if (b == 3)printf("%d\n", findRank(a, c)), ver[i] = ver[a]; else if (b == 4)printf("%d\n", findNum(a, c)), ver[i] = ver[a]; else if (b == 5)printf("%d\n", preNum(a, c)), ver[i] = ver[a]; else printf("%d\n", nextNum(a, c)), ver[i] = ver[a]; &#125; return 0; 可持久化文艺平衡树&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;有可持久化平衡树，自然有可持久化文艺平衡树。它同样可以用fhq Treap实现，模板题。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;与上面类似：spilt时复制结点，merge时不用复制。但这里需要特别注意的是：下压标记时也需要复制结点。这是因为下压标记需要修改左右子树的标记，对结果造成影响（这个结点的两个子结点可能也属于其它版本），因此需要复制一份。1234567inline void down(int x) &#123; if (!node[x].tag)return; if (node[x].ch[0])node[x].ch[0] = newNode(node + node[x].ch[0]); if (node[x].ch[1])node[x].ch[1] = newNode(node + node[x].ch[1]); swap(node[x].ch[0], node[x].ch[1]); node[node[x].ch[0]].tag ^= 1, node[node[x].ch[1]].tag ^= 1, node[x].tag = 0;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在结点中添加指标sum记录子树和，之后就可以搞出来了。全代码（本题强制在线）：123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101#include&lt;bits/stdc++.h&gt;#define N 200005using namespace std;struct Node &#123; int v&#123;&#125;, key&#123;&#125;, ch[2]&#123;&#125;, num; long long sum; short tag;&#125; node[N &lt;&lt; 6];inline long long read() &#123; char e = getchar(); int p = 0; long long s = 0; while (e &lt; '-')e = getchar(); if (e == '-')e = getchar(), p = 1; while (e &gt; '-')s = (s &lt;&lt; 1) + (s &lt;&lt; 3) + (e &amp; 15), e = getchar(); return p ? -s : s;&#125;int root[N], ver[N], rcnt = 1;long long n, opt, a, b, v;inline int newNode(Node *p) &#123; static int cnt = 1; node[cnt] = *p; return cnt++;&#125;inline void update(int x) &#123; node[x].num = node[node[x].ch[0]].num + node[node[x].ch[1]].num + 1; node[x].sum = node[node[x].ch[0]].sum + node[node[x].ch[1]].sum + node[x].v;&#125;inline void down(int x) &#123; if (!node[x].tag)return; if (node[x].ch[0])node[x].ch[0] = newNode(node + node[x].ch[0]); if (node[x].ch[1])node[x].ch[1] = newNode(node + node[x].ch[1]); swap(node[x].ch[0], node[x].ch[1]); node[node[x].ch[0]].tag ^= 1, node[node[x].ch[1]].tag ^= 1, node[x].tag = 0;&#125;void split(int rt, int &amp;a, int &amp;b, int v) &#123; if (rt == 0) &#123; a = b = 0; return; &#125; down(rt); if (node[node[rt].ch[0]].num &lt; v) a = newNode(node + rt), split(node[rt].ch[1], node[a].ch[1], b, v - node[node[rt].ch[0]].num - 1), update(a); else b = newNode(node + rt), split(node[rt].ch[0], a, node[b].ch[0], v), update(b);&#125;void merge(int &amp;rt, int a, int b) &#123; if (a == 0 || b == 0) &#123; rt = a + b; return; &#125; down(a), down(b); if (node[a].key &gt; node[b].key)rt = a, merge(node[rt].ch[1], node[a].ch[1], b); else rt = b, merge(node[rt].ch[0], a, node[b].ch[0]); update(rt);&#125;inline int insert(int v, int x, int y) &#123; int p = newNode(node), a, b, c; node[p].key = rand(), node[p].sum = node[p].v = y, node[p].num = 1, split(root[ver[v]], a, b, x); merge(a, a, p), merge(c, a, b); return c;&#125;inline int delNum(int v, int x) &#123; int a, b, c; split(root[ver[v]], a, b, x - 1), split(b, b, c, 1), merge(a, a, c); return a;&#125;int main() &#123; long long last = 0; srand(time(NULL)); n = read(); for (int i = 1; i &lt;= n; i++) &#123; v = read(), opt = read(), a = read() ^ last; if (opt == 1)b = read() ^ last, root[rcnt] = insert(v, a, b), ver[i] = rcnt++; else if (opt == 2)root[rcnt] = delNum(v, a), ver[i] = rcnt++; else if (opt == 3) &#123; b = read() ^ last; int x, y, z, p; split(root[ver[v]], x, y, b), split(x, x, z, a - 1), node[z].tag ^= 1, merge(p, x, z), merge(x, p, y); root[rcnt] = x, ver[i] = rcnt++; &#125; else &#123; int x, y, z, p; b = read() ^ last; split(root[ver[v]], x, y, b), split(x, x, z, a - 1), printf("%lld\n", last = node[z].sum); merge(p, x, z), merge(x, p, y); root[rcnt] = x, ver[i] = rcnt++; &#125; &#125; return 0;&#125;]]></content>
@@ -9,9 +22,9 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
+        <tag>数据结构</tag>
         <tag>平衡树</tag>
         <tag>文艺平衡树</tag>
-        <tag>数据结构</tag>
         <tag>树</tag>
       </tags>
   </entry>
@@ -112,8 +125,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>搜索</tag>
         <tag>提高算法</tag>
+        <tag>搜索</tag>
       </tags>
   </entry>
   <entry>
@@ -200,8 +213,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>平衡树</tag>
         <tag>数据结构</tag>
+        <tag>平衡树</tag>
       </tags>
   </entry>
   <entry>
@@ -213,9 +226,9 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
+        <tag>数据结构</tag>
         <tag>平衡树</tag>
         <tag>文艺平衡树</tag>
-        <tag>数据结构</tag>
         <tag>树</tag>
       </tags>
   </entry>
@@ -228,8 +241,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>平衡树</tag>
         <tag>数据结构</tag>
+        <tag>平衡树</tag>
         <tag>树</tag>
       </tags>
   </entry>
@@ -242,9 +255,9 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
+        <tag>数据结构</tag>
         <tag>平衡树</tag>
         <tag>文艺平衡树</tag>
-        <tag>数据结构</tag>
         <tag>树</tag>
       </tags>
   </entry>
@@ -309,8 +322,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>网络流</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -321,8 +334,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>网络流</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -379,9 +392,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>图论</tag>
         <tag>图的最短路</tag>
+        <tag>提高算法</tag>
         <tag>差分约束</tag>
       </tags>
   </entry>
@@ -694,11 +707,11 @@
       </categories>
       <tags>
         <tag>基础算法</tag>
-        <tag>数据结构</tag>
         <tag>区间最值</tag>
+        <tag>数据结构</tag>
         <tag>区间</tag>
-        <tag>队列</tag>
         <tag>单调队列</tag>
+        <tag>队列</tag>
       </tags>
   </entry>
   <entry>
@@ -715,8 +728,8 @@
         <tag>ST表</tag>
         <tag>动态规划</tag>
         <tag>区间</tag>
-        <tag>队列</tag>
         <tag>单调队列</tag>
+        <tag>队列</tag>
       </tags>
   </entry>
   <entry>
@@ -828,9 +841,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>图论</tag>
         <tag>图的最短路</tag>
+        <tag>提高算法</tag>
         <tag>动态规划</tag>
         <tag>数学期望</tag>
       </tags>
@@ -973,8 +986,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>数据结构</tag>
         <tag>区间最值</tag>
+        <tag>数据结构</tag>
         <tag>ST表</tag>
       </tags>
   </entry>
