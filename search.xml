@@ -1,6 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[快速沃尔什变换（FWT）]]></title>
+    <url>%2F2019%2F04%2F18%2F%E5%BF%AB%E9%80%9F%E6%B2%83%E5%B0%94%E4%BB%80%E5%8F%98%E6%8D%A2%EF%BC%88FWT%EF%BC%89%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;快速沃尔什变换（FWT）是一类解决位运算卷积问题的算法。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;看下面一个式子： c_k=\sum_{i+j=k}a_ib_j&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这明显是一个卷积，可以通过FFT或者NTT（MTT）解决，但是如果遇到了下面的情况： c_k=\sum_{i\bigoplus j=k}a_ib_j&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里的$\bigoplus$是位运算（or、ans、xor），如何求卷积？这就是快速沃尔什变换解决的问题，它可以在$O(nlogn)$复杂度下解决问题。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FWT的优化思想与FFT相同：构造映射tf，使得下面式子成立： tf(A*B)=tf(A)tf(B)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前面的乘号$*$是卷积乘法。同样需要反向映射utf满足： utf(tf(A))=A&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;只需要将tf和utf运算压至$O(nlogn)$即可。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FWT中有着分治思想：将长度为2的方幂的序列一分为2，即将序列$A$分为$A_0$和$A_1$，记为$A=(A_0,A_1)$。则三类位运算的tf与utf构造方法如下： or运算tf(A)=(tf(A_0),tf(A_0)+tf(A_1))\\ utf(A)=(utf(A_0),utf(A_1)-utf(A_0))and运算tf(A)=(tf(A_0)+tf(A_1),tf(A_1))\\ utf(A)=(utf(A_0)-utf(A_1),utf(A_1))xor运算tf(A)=(tf(A_0)+tf(A_1),tf(A_0)-tf(A_1))\\ utf(A)=(\frac {utf(A_0)+utf(A_1)} {2},\frac {utf(A_0)-utf(A_1)} {2})代码模板&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;证明略。模板题。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将FFT的板子改一改就可以得到FWT的板子，注意取模。除以2时需要转化为乘2的逆元499122177。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566#include&lt;bits/stdc++.h&gt;#define MOD 998244353using namespace std;typedef long long ll;ll f[1 &lt;&lt; 20], g[1 &lt;&lt; 20], a[1 &lt;&lt; 20], b[1 &lt;&lt; 20];int n;inline void FWT_or(ll *s, int type) &#123; for (int mid = 1; mid &lt; n; mid &lt;&lt;= 1) &#123; for (int len = mid &lt;&lt; 1, j = 0; j &lt; n; j += len) &#123; for (int k = 0; k &lt; len &gt;&gt; 1; k++) &#123; s[j + mid + k] = (s[j + mid + k] + type * s[j + k]) % MOD; &#125; &#125; &#125;&#125;inline void FWT_and(ll *s, int type) &#123; for (int mid = 1; mid &lt; n; mid &lt;&lt;= 1) &#123; for (int len = mid &lt;&lt; 1, j = 0; j &lt; n; j += len) &#123; for (int k = 0; k &lt; len &gt;&gt; 1; k++) &#123; s[j + k] = (s[j + k] + type * s[j + mid + k]) % MOD; &#125; &#125; &#125;&#125;inline void FWT_xor(ll *s, int type) &#123; for (int mid = 1; mid &lt; n; mid &lt;&lt;= 1) &#123; for (int len = mid &lt;&lt; 1, j = 0; j &lt; n; j += len) &#123; for (int k = 0; k &lt; len &gt;&gt; 1; k++) &#123; ll v = s[j + k]; s[j + k] = (s[j + k] + s[j + mid + k]) % MOD, s[j + k + mid] = (v - s[j + mid + k]) % MOD; if (type == -1)s[j + k] = s[j + k] * 499122177 % MOD, s[j + k + mid] = s[j + k + mid] * 499122177 % MOD; &#125; &#125; &#125;&#125;int main() &#123; ios::sync_with_stdio(false); cin &gt;&gt; n; n = 1 &lt;&lt; n; for (int i = 0; i &lt; n; i++)cin &gt;&gt; f[i]; for (int i = 0; i &lt; n; i++)cin &gt;&gt; g[i]; for (int i = 0; i &lt; n; i++)a[i] = f[i], b[i] = g[i]; FWT_or(a, 1), FWT_or(b, 1); for (int i = 0; i &lt; n; i++)a[i] = a[i] * b[i] % MOD; FWT_or(a, -1); for (int i = 0; i &lt; n; i++)cout &lt;&lt; (a[i] + MOD) % MOD &lt;&lt; " "; cout &lt;&lt; endl; for (int i = 0; i &lt; n; i++)a[i] = f[i], b[i] = g[i]; FWT_and(a, 1), FWT_and(b, 1); for (int i = 0; i &lt; n; i++)a[i] = a[i] * b[i] % MOD; FWT_and(a, -1); for (int i = 0; i &lt; n; i++)cout &lt;&lt; (a[i] + MOD) % MOD &lt;&lt; " "; cout &lt;&lt; endl; for (int i = 0; i &lt; n; i++)a[i] = f[i], b[i] = g[i]; FWT_xor(a, 1), FWT_xor(b, 1); for (int i = 0; i &lt; n; i++)a[i] = a[i] * b[i] % MOD; FWT_xor(a, -1); for (int i = 0; i &lt; n; i++)cout &lt;&lt; (a[i] + MOD) % MOD &lt;&lt; " "; return 0;&#125;]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>提高算法</tag>
+        <tag>数学</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[线性基]]></title>
+    <url>%2F2019%2F04%2F18%2F%E7%BA%BF%E6%80%A7%E5%9F%BA%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;线性基是处理异或问题的有力工具。 基&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在一个线性空间中，如果一组向量满足以下条件： 线性无关 空间中的任何向量都可以由这一组向量线性表示 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;则称这一组向量为线性空间的一个基。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在异或运算中，可以这样定义一个只有异或运算的线性空间的基： 线性无关：即每一个向量不能由其它向量经异或运算得到 空间中的任何向量都可以由这一组向量异或得到 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;则称它们为这个空间的基，或是线性基。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在给定n个向量，从中选取任意个数，使得它们异或和最大。这种求最大值的问题可以用线性基解决。可以发现，将这n个数化为二进制，可以得到n个向量，每一个向量的元素取值只能为0或1。如果能够求出这n个向量的极大无关组（或其等价的形式）就可以用这个向量组来表示空间中的所有向量，可以简化问题。 线性基的求法&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;给定n个数，可以用下面算法来求： 遍历每一个数x，求出它们最高位1的位置i（从0开始），初始化线性基数组p每一位为0。 若p[i]为0，则p[i]=x，否则令x=x^p[i]，重新计算最高位1的位置，递归进行，直到x加入数组或x变为0。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意到异或运算的逆运算就是其本身，这样的话可以看出上面的过程本质上是高斯消元的过程，将矩阵化为上三角矩阵，从而得到极大无关组。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里的算法有一个应用：判定给定的数能否异或得到某数，方法即为先将给定的数组加入，再加入待判定的数。若该数最终加入了线性基，则不可表示，否则可表示。 最值的求法&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;得到了线性基，如何求最大或最小异或和？可以发现p数组每一位最高位1是递增的，对于满秩矩阵最小值自然就是最小的非0值，不满秩即为0；而最大值可以贪心去求，算法为： 从大到小遍历p数组，若异或上p[i]可以使答案更大，则异或，否则继续。 第k小的求法&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果需要求第k小，可以考虑先将求出来的线性基进一步转化，把每一位p[i]变成唯一的第i位为1的数。这一步可以从高位到低位遍历线性基，并向后扫，若后面的数第i位为1，则异或p[i]，这样可以将线性基化为上面的形式。之后求第k小有如下的算法：将k二进制拆分，若第i位为1，则答案异或上线性基中第i+1个不为0的数。这里需要注意0的处理。]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>提高算法</tag>
+        <tag>数学</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[快速数论变换（NTT）]]></title>
+    <url>%2F2019%2F04%2F17%2F%E5%BF%AB%E9%80%9F%E6%95%B0%E8%AE%BA%E5%8F%98%E6%8D%A2%EF%BC%88NTT%EF%BC%89%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;介绍快速数论变换，本文需要快速傅里叶变换前缀知识。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FFT可以很好地解决计算卷积的问题，但是它也有缺点： 精度问题：double的使用 不能取模：复数的引入 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果给定的所有系数均为整数，最后的结果又在模意义下，那么FFT没有很大优势。这时就需要快速数论变换（Number Theoretic Transform，NTT）来解决这个问题。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NTT的使用有一定限制，即对模数有要求，它们需要为$k2^p+1$的素数形式，比如1004535809, 998244353, 469762049这三个数。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在理解了FFT原理后，NTT是容易理解的。在此之前，需要先了解原根的性质。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于一个数x，如果它存在原根g，那么总有下式成立： g^i\not \equiv g^j\pmod x,0\leq i]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>提高算法</tag>
+        <tag>数论</tag>
+        <tag>数学</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[快速傅里叶变换（FFT）]]></title>
     <url>%2F2019%2F04%2F16%2F%E5%BF%AB%E9%80%9F%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2%EF%BC%88FFT%EF%BC%89%2F</url>
     <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;介绍快速傅里叶变换（Fast Fourier Transformation，FFT），可以用来加速多项式乘法。 多项式的点值表示&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;众所周知，一个多项式可以表示成下面的形式： \sum_{i=0}^na_ix^i&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这时，它的系数可以组成一个向量： \vec F=(a_0,a_1,\cdots,a_n)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这种形式称为多项式的系数表示，通过原有系数向量得到的它们所对应多项式乘积的系数向量，称为两个向量的卷积。易知，如果要求两个多项式的乘积，需要用它们的系数去分别相乘，时间复杂度为$O(n^2)$，是很低效的。。这时，我们希望可以用另一种方式来表示多项式。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里有一个定理：任何一个最高次幂为n的多项式，可以由n+1组满足该多项式的互异点对唯一地确定出来。用这些点表示多项式的形式称为点值表示。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面是定理的简单证明。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考虑点对$(x_0,y_0),(x_1,y_1),\cdots,(x_n,y_n)$，那么有： \begin{bmatrix} 1&x_0&x_0^2&\cdots&x_0^{n}\\ 1&x_1&x_1^2&\cdots&x_1^{n}\\ \vdots&\vdots&\vdots &\ &\vdots\\ 1&x_n&x_n^2&\cdots&x_n^{n}\\ \end{bmatrix} \begin{bmatrix} a_0\\ a_1\\ \vdots\\ a_n \end{bmatrix}=\begin{bmatrix} y_0\\ y_1\\ \vdots\\ y_n \end{bmatrix}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最左侧的方阵对应的行列式为范德蒙行列式，其值为： \prod_{1\leq i]]></content>
@@ -34,10 +71,10 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>数据结构</tag>
-        <tag>树</tag>
         <tag>平衡树</tag>
         <tag>文艺平衡树</tag>
+        <tag>数据结构</tag>
+        <tag>树</tag>
       </tags>
   </entry>
   <entry>
@@ -137,8 +174,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>搜索</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -225,8 +262,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>数据结构</tag>
         <tag>平衡树</tag>
+        <tag>数据结构</tag>
       </tags>
   </entry>
   <entry>
@@ -238,10 +275,10 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>数据结构</tag>
-        <tag>树</tag>
         <tag>平衡树</tag>
         <tag>文艺平衡树</tag>
+        <tag>数据结构</tag>
+        <tag>树</tag>
       </tags>
   </entry>
   <entry>
@@ -253,9 +290,9 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
+        <tag>平衡树</tag>
         <tag>数据结构</tag>
         <tag>树</tag>
-        <tag>平衡树</tag>
       </tags>
   </entry>
   <entry>
@@ -267,10 +304,10 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>数据结构</tag>
-        <tag>树</tag>
         <tag>平衡树</tag>
         <tag>文艺平衡树</tag>
+        <tag>数据结构</tag>
+        <tag>树</tag>
       </tags>
   </entry>
   <entry>
@@ -692,8 +729,8 @@
       <tags>
         <tag>提高算法</tag>
         <tag>矩阵</tag>
-        <tag>ST表</tag>
         <tag>动态规划</tag>
+        <tag>ST表</tag>
       </tags>
   </entry>
   <entry>
@@ -736,9 +773,9 @@
       <tags>
         <tag>基础算法</tag>
         <tag>矩阵</tag>
+        <tag>动态规划</tag>
         <tag>区间最值</tag>
         <tag>ST表</tag>
-        <tag>动态规划</tag>
         <tag>区间</tag>
         <tag>单调队列</tag>
         <tag>队列</tag>
@@ -970,8 +1007,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>字符串</tag>
         <tag>基础算法</tag>
+        <tag>字符串</tag>
         <tag>哈希</tag>
       </tags>
   </entry>
