@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[[洛谷P2515]软件安装]]></title>
+    <url>%2F2019%2F05%2F19%2F%E6%B4%9B%E8%B0%B7P2515-%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85%2F</url>
+    <content type="text"><![CDATA[难度：省选/NOI- 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在我们的手头有$N$个软件，对于一个软件$i$，它要占用$W_i$的磁盘空间，它的价值为$V_i$。我们希望从中选择一些软件安装到一台磁盘容量为$M$计算机上，使得这些软件的价值尽可能大（即$V_i$的和最大）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是现在有个问题：软件之间存在依赖关系，即软件i只有在安装了软件$j$（包括软件$j$的直接或间接依赖）的情况下才能正确工作（软件$i$依赖软件$j$)。幸运的是，一个软件最多依赖另外一个软件。如果一个软件不能正常工作，那么它能够发挥的作用为0。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们现在知道了软件之间的依赖关系：软件i依赖软件$D_i$。现在请你设计出一种方案，安装价值尽量大的软件。一个软件只能被安装一次，如果一个软件没有依赖则$D_i=0$，这时只要这个软件安装了，它就能正常工作。 输入输出格式输入格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第1行：$N,M(0\leq N\leq 100, 0\leq M\leq 500)$&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第2行：$W_1,W_2, … W_i, …, W_n (0\leq W_i\leq M)$&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第3行：$V_1, V_2, …, V_i, …, V_n (0\leq V_i\leq 1000)$&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第4行：$D_1, D_2, …, D_i, …, D_n (0\leq D_i\leq N, D_i≠i)$ 输出格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一个整数，代表最大价值 输入输出样例Sample input 3 105 5 62 3 40 1 1 Sample output 5 题解&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果没有依赖问题，这就是一个简单的01背包。软件依赖问题使得本题具有一定难度。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先根据依赖关系建图，若A依赖于B（B不是0时），那么连一条有向边从B指向A。注意本题中可能出现循环依赖的现象，显然，对于循环依赖的软件，它们要么全被安装，要么全不被安装，因此可以看成一个软件。由于循环依赖的存在，在建完图后，需要用tarjan算法缩点，这样可以得到一个森林。建一个超级源点指向所有树的根结点得到一棵树。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然后就是DP。本人方法比较奇葩：先多叉树转二叉树，然后再DP。规定$dp(i,j)$表示根结点编号为i的子树，空间限制为j时的最大价值，那么显然有： dp(i,j)=\begin{cases} 0 & j< W_i\\ V_i+\max\{dp(lc_i,k)+dp(rc_i,j-k)\},0\leq k\leq j & j\geq W_i \end{cases}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;转移就是向两个子树进行空间分配，取其中的最大值。最终代码如下：12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879#include&lt;bits/stdc++.h&gt;#define N 105using namespace std;int n, m, w[N], v[N], id = 1, dp[N &lt;&lt; 2][505], cnt = 1, nw[N &lt;&lt; 2], nv[N &lt;&lt; 2], degree[N], ch[N &lt;&lt; 2][2];int head[N], color[N], DFN[N], LOW[N], DFNCNT = 1, ID = 1, vis[N], nhead[N], ncnt = 1, in[N &lt;&lt; 2];struct Edge &#123; int to, next, from;&#125; edge[N], nedge[N &lt;&lt; 1];inline void add(int x, int y) &#123; edge[cnt].from = x, edge[cnt].to = y, edge[cnt].next = head[x], head[x] = cnt++;&#125;inline void nadd(int x, int y) &#123; nedge[ncnt].to = y, nedge[ncnt].next = nhead[x], nhead[x] = ncnt++;&#125;stack&lt;int&gt; sta;void tarjan(int x) &#123;//缩点 if (DFN[x])return; LOW[x] = DFN[x] = DFNCNT++, sta.push(x), vis[x] = 1; for (int i = head[x]; i; i = edge[i].next) &#123; if (!DFN[edge[i].to])tarjan(edge[i].to), LOW[x] = min(LOW[x], LOW[edge[i].to]); else if (vis[edge[i].to])LOW[x] = min(LOW[x], DFN[edge[i].to]); &#125; if (DFN[x] == LOW[x]) &#123; int t; do color[t = sta.top()] = id, vis[t] = 0, sta.pop(); while (t != x); ++id; &#125;&#125;int DP(int x, int y) &#123;//递归进行DP if (dp[x][y] != -1)return dp[x][y]; if (y &lt; nw[x])return dp[x][y] = 0; if (ch[x][0] == 0)return dp[x][y] = nv[x]; if (ch[x][1] == 0)return dp[x][y] = nv[x] + DP(ch[x][0], y - nw[x]); dp[x][y] = 0; for (int i = 0; i &lt;= y - nw[x]; i++) dp[x][y] = max(dp[x][y], DP(ch[x][0], i) + DP(ch[x][1], y - nw[x] - i) + nv[x]); return dp[x][y];&#125;int main() &#123; ios::sync_with_stdio(false); cin &gt;&gt; n &gt;&gt; m; for (int i = 1; i &lt;= n; i++)cin &gt;&gt; w[i]; for (int i = 1; i &lt;= n; i++)cin &gt;&gt; v[i]; for (int i = 1; i &lt;= n; i++) &#123; int x; cin &gt;&gt; x; if (x != 0)add(x, i); &#125; for (int i = 1; i &lt;= n; i++)tarjan(i); for (int i = 1; i &lt;= n; i++)nw[color[i]] += w[i], nv[color[i]] += v[i];//新建点 for (int i = 1; i &lt; cnt; i++) if (color[edge[i].from] != color[edge[i].to]) nadd(color[edge[i].from], color[edge[i].to]), ++degree[color[edge[i].from]], ++in[color[edge[i].to]];//重建图 color[0] = id; for (int i = 1; i &lt; id; i++)if (in[i] == 0)nadd(id, i), ++degree[color[0]];//连接超级源点0 ID = id + 1, memset(dp, -1, sizeof(dp)); for (int i = 1; i &lt;= id; i++) &#123;//多叉树转二叉树 int pt = 0, last = i; for (int j = nhead[i]; j; j = nedge[j].next) &#123; if (degree[i] == 1)ch[i][0] = nedge[j].to; else if (degree[i] == 2)pt ? ch[i][1] = nedge[j].to : ch[i][0] = nedge[j].to, ++pt; else &#123; if (pt == degree[i] - 2)ch[last][0] = nedge[j].to, ++pt; else if (pt == degree[i] - 1)ch[last][1] = nedge[j].to; else ch[last][0] = nedge[j].to, last = ch[last][1] = ID++, ++pt; &#125; &#125; &#125; cout &lt;&lt; DP(color[0], m); return 0;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这种方法不是正规的，但是是一个很好想的做法，正规解法是树上背包。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;同样地，规定$dp(i,j)$为编号为i的子树，限制为j时的最大价值，转移时肯定不能像二叉树那样对子结点分配，只能通过不断更新的方式。12345678910void DP(int x) &#123; int v; for (int i = nw[x]; i &lt;= m; i++)dp[x][i] = nv[x];//预处理，其余为0 for (int i = nhead[x]; i; i = nedge[i].next) &#123;//遍历所有结点 DP(v = nedge[i].to);//DP子结点 for (int j = m - nw[x]; j &gt;= 0; j--) &#123;//枚举剩下的空间，倒序枚举 for (int z = 1; z &lt;= j; z++)dp[x][j + nw[x]] = max(dp[x][j + nw[x]], dp[x][j + nw[x] - z] + dp[v][z]);//枚举分配给这个子结点的空间 &#125; &#125;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样完整代码如下：12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667#include&lt;bits/stdc++.h&gt;#define N 105using namespace std;int n, m, w[N], v[N], id = 1, dp[N &lt;&lt; 2][505], cnt = 1, nw[N &lt;&lt; 2], nv[N &lt;&lt; 2];int head[N], color[N], DFN[N], LOW[N], DFNCNT = 1, vis[N], nhead[N], ncnt = 1, in[N &lt;&lt; 2];struct Edge &#123; int to, next, from;&#125; edge[N], nedge[N &lt;&lt; 1];inline void add(int x, int y) &#123; edge[cnt].from = x, edge[cnt].to = y, edge[cnt].next = head[x], head[x] = cnt++;&#125;inline void nadd(int x, int y) &#123; nedge[ncnt].to = y, nedge[ncnt].next = nhead[x], nhead[x] = ncnt++;&#125;stack&lt;int&gt; sta;void tarjan(int x) &#123;//缩点 if (DFN[x])return; LOW[x] = DFN[x] = DFNCNT++, sta.push(x), vis[x] = 1; for (int i = head[x]; i; i = edge[i].next) &#123; if (!DFN[edge[i].to])tarjan(edge[i].to), LOW[x] = min(LOW[x], LOW[edge[i].to]); else if (vis[edge[i].to])LOW[x] = min(LOW[x], DFN[edge[i].to]); &#125; if (DFN[x] == LOW[x]) &#123; int t; do color[t = sta.top()] = id, vis[t] = 0, sta.pop(); while (t != x); ++id; &#125;&#125;void DP(int x) &#123; int v; for (int i = nw[x]; i &lt;= m; i++)dp[x][i] = nv[x]; for (int i = nhead[x]; i; i = nedge[i].next) &#123; DP(v = nedge[i].to); for (int j = m - nw[x]; j &gt;= 0; j--) &#123; for (int z = 1; z &lt;= j; z++)dp[x][j + nw[x]] = max(dp[x][j + nw[x]], dp[x][j + nw[x] - z] + dp[v][z]); &#125; &#125;&#125;int main() &#123; ios::sync_with_stdio(false); cin &gt;&gt; n &gt;&gt; m; for (int i = 1; i &lt;= n; i++)cin &gt;&gt; w[i]; for (int i = 1; i &lt;= n; i++)cin &gt;&gt; v[i]; for (int i = 1; i &lt;= n; i++) &#123; int x; cin &gt;&gt; x; if (x != 0)add(x, i); &#125; for (int i = 1; i &lt;= n; i++)tarjan(i); for (int i = 1; i &lt;= n; i++)nw[color[i]] += w[i], nv[color[i]] += v[i];//新建点 for (int i = 1; i &lt; cnt; i++) if (color[edge[i].from] != color[edge[i].to]) nadd(color[edge[i].from], color[edge[i].to]), ++in[color[edge[i].to]];//重建图 color[0] = id; for (int i = 1; i &lt; id; i++)if (in[i] == 0)nadd(id, i); DP(color[0]); cout &lt;&lt; dp[color[0]][m]; return 0;&#125;]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>树</tag>
+        <tag>动态规划</tag>
+        <tag>强连通分量</tag>
+        <tag>图</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[斜率优化DP]]></title>
+    <url>%2F2019%2F05%2F16%2F%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96DP%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;继四边形不等式和单调队列之后的另一个DP优化方法，这样DP优化方法基本全了。 斜率优化DP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在DP状态转移方程中，常常可以看到这样的一种形式： dp[x]=\min\{dp[i]+f(i,x)\},i]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>提高算法</tag>
+        <tag>动态规划</tag>
+        <tag>单调队列</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[[hihocoder1554]Shortest Nore0061]]></title>
     <url>%2F2019%2F05%2F12%2FNore0061%2F</url>
     <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一个比较有意思的DP类字符串问题。涉及到子序列问题，故为了弥补漏洞，写这个题。 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nore0061 is a weird Nore. Just like all Nores, Nore0061 is a string lover. Nore0061’s given name is string A and the family name is string B. One day Nore King sends Nore0061 a strange alphanumeric string S, and ask Nore0061 to find the shortest substring S’ of S such that S’ can partition into three nonintersecting subsequences {A’, B’, C’} so that A’ = A and B = B’. 输入输出格式输入格式&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The first line contains one single alphanumeric string A(1 ≤ |A| ≤ 100). The second line contains one single alphanumeric string B(1 ≤ |B| ≤ 100). The third line contains one single alphanumeric string S(1 ≤ |S| ≤ 3000). 输出格式&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;One single integer denoting the length of such shortest substring. If no such substring, just print -1 instead. 输入输出样例Sample input Twyj0mJXRiqNuRj4mRKyTcwFKj0KmCJAFpXRiHGNq Sample output 22 题解&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考虑动态规划。规定$dp[x][y][z]$表示：若串A前x位，串B前y位是串S前z位的两个不相交子序列，则为首位匹配的最大位置，否则为0。这样可以比较容易地推出dp数组。时间复杂度$O(l_1l_2l_3)$，$l_1、l_2、l_3$是三个串的长度。12345678910111213141516171819202122232425262728293031323334353637#include &lt;bits/stdc++.h&gt;using namespace std;char a[102], b[102], str[3005];int dp[102][102][3005];int l1, l2, len;inline void getDP(int l = 1, int r = len) &#123; dp[1][0][l] = str[l] == a[1], dp[0][1][l] = str[l] == b[1]; for (int i = l + 1; i &lt;= r; i++) &#123; for (int j = 0; j &lt;= l1; j++) &#123; for (int z = 0; z &lt;= l2; z++) &#123; if (j) &#123; if (str[i] == a[j])dp[j][z][i] = max(dp[j][z][i - 1], j == 1 &amp;&amp; z == 0 ? i : dp[j - 1][z][i - 1]); else dp[j][z][i] = dp[j][z][i - 1]; &#125; if (z) &#123; int x = dp[j][z][i]; if (str[i] == b[z])dp[j][z][i] = max(dp[j][z][i - 1], j == 0 &amp;&amp; z == 1 ? i : dp[j][z - 1][i - 1]); else dp[j][z][i] = dp[j][z][i - 1]; dp[j][z][i] = max(dp[j][z][i], x); &#125; &#125; &#125; &#125;&#125;int main() &#123; cin &gt;&gt; (a + 1) &gt;&gt; (b + 1) &gt;&gt; (str + 1); l1 = strlen(a + 1), l2 = strlen(b + 1), len = strlen(str + 1); getDP(); int ans = 30000; for (int i = 1; i &lt;= len; i++) if (dp[l1][l2][i])ans = min(ans, i - dp[l1][l2][i] + 1); cout &lt;&lt; (ans == 30000 ? -1 : ans); return 0;&#125;]]></content>
@@ -8,8 +35,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>字符串</tag>
         <tag>基础算法</tag>
+        <tag>字符串</tag>
         <tag>动态规划</tag>
       </tags>
   </entry>
@@ -290,8 +317,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>搜索</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -326,8 +353,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数据结构</tag>
         <tag>基础算法</tag>
+        <tag>数据结构</tag>
         <tag>单调栈</tag>
         <tag>栈</tag>
       </tags>
@@ -460,9 +487,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
+        <tag>基础算法</tag>
         <tag>数据结构</tag>
         <tag>树</tag>
-        <tag>基础算法</tag>
         <tag>动态规划</tag>
       </tags>
   </entry>
@@ -683,8 +710,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数论</tag>
         <tag>基础算法</tag>
+        <tag>数论</tag>
       </tags>
   </entry>
   <entry>
@@ -743,8 +770,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数论</tag>
         <tag>基础算法</tag>
+        <tag>数论</tag>
         <tag>最大公约数</tag>
       </tags>
   </entry>
@@ -756,8 +783,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数论</tag>
         <tag>矩阵</tag>
+        <tag>数论</tag>
         <tag>快速幂</tag>
       </tags>
   </entry>
@@ -845,8 +872,8 @@
       <tags>
         <tag>提高算法</tag>
         <tag>矩阵</tag>
-        <tag>ST表</tag>
         <tag>动态规划</tag>
+        <tag>ST表</tag>
       </tags>
   </entry>
   <entry>
@@ -871,12 +898,12 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数据结构</tag>
         <tag>基础算法</tag>
+        <tag>数据结构</tag>
         <tag>区间最值</tag>
-        <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
+        <tag>区间</tag>
       </tags>
   </entry>
   <entry>
@@ -889,12 +916,12 @@
       <tags>
         <tag>基础算法</tag>
         <tag>矩阵</tag>
+        <tag>动态规划</tag>
         <tag>区间最值</tag>
         <tag>ST表</tag>
-        <tag>动态规划</tag>
-        <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
+        <tag>区间</tag>
       </tags>
   </entry>
   <entry>
@@ -1123,8 +1150,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>字符串</tag>
         <tag>基础算法</tag>
+        <tag>字符串</tag>
         <tag>哈希</tag>
       </tags>
   </entry>
@@ -1202,8 +1229,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数论</tag>
         <tag>基础算法</tag>
+        <tag>数论</tag>
       </tags>
   </entry>
   <entry>
@@ -1342,8 +1369,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数据结构</tag>
         <tag>基础算法</tag>
+        <tag>数据结构</tag>
         <tag>线段树</tag>
       </tags>
   </entry>
@@ -1392,8 +1419,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数据结构</tag>
         <tag>基础算法</tag>
+        <tag>数据结构</tag>
         <tag>树状数组</tag>
       </tags>
   </entry>
@@ -1418,8 +1445,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数据结构</tag>
         <tag>基础算法</tag>
+        <tag>数据结构</tag>
         <tag>堆</tag>
       </tags>
   </entry>
