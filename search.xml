@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[虚树]]></title>
+    <url>%2F2019%2F05%2F21%2F%E8%99%9A%E6%A0%91%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;介绍虚树，一个解决树上动态规划的利器。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;先来一个经典例题：洛谷P2011消耗战。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;很明显是树型DP，但是奈何n过大，时间复杂度达到$O(nm)$，必然TLE，但是我们又没有什么好的解决思路。这时看到了一个条件$\displaystyle\sum_{i=1}^mk_i&lt;=500000$，这说明无论m有多大，k的总和总是不大于500000，这个条件能不能用来优化算法？&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;答案是肯定的，这时就需要引入虚树这个黑科技。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所谓虚树是指将原树中与问题无关的点剔除，保留与问题有关的点及其lca，之后得到的树。经过这种处理后的树保留了点的相对关系，又去除了冗余的点，可以提高算法效率，这样得到的树就称为虚树。相对应地，原有的树称为原树。虚树能够有效利用与问题有关的点，这样k总和不大于500000的条件就很好地利用上了。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上图是例题样例图。假如现在需要处理10和6两个点，那么树可以简化成这样：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然后复杂度就降下来了，这就是虚树。 虚树的构建&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在给定原树和我们需要处理的点，如何求虚树呢？这里需要前缀知识：求LCA。只要不是暴力，选哪一个求LCA的方法均可，包括但不仅限于倍增法、tarjan算法、树链剖分。这里选择倍增法。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先，我们需要对树上结点进行DFS排序，得到其编号DFN。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;再次，对给定的点按照DFS序排序，用一个栈维护加入虚树的结点遍号，之后将点按照DFS序从小到大的顺序依次加入虚树，规则如下： 若栈中元素数目小于2个，则直接进栈。 若栈中元素数目不小于2个，则求待进栈结点与栈首结点的lca。如果lca就是栈首元素，说明待入栈结点是栈首元素的子结点，直接进栈。 如果lca不是栈首元素，说明栈首元素已经没有需要处理的子结点（毕竟是按照DFS序进栈的），这时构建虚树子树，构建方法是：取栈首元素和第二个元素，若两者都是lca的子结点（这个用DFS序判断），则两者连边作为虚树的树边，根据DFS序，可知第二个元素必定是栈首元素的父结点，加完边后栈首元素出栈，重复这个过程直到栈中元素少于2个或者栈首元素和第二元素不都是lca的子结点。这个过程完成后，判断lca是否是栈首元素，若否说明当前栈首元素是栈中唯一一个为lca子结点的结点，连接lca和这个结点，然后将栈首替换为lca。最后待进栈元素进栈。 最后，可能虚树仍然没有构建完成，最后还需要一次出栈处理。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这一步示例代码：123456789101112inline void insert(int x) &#123;//建立虚树 if (top &lt;= 1)sta[++top] = x;//数组模拟栈 else &#123; int lca = LCA(sta[top], x);//求lca if (lca == sta[top])sta[++top] = x; else &#123; while (top &gt; 1 &amp;&amp; DFN[lca] &lt;= DFN[sta[top - 1]])add(sta[top - 1], sta[top]), --top; if (lca != sta[top])add(lca, sta[top]), sta[top] = lca; sta[++top] = x; &#125; &#125;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最后一次出栈处理代码：1while (top &gt; 1)add(sta[top - 1], sta[top]), --top;//最后一次的出栈处理 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里会有一个问题：虚树边权如何定义？这个需要具体分析，本题中将点和点之间的链化成了一条边，根据题目性质，这一条边权值应该是它所连接的两点在原树中链边权的最小值。这个可以用倍增法快速求。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;建完虚树之后，DP方程就很好列了（本来就好列）。规定$dp(i)$为以i点为根的子树中，去除所有目标点所需的最小代价，那么有转移方程： dp(i)=\begin{cases} \infty & vis[i]\\ \displaystyle\sum_{j=1}^k\min\{val(i,j),dp(j)\} & !vis[i] \end{cases}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$vis[x]$在i为目标结点时为1，否则为0。k为i结点的儿子数目，编号为1~k，$val(i,j)$是结点i到结点j在虚树上的连边权值。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然后本题就切掉了。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104#include&lt;bits/stdc++.h&gt;#define N 250005using namespace std;inline int read() &#123;//读入优化 char e = getchar(); int s = 0; while (e &lt; '-')e = getchar(); while (e &gt; '-')s = (s &lt;&lt; 1) + (s &lt;&lt; 3) + (e &amp; 15), e = getchar(); return s;&#125;unordered_set&lt;int&gt; ssp;//用于预处理struct Edge &#123; int to, next, v;&#125; edge[N &lt;&lt; 1], vedge[N];int n, m, head[N], vhead[N], x, y, z, cnt = 1, vcnt = 1, grand[N][19], DFN[N], depth[N], DFNCNT = 1;int op[500002], sta[500002], top, grand_min[N][19];long long dp[N];bool vis[N];inline void add(int x, int y, int w) &#123;//原树 edge[cnt].to = y, edge[cnt].next = head[x], edge[cnt].v = w, head[x] = cnt++;&#125;inline void addv(int x, int y, int w) &#123;//虚树 vedge[vcnt].to = y, vedge[vcnt].next = vhead[x], vedge[vcnt].v = w, vhead[x] = vcnt++;&#125;inline int LCA(int x, int y) &#123;//倍增LCA if (depth[x] &gt; depth[y])swap(x, y); for (int i = 18; i &gt;= 0; i--)if (depth[grand[y][i]] &gt;= depth[x])y = grand[y][i]; if (x == y)return x; for (int i = 18; i &gt;= 0; i--)if (grand[x][i] != grand[y][i])x = grand[x][i], y = grand[y][i]; return grand[x][0];&#125;inline int minEdge(int x, int y) &#123;//求最小边权 int ans = 0x7fffffff; if (depth[x] &gt; depth[y])swap(x, y); for (int i = 18; i &gt;= 0; i--)if (depth[grand[y][i]] &gt;= depth[x])ans = min(ans, grand_min[y][i]), y = grand[y][i]; return ans;&#125;void DFS(int x) &#123; DFN[x] = DFNCNT++; for (int i = head[x]; i; i = edge[i].next) &#123; if (depth[edge[i].to] == 0) &#123; depth[edge[i].to] = depth[x] + 1, grand[edge[i].to][0] = x, grand_min[edge[i].to][0] = edge[i].v; for (int j = 1; j &lt;= 18; j++)grand[edge[i].to][j] = grand[grand[edge[i].to][j - 1]][j - 1]; for (int j = 1; j &lt;= 18; j++) grand_min[edge[i].to][j] = min(grand_min[edge[i].to][j - 1], grand_min[grand[edge[i].to][j - 1]][j - 1]); DFS(edge[i].to); &#125; &#125;&#125;bool cmp(int x, int y) &#123; return DFN[x] &lt; DFN[y];&#125;inline void insert(int x) &#123;//建立虚树 ssp.insert(x); if (top &lt;= 1)sta[++top] = x; else &#123; int lca = LCA(sta[top], x); if (lca == sta[top])sta[++top] = x; else &#123; while (top &gt; 1 &amp;&amp; DFN[lca] &lt;= DFN[sta[top - 1]]) addv(sta[top - 1], sta[top], minEdge(sta[top - 1], sta[top])), --top; if (lca != sta[top])addv(lca, sta[top], minEdge(lca, sta[top])), sta[top] = lca, ssp.insert(lca); sta[++top] = x; &#125; &#125;&#125;long long DP(int x) &#123;//DP过程 if (dp[x] != -1)return dp[x]; if (vis[x])return dp[x] = 1l &lt;&lt; 60; dp[x] = 0ll; for (int i = vhead[x]; i; i = vedge[i].next)dp[x] += min(1ll * vedge[i].v, DP(vedge[i].to)); return dp[x];&#125;int main() &#123; n = read(); for (int i = 1; i &lt; n; i++)x = read(), y = read(), z = read(), add(x, y, z), add(y, x, z); depth[1] = 1, DFS(1), m = read(); for (int i = 1; i &lt;= m; i++) &#123; int k = read(); sta[top = 1] = 1, vcnt = 1, ssp.insert(1); for (int j = 1; j &lt;= k; j++)op[j] = read(), vis[op[j]] = true; sort(op + 1, op + k + 1, cmp); for (int j = 1; j &lt;= k; j++)insert(op[j]);//构建虚树 while (top &gt; 1)addv(sta[top - 1], sta[top], minEdge(sta[top - 1], sta[top])), --top; for (int it : ssp)dp[it] = -1; printf("%lld\n", DP(1)); for (int it : ssp)vis[it] = false, vhead[it] = 0; ssp.clear(); &#125; return 0;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里需要注意一个问题：不能在每一次查询中都清一遍数组，这样时间复杂度就退化了（又达到$O(nm)$）。正确解法是记录这一次查询用到了那些位置，然后再单独对这些位置做初始化。上面代码中用unordered_set实现。]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
+        <tag>提高算法</tag>
+        <tag>树</tag>
+        <tag>动态规划</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[[洛谷P2515]软件安装]]></title>
     <url>%2F2019%2F05%2F19%2F%E6%B4%9B%E8%B0%B7P2515-%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85%2F</url>
     <content type="text"><![CDATA[难度：省选/NOI- 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在我们的手头有$N$个软件，对于一个软件$i$，它要占用$W_i$的磁盘空间，它的价值为$V_i$。我们希望从中选择一些软件安装到一台磁盘容量为$M$计算机上，使得这些软件的价值尽可能大（即$V_i$的和最大）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是现在有个问题：软件之间存在依赖关系，即软件i只有在安装了软件$j$（包括软件$j$的直接或间接依赖）的情况下才能正确工作（软件$i$依赖软件$j$)。幸运的是，一个软件最多依赖另外一个软件。如果一个软件不能正常工作，那么它能够发挥的作用为0。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们现在知道了软件之间的依赖关系：软件i依赖软件$D_i$。现在请你设计出一种方案，安装价值尽量大的软件。一个软件只能被安装一次，如果一个软件没有依赖则$D_i=0$，这时只要这个软件安装了，它就能正常工作。 输入输出格式输入格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第1行：$N,M(0\leq N\leq 100, 0\leq M\leq 500)$&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第2行：$W_1,W_2, … W_i, …, W_n (0\leq W_i\leq M)$&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第3行：$V_1, V_2, …, V_i, …, V_n (0\leq V_i\leq 1000)$&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第4行：$D_1, D_2, …, D_i, …, D_n (0\leq D_i\leq N, D_i≠i)$ 输出格式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一个整数，代表最大价值 输入输出样例Sample input 3 105 5 62 3 40 1 1 Sample output 5 题解&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果没有依赖问题，这就是一个简单的01背包。软件依赖问题使得本题具有一定难度。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先根据依赖关系建图，若A依赖于B（B不是0时），那么连一条有向边从B指向A。注意本题中可能出现循环依赖的现象，显然，对于循环依赖的软件，它们要么全被安装，要么全不被安装，因此可以看成一个软件。由于循环依赖的存在，在建完图后，需要用tarjan算法缩点，这样可以得到一个森林。建一个超级源点指向所有树的根结点得到一棵树。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然后就是DP。本人方法比较奇葩：先多叉树转二叉树，然后再DP。规定$dp(i,j)$表示根结点编号为i的子树，空间限制为j时的最大价值，那么显然有： dp(i,j)=\begin{cases} 0 & j< W_i\\ V_i+\max\{dp(lc_i,k)+dp(rc_i,j-k)\},0\leq k\leq j & j\geq W_i \end{cases}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;转移就是向两个子树进行空间分配，取其中的最大值。最终代码如下：12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879#include&lt;bits/stdc++.h&gt;#define N 105using namespace std;int n, m, w[N], v[N], id = 1, dp[N &lt;&lt; 2][505], cnt = 1, nw[N &lt;&lt; 2], nv[N &lt;&lt; 2], degree[N], ch[N &lt;&lt; 2][2];int head[N], color[N], DFN[N], LOW[N], DFNCNT = 1, ID = 1, vis[N], nhead[N], ncnt = 1, in[N &lt;&lt; 2];struct Edge &#123; int to, next, from;&#125; edge[N], nedge[N &lt;&lt; 1];inline void add(int x, int y) &#123; edge[cnt].from = x, edge[cnt].to = y, edge[cnt].next = head[x], head[x] = cnt++;&#125;inline void nadd(int x, int y) &#123; nedge[ncnt].to = y, nedge[ncnt].next = nhead[x], nhead[x] = ncnt++;&#125;stack&lt;int&gt; sta;void tarjan(int x) &#123;//缩点 if (DFN[x])return; LOW[x] = DFN[x] = DFNCNT++, sta.push(x), vis[x] = 1; for (int i = head[x]; i; i = edge[i].next) &#123; if (!DFN[edge[i].to])tarjan(edge[i].to), LOW[x] = min(LOW[x], LOW[edge[i].to]); else if (vis[edge[i].to])LOW[x] = min(LOW[x], DFN[edge[i].to]); &#125; if (DFN[x] == LOW[x]) &#123; int t; do color[t = sta.top()] = id, vis[t] = 0, sta.pop(); while (t != x); ++id; &#125;&#125;int DP(int x, int y) &#123;//递归进行DP if (dp[x][y] != -1)return dp[x][y]; if (y &lt; nw[x])return dp[x][y] = 0; if (ch[x][0] == 0)return dp[x][y] = nv[x]; if (ch[x][1] == 0)return dp[x][y] = nv[x] + DP(ch[x][0], y - nw[x]); dp[x][y] = 0; for (int i = 0; i &lt;= y - nw[x]; i++) dp[x][y] = max(dp[x][y], DP(ch[x][0], i) + DP(ch[x][1], y - nw[x] - i) + nv[x]); return dp[x][y];&#125;int main() &#123; ios::sync_with_stdio(false); cin &gt;&gt; n &gt;&gt; m; for (int i = 1; i &lt;= n; i++)cin &gt;&gt; w[i]; for (int i = 1; i &lt;= n; i++)cin &gt;&gt; v[i]; for (int i = 1; i &lt;= n; i++) &#123; int x; cin &gt;&gt; x; if (x != 0)add(x, i); &#125; for (int i = 1; i &lt;= n; i++)tarjan(i); for (int i = 1; i &lt;= n; i++)nw[color[i]] += w[i], nv[color[i]] += v[i];//新建点 for (int i = 1; i &lt; cnt; i++) if (color[edge[i].from] != color[edge[i].to]) nadd(color[edge[i].from], color[edge[i].to]), ++degree[color[edge[i].from]], ++in[color[edge[i].to]];//重建图 color[0] = id; for (int i = 1; i &lt; id; i++)if (in[i] == 0)nadd(id, i), ++degree[color[0]];//连接超级源点0 ID = id + 1, memset(dp, -1, sizeof(dp)); for (int i = 1; i &lt;= id; i++) &#123;//多叉树转二叉树 int pt = 0, last = i; for (int j = nhead[i]; j; j = nedge[j].next) &#123; if (degree[i] == 1)ch[i][0] = nedge[j].to; else if (degree[i] == 2)pt ? ch[i][1] = nedge[j].to : ch[i][0] = nedge[j].to, ++pt; else &#123; if (pt == degree[i] - 2)ch[last][0] = nedge[j].to, ++pt; else if (pt == degree[i] - 1)ch[last][1] = nedge[j].to; else ch[last][0] = nedge[j].to, last = ch[last][1] = ID++, ++pt; &#125; &#125; &#125; cout &lt;&lt; DP(color[0], m); return 0;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这种方法不是正规的，但是是一个很好想的做法，正规解法是树上背包。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;同样地，规定$dp(i,j)$为编号为i的子树，限制为j时的最大价值，转移时肯定不能像二叉树那样对子结点分配，只能通过不断更新的方式。12345678910void DP(int x) &#123; int v; for (int i = nw[x]; i &lt;= m; i++)dp[x][i] = nv[x];//预处理，其余为0 for (int i = nhead[x]; i; i = nedge[i].next) &#123;//遍历所有结点 DP(v = nedge[i].to);//DP子结点 for (int j = m - nw[x]; j &gt;= 0; j--) &#123;//枚举剩下的空间，倒序枚举 for (int z = 1; z &lt;= j; z++)dp[x][j + nw[x]] = max(dp[x][j + nw[x]], dp[x][j + nw[x] - z] + dp[v][z]);//枚举分配给这个子结点的空间 &#125; &#125;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样完整代码如下：12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667#include&lt;bits/stdc++.h&gt;#define N 105using namespace std;int n, m, w[N], v[N], id = 1, dp[N &lt;&lt; 2][505], cnt = 1, nw[N &lt;&lt; 2], nv[N &lt;&lt; 2];int head[N], color[N], DFN[N], LOW[N], DFNCNT = 1, vis[N], nhead[N], ncnt = 1, in[N &lt;&lt; 2];struct Edge &#123; int to, next, from;&#125; edge[N], nedge[N &lt;&lt; 1];inline void add(int x, int y) &#123; edge[cnt].from = x, edge[cnt].to = y, edge[cnt].next = head[x], head[x] = cnt++;&#125;inline void nadd(int x, int y) &#123; nedge[ncnt].to = y, nedge[ncnt].next = nhead[x], nhead[x] = ncnt++;&#125;stack&lt;int&gt; sta;void tarjan(int x) &#123;//缩点 if (DFN[x])return; LOW[x] = DFN[x] = DFNCNT++, sta.push(x), vis[x] = 1; for (int i = head[x]; i; i = edge[i].next) &#123; if (!DFN[edge[i].to])tarjan(edge[i].to), LOW[x] = min(LOW[x], LOW[edge[i].to]); else if (vis[edge[i].to])LOW[x] = min(LOW[x], DFN[edge[i].to]); &#125; if (DFN[x] == LOW[x]) &#123; int t; do color[t = sta.top()] = id, vis[t] = 0, sta.pop(); while (t != x); ++id; &#125;&#125;void DP(int x) &#123; int v; for (int i = nw[x]; i &lt;= m; i++)dp[x][i] = nv[x]; for (int i = nhead[x]; i; i = nedge[i].next) &#123; DP(v = nedge[i].to); for (int j = m - nw[x]; j &gt;= 0; j--) &#123; for (int z = 1; z &lt;= j; z++)dp[x][j + nw[x]] = max(dp[x][j + nw[x]], dp[x][j + nw[x] - z] + dp[v][z]); &#125; &#125;&#125;int main() &#123; ios::sync_with_stdio(false); cin &gt;&gt; n &gt;&gt; m; for (int i = 1; i &lt;= n; i++)cin &gt;&gt; w[i]; for (int i = 1; i &lt;= n; i++)cin &gt;&gt; v[i]; for (int i = 1; i &lt;= n; i++) &#123; int x; cin &gt;&gt; x; if (x != 0)add(x, i); &#125; for (int i = 1; i &lt;= n; i++)tarjan(i); for (int i = 1; i &lt;= n; i++)nw[color[i]] += w[i], nv[color[i]] += v[i];//新建点 for (int i = 1; i &lt; cnt; i++) if (color[edge[i].from] != color[edge[i].to]) nadd(color[edge[i].from], color[edge[i].to]), ++in[color[edge[i].to]];//重建图 color[0] = id; for (int i = 1; i &lt; id; i++)if (in[i] == 0)nadd(id, i); DP(color[0]); cout &lt;&lt; dp[color[0]][m]; return 0;&#125;]]></content>
@@ -17,7 +30,7 @@
   <entry>
     <title><![CDATA[斜率优化DP]]></title>
     <url>%2F2019%2F05%2F16%2F%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96DP%2F</url>
-    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;继四边形不等式和单调队列之后的另一个DP优化方法，这样DP优化方法基本全了。 斜率优化DP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在DP状态转移方程中，常常可以看到这样的一种形式： dp[x]=\min\{dp[i]+f(i,x)\},i]]></content>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;继四边形不等式和单调队列之后的另一个DP优化方法，这样常见的DP优化方法基本全了。 斜率优化DP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在DP状态转移方程中，常常可以看到这样的一种形式： dp[x]=\min\{dp[i]+f(i,x)\},i]]></content>
       <categories>
         <category>算法与OI</category>
       </categories>
@@ -35,8 +48,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>字符串</tag>
+        <tag>基础算法</tag>
         <tag>动态规划</tag>
       </tags>
   </entry>
@@ -317,8 +330,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>搜索</tag>
         <tag>提高算法</tag>
+        <tag>搜索</tag>
       </tags>
   </entry>
   <entry>
@@ -783,8 +796,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>矩阵</tag>
         <tag>数论</tag>
+        <tag>矩阵</tag>
         <tag>快速幂</tag>
       </tags>
   </entry>
@@ -901,9 +914,9 @@
         <tag>基础算法</tag>
         <tag>数据结构</tag>
         <tag>区间最值</tag>
+        <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
-        <tag>区间</tag>
       </tags>
   </entry>
   <entry>
@@ -919,9 +932,9 @@
         <tag>动态规划</tag>
         <tag>区间最值</tag>
         <tag>ST表</tag>
+        <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
-        <tag>区间</tag>
       </tags>
   </entry>
   <entry>
@@ -1150,8 +1163,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>字符串</tag>
+        <tag>基础算法</tag>
         <tag>哈希</tag>
       </tags>
   </entry>

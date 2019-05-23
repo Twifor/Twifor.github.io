@@ -117,20 +117,20 @@
 
 
 
-  <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;继四边形不等式和单调队列之后的另一个DP优化方法，这样DP优化方法基本全了。">
+  <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;继四边形不等式和单调队列之后的另一个DP优化方法，这样常见的DP优化方法基本全了。">
 <meta name="keywords" content="提高算法,动态规划,单调队列">
 <meta property="og:type" content="article">
 <meta property="og:title" content="斜率优化DP">
 <meta property="og:url" content="https://twifor.github.io/2019/05/16/斜率优化DP/index.html">
 <meta property="og:site_name" content="Twifor~Liyh">
-<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;继四边形不等式和单调队列之后的另一个DP优化方法，这样DP优化方法基本全了。">
+<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;继四边形不等式和单调队列之后的另一个DP优化方法，这样常见的DP优化方法基本全了。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://twifor.github.io/2019/05/16/斜率优化DP/ph.bmp">
 <meta property="og:image" content="https://twifor.github.io/2019/05/16/斜率优化DP/ph2.bmp">
-<meta property="og:updated_time" content="2019-05-16T15:26:58.059Z">
+<meta property="og:updated_time" content="2019-05-22T17:19:42.939Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="斜率优化DP">
-<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;继四边形不等式和单调队列之后的另一个DP优化方法，这样DP优化方法基本全了。">
+<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;继四边形不等式和单调队列之后的另一个DP优化方法，这样常见的DP优化方法基本全了。">
 <meta name="twitter:image" content="https://twifor.github.io/2019/05/16/斜率优化DP/ph.bmp">
 
 
@@ -424,7 +424,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-05-16 23:26:58" itemprop="dateModified" datetime="2019-05-16T23:26:58+08:00">2019-05-16</time>
+                <time title="修改时间：2019-05-23 01:19:42" itemprop="dateModified" datetime="2019-05-23T01:19:42+08:00">2019-05-23</time>
               
             
           </span>
@@ -485,7 +485,7 @@
       
 
       
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;继四边形不等式和单调队列之后的另一个DP优化方法，这样DP优化方法基本全了。<br><a id="more"></a></p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;继四边形不等式和单调队列之后的另一个DP优化方法，这样常见的DP优化方法基本全了。<br><a id="more"></a></p>
 <h3 id="斜率优化DP"><a href="#斜率优化DP" class="headerlink" title="斜率优化DP"></a>斜率优化DP</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在DP状态转移方程中，常常可以看到这样的一种形式：</p>
 <script type="math/tex; mode=display">dp[x]=\min\{dp[i]+f(i,x)\},i<x</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$\min$取$\max$也是可以的。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果$f(i,x)$只与$i$有关或者只与$x$有关直接$O(n)$就能做了。这里麻烦的是转移代价与$x$和$i$都有关系，我们必须遍历所有的情况才能找到最值。如果dp的复杂度为$O(n)$，总的时间复杂度就是$O(n^2)$。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;和其它DP优化类似，斜率优化可以直接降维，将复杂度优化到$O(n)$。看一道入门例题：<a href="http://acm.hdu.edu.cn/showproblem.php?pid=3507" target="_blank" rel="noopener">HDU3507</a>。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;状态转移方程很好找。如果规定$S(x)$为前缀和，$dp(x)$为前x个元素的最优解，那么有：</p>
 <script type="math/tex; mode=display">dp(x)=\min\{dp(i)+(S(x)-S(i))^2+m\},0\leq i<x</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;显然是$O(n^2)$复杂度，必然TLE，考虑斜率优化。对于$j$和$k(j&gt;k)$，如果从$j$转移比从$k$转移更优，那么有：</p>
@@ -634,7 +634,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">122</span>
+                    <span class="site-state-item-count">123</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
