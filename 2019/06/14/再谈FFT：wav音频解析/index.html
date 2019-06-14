@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<script>
+    (function () {
+        if ('') {
+            if (prompt('请输入文章密码') !== '') {
+                alert('密码错误！');
+                if (history.length === 1) {
+                    location.replace("http://twifor.github.io"); // 这里替换成你的首页
+                } else {
+                    history.back();
+                }
+            }
+        }
+    })();
+</script>
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本文是快速傅里叶变换（FFT）的后续。这一篇文章和OI确实没有什么关系，它是对FFT在工程领域应用的一个介绍。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;从上一篇文章中，我们认识了FFT在OI中的一个应用：求卷积。但事实上，FFT在信号处理领域有着重要">
+<meta name="keywords" content="数学">
+<meta property="og:type" content="article">
+<meta property="og:title" content="再谈FFT：wav音频解析">
+<meta property="og:url" content="https://twifor.github.io/2019/06/14/再谈FFT：wav音频解析/index.html">
+<meta property="og:site_name" content="Twifor~Liyh">
+<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本文是快速傅里叶变换（FFT）的后续。这一篇文章和OI确实没有什么关系，它是对FFT在工程领域应用的一个介绍。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;从上一篇文章中，我们认识了FFT在OI中的一个应用：求卷积。但事实上，FFT在信号处理领域有着重要">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://twifor.github.io/2019/06/14/再谈FFT：wav音频解析/ph.jpg">
+<meta property="og:image" content="https://twifor.github.io/2019/06/14/再谈FFT：wav音频解析/ph2.jpeg">
+<meta property="og:updated_time" content="2019-06-14T07:58:26.829Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="再谈FFT：wav音频解析">
+<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本文是快速傅里叶变换（FFT）的后续。这一篇文章和OI确实没有什么关系，它是对FFT在工程领域应用的一个介绍。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;从上一篇文章中，我们认识了FFT在OI中的一个应用：求卷积。但事实上，FFT在信号处理领域有着重要">
+<meta name="twitter:image" content="https://twifor.github.io/2019/06/14/再谈FFT：wav音频解析/ph.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="https://twifor.github.io/2019/06/14/再谈FFT：wav音频解析/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>再谈FFT：wav音频解析 | Twifor~Liyh</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+	<a href="https://github.com/Twifor" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Twifor~Liyh</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://twifor.github.io/2019/06/14/再谈FFT：wav音频解析/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Twifor">
+      <meta itemprop="description" content="一个打OI的弱鸡">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Twifor~Liyh">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">再谈FFT：wav音频解析
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-14 13:26:20" itemprop="dateCreated datePublished" datetime="2019-06-14T13:26:20+08:00">2019-06-14</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-06-14 15:58:26" itemprop="dateModified" datetime="2019-06-14T15:58:26+08:00">2019-06-14</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/算法与OI/" itemprop="url" rel="index"><span itemprop="name">算法与OI</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/06/14/再谈FFT：wav音频解析/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/06/14/再谈FFT：wav音频解析/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本文是<a href="https://twifor.github.io/2019/04/16/%E5%BF%AB%E9%80%9F%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2%EF%BC%88FFT%EF%BC%89/">快速傅里叶变换（FFT）</a>的后续。这一篇文章和OI确实没有什么关系，它是对FFT在工程领域应用的一个介绍。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从上一篇文章中，我们认识了FFT在OI中的一个应用：求卷积。但事实上，FFT在信号处理领域有着重要的应用，它在一些信号处理领域（比如音频解析）方面如何应用？与OI中FFT有哪些区别与联系？这是本文讨论的问题。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;值得注意的是，本文并不是在一个专业的角度去阐述，而是在一个尽可能通俗易懂的角度来探讨FFT。下面我们用一个实例：解析一段wav中声音的频率信息。<br><a id="more"></a></p>
+<h3 id="从声音说起"><a href="#从声音说起" class="headerlink" title="从声音说起"></a>从声音说起</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;众所周知，声音是由振动产生的，振动会产生波，波在介质中传播引起人耳鼓膜振动，于是人就有了听觉。由此可见，声音实质上就是波。这种波在某种意义上可以看成是一个关于时间的连续函数。<br><img src="/2019/06/14/再谈FFT：wav音频解析/ph.jpg"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;（上图来源：百度百科-声波）<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;显然，这种波中蕴含着大量的信息，计算机是不能处理这种几乎无穷多的信息的。也就是说，计算机只能处理和存储离散的数据，于是在储存声波时，需要对其进行采样。采样的频率称为采样率，它在数值上等于1s内对声波进行采样的次数。常用的采样率比如44100Hz，是指1s内对声波进行44100次采样，这样我们如果想存一段1s的声音，只需存下这44100个数据即可，这样计算机就可以存储和处理这些声波了。</p>
+<h3 id="时域与频域"><a href="#时域与频域" class="headerlink" title="时域与频域"></a>时域与频域</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这些声波数据，它们是以时间为参照的，这种分析的方法称之为时域分析。仅用时域分析有什么不好呢？设想将两个不同频率的声音波形合在一起得到一个新的波形，现要求从这个新的波形中滤掉其中一个频率（这种操作称之为滤波），可以发现在时域领域，这是极难做到的，而傅里叶的工作很好地解决了这个问题。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1822年，傅里叶证明了下面的定理，称之为傅里叶定理：</p>
+<blockquote>
+<p>【傅里叶定理】任何连续测量的时序或信号，都可以表示为不同频率的正弦波信号的无限叠加。</p>
+</blockquote>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个定理揭示了一个信号可以分解成若干正弦波之和，它在信号处理领域有着极为重要的意义。它告诉我们所谓复杂的信号也只是很多正弦波的叠加，相对于处理复杂的信号，当然是处理正弦波更为容易一些。既然一个波可以分解成若干正弦波，这些正弦波肯定是有固定的频率的（当然，它还有其它重要的性质比如周期性，相位，振幅等等），将这些正弦波的频率放到横坐标上，将它们的振幅放到纵坐标上，可以得到一个图。<br><img src="/2019/06/14/再谈FFT：wav音频解析/ph2.jpeg"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;（图片来源于网络，侵删）<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这就是频域，它显示了在一个频率范围内每个给定频带内的信号量。在频域中进行滤波是十分容易的，从图上来看，我们只需抽掉一根竖线就可以完成这个操作。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本文的主角：傅里叶变换，就是时域与频域相互转换的桥梁。</p>
+<h3 id="傅里叶变换"><a href="#傅里叶变换" class="headerlink" title="傅里叶变换"></a>傅里叶变换</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;计算机中数据是离散的，需要使用离散傅里叶变换（DFT）来将时域转化为频域。DFT的作用是：对一段有限长的离散信号，找出它所含有的各个频率正弦波分量。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于给定的N组数据$x(n)$，DFT可以表示为：</p>
+<script type="math/tex; mode=display">X_k=\sum_{n=0}^{N-1}x(n)e^{-2\pi i\frac {kn} {N}}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;公式不好理解，下面简单解释一下。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为了找到给定的离散信号中是否含有某一个频率的正弦波，可以先生成N个该正弦波的对应值，然后计算两个离散值的相关程度。代数中判断两个离散值相关程度的方法就是将对应值相乘再相加。</p>
+<script type="math/tex; mode=display">\sum_{n=0}^{N-1}x(n)y(n)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个值的大小反映了两者的相关程度，下面用c++写一段代码来看这个操作。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;给定函数$f(x)=cos(\frac {2\pi} {10} x)+cos(\frac {2\pi} {15} x)$，取样30个点：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> PI = <span class="number">3.1415926535</span>;</span><br><span class="line"><span class="keyword">double</span> ss[<span class="number">50</span>];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">30</span>; i++)ss[i] = <span class="built_in">cos</span>(<span class="number">2</span> * PI * i / <span class="number">10</span>) + <span class="built_in">cos</span>(<span class="number">2</span> * PI * i / <span class="number">15</span>);</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;给定30个基函数去与之计算相关程度，它们为：</p>
+<script type="math/tex; mode=display">f_k(x)=cos(\frac {2\pi kx} {30}),k=0,1,\cdots,29</script><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">30</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">double</span> ans = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">30</span>; j++)ans += <span class="built_in">cos</span>(<span class="number">2</span> * PI * i * j / <span class="number">30</span>) * ss[j];</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; i &lt;&lt; <span class="string">" "</span> &lt;&lt; ans &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">0 -1.67396e-09</span><br><span class="line">1 -1.6675e-09</span><br><span class="line">2 15</span><br><span class="line">3 15</span><br><span class="line">4 -1.56941e-09</span><br><span class="line">5 -1.50941e-09</span><br><span class="line">6 -1.43485e-09</span><br><span class="line">7 -1.34496e-09</span><br><span class="line">8 -1.23867e-09</span><br><span class="line">9 -1.11475e-09</span><br><span class="line">10 -9.71563e-10</span><br><span class="line">11 -8.07107e-10</span><br><span class="line">12 -6.18845e-10</span><br><span class="line">13 -4.03583e-10</span><br><span class="line">14 -1.57221e-10</span><br><span class="line">15 1.25701e-10</span><br><span class="line">16 4.52261e-10</span><br><span class="line">17 8.32149e-10</span><br><span class="line">18 1.27892e-09</span><br><span class="line">19 1.81208e-09</span><br><span class="line">20 2.46101e-09</span><br><span class="line">21 3.27228e-09</span><br><span class="line">22 4.32537e-09</span><br><span class="line">23 5.76929e-09</span><br><span class="line">24 7.92693e-09</span><br><span class="line">25 1.16812e-08</span><br><span class="line">26 2.09319e-08</span><br><span class="line">27 15</span><br><span class="line">28 15</span><br><span class="line">29 -1.36485e-08</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;程序认为2、3、27、28这四个函数与原有离散数据有较大的相关性，其余基本没有相关性。其实第2个函数$cos(\frac {2\pi 2x} {30})$与第28个函数$cos(\frac {2\pi 28x} {30})$本质上是一个函数，这是因为：</p>
+<script type="math/tex; mode=display">cos(\frac {2\pi 28x} {30})=cos(\frac {2\pi 28x} {30}-2\pi x)=cos(-\frac {4\pi x} {30})=cos(\frac {2\pi 2x} {30})</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最后可以发现，只有两个函数与原离散数据相符，从而就得知原函数$f(x)$的组成，这就是DFT的思路。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但这样再来看DFT的公式，发现与上面描述的仍有较大出入。这是因为三角函数具有相位，即可能有$cos(2\pi x+\frac {\pi} {4})$这样的存在，单纯的余弦函数是不能描述出相位的。考虑到一个含相位的余弦函数可以分解成一个余弦函数与正弦函数的和，因此可以考虑另取30个基函数去求相关性，为了区分两者，给正弦函数乘一个i变成虚数：</p>
+<script type="math/tex; mode=display">f_k(x)=isin(\frac {2\pi kx} {30}),k=0,1,\cdots,29</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是最终综合来看，我们得到了这30个基函数：</p>
+<script type="math/tex; mode=display">f_k(x)=cos(\frac {2\pi kx} {30})+isin(\frac {2\pi kx} {30}),k=0,1,\cdots,29</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;根据欧拉公式，它就是：</p>
+<script type="math/tex; mode=display">f_k(x)=e^{i\frac {2\pi kx} {30}},k=0,1,\cdots,29</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们最终得出的相位是相对于余弦函数的，对于一个函数：</p>
+<script type="math/tex; mode=display">acosx+bsinx</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样模就是$\sqrt{a^2+b^2}$，相位就是$arctan(-\frac {a} {b})$，有一个负号不方便，因此可以在取基函数时就加入负号，得到：</p>
+<script type="math/tex; mode=display">f_k(x)=e^{-i\frac {2\pi kx} {30}},k=0,1,\cdots,29</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在再看DFT的公式就容易理解了。</p>
+<h3 id="FFT"><a href="#FFT" class="headerlink" title="FFT"></a>FFT</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从上面的讨论中可以看出，如果我们需要进行DFT，需要对N个基函数分别求一次相关程度，求一次相关程度的复杂度是$O(n)$的，故总时间复杂度为$O(n^2)$，效率比较低，这时快速傅里叶变换（FFT）就发挥作用了，它可以将这个过程优化到$O(nlogn)$。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那这里的FFT与OI中的FFT有什么区别？<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;取一个多项式如下：</p>
+<script type="math/tex; mode=display">a(0)+a(1)x+a(2)x^2+\cdots+a(N-1)x^{N-1}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假定N是2的方幂。这里的$a(n)$就是离散数值，x是多项式的自变量，现在代入基函数$cos(\frac {2\pi kx} {N})-isin(\frac {2\pi kx} {N})$，这个式子得到的其实就是相关程度。根据FFT的算法过程，多项式中分别代入了所有我们需要的基函数，因此OI中的FFT其实与这里的信号处理没有本质区别，可以说OI中的FFT是对原有FFT的花式应用。</p>
+<h3 id="FFT应用实例：分析wav"><a href="#FFT应用实例：分析wav" class="headerlink" title="FFT应用实例：分析wav"></a>FFT应用实例：分析wav</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在来试着应用FFT：给定一小段单音调音频，编程判断其声音频率。为了方便起见，我们选用wav格式的声音文件。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面的例子都是在44100Hz采样率，16位的数据位数下进行。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;根据wav文件的格式，前44个字节是文件的信息，之后才是数据，它们每2个字节（16位）记录一个采样的数据，数据用小端的方式存储。这里用一个c++框架Qt的一些功能去实现解析的过程。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先需要有一个1000Hz的正弦波音频文件，在Qt中，调用QDataStream读取其二进制数据流：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">QCoreApplication <span class="title">a</span><span class="params">(argc, argv)</span></span>;</span><br><span class="line"><span class="function">QFile <span class="title">file</span><span class="params">(<span class="string">"bgm.wav"</span>)</span></span>;<span class="comment">//读文件</span></span><br><span class="line">file.open(QIODevice::ReadOnly);</span><br><span class="line"><span class="function">QDataStream <span class="title">stream</span><span class="params">(&amp;file)</span></span>;</span><br><span class="line">stream.setByteOrder(QDataStream::LittleEndian);<span class="comment">//小端方式读二进制流</span></span><br><span class="line">stream.skipRawData(<span class="number">44</span>);<span class="comment">//跳过前44个字节</span></span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我这里的音频文件是双声道的，它的数据中左右声道来回切换，我们需要将一半的数据滤掉，只处理其一个声道的信息。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Complex</span> &#123;</span><span class="comment">//定义复数</span></span><br><span class="line">	<span class="keyword">double</span> a, b;</span><br><span class="line"></span><br><span class="line">	Complex(<span class="keyword">double</span> x = <span class="number">0</span>, <span class="keyword">double</span> y = <span class="number">0</span>) : a(x), b(y)&#123;</span><br><span class="line">	&#125;</span><br><span class="line">	Complex <span class="keyword">operator</span>+(Complex c) &#123;</span><br><span class="line">		<span class="keyword">return</span> &#123;a + c.a, b + c.b&#125;;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	Complex <span class="keyword">operator</span>*(Complex c) &#123;</span><br><span class="line">		<span class="keyword">return</span> &#123;a * c.a - b * c.b, a * c.b + b * c.a&#125;;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	Complex <span class="keyword">operator</span>-(Complex c) &#123;</span><br><span class="line">		<span class="keyword">return</span> &#123;a - c.a, b - c.b&#125;;</span><br><span class="line">	&#125;</span><br><span class="line">&#125; op[<span class="number">33554435</span>];</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">qint16 e;</span><br><span class="line"><span class="keyword">bool</span> k = <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; (<span class="number">2097152</span> &lt;&lt; <span class="number">1</span>); i++)&#123;<span class="comment">//2097152是2的21次方，FFT要求数据量是2的方幂</span></span><br><span class="line">	stream &gt;&gt; e;</span><br><span class="line">	<span class="keyword">if</span> (k) op[i &gt;&gt; <span class="number">1</span>].a = e, k = <span class="literal">false</span>;<span class="comment">//只读取一半</span></span><br><span class="line">	<span class="keyword">else</span> k = <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;之后进行FFT，代码如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> tr[<span class="number">33554435</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">FFT</span><span class="params">(<span class="keyword">int</span> l, Complex *c, <span class="keyword">int</span> type = <span class="number">-1</span>)</span> </span>&#123;<span class="comment">//快速傅里叶变换</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++) <span class="keyword">if</span> (i &lt; tr[i]) <span class="built_in">std</span>::swap(c[i], c[tr[i]]); <span class="comment">//交换</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> mid = <span class="number">1</span>; mid &lt; l; mid &lt;&lt;= <span class="number">1</span>)&#123; <span class="comment">//mid为区间一半的长度</span></span><br><span class="line">		<span class="function">Complex <span class="title">wn</span><span class="params">(<span class="built_in">cos</span>(Pi / mid), type * <span class="built_in">sin</span>(Pi / mid))</span></span>;<span class="comment">//2pi/2mid就是pi/mid</span></span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> len = mid &lt;&lt; <span class="number">1</span>, j = <span class="number">0</span>; j &lt; l; j += len)&#123; <span class="comment">//len是区间长度，j为现在所对应的区间首标记</span></span><br><span class="line">			<span class="function">Complex <span class="title">w</span><span class="params">(<span class="number">1.0</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; mid; k++, w = w * wn)&#123;</span><br><span class="line">				Complex x = c[j + k], y = w * c[j + mid + k];<span class="comment">//蝴蝶效应</span></span><br><span class="line">				c[j + k] = x + y, c[j + mid + k] = x - y;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当然还有预处理：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++) tr[i] = (tr[i &gt;&gt; <span class="number">1</span>] &gt;&gt; <span class="number">1</span>) | ((i &amp; <span class="number">1</span>) &lt;&lt; (le - <span class="number">1</span>)); <span class="comment">//构造</span></span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;之后就得到了所有的值，从中选取一个最大的值，并得到其编号：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">FFT(l, op);<span class="comment">//调用FFT</span></span><br><span class="line"><span class="keyword">double</span> maxn = <span class="number">-10000</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">2097152</span>; i++)&#123;</span><br><span class="line">	<span class="keyword">if</span> (op[i].a &gt; maxn)&#123;<span class="comment">//找到权重最大的一个，并记录其频率</span></span><br><span class="line">		maxn = op[i].a;</span><br><span class="line">		ans = i;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假设实际上该信号为$cos(\omega x)$，而采样率为44100Hz，于是第x个测试数据值应为$cos(\omega \frac{x} {44100})$。FFT求出的形式应形如$cos(\frac {2\pi kx} {2097152})$，于是$\omega \frac{x} {44100}=\frac {2\pi kx} {2097152}$，得到$\omega=\frac {44100*2\pi k}{2097152}$，频率就是$\frac {44100k}{2097152}$。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;执行程序，得到ans为47554，当然还有另一个2049598，将它们分别代入到上面的式子中，计算得到999.990以及43100.009。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其实前一个数据999.990已经十分接近正确答案1000Hz了，这是一个不错的检验结果，后一个频率是超声波舍掉即可。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数学/" rel="tag"><i class="fa fa-tag"></i>数学</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/26/网络流应用专题/" rel="next" title="网络流应用专题">
+                <i class="fa fa-chevron-left"></i> 网络流应用专题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/header.jpg" alt="Twifor">
+            
+              <p class="site-author-name" itemprop="name">Twifor</p>
+              <p class="site-description motion-element" itemprop="description">一个打OI的弱鸡</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">125</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">62</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#从声音说起"><span class="nav-number">1.</span> <span class="nav-text">从声音说起</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#时域与频域"><span class="nav-number">2.</span> <span class="nav-text">时域与频域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#傅里叶变换"><span class="nav-number">3.</span> <span class="nav-text">傅里叶变换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FFT"><span class="nav-number">4.</span> <span class="nav-text">FFT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FFT应用实例：分析wav"><span class="nav-number">5.</span> <span class="nav-text">FFT应用实例：分析wav</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Twifor</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="255,255,255" '="" opacity="0.85" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+
+
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function (item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '2aSxA7Naxmi6lgfgVU1ulgcS-gzGzoHsz',
+    appKey: '6G9RDaS7lVtgyGKw8AxxkLyi',
+    placeholder: '写下评论吧~qwq',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+	  preview: 'none'
+    },
+	messageStyle: 'none',
+	"HTML-CSS": {
+      showMathMenu: false //关闭右击菜单显示
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style>
+
+    
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
