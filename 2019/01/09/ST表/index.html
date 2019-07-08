@@ -125,7 +125,7 @@
 <meta property="og:site_name" content="Twifor~Liyh">
 <meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;ST表是一种求区间最值的高效数据结构，不支持动态维护，建表时间复杂度O(nlogn)，查询复杂度O(1)。在不需要修改原数据的情况下ST表要比线段树更简洁，但在需要修改原数据时只能用线段树。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-02-06T11:33:26.110Z">
+<meta property="og:updated_time" content="2019-07-08T05:21:17.501Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ST表">
 <meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;ST表是一种求区间最值的高效数据结构，不支持动态维护，建表时间复杂度O(nlogn)，查询复杂度O(1)。在不需要修改原数据的情况下ST表要比线段树更简洁，但在需要修改原数据时只能用线段树。">
@@ -421,7 +421,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-06 19:33:26" itemprop="dateModified" datetime="2019-02-06T19:33:26+08:00">2019-02-06</time>
+                <time title="修改时间：2019-07-08 13:21:17" itemprop="dateModified" datetime="2019-07-08T13:21:17+08:00">2019-07-08</time>
               
             
           </span>
@@ -482,7 +482,7 @@
       
 
       
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ST表是一种求区间最值的高效数据结构，不支持动态维护，建表时间复杂度O(nlogn)，查询复杂度O(1)。在不需要修改原数据的情况下ST表要比线段树更简洁，但在需要修改原数据时只能用线段树。<br><a id="more"></a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ST表可以定义为二维数组ST[][]，其中ST[i][j]表示从第j的元素开始的长度为2i的区间中的最值，也就是区间[j，j+2<sup>i-1</sup>]中的最值。这个表可以用DP思想建立。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;建表前，需要两个辅助数组log[]与bin[]。其中log[i]储存使2<sup>k</sup>&lt;=i的整数k的最大值;bin[i]储存2<sup>i</sup>。这两个数组都可以通过递推实现:</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ST表是一种求区间最值的高效数据结构，不支持动态维护，建表时间复杂度O(nlogn)，查询复杂度O(1)。在不需要修改原数据的情况下ST表要比线段树更简洁，但在需要修改原数据时只能用线段树。<br><a id="more"></a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ST表可以定义为二维数组ST[][]，其中ST[i][j]表示从第j的元素开始的长度为2<sup>i</sup>的区间中的最值，也就是区间[j，j+2<sup>i</sup>-1]中的最值。这个表可以用DP思想建立。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;建表前，需要两个辅助数组log[]与bin[]。其中log[i]储存使2<sup>k</sup>&lt;=i的整数k的最大值;bin[i]储存2<sup>i</sup>。这两个数组都可以通过递推实现:</p>
 <script type="math/tex; mode=display">log[0]=-1，log[x]=log[x/2]+1\\
 bin[0]=1，bin[x]=bin[x/2]*2</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log数组大小达到数据量n，bin达到logn。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;辅助数组构建完毕后开始建ST表。首先对ST表首行初始化，即ST[0][x]。它们都表示从x号元素开始长度为1的区间的最值，显然就是该元素本身。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;此外ST表中有递推公式:</p>
 <script type="math/tex; mode=display">ST[i][x]=\max/\min\{ST[i-1][x]，ST[i-1][x+bin[i-1]]\}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;即将区间分成两半，求取其中的最值，这里注意x+bin[i]-1≤n。递推后即可完成建表。</p>
