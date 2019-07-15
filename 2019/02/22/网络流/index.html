@@ -131,7 +131,7 @@
 <meta property="og:image" content="https://twifor.github.io/2019/02/22/网络流/ph4.bmp">
 <meta property="og:image" content="https://twifor.github.io/2019/02/22/网络流/ph5.bmp">
 <meta property="og:image" content="https://twifor.github.io/2019/02/22/网络流/ph6.bmp">
-<meta property="og:updated_time" content="2019-05-25T07:20:25.960Z">
+<meta property="og:updated_time" content="2019-07-15T07:12:59.595Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="网络流">
 <meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本文介绍简单的网络流模型和相关算法。">
@@ -428,7 +428,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-05-25 15:20:25" itemprop="dateModified" datetime="2019-05-25T15:20:25+08:00">2019-05-25</time>
+                <time title="修改时间：2019-07-15 15:12:59" itemprop="dateModified" datetime="2019-07-15T15:12:59+08:00">2019-07-15</time>
               
             
           </span>
@@ -521,7 +521,7 @@
 <blockquote>
 <p>【最小割最大流定理】最小割容量等于最大流。</p>
 </blockquote>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;证明略。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样我们就可以求最小割容量了，但是如何求最小割呢？EK算法结束时，我们得到了很多flow，它们当中大于0的点就是S集，剩下的是T集。注意这种方法要求在每次BFS前要清空一下flow（全部初始化成0）。Dinic算法和ISAP算法的方案求法待以后更新。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;证明略。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样我们就可以求最小割容量了，但是如何求最小割呢？EK算法结束时，我们得到了很多flow，它们当中大于0的点就是S集，剩下的是T集。注意这种方法要求在每次BFS前要清空一下flow（全部初始化成0）。Dinic算法和ISAP算法的方案求法待以后更新。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一个待验证的假说：求完最大流之后边权变为0的原边就是被割掉的边。</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最小割点数量也是经典问题，但是最小割最大流定理只适用于割边。我们可以将每一个点分成两个点，一个连接点的入边，另一个连接点的出边，并在两点间加一条容量为1的边（注意源点和汇点中间边的边权为无穷大，因为通常不能割这两个点），这样就把割点问题转化为割边问题。</p>
 <h4 id="费用流问题"><a href="#费用流问题" class="headerlink" title="费用流问题"></a>费用流问题</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在原有图的基础上加入“费用”，总费用为单位费用乘以这条边的流量。得到最大流的方案很多，但是其中有一种花费最少。最小费用最大流问题也是一类重要问题。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;解决方法是将EK算法中的BFS改成SPFA，根据最短路径（将费用看成边权）来找增广路。它和普通的EK算法相比，有以下几点区别：</p>
 <ul>
@@ -664,7 +664,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">125</span>
+                    <span class="site-state-item-count">129</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
