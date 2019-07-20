@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<script>
+    (function () {
+        if ('') {
+            if (prompt('请输入文章密码') !== '') {
+                alert('密码错误！');
+                if (history.length === 1) {
+                    location.replace("http://twifor.github.io"); // 这里替换成你的首页
+                } else {
+                    history.back();
+                }
+            }
+        }
+    })();
+</script>
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本文整理OI相关的多项式有关算法，长期更新。">
+<meta name="keywords" content="提高算法,多项式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="多项式专题">
+<meta property="og:url" content="https://twifor.github.io/2019/07/19/多项式专题/index.html">
+<meta property="og:site_name" content="Twifor~Liyh">
+<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本文整理OI相关的多项式有关算法，长期更新。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-07-20T07:53:49.315Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="多项式专题">
+<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本文整理OI相关的多项式有关算法，长期更新。">
+
+
+
+
+
+
+  <link rel="canonical" href="https://twifor.github.io/2019/07/19/多项式专题/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>多项式专题 | Twifor~Liyh</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+	<a href="https://github.com/Twifor" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Twifor~Liyh</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://twifor.github.io/2019/07/19/多项式专题/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Twifor">
+      <meta itemprop="description" content="一个打OI的弱鸡">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Twifor~Liyh">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">多项式专题
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-07-19 10:44:46" itemprop="dateCreated datePublished" datetime="2019-07-19T10:44:46+08:00">2019-07-19</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-20 15:53:49" itemprop="dateModified" datetime="2019-07-20T15:53:49+08:00">2019-07-20</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/算法与OI/" itemprop="url" rel="index"><span itemprop="name">算法与OI</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/07/19/多项式专题/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/07/19/多项式专题/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本文整理OI相关的多项式有关算法，长期更新。<br><a id="more"></a></p>
+<h3 id="多项式乘法"><a href="#多项式乘法" class="headerlink" title="多项式乘法"></a>多项式乘法</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;多项式乘法运算可以说是多项式中的基本功。朴素的多项式乘法时间复杂度$O(n^2)$，通常可以使用FFT以及NTT来将时间复杂度降至$O(nlogn)$，关于这两个算法前面的文章有所介绍，见<a href="https://twifor.github.io/2019/04/16/%E5%BF%AB%E9%80%9F%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2%EF%BC%88FFT%EF%BC%89/">FFT</a>以及<a href="https://twifor.github.io/2019/04/17/%E5%BF%AB%E9%80%9F%E6%95%B0%E8%AE%BA%E5%8F%98%E6%8D%A2%EF%BC%88NTT%EF%BC%89/">NTT</a>。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为了使问题更简便，这里封装一下NTT的代码。首先定义多项式类：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Pol</span> &#123;</span><span class="comment">//多项式类</span></span><br><span class="line">    <span class="keyword">int</span> l, op[N &lt;&lt; <span class="number">2</span>] = &#123;<span class="number">0</span>&#125;;<span class="comment">//l为最高项指数，N是最高项次数，通常取一个更大一点的值</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;封装NTT以及多项式乘法：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MOD 998244353<span class="comment">//NTT模数</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> G 3 <span class="comment">//原根</span></span></span><br><span class="line"><span class="keyword">int</span> tr[N &lt;&lt; <span class="number">2</span>];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">qPow</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;<span class="comment">//快速幂</span></span><br><span class="line">    <span class="keyword">int</span> ans = <span class="number">1</span>, x = a;</span><br><span class="line">    <span class="keyword">while</span> (b) &#123;</span><br><span class="line">        <span class="keyword">if</span> (b &amp; <span class="number">1</span>)ans = <span class="number">1l</span>l * ans * x % MOD;</span><br><span class="line">        x = <span class="number">1l</span>l * x * x % MOD, b &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">NTT</span><span class="params">(<span class="keyword">int</span> l, <span class="keyword">int</span> *c, <span class="keyword">int</span> type)</span> </span>&#123;<span class="comment">//NTT模板</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++)<span class="keyword">if</span> (i &lt; tr[i])swap(c[i], c[tr[i]]);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> mid = <span class="number">1</span>; mid &lt; l; mid &lt;&lt;= <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">int</span> wn = qPow(G, (MOD - <span class="number">1</span>) / (mid &lt;&lt; <span class="number">1</span>));</span><br><span class="line">        <span class="keyword">if</span> (type == <span class="number">-1</span>)wn = qPow(wn, MOD - <span class="number">2</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> len = mid &lt;&lt; <span class="number">1</span>, j = <span class="number">0</span>; j &lt; l; j += len) &#123;</span><br><span class="line">            <span class="keyword">int</span> w = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; mid; k++, w = <span class="number">1l</span>l * w * wn % MOD) &#123;</span><br><span class="line">                <span class="keyword">int</span> x = c[j + k], y = <span class="number">1l</span>l * w * c[j + mid + k] % MOD;</span><br><span class="line">                c[j + k] = ((x + y) % MOD + MOD) % MOD;</span><br><span class="line">                c[j + mid + k] = ((x - y) % MOD + MOD) % MOD;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">multiple</span><span class="params">(Pol *ans, Pol *a, Pol *b)</span> </span>&#123;<span class="comment">//将a与b相乘并计入ans</span></span><br><span class="line">    <span class="keyword">int</span> l = <span class="number">1</span>, le = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (l &lt;= a-&gt;l + b-&gt;l)l &lt;&lt;= <span class="number">1</span>, ++le;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++)tr[i] = (tr[i &gt;&gt; <span class="number">1</span>] &gt;&gt; <span class="number">1</span>) | ((i &amp; <span class="number">1</span>) &lt;&lt; (le - <span class="number">1</span>));</span><br><span class="line">    NTT(l, a-&gt;op, <span class="number">1</span>), NTT(l, b-&gt;op, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++)a-&gt;op[i] = <span class="number">1l</span>l * a-&gt;op[i] * b-&gt;op[i] % MOD;</span><br><span class="line">    NTT(l, a-&gt;op, <span class="number">-1</span>), l = qPow(l, MOD - <span class="number">2</span>), ans-&gt;l = a-&gt;l + b-&gt;l;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= ans-&gt;l; i++)ans-&gt;op[i] = <span class="number">1l</span>l * a-&gt;op[i] * l % MOD;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为了更安全地进行乘法，最好使用下面的形式：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">multiple</span><span class="params">(Pol *ans, Pol *a, Pol *b)</span> </span>&#123;<span class="comment">//将a与b相乘并计入ans</span></span><br><span class="line">    <span class="keyword">int</span> l = <span class="number">1</span>, le = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (l &lt;= a-&gt;l + b-&gt;l)l &lt;&lt;= <span class="number">1</span>, ++le;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++) &#123;</span><br><span class="line">        tr[i] = (tr[i &gt;&gt; <span class="number">1</span>] &gt;&gt; <span class="number">1</span>) | ((i &amp; <span class="number">1</span>) &lt;&lt; (le - <span class="number">1</span>));</span><br><span class="line">        <span class="keyword">if</span> (i &gt; a-&gt;l)a-&gt;op[i] = <span class="number">0</span>;<span class="comment">//高次项系数清零</span></span><br><span class="line">        <span class="keyword">if</span> (i &gt; b-&gt;l)b-&gt;op[i] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    NTT(l, a-&gt;op, <span class="number">1</span>), NTT(l, b-&gt;op, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++)a-&gt;op[i] = <span class="number">1l</span>l * a-&gt;op[i] * b-&gt;op[i] % MOD;</span><br><span class="line">    NTT(l, a-&gt;op, <span class="number">-1</span>), l = qPow(l, MOD - <span class="number">2</span>), ans-&gt;l = a-&gt;l + b-&gt;l;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= ans-&gt;l; i++)ans-&gt;op[i] = <span class="number">1l</span>l * a-&gt;op[i] * l % MOD;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面的板子直接拿来用就可以了。这里需要注意一个问题：multiple函数会修改a与b的值，如果不希望修改需要事先备份。其次，这里的多项式乘数a与b不能相同。此处的板子可以直接切掉多项式乘法模板题（见FFT）。</p>
+<h3 id="多项式求逆"><a href="#多项式求逆" class="headerlink" title="多项式求逆"></a>多项式求逆</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;多项式求逆是多项式专题中的重要问题，多项式的逆定义如下。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于最高次项次数为n-1的多项式$A(x)$，若存在$B(x)$使得：</p>
+<script type="math/tex; mode=display">A(x)B(x)\equiv 1\pmod {x^n}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;则称$B(x)$为$A(x)$在模$x^n$下的逆多项式。比如$A(x)=1+x$与$B(x)=1-x$就在模$x^2$下互为逆多项式，这是因为：</p>
+<script type="math/tex; mode=display">A(x)B(x)=(1+x)(1-x)=1-x^2\equiv 1 \pmod {x^2}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;若$B(x)$为$A(x)$的逆多项式，也记$A^{-1}(x)=B(x)$。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;易知如果$A(x)$与$B(x)$在模$x^n$下互逆，则$A(x)B(x)$的所有次数为$1$到$n-1$的项系数都为0而常数项为1。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面探讨逆多项式的求法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在要求$A(x)$在模$x^n$下的逆多项式。如果$A(x)$最高次项次数为0，那么其逆多项式就是常数项的逆元。假设在$x^{\lceil \frac {n} {2}\rceil}$下的逆多项式已经求出，为$B’(x)$，即有：</p>
+<script type="math/tex; mode=display">A(x)B'(x)\equiv 1\pmod {x^{\lceil \frac {n} {2}\rceil}}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假设需要求的逆多项式为$B(x)$，那么有：</p>
+<script type="math/tex; mode=display">A(x)B(x)\equiv 1\pmod {x^n}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;也满足：</p>
+<script type="math/tex; mode=display">A(x)B(x)\equiv 1\pmod {x^{\lceil \frac {n} {2}\rceil}}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是有：</p>
+<script type="math/tex; mode=display">A(x)(B(x)-B'(x))\equiv 0\pmod {x^{\lceil \frac {n} {2}\rceil}}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;两边同时去乘$B’(x)$，得到：</p>
+<script type="math/tex; mode=display">B(x)-B'(x)\equiv 0\pmod {x^{\lceil \frac {n} {2}\rceil}}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;两边平方：</p>
+<script type="math/tex; mode=display">(B(x)-B'(x))^2\equiv B^2(x)+{B'}^2(x)-2B(x)B'(x)\equiv 0\pmod {x^n}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;同时乘上$A(x)$，得到：</p>
+<script type="math/tex; mode=display">B(x)+A(x){B'}^2(x)-2B'(x)\equiv 0\pmod {x^n}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;立即得到：</p>
+<script type="math/tex; mode=display">B(x)\equiv 2B'(x)-A(x){B'}^2(x)\pmod {x^n}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面公式给出了$B(x)$与$B’(x)$的递推关系，这使得我们可以在$O(lognM)$复杂度下递推出逆多项式，$M$是多项式乘法的复杂度。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果要求系数在模空间下给出，并且模数恰好是NTT模数，那么我们可以用NTT来使乘法复杂度达到$O(nlogn)$，总复杂度大约就是$O(nlog^2n)$。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意到在相乘时，$A(x)$中次数不小于n的项是无用的，它们不会影响答案，因此可以在相乘时滤掉这些项，达到每一次相乘时最高次项次数不断下降的效果，最终复杂度就是$O(nlogn)$。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;核心代码如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">inv</span><span class="params">(Pol *ans, <span class="keyword">const</span> Pol *x, <span class="keyword">int</span> rk)</span> </span>&#123;<span class="comment">//求x的逆，在x^rk意义下，存入ans，x不会被修改</span></span><br><span class="line">    <span class="keyword">if</span> (rk == <span class="number">1</span>) &#123;<span class="comment">//递推边界</span></span><br><span class="line">        ans-&gt;l = <span class="number">0</span>, ans-&gt;op[<span class="number">0</span>] = qPow(x-&gt;op[<span class="number">0</span>], MOD - <span class="number">2</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    inv(ans, x, (rk + <span class="number">1</span>) &gt;&gt; <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">int</span> l = <span class="number">1</span>, le = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (l &lt;= (rk &lt;&lt; <span class="number">1</span>))l &lt;&lt;= <span class="number">1</span>, ++le;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++) &#123;</span><br><span class="line">        tr[i] = (tr[i &gt;&gt; <span class="number">1</span>] &gt;&gt; <span class="number">1</span>) | ((i &amp; <span class="number">1</span>) &lt;&lt; (le - <span class="number">1</span>));</span><br><span class="line">        tmp.op[i] = i &lt;= min(x-&gt;l, rk - <span class="number">1</span>) ? x-&gt;op[i] : <span class="number">0</span>;<span class="comment">//高次项滤掉，零项补零</span></span><br><span class="line">        ans-&gt;op[i] = i &lt;= ans-&gt;l ? ans-&gt;op[i] : <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    NTT(l, tmp.op, <span class="number">1</span>), NTT(l, ans-&gt;op, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++)</span><br><span class="line">        ans-&gt;op[i] = (<span class="number">2l</span>l * ans-&gt;op[i] % MOD - (<span class="number">1l</span>l * tmp.op[i] * ans-&gt;op[i] % MOD) * <span class="number">1l</span>l * ans-&gt;op[i] % MOD) % MOD;</span><br><span class="line">    NTT(l, ans-&gt;op, <span class="number">-1</span>), l = qPow(l, MOD - <span class="number">2</span>), ans-&gt;l = rk - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= ans-&gt;l; i++)ans-&gt;op[i] = <span class="number">1l</span>l * ans-&gt;op[i] * l % MOD;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;附<a href="https://www.luogu.org/problemnew/show/P4238" target="_blank" rel="noopener">模板题</a>代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MOD 998244353</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> G 3</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> N 100005</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> tr[N &lt;&lt; <span class="number">2</span>];</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Pol</span> &#123;</span><span class="comment">//多项式类</span></span><br><span class="line">    <span class="keyword">int</span> l, op[N &lt;&lt; <span class="number">2</span>] = &#123;<span class="number">0</span>&#125;;<span class="comment">//l最高项指数</span></span><br><span class="line">&#125; pol1, pol2, tmp;</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">qPow</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> ans = <span class="number">1</span>, x = a;</span><br><span class="line">    <span class="keyword">while</span> (b) &#123;</span><br><span class="line">        <span class="keyword">if</span> (b &amp; <span class="number">1</span>)ans = <span class="number">1l</span>l * ans * x % MOD;</span><br><span class="line">        x = <span class="number">1l</span>l * x * x % MOD, b &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">NTT</span><span class="params">(<span class="keyword">int</span> l, <span class="keyword">int</span> *c, <span class="keyword">int</span> type)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++)<span class="keyword">if</span> (i &lt; tr[i])swap(c[i], c[tr[i]]);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> mid = <span class="number">1</span>; mid &lt; l; mid &lt;&lt;= <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">int</span> wn = qPow(G, (MOD - <span class="number">1</span>) / (mid &lt;&lt; <span class="number">1</span>));</span><br><span class="line">        <span class="keyword">if</span> (type == <span class="number">-1</span>)wn = qPow(wn, MOD - <span class="number">2</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> len = mid &lt;&lt; <span class="number">1</span>, j = <span class="number">0</span>; j &lt; l; j += len) &#123;</span><br><span class="line">            <span class="keyword">int</span> w = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; mid; k++, w = <span class="number">1l</span>l * w * wn % MOD) &#123;</span><br><span class="line">                <span class="keyword">int</span> x = c[j + k], y = <span class="number">1l</span>l * w * c[j + mid + k] % MOD;</span><br><span class="line">                c[j + k] = ((x + y) % MOD + MOD) % MOD, c[j + mid + k] = ((x - y) % MOD + MOD) % MOD;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">inv</span><span class="params">(Pol *ans, <span class="keyword">const</span> Pol *x, <span class="keyword">int</span> rk)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (rk == <span class="number">1</span>) &#123;</span><br><span class="line">        ans-&gt;l = <span class="number">0</span>, ans-&gt;op[<span class="number">0</span>] = qPow(x-&gt;op[<span class="number">0</span>], MOD - <span class="number">2</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    inv(ans, x, (rk + <span class="number">1</span>) &gt;&gt; <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">int</span> l = <span class="number">1</span>, le = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (l &lt;= (rk &lt;&lt; <span class="number">1</span>))l &lt;&lt;= <span class="number">1</span>, ++le;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++) &#123;</span><br><span class="line">        tr[i] = (tr[i &gt;&gt; <span class="number">1</span>] &gt;&gt; <span class="number">1</span>) | ((i &amp; <span class="number">1</span>) &lt;&lt; (le - <span class="number">1</span>));</span><br><span class="line">        tmp.op[i] = i &lt;= min(x-&gt;l, rk - <span class="number">1</span>) ? x-&gt;op[i] : <span class="number">0</span>;<span class="comment">//高次项滤掉，零项补零</span></span><br><span class="line">        ans-&gt;op[i] = i &lt;= ans-&gt;l ? ans-&gt;op[i] : <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    NTT(l, tmp.op, <span class="number">1</span>), NTT(l, ans-&gt;op, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++)</span><br><span class="line">        ans-&gt;op[i] = (<span class="number">2l</span>l * ans-&gt;op[i] % MOD - (<span class="number">1l</span>l * tmp.op[i] * ans-&gt;op[i] % MOD) * <span class="number">1l</span>l * ans-&gt;op[i] % MOD) % MOD;</span><br><span class="line">    NTT(l, ans-&gt;op, <span class="number">-1</span>), l = qPow(l, MOD - <span class="number">2</span>), ans-&gt;l = rk - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= ans-&gt;l; i++)ans-&gt;op[i] = <span class="number">1l</span>l * ans-&gt;op[i] * l % MOD;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ios::sync_with_stdio(<span class="literal">false</span>);</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">    pol1.l = n - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= pol1.l; i++)<span class="built_in">cin</span> &gt;&gt; pol1.op[i];</span><br><span class="line">    inv(&amp;pol2, &amp;pol1, n);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= pol2.l; i++)<span class="built_in">cout</span> &lt;&lt; (pol2.op[i] + MOD) % MOD &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;和乘法逆元类似，多项式逆元有着它的应用，其中一个重要应用就是求$\displaystyle\frac {B(x)} {A(x)}$在$x^n$模意义下的多项式，答案就是$B(x)A^{-1}(x)$。</p>
+<h3 id="多项式对数函数"><a href="#多项式对数函数" class="headerlink" title="多项式对数函数"></a>多项式对数函数</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;给定一个n-1次多项式$A(x)$，求在模$x^n$意义下的$B(x)$满足：</p>
+<script type="math/tex; mode=display">B(x)\equiv ln(A(x))\pmod {x^n}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这种问题可以用求导的方式解决，首先求个导：</p>
+<script type="math/tex; mode=display">B'(x)\equiv \frac {A'(x)} {A(x)} \pmod {x^n}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;就是：</p>
+<script type="math/tex; mode=display">B'(x)\equiv A'(x)A^{-1}(x)\pmod {x^n}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;之后对$B’(x)$积分就可以了。这里定义一下求导和积分函数：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">diff</span><span class="params">(Pol *s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; s-&gt;l; i++)s-&gt;op[i] = <span class="number">1l</span>l * s-&gt;op[i + <span class="number">1</span>] * (i + <span class="number">1</span>) % MOD;</span><br><span class="line">    s-&gt;op[s-&gt;l] = <span class="number">0</span>, --s-&gt;l;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">integral</span><span class="params">(Pol *s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = s-&gt;l + <span class="number">1</span>; i &gt;= <span class="number">1</span>; i--)s-&gt;op[i] = <span class="number">1l</span>l * s-&gt;op[i - <span class="number">1</span>] * qPow(i, MOD - <span class="number">2</span>) % MOD;</span><br><span class="line">    ++s-&gt;l, s-&gt;op[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然后用上面的模板代码去求逆以及乘积即可，复杂度$O(nlogn)$，<a href="https://www.luogu.org/problemnew/show/P4725" target="_blank" rel="noopener">模板题</a>全代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MOD 998244353</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> G 3</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> N 100005</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> tr[N &lt;&lt; <span class="number">2</span>];</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Pol</span> &#123;</span><span class="comment">//多项式类</span></span><br><span class="line">    <span class="keyword">int</span> l, op[N &lt;&lt; <span class="number">2</span>] = &#123;<span class="number">0</span>&#125;;<span class="comment">//l最高项指数</span></span><br><span class="line">&#125; pol1, pol2, tmp;</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">qPow</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> ans = <span class="number">1</span>, x = a;</span><br><span class="line">    <span class="keyword">while</span> (b) &#123;</span><br><span class="line">        <span class="keyword">if</span> (b &amp; <span class="number">1</span>)ans = <span class="number">1l</span>l * ans * x % MOD;</span><br><span class="line">        x = <span class="number">1l</span>l * x * x % MOD, b &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">diff</span><span class="params">(Pol *s)</span> </span>&#123;<span class="comment">//求导</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; s-&gt;l; i++)s-&gt;op[i] = <span class="number">1l</span>l * s-&gt;op[i + <span class="number">1</span>] * (i + <span class="number">1</span>) % MOD;</span><br><span class="line">    s-&gt;op[s-&gt;l] = <span class="number">0</span>, --s-&gt;l;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">integral</span><span class="params">(Pol *s)</span> </span>&#123;<span class="comment">//积分</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = s-&gt;l + <span class="number">1</span>; i &gt;= <span class="number">1</span>; i--)s-&gt;op[i] = <span class="number">1l</span>l * s-&gt;op[i - <span class="number">1</span>] * qPow(i, MOD - <span class="number">2</span>) % MOD;</span><br><span class="line">    ++s-&gt;l, s-&gt;op[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">NTT</span><span class="params">(<span class="keyword">int</span> l, <span class="keyword">int</span> *c, <span class="keyword">int</span> type)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++)<span class="keyword">if</span> (i &lt; tr[i])swap(c[i], c[tr[i]]);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> mid = <span class="number">1</span>; mid &lt; l; mid &lt;&lt;= <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">int</span> wn = qPow(G, (MOD - <span class="number">1</span>) / (mid &lt;&lt; <span class="number">1</span>));</span><br><span class="line">        <span class="keyword">if</span> (type == <span class="number">-1</span>)wn = qPow(wn, MOD - <span class="number">2</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> len = mid &lt;&lt; <span class="number">1</span>, j = <span class="number">0</span>; j &lt; l; j += len) &#123;</span><br><span class="line">            <span class="keyword">int</span> w = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; mid; k++, w = <span class="number">1l</span>l * w * wn % MOD) &#123;</span><br><span class="line">                <span class="keyword">int</span> x = c[j + k], y = <span class="number">1l</span>l * w * c[j + mid + k] % MOD;</span><br><span class="line">                c[j + k] = ((x + y) % MOD + MOD) % MOD, c[j + mid + k] = ((x - y) % MOD + MOD) % MOD;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">inv</span><span class="params">(Pol *ans, <span class="keyword">const</span> Pol *x, <span class="keyword">int</span> rk)</span> </span>&#123;<span class="comment">//求逆</span></span><br><span class="line">    <span class="keyword">if</span> (rk == <span class="number">1</span>) &#123;</span><br><span class="line">        ans-&gt;l = <span class="number">0</span>, ans-&gt;op[<span class="number">0</span>] = qPow(x-&gt;op[<span class="number">0</span>], MOD - <span class="number">2</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    inv(ans, x, (rk + <span class="number">1</span>) &gt;&gt; <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">int</span> l = <span class="number">1</span>, le = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (l &lt;= (rk &lt;&lt; <span class="number">1</span>))l &lt;&lt;= <span class="number">1</span>, ++le;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++) &#123;</span><br><span class="line">        tr[i] = (tr[i &gt;&gt; <span class="number">1</span>] &gt;&gt; <span class="number">1</span>) | ((i &amp; <span class="number">1</span>) &lt;&lt; (le - <span class="number">1</span>));</span><br><span class="line">        tmp.op[i] = i &lt;= min(x-&gt;l, rk - <span class="number">1</span>) ? x-&gt;op[i] : <span class="number">0</span>;<span class="comment">//高次项滤掉，零项补零</span></span><br><span class="line">        ans-&gt;op[i] = i &lt;= ans-&gt;l ? ans-&gt;op[i] : <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    NTT(l, tmp.op, <span class="number">1</span>), NTT(l, ans-&gt;op, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++)</span><br><span class="line">        ans-&gt;op[i] = (<span class="number">2l</span>l * ans-&gt;op[i] % MOD - (<span class="number">1l</span>l * tmp.op[i] * ans-&gt;op[i] % MOD) * <span class="number">1l</span>l * ans-&gt;op[i] % MOD) % MOD;</span><br><span class="line">    NTT(l, ans-&gt;op, <span class="number">-1</span>), l = qPow(l, MOD - <span class="number">2</span>), ans-&gt;l = rk - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= ans-&gt;l; i++)ans-&gt;op[i] = <span class="number">1l</span>l * ans-&gt;op[i] * l % MOD;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">multiple</span><span class="params">(Pol *ans, Pol *a, Pol *b)</span> </span>&#123;<span class="comment">//将a与b相乘并计入ans</span></span><br><span class="line">    <span class="keyword">int</span> l = <span class="number">1</span>, le = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (l &lt;= a-&gt;l + b-&gt;l)l &lt;&lt;= <span class="number">1</span>, ++le;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++) &#123;</span><br><span class="line">        tr[i] = (tr[i &gt;&gt; <span class="number">1</span>] &gt;&gt; <span class="number">1</span>) | ((i &amp; <span class="number">1</span>) &lt;&lt; (le - <span class="number">1</span>));</span><br><span class="line">        <span class="keyword">if</span> (i &gt; a-&gt;l)a-&gt;op[i] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (i &gt; b-&gt;l)b-&gt;op[i] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    NTT(l, a-&gt;op, <span class="number">1</span>), NTT(l, b-&gt;op, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++)a-&gt;op[i] = <span class="number">1l</span>l * a-&gt;op[i] * b-&gt;op[i] % MOD;</span><br><span class="line">    NTT(l, a-&gt;op, <span class="number">-1</span>), l = qPow(l, MOD - <span class="number">2</span>), ans-&gt;l = a-&gt;l + b-&gt;l;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= ans-&gt;l; i++)ans-&gt;op[i] = <span class="number">1l</span>l * a-&gt;op[i] * l % MOD;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ios::sync_with_stdio(<span class="literal">false</span>);</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">    pol1.l = n - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= pol1.l; i++)<span class="built_in">cin</span> &gt;&gt; pol1.op[i];</span><br><span class="line">    inv(&amp;pol2, &amp;pol1, n), diff(&amp;pol1), multiple(&amp;pol1, &amp;pol1, &amp;pol2), integral(&amp;pol1);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= n - <span class="number">1</span>; i++)<span class="built_in">cout</span> &lt;&lt; pol1.op[i] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="多项式指数函数"><a href="#多项式指数函数" class="headerlink" title="多项式指数函数"></a>多项式指数函数</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可以认为是对数函数的逆运算。为了让问题更简便，封装一下求ln的函数：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">getLn</span><span class="params">(Pol *ans, <span class="keyword">const</span> Pol *x, <span class="keyword">int</span> rk)</span> </span>&#123;<span class="comment">//求x的ln，在x^rk意义下，存入ans，x不会被改变</span></span><br><span class="line">    inv(ans, x, rk);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; rk; i++)tmp.op[i] = i &lt;= x-&gt;l ? x-&gt;op[i] : <span class="number">0</span>, tmp.l = rk - <span class="number">1</span>;</span><br><span class="line">    diff(&amp;tmp), multiple(ans, &amp;tmp, ans), integral(ans), ans-&gt;l = rk - <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;给定n-1次多项式$A(x)$，求模$x^n$意义下的$B(x)$满足：</p>
+<script type="math/tex; mode=display">B(x)\equiv e^{A(x)}\pmod {x^n}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先两边取个$ln$，然后移项：</p>
+<script type="math/tex; mode=display">ln(B(x))-A(x)\equiv 0\pmod {x^n}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;左侧式中，$A(x)$是给定的，可以认为是常量，而$B(x)$是变量，那么可以将左侧看成关于$B(x)$的函数$G(B(x))$，令其对$B(x)$求导可得：</p>
+<script type="math/tex; mode=display">G'(B(x))=B^{-1}(x)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面考虑其它问题。既然将$B(x)$看成是$G$的自变量，那么现在要做的实质上就是求$G$的零点，但这个函数的零点显然不是那么容易求：</p>
+<script type="math/tex; mode=display">G(B(x))\equiv 0\pmod {x^n}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考虑迭代。假设现在已经求出$F(x)$满足：</p>
+<script type="math/tex; mode=display">G(F(x))\equiv 0\pmod {x^{\lceil \frac {n} {2}\rceil}}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将$G(X)$在这一点做幂级数展开：</p>
+<script type="math/tex; mode=display">G(X)=\sum_{i=0}^\infty \frac {G^{(i)}(F(x))} {i!}(X-F(x))^i</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$X$表示一个多项式。现在要求满足$G(X)\equiv 0\pmod {x^n}$的$X$，$X$当然也满足$G(X)\equiv 0\pmod {x^{\lceil \frac {n} {2}\rceil}}$。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;根据$G(X)$的形式，当然可以推出：</p>
+<script type="math/tex; mode=display">X-F(x)\equiv 0 \pmod{x^{\lceil \frac {n} {2}\rceil}}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是：</p>
+<script type="math/tex; mode=display">(X-F(x))^2\equiv 0\pmod {x^n}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样只需要拿出幂级数展开的前两项就可以了，因为后面的全是0：</p>
+<script type="math/tex; mode=display">G(X)\equiv G(F(x))+G'(F(x))(X-F(x))\equiv 0\pmod {x^n}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样$X$就求出来了，这里的$X$就是$B(x)$：</p>
+<script type="math/tex; mode=display">X\equiv F(x)-\frac {G(F(x))} {G'(F(x))}\pmod {x^n}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这就是牛顿迭代公式，代入上面求出的导数：</p>
+<script type="math/tex; mode=display">X\equiv F(x)-F(x)(ln(F(x))-A(x))</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最终：</p>
+<script type="math/tex; mode=display">B(x)=x\equiv F(x)(1-ln(F(x))+A(x))\pmod {x^n}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;边界条件为$n=1$时，$B(x)=1$。这样就可以写出核心迭代函数，和inv很像：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">getExp</span><span class="params">(Pol *ans, <span class="keyword">const</span> Pol *x, <span class="keyword">int</span> rk)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (rk == <span class="number">1</span>) &#123;<span class="comment">//迭代边界</span></span><br><span class="line">        ans-&gt;l = <span class="number">0</span>, ans-&gt;op[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    getExp(ans, x, (rk + <span class="number">1</span>) &gt;&gt; <span class="number">1</span>), getLn(&amp;tmp2, ans, rk);<span class="comment">//用一个临时变量存ln</span></span><br><span class="line">    <span class="keyword">int</span> l = <span class="number">1</span>, le = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (l &lt;= (rk &lt;&lt; <span class="number">1</span>))l &lt;&lt;= <span class="number">1</span>, ++le;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++) &#123;</span><br><span class="line">        tr[i] = (tr[i &gt;&gt; <span class="number">1</span>] &gt;&gt; <span class="number">1</span>) | ((i &amp; <span class="number">1</span>) &lt;&lt; (le - <span class="number">1</span>));</span><br><span class="line">        tmp.op[i] = i &lt; rk ? x-&gt;op[i] : <span class="number">0</span>;</span><br><span class="line">        ans-&gt;op[i] = i &lt;= ans-&gt;l ? ans-&gt;op[i] : <span class="number">0</span>;</span><br><span class="line">        tmp2.op[i] = i &lt;= tmp2.l ? tmp2.op[i] : <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    NTT(l, tmp.op, <span class="number">1</span>), NTT(l, ans-&gt;op, <span class="number">1</span>), NTT(l, tmp2.op, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++)ans-&gt;op[i] = <span class="number">1l</span>l * ans-&gt;op[i] * (<span class="number">1l</span>l - tmp2.op[i] + tmp.op[i]) % MOD;</span><br><span class="line">    NTT(l, ans-&gt;op, <span class="number">-1</span>), l = qPow(l, MOD - <span class="number">2</span>), ans-&gt;l = rk - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= ans-&gt;l; i++)ans-&gt;op[i] = <span class="number">1l</span>l * ans-&gt;op[i] * l % MOD;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;复杂度$O(nlogn)$(?)，附<a href="https://www.luogu.org/problemnew/show/P4726" target="_blank" rel="noopener">模板题</a>全代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MOD 998244353</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> G 3</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> N 100005</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> tr[N &lt;&lt; <span class="number">2</span>];</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Pol</span> &#123;</span><span class="comment">//多项式类</span></span><br><span class="line">    <span class="keyword">int</span> l, op[N &lt;&lt; <span class="number">2</span>] = &#123;<span class="number">0</span>&#125;;<span class="comment">//l最高项指数</span></span><br><span class="line">&#125; pol1, pol2, tmp, tmp2;</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">qPow</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> ans = <span class="number">1</span>, x = a;</span><br><span class="line">    <span class="keyword">while</span> (b) &#123;</span><br><span class="line">        <span class="keyword">if</span> (b &amp; <span class="number">1</span>)ans = <span class="number">1l</span>l * ans * x % MOD;</span><br><span class="line">        x = <span class="number">1l</span>l * x * x % MOD, b &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">diff</span><span class="params">(Pol *s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; s-&gt;l; i++)s-&gt;op[i] = <span class="number">1l</span>l * s-&gt;op[i + <span class="number">1</span>] * (i + <span class="number">1</span>) % MOD;</span><br><span class="line">    s-&gt;op[s-&gt;l] = <span class="number">0</span>, --s-&gt;l;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">integral</span><span class="params">(Pol *s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = s-&gt;l + <span class="number">1</span>; i &gt;= <span class="number">1</span>; i--)s-&gt;op[i] = <span class="number">1l</span>l * s-&gt;op[i - <span class="number">1</span>] * qPow(i, MOD - <span class="number">2</span>) % MOD;</span><br><span class="line">    ++s-&gt;l, s-&gt;op[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">NTT</span><span class="params">(<span class="keyword">int</span> l, <span class="keyword">int</span> *c, <span class="keyword">int</span> type)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++)<span class="keyword">if</span> (i &lt; tr[i])swap(c[i], c[tr[i]]);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> mid = <span class="number">1</span>; mid &lt; l; mid &lt;&lt;= <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">int</span> wn = qPow(G, (MOD - <span class="number">1</span>) / (mid &lt;&lt; <span class="number">1</span>));</span><br><span class="line">        <span class="keyword">if</span> (type == <span class="number">-1</span>)wn = qPow(wn, MOD - <span class="number">2</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> len = mid &lt;&lt; <span class="number">1</span>, j = <span class="number">0</span>; j &lt; l; j += len) &#123;</span><br><span class="line">            <span class="keyword">int</span> w = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; mid; k++, w = <span class="number">1l</span>l * w * wn % MOD) &#123;</span><br><span class="line">                <span class="keyword">int</span> x = c[j + k], y = <span class="number">1l</span>l * w * c[j + mid + k] % MOD;</span><br><span class="line">                c[j + k] = ((x + y) % MOD + MOD) % MOD, c[j + mid + k] = ((x - y) % MOD + MOD) % MOD;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">inv</span><span class="params">(Pol *ans, <span class="keyword">const</span> Pol *x, <span class="keyword">int</span> rk)</span> </span>&#123;<span class="comment">//求逆</span></span><br><span class="line">    <span class="keyword">if</span> (rk == <span class="number">1</span>) &#123;</span><br><span class="line">        ans-&gt;l = <span class="number">0</span>, ans-&gt;op[<span class="number">0</span>] = qPow(x-&gt;op[<span class="number">0</span>], MOD - <span class="number">2</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    inv(ans, x, (rk + <span class="number">1</span>) &gt;&gt; <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">int</span> l = <span class="number">1</span>, le = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (l &lt;= (rk &lt;&lt; <span class="number">1</span>))l &lt;&lt;= <span class="number">1</span>, ++le;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++) &#123;</span><br><span class="line">        tr[i] = (tr[i &gt;&gt; <span class="number">1</span>] &gt;&gt; <span class="number">1</span>) | ((i &amp; <span class="number">1</span>) &lt;&lt; (le - <span class="number">1</span>));</span><br><span class="line">        tmp.op[i] = i &lt;= min(x-&gt;l, rk - <span class="number">1</span>) ? x-&gt;op[i] : <span class="number">0</span>;<span class="comment">//高次项滤掉，零项补零</span></span><br><span class="line">        ans-&gt;op[i] = i &lt;= ans-&gt;l ? ans-&gt;op[i] : <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    NTT(l, tmp.op, <span class="number">1</span>), NTT(l, ans-&gt;op, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++)</span><br><span class="line">        ans-&gt;op[i] = (<span class="number">2l</span>l * ans-&gt;op[i] % MOD - (<span class="number">1l</span>l * tmp.op[i] * ans-&gt;op[i] % MOD) * <span class="number">1l</span>l * ans-&gt;op[i] % MOD) % MOD;</span><br><span class="line">    NTT(l, ans-&gt;op, <span class="number">-1</span>), l = qPow(l, MOD - <span class="number">2</span>), ans-&gt;l = rk - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= ans-&gt;l; i++)ans-&gt;op[i] = <span class="number">1l</span>l * ans-&gt;op[i] * l % MOD;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">multiple</span><span class="params">(Pol *ans, Pol *a, Pol *b)</span> </span>&#123;<span class="comment">//将a与b相乘并计入ans</span></span><br><span class="line">    <span class="keyword">int</span> l = <span class="number">1</span>, le = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (l &lt;= a-&gt;l + b-&gt;l)l &lt;&lt;= <span class="number">1</span>, ++le;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++) &#123;</span><br><span class="line">        tr[i] = (tr[i &gt;&gt; <span class="number">1</span>] &gt;&gt; <span class="number">1</span>) | ((i &amp; <span class="number">1</span>) &lt;&lt; (le - <span class="number">1</span>));</span><br><span class="line">        <span class="keyword">if</span> (i &gt; a-&gt;l)a-&gt;op[i] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (i &gt; b-&gt;l)b-&gt;op[i] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    NTT(l, a-&gt;op, <span class="number">1</span>), NTT(l, b-&gt;op, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++)a-&gt;op[i] = <span class="number">1l</span>l * a-&gt;op[i] * b-&gt;op[i] % MOD;</span><br><span class="line">    NTT(l, a-&gt;op, <span class="number">-1</span>), l = qPow(l, MOD - <span class="number">2</span>), ans-&gt;l = a-&gt;l + b-&gt;l;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= ans-&gt;l; i++)ans-&gt;op[i] = <span class="number">1l</span>l * a-&gt;op[i] * l % MOD;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">getLn</span><span class="params">(Pol *ans, <span class="keyword">const</span> Pol *x, <span class="keyword">int</span> rk)</span> </span>&#123;<span class="comment">//求x的ln</span></span><br><span class="line">    inv(ans, x, rk);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; rk; i++)tmp.op[i] = i &lt;= x-&gt;l ? x-&gt;op[i] : <span class="number">0</span>, tmp.l = rk - <span class="number">1</span>;</span><br><span class="line">    diff(&amp;tmp), multiple(ans, &amp;tmp, ans), integral(ans), ans-&gt;l = rk - <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">getExp</span><span class="params">(Pol *ans, <span class="keyword">const</span> Pol *x, <span class="keyword">int</span> rk)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (rk == <span class="number">1</span>) &#123;</span><br><span class="line">        ans-&gt;l = <span class="number">0</span>, ans-&gt;op[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    getExp(ans, x, (rk + <span class="number">1</span>) &gt;&gt; <span class="number">1</span>), getLn(&amp;tmp2, ans, rk);</span><br><span class="line">    <span class="keyword">int</span> l = <span class="number">1</span>, le = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (l &lt;= (rk &lt;&lt; <span class="number">1</span>))l &lt;&lt;= <span class="number">1</span>, ++le;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++) &#123;</span><br><span class="line">        tr[i] = (tr[i &gt;&gt; <span class="number">1</span>] &gt;&gt; <span class="number">1</span>) | ((i &amp; <span class="number">1</span>) &lt;&lt; (le - <span class="number">1</span>));</span><br><span class="line">        tmp.op[i] = i &lt; rk ? x-&gt;op[i] : <span class="number">0</span>;</span><br><span class="line">        ans-&gt;op[i] = i &lt;= ans-&gt;l ? ans-&gt;op[i] : <span class="number">0</span>;</span><br><span class="line">        tmp2.op[i] = i &lt;= tmp2.l ? tmp2.op[i] : <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    NTT(l, tmp.op, <span class="number">1</span>), NTT(l, ans-&gt;op, <span class="number">1</span>), NTT(l, tmp2.op, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++)ans-&gt;op[i] = <span class="number">1l</span>l * ans-&gt;op[i] * (<span class="number">1l</span>l - tmp2.op[i] + tmp.op[i]) % MOD;</span><br><span class="line">    NTT(l, ans-&gt;op, <span class="number">-1</span>), l = qPow(l, MOD - <span class="number">2</span>), ans-&gt;l = rk - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= ans-&gt;l; i++)ans-&gt;op[i] = <span class="number">1l</span>l * ans-&gt;op[i] * l % MOD;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ios::sync_with_stdio(<span class="literal">false</span>);</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">    pol1.l = n - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= pol1.l; i++)<span class="built_in">cin</span> &gt;&gt; pol1.op[i];</span><br><span class="line">    getExp(&amp;pol2, &amp;pol1, n);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= pol2.l; i++)<span class="built_in">cout</span> &lt;&lt; pol2.op[i] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="多项式快速幂"><a href="#多项式快速幂" class="headerlink" title="多项式快速幂"></a>多项式快速幂</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在上面求对数以及求指数的基础上我们可以很方便地求多项式快速幂。它适用于$A(x)$常数项为1的情况。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在要求一个$B(x)$满足：</p>
+<script type="math/tex; mode=display">B(x)\equiv A^k(x)\pmod {x^n}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;两边取对数：</p>
+<script type="math/tex; mode=display">ln(B(x))\equiv kln(A(x))\pmod {x^n}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;再取指数：</p>
+<script type="math/tex; mode=display">B(x)\equiv e^{kln(A(x))}\pmod {x^n}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然后就转化为求指数和求对数的问题了，复杂度$O(nlogn)$。这个算法支持k非常大的情况，因为k无论多大最终都会取模。<a href="https://www.luogu.org/problemnew/show/P5245" target="_blank" rel="noopener">模板题</a>全代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MOD 998244353</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> G 3</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> N 100005</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> tr[N &lt;&lt; <span class="number">2</span>];</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Pol</span> &#123;</span><span class="comment">//多项式类</span></span><br><span class="line">    <span class="keyword">int</span> l, op[N &lt;&lt; <span class="number">2</span>] = &#123;<span class="number">0</span>&#125;;<span class="comment">//l最高项指数</span></span><br><span class="line">&#125; pol1, pol2, tmp, tmp2;</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">qPow</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> ans = <span class="number">1</span>, x = a;</span><br><span class="line">    <span class="keyword">while</span> (b) &#123;</span><br><span class="line">        <span class="keyword">if</span> (b &amp; <span class="number">1</span>)ans = <span class="number">1l</span>l * ans * x % MOD;</span><br><span class="line">        x = <span class="number">1l</span>l * x * x % MOD, b &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">diff</span><span class="params">(Pol *s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; s-&gt;l; i++)s-&gt;op[i] = <span class="number">1l</span>l * s-&gt;op[i + <span class="number">1</span>] * (i + <span class="number">1</span>) % MOD;</span><br><span class="line">    s-&gt;op[s-&gt;l] = <span class="number">0</span>, --s-&gt;l;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">integral</span><span class="params">(Pol *s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = s-&gt;l + <span class="number">1</span>; i &gt;= <span class="number">1</span>; i--)s-&gt;op[i] = <span class="number">1l</span>l * s-&gt;op[i - <span class="number">1</span>] * qPow(i, MOD - <span class="number">2</span>) % MOD;</span><br><span class="line">    ++s-&gt;l, s-&gt;op[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">NTT</span><span class="params">(<span class="keyword">int</span> l, <span class="keyword">int</span> *c, <span class="keyword">int</span> type)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++)<span class="keyword">if</span> (i &lt; tr[i])swap(c[i], c[tr[i]]);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> mid = <span class="number">1</span>; mid &lt; l; mid &lt;&lt;= <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">int</span> wn = qPow(G, (MOD - <span class="number">1</span>) / (mid &lt;&lt; <span class="number">1</span>));</span><br><span class="line">        <span class="keyword">if</span> (type == <span class="number">-1</span>)wn = qPow(wn, MOD - <span class="number">2</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> len = mid &lt;&lt; <span class="number">1</span>, j = <span class="number">0</span>; j &lt; l; j += len) &#123;</span><br><span class="line">            <span class="keyword">int</span> w = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; mid; k++, w = <span class="number">1l</span>l * w * wn % MOD) &#123;</span><br><span class="line">                <span class="keyword">int</span> x = c[j + k], y = <span class="number">1l</span>l * w * c[j + mid + k] % MOD;</span><br><span class="line">                c[j + k] = ((x + y) % MOD + MOD) % MOD, c[j + mid + k] = ((x - y) % MOD + MOD) % MOD;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">inv</span><span class="params">(Pol *ans, <span class="keyword">const</span> Pol *x, <span class="keyword">int</span> rk)</span> </span>&#123;<span class="comment">//求逆</span></span><br><span class="line">    <span class="keyword">if</span> (rk == <span class="number">1</span>) &#123;</span><br><span class="line">        ans-&gt;l = <span class="number">0</span>, ans-&gt;op[<span class="number">0</span>] = qPow(x-&gt;op[<span class="number">0</span>], MOD - <span class="number">2</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    inv(ans, x, (rk + <span class="number">1</span>) &gt;&gt; <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">int</span> l = <span class="number">1</span>, le = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (l &lt;= (rk &lt;&lt; <span class="number">1</span>))l &lt;&lt;= <span class="number">1</span>, ++le;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++) &#123;</span><br><span class="line">        tr[i] = (tr[i &gt;&gt; <span class="number">1</span>] &gt;&gt; <span class="number">1</span>) | ((i &amp; <span class="number">1</span>) &lt;&lt; (le - <span class="number">1</span>));</span><br><span class="line">        tmp.op[i] = i &lt;= min(x-&gt;l, rk - <span class="number">1</span>) ? x-&gt;op[i] : <span class="number">0</span>;<span class="comment">//高次项滤掉，零项补零</span></span><br><span class="line">        ans-&gt;op[i] = i &lt;= ans-&gt;l ? ans-&gt;op[i] : <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    NTT(l, tmp.op, <span class="number">1</span>), NTT(l, ans-&gt;op, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++)</span><br><span class="line">        ans-&gt;op[i] = (<span class="number">2l</span>l * ans-&gt;op[i] % MOD - (<span class="number">1l</span>l * tmp.op[i] * ans-&gt;op[i] % MOD) * <span class="number">1l</span>l * ans-&gt;op[i] % MOD) % MOD;</span><br><span class="line">    NTT(l, ans-&gt;op, <span class="number">-1</span>), l = qPow(l, MOD - <span class="number">2</span>), ans-&gt;l = rk - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= ans-&gt;l; i++)ans-&gt;op[i] = <span class="number">1l</span>l * ans-&gt;op[i] * l % MOD;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">multiple</span><span class="params">(Pol *ans, Pol *a, Pol *b)</span> </span>&#123;<span class="comment">//将a与b相乘并计入ans</span></span><br><span class="line">    <span class="keyword">int</span> l = <span class="number">1</span>, le = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (l &lt;= a-&gt;l + b-&gt;l)l &lt;&lt;= <span class="number">1</span>, ++le;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++) &#123;</span><br><span class="line">        tr[i] = (tr[i &gt;&gt; <span class="number">1</span>] &gt;&gt; <span class="number">1</span>) | ((i &amp; <span class="number">1</span>) &lt;&lt; (le - <span class="number">1</span>));</span><br><span class="line">        <span class="keyword">if</span> (i &gt; a-&gt;l)a-&gt;op[i] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (i &gt; b-&gt;l)b-&gt;op[i] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    NTT(l, a-&gt;op, <span class="number">1</span>), NTT(l, b-&gt;op, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++)a-&gt;op[i] = <span class="number">1l</span>l * a-&gt;op[i] * b-&gt;op[i] % MOD;</span><br><span class="line">    NTT(l, a-&gt;op, <span class="number">-1</span>), l = qPow(l, MOD - <span class="number">2</span>), ans-&gt;l = a-&gt;l + b-&gt;l;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= ans-&gt;l; i++)ans-&gt;op[i] = <span class="number">1l</span>l * a-&gt;op[i] * l % MOD;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">getLn</span><span class="params">(Pol *ans, <span class="keyword">const</span> Pol *x, <span class="keyword">int</span> rk)</span> </span>&#123;<span class="comment">//求x的ln</span></span><br><span class="line">    inv(ans, x, rk);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; rk; i++)tmp.op[i] = i &lt;= x-&gt;l ? x-&gt;op[i] : <span class="number">0</span>, tmp.l = rk - <span class="number">1</span>;</span><br><span class="line">    diff(&amp;tmp), multiple(ans, &amp;tmp, ans), integral(ans), ans-&gt;l = rk - <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">getExp</span><span class="params">(Pol *ans, <span class="keyword">const</span> Pol *x, <span class="keyword">int</span> rk)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (rk == <span class="number">1</span>) &#123;</span><br><span class="line">        ans-&gt;l = <span class="number">0</span>, ans-&gt;op[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    getExp(ans, x, (rk + <span class="number">1</span>) &gt;&gt; <span class="number">1</span>), getLn(&amp;tmp2, ans, rk);</span><br><span class="line">    <span class="keyword">int</span> l = <span class="number">1</span>, le = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (l &lt;= (rk &lt;&lt; <span class="number">1</span>))l &lt;&lt;= <span class="number">1</span>, ++le;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++) &#123;</span><br><span class="line">        tr[i] = (tr[i &gt;&gt; <span class="number">1</span>] &gt;&gt; <span class="number">1</span>) | ((i &amp; <span class="number">1</span>) &lt;&lt; (le - <span class="number">1</span>));</span><br><span class="line">        tmp.op[i] = i &lt; rk ? x-&gt;op[i] : <span class="number">0</span>;</span><br><span class="line">        ans-&gt;op[i] = i &lt;= ans-&gt;l ? ans-&gt;op[i] : <span class="number">0</span>;</span><br><span class="line">        tmp2.op[i] = i &lt;= tmp2.l ? tmp2.op[i] : <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    NTT(l, tmp.op, <span class="number">1</span>), NTT(l, ans-&gt;op, <span class="number">1</span>), NTT(l, tmp2.op, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; l; i++)ans-&gt;op[i] = <span class="number">1l</span>l * ans-&gt;op[i] * (<span class="number">1l</span>l - tmp2.op[i] + tmp.op[i]) % MOD;</span><br><span class="line">    NTT(l, ans-&gt;op, <span class="number">-1</span>), l = qPow(l, MOD - <span class="number">2</span>), ans-&gt;l = rk - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= ans-&gt;l; i++)ans-&gt;op[i] = <span class="number">1l</span>l * ans-&gt;op[i] * l % MOD;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">read</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">char</span> e = getchar();</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> s = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (e &lt; <span class="string">'-'</span>)e = getchar();</span><br><span class="line">    <span class="keyword">while</span> (e &gt; <span class="string">'-'</span>)s = (s &lt;&lt; <span class="number">1</span>) + (s &lt;&lt; <span class="number">3</span>) + (e &amp; <span class="number">15</span>), e = getchar(), s %= MOD;</span><br><span class="line">    <span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = read(), k = read();</span><br><span class="line">    pol1.l = n - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= pol1.l; i++)pol1.op[i] = read();</span><br><span class="line">    getLn(&amp;pol2, &amp;pol1, n);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= pol2.l; i++)pol2.op[i] = <span class="number">1l</span>l * pol2.op[i] * k % MOD;</span><br><span class="line">    getExp(&amp;pol1, &amp;pol2, n);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= pol1.l; i++)<span class="built_in">cout</span> &lt;&lt; pol1.op[i] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面基于$ln$和$exp$的快速幂常数很大，在某些情况下会T，所以这里也补充一下倍增快速幂。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;思路很简单，就是按照普通快速幂的思路，只不过将数乘改成多项式乘法。复杂度$O(nlog^2n)$。我们可以用下面的样式去写倍增多项式快速幂。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (n) &#123;</span><br><span class="line">    <span class="keyword">if</span> (n &amp; <span class="number">1</span>) &#123;</span><br><span class="line">        tmp.l = pol.l;<span class="comment">//复制一份</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= pol.l; i++)tmp.op[i] = pol.op[i];</span><br><span class="line">        multiple(&amp;ans, &amp;tmp, &amp;ans);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= pol.l; i++)tmp.op[i] = pol.op[i];<span class="comment">//继续复制</span></span><br><span class="line">    tmp.l = pol.l, multiple(&amp;pol, &amp;tmp, &amp;pol);</span><br><span class="line">    n &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里主要注意一下复制的问题，其余就没有什么了。这种方法在某些情况下比上面的快速幂更优。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/提高算法/" rel="tag"><i class="fa fa-tag"></i>提高算法</a>
+          
+            <a href="/tags/多项式/" rel="tag"><i class="fa fa-tag"></i>多项式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/18/Operations/" rel="next" title="[CF498C]Array and Operations">
+                <i class="fa fa-chevron-left"></i> [CF498C]Array and Operations
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/20/Tickets/" rel="prev" title="[CF1096G]Lucky Tickets">
+                [CF1096G]Lucky Tickets <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/header.jpg" alt="Twifor">
+            
+              <p class="site-author-name" itemprop="name">Twifor</p>
+              <p class="site-description motion-element" itemprop="description">一个打OI的弱鸡</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">133</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">64</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#多项式乘法"><span class="nav-number">1.</span> <span class="nav-text">多项式乘法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多项式求逆"><span class="nav-number">2.</span> <span class="nav-text">多项式求逆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多项式对数函数"><span class="nav-number">3.</span> <span class="nav-text">多项式对数函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多项式指数函数"><span class="nav-number">4.</span> <span class="nav-text">多项式指数函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多项式快速幂"><span class="nav-number">5.</span> <span class="nav-text">多项式快速幂</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Twifor</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="255,255,255" '="" opacity="0.85" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+
+
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function (item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '2aSxA7Naxmi6lgfgVU1ulgcS-gzGzoHsz',
+    appKey: '6G9RDaS7lVtgyGKw8AxxkLyi',
+    placeholder: '写下评论吧~qwq',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+	  preview: 'none'
+    },
+	messageStyle: 'none',
+	"HTML-CSS": {
+      showMathMenu: false //关闭右击菜单显示
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style>
+
+    
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+<script src="/js/src/snow.js"></script>
+<script src="/live2d-widget/autoload.js"></script>
+<style type="text/css">
+.snow-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:100001;}</style>
+<div class="snow-container"></div>
+</body>
+</html>
+
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
