@@ -1,15 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[[CF1096G]Lucky Tickets]]></title>
-    <url>%2F2019%2F07%2F20%2FTickets%2F</url>
-    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第三个比赛原题？ 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;All bus tickets in Berland have their numbers. A number consists of $n$ digits ($n$ is even). Only k decimal digits $d_1,d_2,…,d_k$ can be used to form ticket numbers. If 0 is among these digits, then numbers may have leading zeroes. For example, if $n=4$ and only digits 0 and 4 can be used, then 0000, 4004, 4440 are valid ticket numbers, and 0002, 00, 44443 are not.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A ticket is lucky if the sum of first $\frac {n} {2}$ digits is equal to the sum of remaining $\frac {n} {2}$ digits.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Calculate the number of different lucky tickets in Berland. Since the answer may be big, print it modulo 998244353. 输入输出格式输入格式&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The first line contains two integers $n$ and$k$ $(2≤n≤2⋅10^5,1≤k≤10)$ — the number of digits in each ticket number, and the number of different decimal digits that may be used. $n$ is even.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The second line contains a sequence of pairwise distinct integers $d_1,d_2,…,d_k (0≤d_i≤9)$ — the digits that may be used in ticket numbers. The digits are given in arbitrary order. 输出格式&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Print the number of lucky ticket numbers, taken modulo 998244353. 输入输出样例Sample input1 4 21 8 Sample output1 6 Sample input2 20 16 Sample output2 1 Sample input3 10 56 1 4 0 3 Sample output3 569725 Sample input4 1000 75 4 0 1 8 3 2 Sample output4 460571165 题解&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;生成函数。构造一个多项式如下： A(x)=\sum_{i=0}^9a_ix^i&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$a_i$在$i$被选入时为1，否则为0。对这个多项式求$\frac {n} {2}$次幂，每一项的系数就是它的方案数，答案就是这些系数的平方和。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;常数可能过大，导致$exp$与%ln%的快速幂T了，换倍增快速幂就能AC。12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182#include &lt;bits/stdc++.h&gt;#pragma GCC optimize(3)#define MOD 998244353#define G 3#define N 1000005using namespace std;int tr[N &lt;&lt; 2];struct Pol &#123;//多项式类 int l, op[N &lt;&lt; 2] = &#123;0&#125;;//l最高项指数&#125; pol, tmp, ans;int n;int qPow(int a, int b) &#123; int ans = 1, x = a; while (b) &#123; if (b &amp; 1)ans = 1ll * ans * x % MOD; x = 1ll * x * x % MOD, b &gt;&gt;= 1; &#125; return ans;&#125;void NTT(int l, int *c, int type) &#123; for (register int i = 0; i &lt; l; i++)if (i &lt; tr[i])swap(c[i], c[tr[i]]); for (register int mid = 1; mid &lt; l; mid &lt;&lt;= 1) &#123; register int wn = qPow(G, (MOD - 1) / (mid &lt;&lt; 1)); if (type == -1)wn = qPow(wn, MOD - 2); for (register int len = mid &lt;&lt; 1, j = 0; j &lt; l; j += len) &#123; register int w = 1; for (register int k = 0; k &lt; mid; k++, w = 1ll * w * wn % MOD) &#123; register int x = c[j + k], y = 1ll * w * c[j + mid + k] % MOD; c[j + k] = ((x + y) % MOD + MOD) % MOD, c[j + mid + k] = ((x - y) % MOD + MOD) % MOD; &#125; &#125; &#125;&#125;inline void multiple(Pol *ans, Pol *a, Pol *b) &#123;//将a与b相乘并计入ans int l = 1, le = 0; while (l &lt;= a-&gt;l + b-&gt;l)l &lt;&lt;= 1, ++le; for (register int i = 0; i &lt; l; i++) &#123; tr[i] = (tr[i &gt;&gt; 1] &gt;&gt; 1) | ((i &amp; 1) &lt;&lt; (le - 1)); if (i &gt; a-&gt;l)a-&gt;op[i] = 0; if (i &gt; b-&gt;l)b-&gt;op[i] = 0; &#125; NTT(l, a-&gt;op, 1), NTT(l, b-&gt;op, 1); for (register int i = 0; i &lt; l; i++)a-&gt;op[i] = 1ll * a-&gt;op[i] * b-&gt;op[i] % MOD; NTT(l, a-&gt;op, -1), l = qPow(l, MOD - 2), ans-&gt;l = a-&gt;l + b-&gt;l; for (register int i = 0; i &lt;= ans-&gt;l; i++)ans-&gt;op[i] = 1ll * a-&gt;op[i] * l % MOD;&#125;inline int read() &#123; char e = getchar(); int s = 0; while (e &lt; '-')e = getchar(); while (e &gt; '-')s = (s &lt;&lt; 1) + (s &lt;&lt; 3) + (e &amp; 15), e = getchar(); return s;&#125;vector&lt;int&gt; vvp;int main() &#123; int n = read() &gt;&gt; 1, k = read(); pol.l = 9, ans.op[0] = 1, ans.l = 0; for (register int i = 1; i &lt;= k; i++)vvp.push_back(read()); for (register int i = 0; i &lt; vvp.size(); i++)pol.op[vvp[i]] = 1; while (n) &#123;//倍增快速幂 if (n &amp; 1) &#123; tmp.l = pol.l; for (int i = 0; i &lt;= pol.l; i++)tmp.op[i] = pol.op[i]; multiple(&amp;ans, &amp;tmp, &amp;ans); &#125; for (int i = 0; i &lt;= pol.l; i++)tmp.op[i] = pol.op[i]; tmp.l = pol.l, multiple(&amp;pol, &amp;tmp, &amp;pol); n &gt;&gt;= 1; &#125; long long sans = 0; for (register int i = 0; i &lt;= ans.l; i++)sans = (sans + 1ll * ans.op[i] * ans.op[i] % MOD) % MOD; cout &lt;&lt; sans; return 0;&#125;]]></content>
+    <title><![CDATA[[HDU6333]Harvest of Apples]]></title>
+    <url>%2F2019%2F07%2F21%2FApples%2F</url>
+    <content type="text"><![CDATA[题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;There are $n$ apples on a tree, numbered from $1$ to $n$.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Count the number of ways to pick at most $m$ apples. 输入输出格式输入格式&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The first line of the input contains an integer $T (1≤T≤10^5)$ denoting the number of test cases.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Each test case consists of one line with two integers $n,m (1≤m≤n≤10^5)$. 输出格式&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For each test case, print an integer representing the number of ways modulo $10^9+7$. 输入输出样例Sample input 25 21000 500 Sample ouput 16924129523 题解&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;莫队算法神题。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;就是求： \sum_{i=0}^mC_n^m&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;复杂度$O(Tn)$，会T，考虑将要求的数写成$S(n,m)$的形式： S(n,m)=\sum_{i=0}^mC_n^m&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;立即可以推知： S(n,m)=S(n,m-1)+C_n^m&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另外注意到： C_n^m=C_{n-1}^{m-1}+C_{n-1}^m&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是可得： S(n,m)=2S(n-1,m)-C_{n-1}^m&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将区间$[0,10^5]$分块处理，$n$看成区间左端点，$m$看成区间右端点，根据上面的递推式进行更新，跑一遍莫队算法即可，复杂度在$O(T\sqrt n)$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意移动指针时可能出现$m&gt;n$的情况，这样的时候组合数直接就是0。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657#include &lt;bits/stdc++.h&gt;using namespace std;int fac[100005], inv[100005], t, l, r, now, belong[100005];const int MOD = static_cast&lt;const int&gt;(1e9 + 7);struct Node &#123; int n, m; int ans, rk; bool operator&lt;(Node s) &#123; if (belong[n] == belong[s.n])return belong[m] &lt; belong[s.m]; return belong[n] &lt; belong[s.n]; &#125;&#125; node[100005];inline int C(int n, int m) &#123; if (n &lt; 0 || m &lt; 0)return 0;//注意这里的判断 if (m &gt; n)return 0; return 1ll * fac[n] * inv[m] % MOD * inv[n - m] % MOD;&#125;int qPow(int x, int y) &#123; int ans = 1, sta = x; while (y) &#123; if (y &amp; 1)ans = 1ll * ans * sta % MOD; sta = 1ll * sta * sta % MOD, y &gt;&gt;= 1; &#125; return ans;&#125;bool cmp(Node a, Node b) &#123; return a.rk &lt; b.rk;&#125;int main() &#123; ios::sync_with_stdio(false); fac[0] = 1, inv[0] = 1; for (int i = 1; i &lt;= 100000; i++)fac[i] = 1ll * fac[i - 1] * i % MOD;//预处理阶乘以及逆元 for (int i = 1; i &lt;= 100000; i++)inv[i] = qPow(fac[i], MOD - 2); cin &gt;&gt; t; for (int i = 1; i &lt;= t; i++)cin &gt;&gt; node[i].n &gt;&gt; node[i].m, node[i].rk = i; int base = static_cast&lt;int&gt;(sqrt(100000)); for (int i = 0; i &lt;= 100000; i++)belong[i] = i / base + 1;//分块 sort(node + 1, node + t + 1); l = 1, r = 0, now = 1;//C(1,0)=1 for (int i = 1; i &lt;= t; i++) &#123; while (l &gt; node[i].n)now = 1ll * (1ll * now + C(l - 1, r)) % MOD * inv[2] % MOD, --l;//移动指针的过程 while (l &lt; node[i].n)now = 1ll * (2ll * now - C(l, r)) % MOD, ++l; while (r &gt; node[i].m)now = (now - C(l, r)) % MOD, --r; while (r &lt; node[i].m)now = (now + C(l, r + 1)) % MOD, ++r; node[i].ans = now; &#125; sort(node + 1, node + t + 1, cmp); for (int i = 1; i &lt;= t; i++)cout &lt;&lt; (node[i].ans + MOD) % MOD &lt;&lt; endl; return 0;&#125;]]></content>
       <categories>
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>多项式</tag>
+        <tag>莫队算法</tag>
+        <tag>数学</tag>
+        <tag>数论</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[[CF1096G]Lucky Tickets]]></title>
+    <url>%2F2019%2F07%2F20%2FTickets%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第三个比赛原题？ 题目描述&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;All bus tickets in Berland have their numbers. A number consists of $n$ digits ($n$ is even). Only k decimal digits $d_1,d_2,…,d_k$ can be used to form ticket numbers. If 0 is among these digits, then numbers may have leading zeroes. For example, if $n=4$ and only digits 0 and 4 can be used, then 0000, 4004, 4440 are valid ticket numbers, and 0002, 00, 44443 are not.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A ticket is lucky if the sum of first $\frac {n} {2}$ digits is equal to the sum of remaining $\frac {n} {2}$ digits.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Calculate the number of different lucky tickets in Berland. Since the answer may be big, print it modulo 998244353. 输入输出格式输入格式&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The first line contains two integers $n$ and$k$ $(2≤n≤2⋅10^5,1≤k≤10)$ — the number of digits in each ticket number, and the number of different decimal digits that may be used. $n$ is even.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The second line contains a sequence of pairwise distinct integers $d_1,d_2,…,d_k (0≤d_i≤9)$ — the digits that may be used in ticket numbers. The digits are given in arbitrary order. 输出格式&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Print the number of lucky ticket numbers, taken modulo 998244353. 输入输出样例Sample input1 4 21 8 Sample output1 6 Sample input2 20 16 Sample output2 1 Sample input3 10 56 1 4 0 3 Sample output3 569725 Sample input4 1000 75 4 0 1 8 3 2 Sample output4 460571165 题解&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;生成函数。构造一个多项式如下： A(x)=\sum_{i=0}^9a_ix^i&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$a_i$在$i$被选入时为1，否则为0。对这个多项式求$\frac {n} {2}$次幂，每一项的系数就是它的方案数，答案就是这些系数的平方和。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;常数可能过大，导致$exp$与$ln$的快速幂T了，换倍增快速幂就能AC。12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182#include &lt;bits/stdc++.h&gt;#pragma GCC optimize(3)#define MOD 998244353#define G 3#define N 1000005using namespace std;int tr[N &lt;&lt; 2];struct Pol &#123;//多项式类 int l, op[N &lt;&lt; 2] = &#123;0&#125;;//l最高项指数&#125; pol, tmp, ans;int n;int qPow(int a, int b) &#123; int ans = 1, x = a; while (b) &#123; if (b &amp; 1)ans = 1ll * ans * x % MOD; x = 1ll * x * x % MOD, b &gt;&gt;= 1; &#125; return ans;&#125;void NTT(int l, int *c, int type) &#123; for (register int i = 0; i &lt; l; i++)if (i &lt; tr[i])swap(c[i], c[tr[i]]); for (register int mid = 1; mid &lt; l; mid &lt;&lt;= 1) &#123; register int wn = qPow(G, (MOD - 1) / (mid &lt;&lt; 1)); if (type == -1)wn = qPow(wn, MOD - 2); for (register int len = mid &lt;&lt; 1, j = 0; j &lt; l; j += len) &#123; register int w = 1; for (register int k = 0; k &lt; mid; k++, w = 1ll * w * wn % MOD) &#123; register int x = c[j + k], y = 1ll * w * c[j + mid + k] % MOD; c[j + k] = ((x + y) % MOD + MOD) % MOD, c[j + mid + k] = ((x - y) % MOD + MOD) % MOD; &#125; &#125; &#125;&#125;inline void multiple(Pol *ans, Pol *a, Pol *b) &#123;//将a与b相乘并计入ans int l = 1, le = 0; while (l &lt;= a-&gt;l + b-&gt;l)l &lt;&lt;= 1, ++le; for (register int i = 0; i &lt; l; i++) &#123; tr[i] = (tr[i &gt;&gt; 1] &gt;&gt; 1) | ((i &amp; 1) &lt;&lt; (le - 1)); if (i &gt; a-&gt;l)a-&gt;op[i] = 0; if (i &gt; b-&gt;l)b-&gt;op[i] = 0; &#125; NTT(l, a-&gt;op, 1), NTT(l, b-&gt;op, 1); for (register int i = 0; i &lt; l; i++)a-&gt;op[i] = 1ll * a-&gt;op[i] * b-&gt;op[i] % MOD; NTT(l, a-&gt;op, -1), l = qPow(l, MOD - 2), ans-&gt;l = a-&gt;l + b-&gt;l; for (register int i = 0; i &lt;= ans-&gt;l; i++)ans-&gt;op[i] = 1ll * a-&gt;op[i] * l % MOD;&#125;inline int read() &#123; char e = getchar(); int s = 0; while (e &lt; '-')e = getchar(); while (e &gt; '-')s = (s &lt;&lt; 1) + (s &lt;&lt; 3) + (e &amp; 15), e = getchar(); return s;&#125;vector&lt;int&gt; vvp;int main() &#123; int n = read() &gt;&gt; 1, k = read(); pol.l = 9, ans.op[0] = 1, ans.l = 0; for (register int i = 1; i &lt;= k; i++)vvp.push_back(read()); for (register int i = 0; i &lt; vvp.size(); i++)pol.op[vvp[i]] = 1; while (n) &#123;//倍增快速幂 if (n &amp; 1) &#123; tmp.l = pol.l; for (int i = 0; i &lt;= pol.l; i++)tmp.op[i] = pol.op[i]; multiple(&amp;ans, &amp;tmp, &amp;ans); &#125; for (int i = 0; i &lt;= pol.l; i++)tmp.op[i] = pol.op[i]; tmp.l = pol.l, multiple(&amp;pol, &amp;tmp, &amp;pol); n &gt;&gt;= 1; &#125; long long sans = 0; for (register int i = 0; i &lt;= ans.l; i++)sans = (sans + 1ll * ans.op[i] * ans.op[i] % MOD) % MOD; cout &lt;&lt; sans; return 0;&#125;]]></content>
+      <categories>
+        <category>算法与OI</category>
+      </categories>
+      <tags>
         <tag>生成函数</tag>
+        <tag>多项式</tag>
       </tags>
   </entry>
   <entry>
@@ -59,9 +72,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
+        <tag>数据结构</tag>
         <tag>搜索</tag>
         <tag>图的最短路</tag>
-        <tag>数据结构</tag>
         <tag>图</tag>
       </tags>
   </entry>
@@ -235,8 +248,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>图论</tag>
         <tag>数学</tag>
+        <tag>图论</tag>
       </tags>
   </entry>
   <entry>
@@ -489,8 +502,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>数据结构</tag>
+        <tag>基础算法</tag>
         <tag>单调栈</tag>
         <tag>栈</tag>
       </tags>
@@ -623,9 +636,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>数据结构</tag>
         <tag>树</tag>
+        <tag>基础算法</tag>
         <tag>动态规划</tag>
       </tags>
   </entry>
@@ -846,8 +859,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数论</tag>
         <tag>基础算法</tag>
+        <tag>数论</tag>
       </tags>
   </entry>
   <entry>
@@ -906,8 +919,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数论</tag>
         <tag>基础算法</tag>
+        <tag>数论</tag>
         <tag>最大公约数</tag>
       </tags>
   </entry>
@@ -1034,12 +1047,12 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>数据结构</tag>
+        <tag>基础算法</tag>
         <tag>区间最值</tag>
-        <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
+        <tag>区间</tag>
       </tags>
   </entry>
   <entry>
@@ -1055,9 +1068,9 @@
         <tag>动态规划</tag>
         <tag>区间最值</tag>
         <tag>ST表</tag>
-        <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
+        <tag>区间</tag>
       </tags>
   </entry>
   <entry>
@@ -1365,8 +1378,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数论</tag>
         <tag>基础算法</tag>
+        <tag>数论</tag>
       </tags>
   </entry>
   <entry>
@@ -1505,8 +1518,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>数据结构</tag>
+        <tag>基础算法</tag>
         <tag>线段树</tag>
       </tags>
   </entry>
@@ -1555,8 +1568,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>数据结构</tag>
+        <tag>基础算法</tag>
         <tag>树状数组</tag>
       </tags>
   </entry>
@@ -1581,8 +1594,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>基础算法</tag>
         <tag>数据结构</tag>
+        <tag>基础算法</tag>
         <tag>堆</tag>
       </tags>
   </entry>
