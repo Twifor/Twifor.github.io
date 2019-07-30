@@ -132,7 +132,7 @@
 <meta property="og:image" content="https://twifor.github.io/2019/03/02/Splay（伸展树）/ph3.bmp">
 <meta property="og:image" content="https://twifor.github.io/2019/03/02/Splay（伸展树）/ph4.bmp">
 <meta property="og:image" content="https://twifor.github.io/2019/03/02/Splay（伸展树）/ph5.bmp">
-<meta property="og:updated_time" content="2019-05-30T16:10:28.721Z">
+<meta property="og:updated_time" content="2019-07-28T15:10:07.776Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Splay（伸展树）">
 <meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本节介绍Splay树的用法与实现。">
@@ -429,7 +429,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-05-31 00:10:28" itemprop="dateModified" datetime="2019-05-31T00:10:28+08:00">2019-05-31</time>
+                <time title="修改时间：2019-07-28 23:10:07" itemprop="dateModified" datetime="2019-07-28T23:10:07+08:00">2019-07-28</time>
               
             
           </span>
@@ -499,7 +499,7 @@
 </ul>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面给出了一个BST的例子：<br><img src="/2019/03/02/Splay（伸展树）/ph1.bmp"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在本文的splay中不允许有相同的数，因此每一个结点都有自己的计数变量（在本文中用s表示）来记录这个数的个数。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另外，BST的左右子树性质不同，因此不能向往常一样把树当图来存，必须基于一定储存结构。这里用结构体来定义树的每一个结点：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> v, ch[<span class="number">2</span>], s, num, f;</span><br><span class="line"></span><br><span class="line">    Node() : s(<span class="number">0</span>), num(<span class="number">0</span>) &#123;</span><br><span class="line">        ch[<span class="number">0</span>] = ch[<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; node[<span class="number">500005</span>];</span><br></pre></td></tr></table></figure></p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v表示该结点表示的数，ch[0]和ch[1]是左右子树根结点编号，s是数的重数，num是该树所有数的总数量（计入重数），f是其父结点编号。然后开一个数组储存这些结点。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;问题来了，BST有什么用呢？如果我们需要不断加入删除数据，不断地询问某个数的排序序号，查找某个数的前驱或者后继等操作，普通的顺序表效率过低，而链表查找效率硬伤，此时我们就需要BST来完成这些工作。平衡的BST可以在$O(logn)$复杂度下完成这些操作，这是容易理解的。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但如果不平衡呢？当二叉排序树退化成一条链时，各种操作都会退化成$O(n)$复杂度，这是我们不希望看到的，于是就有了各种使BST平衡的方法，Splay就是其中之一。</p>
-<h4 id="旋转操作"><a href="#旋转操作" class="headerlink" title="旋转操作"></a>旋转操作</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;旋转操作是Splay中很重要的操作。旋转的意思就是：将某个结点移动到其父结点的位置，保持BST性质不变。旋转只是树的结构变形，没有实质性改变。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当目标结点是其父结点的左儿子时，需要右旋（称为Zig操作），若为右儿子，需要左旋（称为Zag操作）。下面以右旋为例探讨旋转规律。<br><img src="/2019/03/02/Splay（伸展树）/ph2.bmp"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;比如我们想把值为2的结点移动到其父结点位置。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发现4比5小，5应该接管以值为4的结点为根的子树，于是：<br><img src="/2019/03/02/Splay（伸展树）/ph3.bmp"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5比3大，将值为5的结点移动下来作值为3的结点的左儿子（父结点变儿子结点）。<br><img src="/2019/03/02/Splay（伸展树）/ph4.bmp"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然后以3为值的结点替代原父结点位置：<br><img src="/2019/03/02/Splay（伸展树）/ph5.bmp"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;旋转完成，这就是一次zig操作。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;无论左旋还是右旋，都可以发现旋转分为三步。</p>
+<h4 id="旋转操作"><a href="#旋转操作" class="headerlink" title="旋转操作"></a>旋转操作</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;旋转操作是Splay中很重要的操作。旋转的意思就是：将某个结点移动到其父结点的位置，保持BST性质不变。旋转只是树的结构变形，没有实质性改变。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当目标结点是其父结点的左儿子时，需要右旋（称为Zig操作），若为右儿子，需要左旋（称为Zag操作）。下面以右旋为例探讨旋转规律。<br><img src="/2019/03/02/Splay（伸展树）/ph2.bmp"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;比如我们想把值为3的结点移动到其父结点位置。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发现4比5小，5应该接管以值为4的结点为根的子树，于是：<br><img src="/2019/03/02/Splay（伸展树）/ph3.bmp"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5比3大，将值为5的结点移动下来作值为3的结点的左儿子（父结点变儿子结点）。<br><img src="/2019/03/02/Splay（伸展树）/ph4.bmp"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然后以3为值的结点替代原父结点位置：<br><img src="/2019/03/02/Splay（伸展树）/ph5.bmp"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;旋转完成，这就是一次zig操作。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;无论左旋还是右旋，都可以发现旋转分为三步。</p>
 <ol>
 <li>父结点接管目标结点反边上的子树。（接管反边是指：若目标结点为左儿子，则接管右子树，右儿子反之）。</li>
 <li>父结点作目标结点反边上的子树。</li>
@@ -668,7 +668,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">141</span>
+                    <span class="site-state-item-count">147</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -828,7 +828,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">66</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">68</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
