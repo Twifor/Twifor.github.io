@@ -127,7 +127,7 @@
 <meta property="og:site_name" content="Twifor~Liyh">
 <meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;介绍快速傅里叶变换（Fast Fourier Transformation，FFT），可以用来加速多项式乘法。快速傅里叶变换是多项式以及卷积问题的根本基础，是学习多项式以及卷积的前提。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-07-23T13:00:26.766Z">
+<meta property="og:updated_time" content="2019-08-01T11:59:45.795Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="快速傅里叶变换（FFT）">
 <meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;介绍快速傅里叶变换（Fast Fourier Transformation，FFT），可以用来加速多项式乘法。快速傅里叶变换是多项式以及卷积问题的根本基础，是学习多项式以及卷积的前提。">
@@ -423,7 +423,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-23 21:00:26" itemprop="dateModified" datetime="2019-07-23T21:00:26+08:00">2019-07-23</time>
+                <time title="修改时间：2019-08-01 19:59:45" itemprop="dateModified" datetime="2019-08-01T19:59:45+08:00">2019-08-01</time>
               
             
           </span>
@@ -526,7 +526,7 @@ xy=(ac-bd)+(ad+bc)i</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;�
 <script type="math/tex; mode=display">\omega_n^{2k}=\omega_{\frac {n} {2}}^k</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样就构造了一个对应关系。另外注意到：</p>
 <script type="math/tex; mode=display">\omega_n^{2(k+\frac {n} {2})}=\omega_n^{2k+n}=\omega_n^{2k}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由此引理得证，这一条是FFT复杂度的保证。</p>
 <h4 id="求和引理"><a href="#求和引理" class="headerlink" title="求和引理"></a>求和引理</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在$n&gt;0$且$0\leq k&lt;n$时，有：</p>
-<script type="math/tex; mode=display">\sum_{i=0}^{n-1}(\omega_n^k)^i=0</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;nbsp若$0&lt;k&lt;n$，可知$\omega_n^k≠1$，那么可以应用求和公式：</p>
+<script type="math/tex; mode=display">\sum_{i=0}^{n-1}(\omega_n^k)^i=0</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;若$0&lt;k&lt;n$，可知$\omega_n^k≠1$，那么可以应用求和公式：</p>
 <script type="math/tex; mode=display">\sum_{i=0}^{n-1}(\omega_n^k)^i=\frac {(\omega_n^k)^n-1} {\omega_n^k-1}=\frac {(\omega_n^n)^k-1} {\omega_n^k-1}=0</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$k=0$时，则显然有：</p>
 <script type="math/tex; mode=display">\sum_{i=0}^{n-1}(\omega_n^k)^i=n</script><h3 id="FFT"><a href="#FFT" class="headerlink" title="FFT"></a>FFT</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面真正到了FFT的算法部分。考虑一个多项式：</p>
 <script type="math/tex; mode=display">A(x)=a_0+a_1x+a_2x^2+\cdots +a_{n-1}x^{n-1}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将其按照奇偶划分得到：</p>
@@ -679,7 +679,7 @@ b_k=-\frac {c_k-d_k} {2} i</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">148</span>
+                    <span class="site-state-item-count">149</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
