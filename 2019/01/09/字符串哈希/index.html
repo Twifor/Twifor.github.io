@@ -127,7 +127,7 @@
 <meta property="og:site_name" content="Twifor~Liyh">
 <meta property="og:description" content="本文改编自https://blog.csdn.net/pengwill97/article/details/80879387&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;很多题目涉及字符串问题，但是字符串不如整数那样容易处理，尤其是涉及图时。这时需要构造映射string-&amp;gt;int来将字符串转化为int，这就是字符串哈希算法。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-02-06T11:51:13.135Z">
+<meta property="og:updated_time" content="2019-08-10T11:35:06.357Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="字符串哈希">
 <meta name="twitter:description" content="本文改编自https://blog.csdn.net/pengwill97/article/details/80879387&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;很多题目涉及字符串问题，但是字符串不如整数那样容易处理，尤其是涉及图时。这时需要构造映射string-&amp;gt;int来将字符串转化为int，这就是字符串哈希算法。">
@@ -423,7 +423,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-06 19:51:13" itemprop="dateModified" datetime="2019-02-06T19:51:13+08:00">2019-02-06</time>
+                <time title="修改时间：2019-08-10 19:35:06" itemprop="dateModified" datetime="2019-08-10T19:35:06+08:00">2019-08-10</time>
               
             
           </span>
@@ -604,6 +604,13 @@ hash(i)=(hash(i-1)*base+str(i)-’a’+1)%P，i\geq 1</script><p>&nbsp;&nbsp;&nb
 </table>
 </div>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;洛谷P3370用字符串哈希求互异字符串个数，下面给出代码:<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> P1 = <span class="number">19260817</span>, P2 = <span class="number">100663319</span>;</span><br><span class="line"><span class="keyword">int</span> vis[P2] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> h[<span class="number">1050</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">Hash</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">    h[<span class="number">0</span>] = s[<span class="number">0</span>] - <span class="string">'a'</span> + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; s.length(); i++) &#123;</span><br><span class="line">        h[i] = (h[i - <span class="number">1</span>] * P1 + s[i] - <span class="string">'a'</span> + <span class="number">1</span>) % P2;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> h[s.length() - <span class="number">1</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ios::sync_with_stdio(<span class="literal">false</span>);</span><br><span class="line">    <span class="keyword">int</span> n, ans = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="built_in">string</span> str;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; str;</span><br><span class="line">        <span class="keyword">int</span> h = Hash(str);</span><br><span class="line">        <span class="keyword">if</span> (vis[h] == <span class="number">0</span>)vis[h] = <span class="number">1</span>, ans++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; ans;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="子串的哈希"><a href="#子串的哈希" class="headerlink" title="子串的哈希"></a>子串的哈希</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;只哈希一整个字符串并没有什么卵用，我们必须找到一种方法可以很快地哈希子串。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里有一种预处理复杂度为$O(n)$，查询复杂度为$O(1)$的子串哈希算法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先，用一个$hs$数组记录哈希值，假设字符串下标从0开始，那么可以用下面的递推公式推出哈希值：</p>
+<script type="math/tex; mode=display">hs[0]=str[0]\\
+hs[x]=hs[x-1]*BASE+str[x],x\geq 1</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里为了增强适用性，不再将字符减去$’a’$，BASE的含义与上文基本相同，这里可以取一个小质数，比如23。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于$hs$数组，将其定义为unsigned long long类型，使其自然溢出，这样撞车的概率很低。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么问题来了，如何根据$hs$数组找到某一段子串（$[l,r]$）的哈希值？<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考虑一下下面的几个值：</p>
+<script type="math/tex; mode=display">hs[1]=str[0]BASE+str[1]\\
+hs[2]=str[0]BASE^2+str[1]BASE+str[2]\\
+hs[3]=str[0]BASE^3+str[1]BASE^2+str[2]BASE+str[3]</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;规律应该很明显了，$[l,r]$的哈希值就是：</p>
+<script type="math/tex; mode=display">hs[r]-hs[l-1]BASE^{r-l+1}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样再预处理出$BASE$的幂次，就可以$O(1)$求所有子串的哈希值了。子串哈希的一个应用是在$O(logn)$复杂度下对比两个子串的字典序大小。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们只需要二分一个长度$mid$，对比两个子串在前$mid$位置的哈希值，就能找到两个串第一个不同的位置，然后就可以轻松地判别两个串的字典序大小。</p>
 
       
     </div>
@@ -705,8 +712,17 @@ hash(i)=(hash(i-1)*base+str(i)-’a’+1)%P，i\geq 1</script><p>&nbsp;&nbsp;&nb
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -723,7 +739,7 @@ hash(i)=(hash(i-1)*base+str(i)-’a’+1)%P，i\geq 1</script><p>&nbsp;&nbsp;&nb
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">152</span>
+                    <span class="site-state-item-count">153</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -913,6 +929,23 @@ hash(i)=(hash(i-1)*base+str(i)-’a’+1)%P，i\geq 1</script><p>&nbsp;&nbsp;&nb
       </div>
 
       
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#子串的哈希"><span class="nav-number">1.</span> <span class="nav-text">子串的哈希</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
 
       
 
@@ -999,7 +1032,7 @@ hash(i)=(hash(i-1)*base+str(i)-’a’+1)%P，i\geq 1</script><p>&nbsp;&nbsp;&nb
     
     
   
-  <script color="255,255,255" '="" opacity="0.85" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script color="255,255,255" '="" opacity="0.85" zindex="-1" count="15" src="/lib/canvas-nest/canvas-nest.min.js"></script>
 
 
 
