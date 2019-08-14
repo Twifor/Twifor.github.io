@@ -18,7 +18,7 @@
 	z-index: 1;
 	line-height: 0;
 	transition: transform .3s ease-in-out;
-	transform: translateY(3px);
+	transform: translateY(8px);
 }
 #waifu:hover {
 	transform: translateY(0);
