@@ -1929,7 +1929,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #c3ff6f;
+  background: #60feff;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -3224,7 +3224,7 @@ ul.breadcrumb li+li:last-child {
 }
 @media screen and (min-width: 1200px) {
   body {
-    background-image: url("https://acg.toubiec.cn/random");
+    background-image: url("/images/background3.jpeg");
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: 50% 50%;

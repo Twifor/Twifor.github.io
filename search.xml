@@ -282,8 +282,8 @@
       </categories>
       <tags>
         <tag>数学</tag>
-        <tag>数论</tag>
         <tag>莫队算法</tag>
+        <tag>数论</tag>
       </tags>
   </entry>
   <entry>
@@ -294,8 +294,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>生成函数</tag>
         <tag>多项式</tag>
+        <tag>生成函数</tag>
       </tags>
   </entry>
   <entry>
@@ -346,9 +346,9 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数据结构</tag>
-        <tag>图的最短路</tag>
         <tag>搜索</tag>
+        <tag>图的最短路</tag>
+        <tag>数据结构</tag>
         <tag>图</tag>
       </tags>
   </entry>
@@ -778,8 +778,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数据结构</tag>
         <tag>基础算法</tag>
+        <tag>数据结构</tag>
         <tag>单调栈</tag>
         <tag>栈</tag>
       </tags>
@@ -913,9 +913,9 @@
       </categories>
       <tags>
         <tag>动态规划</tag>
+        <tag>基础算法</tag>
         <tag>数据结构</tag>
         <tag>树</tag>
-        <tag>基础算法</tag>
       </tags>
   </entry>
   <entry>
@@ -1323,8 +1323,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数据结构</tag>
         <tag>基础算法</tag>
+        <tag>数据结构</tag>
         <tag>区间最值</tag>
         <tag>区间</tag>
         <tag>队列</tag>
@@ -1794,8 +1794,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数据结构</tag>
         <tag>基础算法</tag>
+        <tag>数据结构</tag>
         <tag>线段树</tag>
       </tags>
   </entry>
@@ -1844,8 +1844,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数据结构</tag>
         <tag>基础算法</tag>
+        <tag>数据结构</tag>
         <tag>树状数组</tag>
       </tags>
   </entry>
@@ -1870,8 +1870,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数据结构</tag>
         <tag>基础算法</tag>
+        <tag>数据结构</tag>
         <tag>堆</tag>
       </tags>
   </entry>
