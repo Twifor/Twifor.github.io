@@ -127,7 +127,7 @@
 <meta property="og:site_name" content="Twifor~Liyh">
 <meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;一个数学算法，用于求积分。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-07-23T03:49:08.489Z">
+<meta property="og:updated_time" content="2019-08-16T03:39:23.952Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="自适应辛普森法">
 <meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;一个数学算法，用于求积分。">
@@ -423,7 +423,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-23 11:49:08" itemprop="dateModified" datetime="2019-07-23T11:49:08+08:00">2019-07-23</time>
+                <time title="修改时间：2019-08-16 11:39:23" itemprop="dateModified" datetime="2019-08-16T11:39:23+08:00">2019-08-16</time>
               
             
           </span>
@@ -492,7 +492,7 @@
 <script type="math/tex; mode=display">\int_a^bAx^2+Bx+Cdx</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面求这个积分就好了：</p>
 <script type="math/tex; mode=display">\frac {Ab^3} {3} +\frac {Bb^2} {2} +Cb-\frac {Aa^3} {3} -\frac {Ba^2} {2} -Ca</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然后就化这个式子，并注意到$f(x)$近似就是$g(x)$，最后可以化成这个样：</p>
 <script type="math/tex; mode=display">\frac {b-a} {6} (f(a)+f(b)+4f(\frac {a+b} {2}))</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个式子称为辛普森积分公式，它给出了求一个函数积分的估计值。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;区间很大时，这种计算的误差相当大，当区间不断细分时它的准确率就会不断上升。现在需要将区间细分，以达到提高精度的效果。但是区间不宜过多，这样时间消耗太大，又不宜过少，这样就不能满足精度。对于一个给定的精度，如果程序能够动态调整其划分区间的策略，那么就可以同时满足效率和精度的要求了，这就是自适应辛普森法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;自适应辛普森法的代码十分短小精悍：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">double</span> <span class="title">simpson</span><span class="params">(<span class="keyword">double</span> l, <span class="keyword">double</span> r)</span> </span>&#123;<span class="comment">//辛普森公式，f就是积分函数，需要自己定义</span></span><br><span class="line">    <span class="keyword">double</span> mid = (l + r) / <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">return</span> (f(l) + f(r) + <span class="number">4.0</span> * f(mid)) * (r - l) / <span class="number">6.0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">asr</span><span class="params">(<span class="keyword">double</span> l, <span class="keyword">double</span> r, <span class="keyword">double</span> ans, <span class="keyword">double</span> eps)</span> </span>&#123;<span class="comment">//eps是精度，可取1e-6，ans是估计答案</span></span><br><span class="line">    <span class="keyword">double</span> mid = (l + r) / <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">double</span> ll = simpson(l, mid), rr = simpson(mid, r);<span class="comment">//左右半区间分治</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">fabs</span>(ll + rr - ans) &lt;= <span class="number">15</span> * eps)<span class="keyword">return</span> ll + rr + (ll + rr - ans) / <span class="number">15.0</span>;<span class="comment">//满足精度需求，直接返回</span></span><br><span class="line">    <span class="keyword">return</span> asr(l, mid, ll, eps / <span class="number">2.0</span>) + asr(mid, r, rr, eps / <span class="number">2.0</span>);<span class="comment">//不满足继续分治</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面的写法是一种通用写法，其中为什么需要乘上15，我也不知道（逃。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;自适应辛普森法其实是一个很板子的代码，基本也不需要多少复杂的变化，当成一个知识点了解一下吧。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面的写法是一种通用写法，其中为什么需要乘上15，我也不知道（逃。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;自适应辛普森法其实是一个很板子的代码，基本也不需要多少复杂的变化，当成一个知识点了解一下吧。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">double</span> a, b, c, d, l, r;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">double</span> <span class="title">f</span><span class="params">(<span class="keyword">double</span> x)</span> </span>&#123;<span class="comment">//这里定义函数</span></span><br><span class="line">    <span class="keyword">return</span> (c * x + d) / (a * x + b);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">double</span> <span class="title">simpson</span><span class="params">(<span class="keyword">double</span> l, <span class="keyword">double</span> r)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">double</span> mid = (l + r) / <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">return</span> (f(l) + f(r) + <span class="number">4.0</span> * f(mid)) * (r - l) / <span class="number">6.0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">asr</span><span class="params">(<span class="keyword">double</span> l, <span class="keyword">double</span> r, <span class="keyword">double</span> ans, <span class="keyword">double</span> eps)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">double</span> mid = (l + r) / <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">double</span> ll = simpson(l, mid), rr = simpson(mid, r);</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">fabs</span>(ll + rr - ans) &lt;= <span class="number">15</span> * eps)<span class="keyword">return</span> ll + rr + (ll + rr - ans) / <span class="number">15.0</span>;</span><br><span class="line">    <span class="keyword">return</span> asr(l, mid, ll, eps / <span class="number">2.0</span>) + asr(mid, r, rr, eps / <span class="number">2.0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; a &gt;&gt; b &gt;&gt; c &gt;&gt; d &gt;&gt; l &gt;&gt; r;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%.6f"</span>, asr(l, r, simpson(l, r), <span class="number">1e-6</span>));<span class="comment">//这样使用</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -619,7 +619,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">155</span>
+                    <span class="site-state-item-count">157</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -634,7 +634,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">1</span>
+                      
+                    
+                    <span class="site-state-item-count">2</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -783,7 +785,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">68</span>
+                      
+                    
+                    <span class="site-state-item-count">69</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
