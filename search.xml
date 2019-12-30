@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[论如何优雅地蒙英语选择]]></title>
+    <url>%2F2019%2F12%2F30%2F%E8%AE%BA%E5%A6%82%E4%BD%95%E4%BC%98%E9%9B%85%E5%9C%B0%E8%92%99%E8%8B%B1%E8%AF%AD%E9%80%89%E6%8B%A9%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考完英语，终于做(meng)完了各种选择。这时，突然有了一个问题：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;随机地蒙英语选择，蒙对题目的期望是多少？&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;四项选择的话，当然就是一个普通的二项分布了，期望显然就是题数乘以0.25，这样一算，15分的题能拿3.75，还不错。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;不过另一种题型就很坑爹了。。。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;不要在意上面全错的题，全是蒙的&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从15个选项中选10个，选项之间不能重复。概率不怎么好算。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是，现在开始推式子了。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先全部的可能数量是$A_{15}^{10}$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下一步，我们考虑蒙对$p$道题的数量应该怎么求。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们假定$f(x,y)$表示从$x$个选项中给$y$个题进行选择，全部选错（很扎心）的数量。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是蒙对了$p$道题，首先应该进行一步组合选择，即$C_y^p$种可能。紧接着，其余的题应该都错，那么就有这样一个式子： f(x,y)=A_x^y-\sum_{i=1}^yC_y^if(x-i,y-i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;写成$DP$的样式，然后上python高精。123456789101112131415161718192021222324252627282930313233343536373839def A(x, y): ans = 1 for i in range(x - y + 1, x + 1): ans = ans * i return ansdef DP(x, y): global dp global C if dp[x][y] != -1: return dp[x][y] if y == 1: return x - 1 dp[x][y] = A(x, y) for i in range(1, y + 1): dp[x][y] -= C[y][i] * DP(x - i, y - i) return dp[x][y]dp = []C = []for i in range(0, 20): dp.append([]) C.append([]) for j in range(0, 20): dp[i].append(-1) C[i].append(0)C[1][0] = C[1][1] = 1for i in range(2, 20): C[i][0] = C[i][i] = 1 for j in range(1, i): C[i][j] = C[i - 1][j - 1] + C[i - 1][j]ans = 0for i in range(0, 11): print(i, end=' ') print(C[10][i] * DP(15 - i, 10 - i) / A(15, 10)) ans = ans + 1.0 * C[10][i] * DP(15 - i, 10 - i) / A(15, 10)print(ans) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;显然，$C_{10}^if(15-i,10-i)$就是恰好蒙对$i$道题的数量了。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然后算一下，可以得到下面的蒙题数量概率分布：12345678910110 0.5094287024520161 0.34749375862967132 0.114687201852380423 0.024262763250858494 0.0036698448156781495 0.000418308543308543336 3.6788057621390956e-057 2.4997048806572615e-068 1.2801352087066374e-079 4.58829823909189e-0910 9.17659647818378e-11 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可见全部蒙错的概率有50.94%，对一个的概率为34.75%，对两个是11.47%。其余的就非常小了。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么算算数学期望，结果是：10.666666666666666666 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;也就是说，期望蒙对的题数连一个题都不到，非常扎心的结果。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;结果这时发现0.6666不就是10除以15么！？代入其它的一些值，发现这是一个普遍真理。。。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是得到下面的结论： 【假说】用$x$个选项去选$y$道题，选项不能重复且$x≥y$，则随机蒙对题数的数学期望是$\frac {y }{x}$。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;证明的话，等会了再补充。]]></content>
+      <categories>
+        <category>虾扯</category>
+      </categories>
+      <tags>
+        <tag>动态规划</tag>
+        <tag>虾扯</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Educational Codeforces Round 75 (Rated for Div. 2)]]></title>
     <url>%2F2019%2F11%2F20%2FEducational-Codeforces-Round-75-Rated-for-Div-2%2F</url>
     <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Educational Codeforces Round 75 (Rated for Div. 2)题解。 A. Broken Keyboard&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;水题了。只要连续的一段字母是奇数个，它一定在答案里。12345678910111213141516171819202122232425262728293031#include &lt;bits/stdc++.h&gt;using namespace std;char op[100005];int dp[100005];set&lt;char&gt; s;int main()&#123; int t; scanf("%d", &amp;t); while (t--) &#123; int len; scanf("%s", op); s.clear(); len = strlen(op); for (int i = 0; i &lt; len;) &#123; int at = i; while (at + 1 &lt; len &amp;&amp; op[at + 1] == op[at]) ++at; if ((at - i + 1) % 2) &#123; s.insert(op[i]); &#125; i = at + 1; &#125; for (char e : s) &#123; printf("%c", e); &#125; printf("\n"); &#125; // PAUSE; return 0;&#125; B. Binary Palindromes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;统计0和1的数量，固定每一个串的长度，给它们做分配。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将串按照长度排序，依次分配。易知，除了最后一个串，其余的串一定可以全分配为0或者全分配为1。这样的话，我们可以保证前面所有的串都是回文串。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于最后一个，如果它的长度是奇数个，由于奇数只能为奇数和偶数的和，因此它一定可以分配成回文串，此时答案就是$n$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果最后一个是偶数长度，要考虑0和1剩余数量的奇偶性质。若都为偶数，则最后一个串仍然可以为回文串。但是当两者都为奇数时，情况则不然。这种情况下，需要考察前面的串中有没有奇数串，若有，我们可以交换其中心的数，使得最后剩余的0和1的数量都为偶数。如果前面没有奇数串，那么答案只能为$n-1$。1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556#include &lt;bits/stdc++.h&gt;using namespace std;vector&lt;int&gt; vec;char op[55];int n, z0, z1;int main()&#123; int t; scanf("%d", &amp;t); while (t--) &#123; scanf("%d", &amp;n); z0 = z1 = 0; vec.clear(); for (int i = 1; i &lt;= n; i++) &#123; scanf("%s", op); int len = strlen(op); vec.push_back(len); for (int j = 0; j &lt; len; j++) &#123; if (op[j] == '0') ++z0; else ++z1; &#125; &#125; int ans = 0, num = 0; sort(vec.begin(), vec.end()); for (int i = 0; i &lt; vec.size() - 1; i++) &#123; if (vec[i] % 2) ++num; &#125; for (int i = 0; i &lt; vec.size(); i++) &#123; if (z0 &gt; vec[i]) &#123; z0 -= vec[i]; ++ans; &#125; else if (z1 &gt; vec[i]) &#123; z1 -= vec[i]; ++ans; &#125; else &#123; if (vec[i] % 2) &#123; ++ans; &#125; else if (z0 % 2 == 0 &amp;&amp; z1 % 2 == 0) &#123; ++ans; &#125; else if (num) &#123; ++ans; &#125; &#125; &#125; printf("%d\n", ans); &#125; // PAUSE; return 0;&#125; C. Minimize The Integer&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于奇数和偶数是不能交换的，因此所有奇数和所有偶数的相对位置保持不变。我们用两个队列维护这种相对关系，然后贪心即可。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748#include &lt;bits/stdc++.h&gt;using namespace std;queue&lt;char&gt; j, o;char op[300005];vector&lt;char&gt; vec;int main()&#123; int t; scanf("%d", &amp;t); while (t--) &#123; scanf("%s", op); vec.clear(); int len = strlen(op); for (int i = 0; op[i]; i++) &#123; if ((op[i] - '0') % 2) j.push(op[i]); else o.push(op[i]); &#125; while (!j.empty() &amp;&amp; !o.empty()) &#123; if (j.front() &lt; o.front()) &#123; vec.push_back(j.front()); j.pop(); &#125; else &#123; vec.push_back(o.front()); o.pop(); &#125; &#125; if (j.empty()) &#123; while (!o.empty()) &#123; vec.push_back(o.front()); o.pop(); &#125; &#125; else &#123; while (!j.empty()) &#123; vec.push_back(j.front()); j.pop(); &#125; &#125; for (int i = 0; i &lt; vec.size(); i++) printf("%c", vec[i]); printf("\n"); &#125; // PAUSE; return 0;&#125; D. Salary Changing&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考虑二分答案。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;二分出一个答案，然后贪心判断其正确性。假设答案为$p$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;找出所有$r&lt; p$的区间，它们一定在中位数$p$的左侧，为了使总和最小，取其$l$值计入答案。然后找出所有$l &gt;p$的区间，它们一定在右侧，同样地，将$l$计入答案。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于包含$p$的区间，我们用它对答案进行调节。注意到如果小于$p$的区间或者大于$p$的区间数量多于$\frac {n-1} {2}$个，那么一定是不合法的。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接下来，我们调节左侧区间的数量。将包含$p$的区间按照左端点$l$升序排列，依次遍历。若左侧的区间不足$\frac {n-1}{2}$，则将当前遍历到的区间加入左侧，答案计入$l$，否则为了最小化总和，之后的区间都计入$p$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最后对比总和和$s$的大小关系，即可判断出答案的正确性。1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980#include &lt;bits/stdc++.h&gt;using namespace std;struct Node&#123; int l, r; bool operator&lt;(Node s) &#123; return l &lt; s.l; &#125;&#125; nd[200005];vector&lt;Node&gt; vec;vector&lt;int&gt; tmp;int n, ps;long long S;bool check(int x)&#123; long long s = 0; int ll = 0, rr = 0; vec.clear(); for (int i = 1; i &lt;= n; i++) &#123; if (nd[i].r &lt; x) &#123; s += nd[i].l; ++ll; &#125; else if (nd[i].l &gt; x) &#123; s += nd[i].l; ++rr; &#125; &#125; if (ll &gt; ps || rr &gt; ps) return false; for (int i = 1; i &lt;= n; i++) &#123; if (nd[i].l &lt;= x &amp;&amp; nd[i].r &gt;= x) vec.push_back(nd[i]); &#125; sort(vec.begin(), vec.end()); for (int i = 0; i &lt; vec.size(); i++) &#123; if (ll &lt; ps) &#123; s += vec[i].l; ++ll; &#125; else &#123; s += x; &#125; &#125; if (s &lt;= S) return true; else return false;&#125;int main()&#123; int t; scanf("%d", &amp;t); while (t--) &#123; scanf("%d%lld", &amp;n, &amp;S); tmp.clear(); ps = n &gt;&gt; 1; for (int i = 1; i &lt;= n; i++) &#123; scanf("%d%d", &amp;nd[i].l, &amp;nd[i].r); tmp.push_back(nd[i].l); &#125; sort(tmp.begin(), tmp.end()); int l = tmp[(tmp.size() - 1) &gt;&gt; 1], r = 1000000001, mid; while (l &lt; r) &#123; //[,) if (r == l + 1) &#123; printf("%d\n", l); goto to; &#125; mid = (l + r) &gt;&gt; 1; if (check(mid)) l = mid; else r = mid; &#125; to:; &#125; // PAUSE; return 0;&#125; E. Voting&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;思维题。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考虑如何选取votes来最小化答案。它们一定是这样的：选了一些并且支付$p_i$硬币后，数量达到一定要求，使得最后所有人都加入vote的集合。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将所有人按照其$m$值分组。对于$m_i=n$的组，假设他有$s$个人，那么有下面的一些思考： 若$n-s&lt;m_i$，这说明选取了除了这个组的所有人都不能使他们免费，这就是说这一个组内的人至少有一个需要收费。 若$n-s\geq m_i$，说明我们可以暂且不对这个组的人付费。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面的思考带来了一个思路。倒序枚举$m$的值，将该组的人统一加入一个集合，计算集合元素的数量$s$与$n$和$m$的关系。若$n-s&lt; m$则说明这个集合中必有人需要付费，那么我们就对其中$m+s-n$个人付费，为了最小化代价，当然选取最小的那一部分，这样集合就是一个优先队列。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用优先队列维护就可以了。12345678910111213141516171819202122232425262728293031323334353637383940#include &lt;bits/stdc++.h&gt;using namespace std;vector&lt;int&gt; vec[200005];int n, m[200005], p[200005];struct cmp&#123; bool operator()(int a, int b) &#123; return p[a] &gt; p[b]; &#125;&#125;;priority_queue&lt;int, vector&lt;int&gt;, greater&lt;int&gt;&gt; pq;int main()&#123; int t; scanf("%d", &amp;t); while (t--) &#123; scanf("%d", &amp;n); while (!pq.empty()) pq.pop(); for (int i = 1; i &lt;= n; i++) vec[i].clear(); for (int i = 1; i &lt;= n; i++) &#123; scanf("%d%d", m + i, p + i); vec[m[i]].push_back(i); &#125; long long s = 0; for (int i = n; i &gt;= 1; i--) &#123; for (int j = 0; j &lt; vec[i].size(); j++) pq.push(p[vec[i][j]]); while (i &gt; n - pq.size()) &#123; s += pq.top(); pq.pop(); &#125; &#125; printf("%lld\n", s); &#125; // PAUSE; return 0;&#125; F. Red-White Fence&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;先统计白板的数量，对于数量多于2的白板，可以将其看做2（因为只能放到两侧），我们用$a_i$和$b_i$来表示用数量为1的白板构造长度为$i$的方案数，$b_i$表示用数量多于1的白板构造长度为$i$的方案数。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假设数量为一的白板有$na$个，数量多于1的有$nb$个（计入重数，重数最多为2），那么，有下面的结论： a_i=C_{na}^i2^i\\ b_i=C_{nb}^i&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$a_i$的$2_i$是对两侧的枚举，$b_i$是不需要的，因为它本身已经包含了这一信息。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么构造长度为$m$的白板的方案数为： \sum_{i=0}^ma_ib_{m-i}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这是一个卷积，可以用$NTT$优化。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于有最多$k$个红板，需要有$k$个多项式。由于$k$很小，查询时暴力查即可。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112#include &lt;bits/stdc++.h&gt;using namespace std;#define N 300005#define MOD 998244353#define G 3 int tr[N &lt;&lt; 2];struct Pol&#123; int l, op[N &lt;&lt; 2];&#125; pol[6], t1, t2;int fac[N], inv[N], n, k, a[N], b[6], q, cnt[N]; int qPow(int a, int b)&#123; int ans = 1, x = a; while (b) &#123; if (b &amp; 1) ans = 1ll * ans * x % MOD; x = 1ll * x * x % MOD, b &gt;&gt;= 1; &#125; return ans;&#125; void NTT(int l, int* c, int type)&#123; for (int i = 0; i &lt; l; i++) if (i &lt; tr[i]) swap(c[i], c[tr[i]]); for (int mid = 1; mid &lt; l; mid &lt;&lt;= 1) &#123; int wn = qPow(G, (MOD - 1) / (mid &lt;&lt; 1)); if (type == -1) wn = qPow(wn, MOD - 2); for (int len = mid &lt;&lt; 1, j = 0; j &lt; l; j += len) &#123; int w = 1; for (int k = 0; k &lt; mid; k++, w = 1ll * w * wn % MOD) &#123; int x = c[j + k], y = 1ll * w * c[j + mid + k] % MOD; c[j + k] = (1ll * x + y) % MOD, c[j + mid + k] = (1ll * x - y) % MOD; &#125; &#125; &#125;&#125; inline void multiple(Pol* ans, Pol* a, Pol* b)&#123; int l = 1, le = 0; while (l &lt;= a-&gt;l + b-&gt;l) l &lt;&lt;= 1, ++le; for (int i = 0; i &lt; l; i++) &#123; tr[i] = (tr[i &gt;&gt; 1] &gt;&gt; 1) | ((i &amp; 1) &lt;&lt; (le - 1)); if (i &gt; a-&gt;l) a-&gt;op[i] = 0; if (i &gt; b-&gt;l) b-&gt;op[i] = 0; &#125; NTT(l, a-&gt;op, 1), NTT(l, b-&gt;op, 1); for (int i = 0; i &lt; l; i++) a-&gt;op[i] = 1ll * a-&gt;op[i] * b-&gt;op[i] % MOD; NTT(l, a-&gt;op, -1), l = qPow(l, MOD - 2), ans-&gt;l = a-&gt;l + b-&gt;l; for (int i = 0; i &lt;= ans-&gt;l; i++) ans-&gt;op[i] = 1ll * a-&gt;op[i] * l % MOD;&#125;inline int C(int x, int y)&#123; if (x == 0) return y == 0; return 1ll * fac[x] * inv[y] % MOD * inv[x - y] % MOD;&#125;int main()&#123; scanf("%d%d", &amp;n, &amp;k); for (int i = 1; i &lt;= n; i++) scanf("%d", a + i); for (int i = 1; i &lt;= k; i++) scanf("%d", b + i); for (int i = 1; i &lt;= n; i++) ++cnt[a[i]]; sort(a + 1, a + n + 1); fac[0] = 1, inv[0] = 1; for (int i = 1; i &lt;= n; i++) &#123; fac[i] = 1ll * i * fac[i - 1] % MOD; inv[i] = qPow(fac[i], MOD - 2); &#125; for (int i = 1; i &lt;= k; i++) &#123; int na = 0, nb = 0; for (int j = 1; j &lt; b[i]; j++) &#123; if (cnt[j] &gt;= 2) nb += 2; else if (cnt[j] == 1) ++na; &#125; t1.l = na, t2.l = nb; for (int j = 0; j &lt;= t1.l; j++) t1.op[j] = 1ll * C(na, j) * qPow(2, j) % MOD; for (int j = 0; j &lt;= t2.l; j++) t2.op[j] = 1ll * C(nb, j) % MOD; multiple(pol + i, &amp;t1, &amp;t2); &#125; scanf("%d", &amp;q); while (q--) &#123; int Q, ans = 0; scanf("%d", &amp;Q); for (int i = 1; i &lt;= k; i++) &#123; int sv = ((Q - 2 * b[i]) / 2) - 1; if (sv &gt;= 0) &#123; ans += pol[i].op[sv]; ans %= MOD; &#125; &#125; printf("%d\n", (ans + MOD) % MOD); &#125; return 0;&#125;]]></content>
@@ -87,8 +99,8 @@
       </categories>
       <tags>
         <tag>数学</tag>
-        <tag>数论</tag>
         <tag>动态规划</tag>
+        <tag>数论</tag>
       </tags>
   </entry>
   <entry>
@@ -422,8 +434,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>生成函数</tag>
         <tag>多项式</tag>
+        <tag>生成函数</tag>
       </tags>
   </entry>
   <entry>
@@ -447,8 +459,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>图论</tag>
         <tag>数论</tag>
+        <tag>图论</tag>
         <tag>网络流</tag>
       </tags>
   </entry>
@@ -651,8 +663,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>图论</tag>
         <tag>数学</tag>
+        <tag>图论</tag>
       </tags>
   </entry>
   <entry>
@@ -1587,8 +1599,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>图论</tag>
         <tag>动态规划</tag>
+        <tag>图论</tag>
         <tag>图的最短路</tag>
         <tag>数学期望</tag>
       </tags>
@@ -1858,8 +1870,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>数论</tag>
         <tag>动态规划</tag>
+        <tag>数论</tag>
         <tag>离散化</tag>
       </tags>
   </entry>
