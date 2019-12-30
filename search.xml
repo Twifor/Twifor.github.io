@@ -3,7 +3,7 @@
   <entry>
     <title><![CDATA[论如何优雅地蒙英语选择]]></title>
     <url>%2F2019%2F12%2F30%2F%E8%AE%BA%E5%A6%82%E4%BD%95%E4%BC%98%E9%9B%85%E5%9C%B0%E8%92%99%E8%8B%B1%E8%AF%AD%E9%80%89%E6%8B%A9%2F</url>
-    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考完英语，终于做(meng)完了各种选择。这时，突然有了一个问题：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;随机地蒙英语选择，蒙对题目的期望是多少？&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;四项选择的话，当然就是一个普通的二项分布了，期望显然就是题数乘以0.25，这样一算，15分的题能拿3.75，还不错。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;不过另一种题型就很坑爹了。。。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;不要在意上面全错的题，全是蒙的&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从15个选项中选10个，选项之间不能重复。概率不怎么好算。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是，现在开始推式子了。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先全部的可能数量是$A_{15}^{10}$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下一步，我们考虑蒙对$p$道题的数量应该怎么求。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们假定$f(x,y)$表示从$x$个选项中给$y$个题进行选择，全部选错（很扎心）的数量。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是蒙对了$p$道题，首先应该进行一步组合选择，即$C_y^p$种可能。紧接着，其余的题应该都错，那么就有这样一个式子： f(x,y)=A_x^y-\sum_{i=1}^yC_y^if(x-i,y-i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;写成$DP$的样式，然后上python高精。123456789101112131415161718192021222324252627282930313233343536373839def A(x, y): ans = 1 for i in range(x - y + 1, x + 1): ans = ans * i return ansdef DP(x, y): global dp global C if dp[x][y] != -1: return dp[x][y] if y == 1: return x - 1 dp[x][y] = A(x, y) for i in range(1, y + 1): dp[x][y] -= C[y][i] * DP(x - i, y - i) return dp[x][y]dp = []C = []for i in range(0, 20): dp.append([]) C.append([]) for j in range(0, 20): dp[i].append(-1) C[i].append(0)C[1][0] = C[1][1] = 1for i in range(2, 20): C[i][0] = C[i][i] = 1 for j in range(1, i): C[i][j] = C[i - 1][j - 1] + C[i - 1][j]ans = 0for i in range(0, 11): print(i, end=' ') print(C[10][i] * DP(15 - i, 10 - i) / A(15, 10)) ans = ans + 1.0 * C[10][i] * DP(15 - i, 10 - i) / A(15, 10)print(ans) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;显然，$C_{10}^if(15-i,10-i)$就是恰好蒙对$i$道题的数量了。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然后算一下，可以得到下面的蒙题数量概率分布：12345678910110 0.5094287024520161 0.34749375862967132 0.114687201852380423 0.024262763250858494 0.0036698448156781495 0.000418308543308543336 3.6788057621390956e-057 2.4997048806572615e-068 1.2801352087066374e-079 4.58829823909189e-0910 9.17659647818378e-11 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可见全部蒙错的概率有50.94%，对一个的概率为34.75%，对两个是11.47%。其余的就非常小了。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么算算数学期望，结果是：10.666666666666666666 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;也就是说，期望蒙对的题数连一个题都不到，非常扎心的结果。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;结果这时发现0.6666不就是10除以15么！？代入其它的一些值，发现这是一个普遍真理。。。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是得到下面的结论： 【假说】用$x$个选项去选$y$道题，选项不能重复且$x≥y$，则随机蒙对题数的数学期望是$\frac {y }{x}$。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;证明的话，等会了再补充。]]></content>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;看看就好，莫当真。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考完英语，终于做(meng)完了各种选择。这时，突然有了一个问题：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;随机地蒙英语选择，蒙对题目的期望是多少？&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;四项选择的话，当然就是一个普通的二项分布了，期望显然就是题数乘以0.25，这样一算，15分的题能拿3.75，还不错。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;不过另一种题型就很坑爹了。。。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;不要在意上面全错的题，全是蒙的&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从15个选项中选10个，选项之间不能重复。概率不怎么好算。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是，现在开始推式子了。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先全部的可能数量是$A_{15}^{10}$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下一步，我们考虑蒙对$p$道题的数量应该怎么求。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们假定$f(x,y)$表示从$x$个选项中给$y$个题进行选择，全部选错（很扎心）的数量。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是蒙对了$p$道题，首先应该进行一步组合选择，即$C_y^p$种可能。紧接着，其余的题应该都错，那么就有这样一个式子： f(x,y)=A_x^y-\sum_{i=1}^yC_y^if(x-i,y-i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;写成$DP$的样式，然后上python高精。123456789101112131415161718192021222324252627282930313233343536373839def A(x, y): ans = 1 for i in range(x - y + 1, x + 1): ans = ans * i return ansdef DP(x, y): global dp global C if dp[x][y] != -1: return dp[x][y] if y == 1: return x - 1 dp[x][y] = A(x, y) for i in range(1, y + 1): dp[x][y] -= C[y][i] * DP(x - i, y - i) return dp[x][y]dp = []C = []for i in range(0, 20): dp.append([]) C.append([]) for j in range(0, 20): dp[i].append(-1) C[i].append(0)C[1][0] = C[1][1] = 1for i in range(2, 20): C[i][0] = C[i][i] = 1 for j in range(1, i): C[i][j] = C[i - 1][j - 1] + C[i - 1][j]ans = 0for i in range(0, 11): print(i, end=' ') print(C[10][i] * DP(15 - i, 10 - i) / A(15, 10)) ans = ans + 1.0 * C[10][i] * DP(15 - i, 10 - i) / A(15, 10)print(ans) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;显然，$C_{10}^if(15-i,10-i)$就是恰好蒙对$i$道题的数量了。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然后算一下，可以得到下面的蒙题数量概率分布：12345678910110 0.5094287024520161 0.34749375862967132 0.114687201852380423 0.024262763250858494 0.0036698448156781495 0.000418308543308543336 3.6788057621390956e-057 2.4997048806572615e-068 1.2801352087066374e-079 4.58829823909189e-0910 9.17659647818378e-11 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可见全部蒙错的概率有50.94%，对一个的概率为34.75%，对两个是11.47%。其余的就非常小了。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么算算数学期望，结果是：10.666666666666666666 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;也就是说，期望蒙对的题数连一个题都不到，非常扎心的结果。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;结果这时发现0.6666不就是10除以15么！？代入其它的一些值，发现这是一个普遍真理。。。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是得到下面的结论： 【假说】用$x$个选项去选$y$道题，选项不能重复且$x≥y$，则随机蒙对题数的数学期望是$\frac {y }{x}$。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;证明的话，等会了再补充。]]></content>
       <categories>
         <category>虾扯</category>
       </categories>
@@ -99,8 +99,8 @@
       </categories>
       <tags>
         <tag>数学</tag>
-        <tag>动态规划</tag>
         <tag>数论</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -422,8 +422,8 @@
       </categories>
       <tags>
         <tag>数学</tag>
-        <tag>莫队算法</tag>
         <tag>数论</tag>
+        <tag>莫队算法</tag>
       </tags>
   </entry>
   <entry>
@@ -459,8 +459,8 @@
         <category>算法与OI</category>
       </categories>
       <tags>
-        <tag>数论</tag>
         <tag>图论</tag>
+        <tag>数论</tag>
         <tag>网络流</tag>
       </tags>
   </entry>
@@ -663,8 +663,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>数学</tag>
         <tag>图论</tag>
+        <tag>数学</tag>
       </tags>
   </entry>
   <entry>
@@ -1467,8 +1467,8 @@
         <tag>数据结构</tag>
         <tag>区间最值</tag>
         <tag>区间</tag>
-        <tag>单调队列</tag>
         <tag>队列</tag>
+        <tag>单调队列</tag>
       </tags>
   </entry>
   <entry>
@@ -1485,8 +1485,8 @@
         <tag>区间最值</tag>
         <tag>ST表</tag>
         <tag>区间</tag>
-        <tag>单调队列</tag>
         <tag>队列</tag>
+        <tag>单调队列</tag>
       </tags>
   </entry>
   <entry>
@@ -1599,8 +1599,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>动态规划</tag>
         <tag>图论</tag>
+        <tag>动态规划</tag>
         <tag>图的最短路</tag>
         <tag>数学期望</tag>
       </tags>
@@ -1870,8 +1870,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>动态规划</tag>
         <tag>数论</tag>
+        <tag>动态规划</tag>
         <tag>离散化</tag>
       </tags>
   </entry>
