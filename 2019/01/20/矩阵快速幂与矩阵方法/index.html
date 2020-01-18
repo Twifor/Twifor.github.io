@@ -119,18 +119,18 @@
 
 
 
-  <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本节介绍矩阵快速幂以及矩阵在OI中的简单应用。本文需要一些线性代数知识作铺垫，这里不再重复。关于快速幂的思想，建议先阅读快速幂。">
+  <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本节介绍矩阵快速幂以及矩阵在ACM中的简单应用。本文需要一些线性代数知识作铺垫，这里不再重复。关于快速幂的思想，建议先阅读快速幂。">
 <meta name="keywords" content="数论,矩阵,快速幂">
 <meta property="og:type" content="article">
 <meta property="og:title" content="矩阵快速幂与矩阵方法">
 <meta property="og:url" content="https://twifor.github.io/2019/01/20/矩阵快速幂与矩阵方法/index.html">
 <meta property="og:site_name" content="Twifor~Liyh">
-<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本节介绍矩阵快速幂以及矩阵在OI中的简单应用。本文需要一些线性代数知识作铺垫，这里不再重复。关于快速幂的思想，建议先阅读快速幂。">
+<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本节介绍矩阵快速幂以及矩阵在ACM中的简单应用。本文需要一些线性代数知识作铺垫，这里不再重复。关于快速幂的思想，建议先阅读快速幂。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2019-01-20T03:59:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="矩阵快速幂与矩阵方法">
-<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本节介绍矩阵快速幂以及矩阵在OI中的简单应用。本文需要一些线性代数知识作铺垫，这里不再重复。关于快速幂的思想，建议先阅读快速幂。">
+<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本节介绍矩阵快速幂以及矩阵在ACM中的简单应用。本文需要一些线性代数知识作铺垫，这里不再重复。关于快速幂的思想，建议先阅读快速幂。">
 
 
 
@@ -396,7 +396,7 @@
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Twifor">
-      <meta itemprop="description" content="一个打OI的弱鸡">
+      <meta itemprop="description" content="弱鸡">
       <meta itemprop="image" content="/images/header.jpg">
     </span>
 
@@ -469,7 +469,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/算法与OI/" itemprop="url" rel="index"><span itemprop="name">算法与OI</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/ACM/" itemprop="url" rel="index"><span itemprop="name">ACM</span></a></span>
 
                 
                 
@@ -513,7 +513,7 @@
       
 
       
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本节介绍矩阵快速幂以及矩阵在OI中的简单应用。本文需要一些线性代数知识作铺垫，这里不再重复。关于快速幂的思想，建议先阅读<a href="https://twifor.github.io/2019/01/09/%E5%BF%AB%E9%80%9F%E5%B9%82/">快速幂</a>。<br><a id="more"></a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先看这么一道题（洛谷P1307）：</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本节介绍矩阵快速幂以及矩阵在ACM中的简单应用。本文需要一些线性代数知识作铺垫，这里不再重复。关于快速幂的思想，建议先阅读<a href="https://twifor.github.io/2019/01/09/%E5%BF%AB%E9%80%9F%E5%B9%82/">快速幂</a>。<br><a id="more"></a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先看这么一道题（洛谷P1307）：</p>
 <h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于Fibonacci数列：1,1,2,3,5,8,13……大家应该很熟悉吧~~~但是现在有一个很“简单”问题：第n项和第m项的最大公约数是多少？</p>
 <h3 id="输入输出格式"><a href="#输入输出格式" class="headerlink" title="输入输出格式"></a>输入输出格式</h3><h4 id="输入格式："><a href="#输入格式：" class="headerlink" title="输入格式："></a>输入格式：</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;两个正整数n和m。（n,m≤10<sup>9</sup>）<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意：数据很大</p>
 <h3 id="输出格式："><a href="#输出格式：" class="headerlink" title="输出格式："></a>输出格式：</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fn和Fm的最大公约数。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于看了大数字就头晕，所以只要输出最后的8位数字就可以了。</p>
@@ -676,7 +676,7 @@ f(n-1)
               <img class="site-author-image" itemprop="image" src="/images/header.jpg" alt="Twifor">
             
               <p class="site-author-name" itemprop="name">Twifor</p>
-              <p class="site-description motion-element" itemprop="description">一个打OI的弱鸡</p>
+              <p class="site-description motion-element" itemprop="description">弱鸡</p>
           </div>
 
           
@@ -686,7 +686,7 @@ f(n-1)
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">169</span>
+                    <span class="site-state-item-count">174</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -922,7 +922,7 @@ f(n-1)
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>

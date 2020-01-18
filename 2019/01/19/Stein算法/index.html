@@ -119,18 +119,18 @@
 
 
 
-  <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本次介绍一种在高精度下求最大公约数的算法——stein算法。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;比较常规的gcd算法有辗转相除法和更相减损术，但是后者过慢，前者不利于高精度（因为有大量的除法取余运算，对高精度十分不友好），于是需要一种更高效又易">
+  <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;一种在高精度下求最大公约数的算法——stein算法。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;比较常规的gcd算法有辗转相除法和更相减损术，但是后者过慢，前者不利于高精度（因为有大量的除法取余运算，对高精度十分不友好），于是需要一种更高效又易于操作的">
 <meta name="keywords" content="数论,最大公约数">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Stein算法">
 <meta property="og:url" content="https://twifor.github.io/2019/01/19/Stein算法/index.html">
 <meta property="og:site_name" content="Twifor~Liyh">
-<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本次介绍一种在高精度下求最大公约数的算法——stein算法。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;比较常规的gcd算法有辗转相除法和更相减损术，但是后者过慢，前者不利于高精度（因为有大量的除法取余运算，对高精度十分不友好），于是需要一种更高效又易">
+<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;一种在高精度下求最大公约数的算法——stein算法。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;比较常规的gcd算法有辗转相除法和更相减损术，但是后者过慢，前者不利于高精度（因为有大量的除法取余运算，对高精度十分不友好），于是需要一种更高效又易于操作的">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-19T16:25:43.596Z">
+<meta property="og:updated_time" content="2020-01-14T04:50:55.056Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Stein算法">
-<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本次介绍一种在高精度下求最大公约数的算法——stein算法。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;比较常规的gcd算法有辗转相除法和更相减损术，但是后者过慢，前者不利于高精度（因为有大量的除法取余运算，对高精度十分不友好），于是需要一种更高效又易">
+<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;一种在高精度下求最大公约数的算法——stein算法。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;比较常规的gcd算法有辗转相除法和更相减损术，但是后者过慢，前者不利于高精度（因为有大量的除法取余运算，对高精度十分不友好），于是需要一种更高效又易于操作的">
 
 
 
@@ -396,7 +396,7 @@
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Twifor">
-      <meta itemprop="description" content="一个打OI的弱鸡">
+      <meta itemprop="description" content="弱鸡">
       <meta itemprop="image" content="/images/header.jpg">
     </span>
 
@@ -452,7 +452,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-20 00:25:43" itemprop="dateModified" datetime="2019-01-20T00:25:43+08:00">2019-01-20</time>
+                <time title="修改时间：2020-01-14 12:50:55" itemprop="dateModified" datetime="2020-01-14T12:50:55+08:00">2020-01-14</time>
               
             
           </span>
@@ -469,7 +469,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/算法与OI/" itemprop="url" rel="index"><span itemprop="name">算法与OI</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/ACM/" itemprop="url" rel="index"><span itemprop="name">ACM</span></a></span>
 
                 
                 
@@ -513,7 +513,7 @@
       
 
       
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本次介绍一种在高精度下求最大公约数的算法——stein算法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;比较常规的gcd算法有辗转相除法和更相减损术，但是后者过慢，前者不利于高精度（因为有大量的除法取余运算，对高精度十分不友好），于是需要一种更高效又易于操作的算法。这便是stein算法，它是更相减损术的改进。<br><a id="more"></a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;算法思想如下（比如求x和y的最大公因数）：</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一种在高精度下求最大公约数的算法——stein算法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;比较常规的gcd算法有辗转相除法和更相减损术，但是后者过慢，前者不利于高精度（因为有大量的除法取余运算，对高精度十分不友好），于是需要一种更高效又易于操作的算法。这便是stein算法，它是更相减损术的改进。<br><a id="more"></a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;算法思想如下（比如求x和y的最大公因数）：</p>
 <ul>
 <li>如果两个数均为偶数，则两数均取半，答案为2*gcd(x/2，y/2)。</li>
 <li>如果两数中有一方为偶数，一方为奇数（假如x为偶数），则偶数取半，答案为gcd(x/2，y)。</li>
@@ -648,7 +648,7 @@
               <img class="site-author-image" itemprop="image" src="/images/header.jpg" alt="Twifor">
             
               <p class="site-author-name" itemprop="name">Twifor</p>
-              <p class="site-description motion-element" itemprop="description">一个打OI的弱鸡</p>
+              <p class="site-description motion-element" itemprop="description">弱鸡</p>
           </div>
 
           
@@ -658,7 +658,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">169</span>
+                    <span class="site-state-item-count">174</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -894,7 +894,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
