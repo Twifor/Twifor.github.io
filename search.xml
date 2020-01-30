@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Educational Codeforces Round 79]]></title>
+    <url>%2F2020%2F01%2F29%2FEducational-Codeforces-Round-79%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Educational Codeforces Round 79题解。 A. New Year Garland&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对三个数排一个序，然后若最大的比两个较小的和加上一还要大，那么就是No，否则为Yes。这是因为满足这个条件时，较小的那两个最多产生它们的和加一这样多的空隙，从而使最大的一个不相邻。1234567891011121314151617#include &lt;bits/stdc++.h&gt;using namespace std;int op[5];int main()&#123; int t; scanf("%d", &amp;t); while (t--) &#123; for (int i = 1; i &lt;= 3; i++) scanf("%d", op + i); sort(op + 1, op + 4); if (op[1] + op[2] + 1 &lt; op[3]) printf("No\n"); else printf("Yes\n"); &#125; return 0;&#125; B. Verse For Santa&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;枚举每一个被删掉的数，然后二分找答案。这里需要用树状数组维护前缀和。12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849#include &lt;bits/stdc++.h&gt;using namespace std;#define N 100005long long tree[N];int n, s, op[N], ans, maxn;inline void add(int x, int y)&#123; for (; x &lt;= n; x += x &amp; -x) tree[x] += y;&#125;inline long long sum(int x)&#123; long long s = 0; for (; x &gt;= 1; x -= x &amp; -x) s += tree[x]; return s;&#125;inline int get()&#123; int l = 1, r = n + 1, mid; while (l &lt; r) &#123; //[,) if (r == l + 1) &#123; if (sum(l) &lt;= s) return l; return 0; &#125; mid = (l + r) &gt;&gt; 1; if (sum(mid) &gt; s) r = mid; else l = mid; &#125;&#125;int main()&#123; int t; scanf("%d", &amp;t); while (t--) &#123; scanf("%d%d", &amp;n, &amp;s); for (int i = 1; i &lt;= n; i++) tree[i] = 0; for (int i = 1; i &lt;= n; i++) scanf("%d", op + i), add(i, op[i]); ans = 0, maxn = get(); for (int i = 1, p; i &lt;= n; i++) &#123; add(i, -op[i]); p = get(); if (p &gt; maxn) maxn = p, ans = i; add(i, op[i]); &#125; printf("%d\n", ans); &#125; return 0;&#125; C. Stack of Presents&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;很明显，最优的策略就是：在调顺序的那一部分中，把将来需要用的按顺序放到最前面。然后模拟一下就可以了。1234567891011121314151617181920212223242526272829303132333435363738#include &lt;bits/stdc++.h&gt;#define N 100005using namespace std;int tr[N], n, m, pos[N], vis[N], bottom, op[N];long long ans;inline void add(int x, int y)&#123; for (; x &lt;= n; x += x &amp; -x) tr[x] += y;&#125;inline int sum(int x)&#123; int s = 0; for (; x &gt;= 1; x -= x &amp; -x) s += tr[x]; return s;&#125;int main()&#123; int t; scanf("%d", &amp;t); while (t--) &#123; scanf("%d%d", &amp;n, &amp;m), bottom = ans = 0; for (int i = 1; i &lt;= n; i++) tr[i] = vis[i] = 0; for (int i = 1, x; i &lt;= n; i++) add(i, 1), scanf("%d", &amp;x), op[i] = x, pos[x] = i; for (int i = 1, x; i &lt;= m; i++) &#123; scanf("%d", &amp;x); if (vis[x]) &#123; ++ans; &#125; else &#123; ans += 2 * sum(pos[x] - 1) + 1; while (bottom &lt; pos[x]) vis[op[++bottom]] = 1; &#125; add(pos[x], -1); &#125; printf("%lld\n", ans); &#125; return 0;&#125; D. Santa’s Bot&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小学(?)数学题。我们记$f(x)$为第$x$号礼物有多少人选，并且记$S(x)$为$x$号人选择的礼物集合。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;答案公式如下： \sum_{i=1}^n\sum_{j\in S(i)}\frac {f(j)}{n^2|S(i)|}12345678910111213141516171819202122232425262728293031#include &lt;bits/stdc++.h&gt;#define MOD 998244353using namespace std;int n, num[1000005], k[1000005], s;vector&lt;int&gt; vec[1000005];long long ans;inline int qPow(int x, int y)&#123; int ans = 1, sta = x; while (y) &#123; if (y &amp; 1) ans = 1ll * ans * sta % MOD; sta = 1ll * sta * sta % MOD, y &gt;&gt;= 1; &#125; return ans;&#125;int main()&#123; scanf("%d", &amp;n); for (int i = 1; i &lt;= n; i++) &#123; scanf("%d", k + i); for (int j = 1, x; j &lt;= k[i]; j++) scanf("%d", &amp;x), ++num[x], vec[i].push_back(x); &#125; for (int i = 1; i &lt;= n; i++) &#123; for (int j : vec[i]) &#123; ans += 1ll * qPow(1ll * n * k[i] % MOD * n % MOD, MOD - 2) * num[j] % MOD; ans %= MOD; &#125; &#125; printf("%lld", ans); return 0;&#125; E. New Year Permutations&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先注意到满足题意的排列可以分为若干段（可以是1段），其中每一段$[l,r]$都是$[l,r]$范围内的数组成的一个排列，并且每一段$[l,r]$中一定都是最大值$r$位于最左侧。这每一段还需要满足一个性质：从最左侧位于$l$的$r$开始，$[l,r]$中的数均可达。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考察$[l,r]$中的一段有多少种可能。若记$len=r-l+1$，那么由于$[l,r]$均可以从位于$l$的$r$可达，将抽象为一个有向图，易知有$(len-2)!$种情况。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在考虑一个长度为$len$的排列有多少种满足题意。我们枚举第一段的长度，并记$f(x)$为$len=x$时的数目，则有： f(x)=\sum_{i=1}^x(i-2)!f(x-i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;特别地，这里认为$(-1)!=1$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;根据上面的公式，我们可以很容易地求出要求的排列分为哪些段，求出它们的长度以及排名。现在问题转化为如何根据字典序排名构造一个段。长度为1的段很好构造，考虑大于1的段。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首选首元素是固定的，我们从下一位开始，从小到大依次放数。在放一个数之前，需要考察这个数是否合法，规则如下： 不能自指。即第$x$位不能放$x$。 不能内部自环。 不能提前返回。即对于段$[l,r]$，若从$l$开始，未遍历所有元素就返回$l$，则非法。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为什么需要上述条件自行思考。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;判定上述条件，然后用排列去框出对应的段，然后用同样地方法求出其它的段，本题即解决。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990#include &lt;bits/stdc++.h&gt;using namespace std;typedef unsigned long long ll;ll f[60], fac[60], k, g[60];int n, vis[60], tmp[60];bool check(int at, int len)&#123; int now = at, cnt = 1; while (true) &#123; if (tmp[now] == at) return cnt != len + 1; if (tmp[now] == 0) break; now = tmp[now], ++cnt; &#125; for (int i = at + 1; i &lt;= at + len; i++) &#123; now = i, cnt = 1; while (true) &#123; if (tmp[now] == 0) break; if (cnt &gt; len + 1) return true; now = tmp[now], ++cnt; &#125; &#125; return false;&#125;inline void get(int at, int len, ll rk)&#123; for (int i = at; i &lt;= at + len; i++) tmp[i] = vis[i] = 0; tmp[at] = at + len; for (int i = at + 1; i &lt; at + len; i++) &#123; ll s = 0; for (int j = at; j &lt;= at + len - 1; j++) &#123; if (vis[j] || i == j) continue; tmp[i] = j; if (check(at, len)) &#123; tmp[i] = 0; continue; &#125; if (len - (i - at) - 1 &gt; 22 || s + fac[len - (i - at) - 1] &gt;= rk) &#123; rk -= s, tmp[i] = j, vis[j] = 1; break; &#125; else &#123; s += fac[len - (i - at) - 1]; &#125; &#125; &#125; for (int i = at; i &lt;= at + len - 1; i++) if (!vis[i]) tmp[at + len] = i;&#125;void DFS(int at, ll num)&#123; if (at == n + 1) return; ll s = 0, sup = 0; int i = 1; ll rk = 0; for (i = 1; i &lt;= n - at + 1; i++) &#123; if (n - at + 1 - i &gt; 22) break; s += g[i] * f[n - at + 1 - i]; if (s &gt;= num) break; &#125; --i; for (int j = 1; j &lt;= i; j++) num -= g[j] * f[n - at + 1 - j]; if (n - at + 1 - i &lt;= 22) rk = (num - 1) / f[n - at + 1 - (i + 1)]; if (n - at + 1 - i &lt;= 22) num -= rk * f[n - at + 1 - (i + 1)]; get(at, i, rk + 1); for (int j = at; j &lt;= at + i; j++) printf("%d ", tmp[j]); DFS(at + i + 1, num);&#125;int main()&#123; fac[0] = 1; for (int i = 1; i &lt;= 23; i++) fac[i] = i * fac[i - 1]; f[0] = 1, f[1] = 1, f[2] = 2, g[1] = 1, g[2] = 1; for (int i = 3; i &lt;= 23; i++) g[i] = fac[i - 2]; for (int i = 3; i &lt;= 23; i++) &#123; for (int j = 1; j &lt;= i; j++) f[i] += g[j] * f[i - j]; &#125; int t; scanf("%d", &amp;t); while (t--) &#123; scanf("%d%lld", &amp;n, &amp;k); if (n &lt;= 22 &amp;&amp; k &gt; f[n]) &#123; printf("-1\n"); &#125; else &#123; DFS(1, k); printf("\n"); &#125; &#125; return 0;&#125; F. New Year and Handle Change&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本题很好，强烈建议一做。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先贪心是不对的，考虑$DP$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;列出$dp(i,j)$表示$[1,i]$这一段用$j$次覆盖可以得到的最小结果（大写字母和小写字母分两次计算）。我们暂且覆盖小写字母，用$s(x)$表示：若$x$这一位为小写字母，则$s(x)=1$否则$s(x)=0$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;转移方程很好列，但是并没有什么用，因为这是一个至少$O(nk)$的算法。这里有一种黑科技可以使其降掉一维。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;不妨定义一个二元函数： f(\lambda,j)=dp(n,j)+\lambda j&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;很显然，我们要求的答案就是$dp(n,k)$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里的$f(\lambda,j)$函数引入了$\lambda$这个参数。如果我们能对于一个已知的$\lambda$并求出对应的$f(\lambda,k)$，那么就可以求出$dp(n,k)$。这看起来非常异想天开，不过它确实是可以的。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们没有必要求出所有的$f$函数值，只需要求出对于一个固定的$\lambda$，$f$函数的最小极值点$j_\lambda$以及极值。这个过程可以$O(n)$完成。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们将$d(j)$定义成一个二元组$\{x,y\}$，其中$x$为当前$f$函数最小值，$y$是可以取到这个值的最小的$j$。那么$d(0)=\{0,0\}$，对于$1\leq j\leq n$递推关系如下：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先继承上一次的结果： d(j)=\{d(j-1).x+s(j),d(j-1).y\}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当$j\geq l$时，考虑进行一次操作： d(j)=\min(d(j),\{d(j-l).x+\lambda,d(j-l).y+1\})&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当$j&lt;l$时，放不下一次操作，但是由于操作之间可能重叠，因此也需要更新： d(j)=\min(d(j),\{\lambda,1\})&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最终得到的$d(n)=\{x,y\}$中，$x$就是$f(\lambda,j)$的最小值，$y$就是取到最小值的最小极值点$j_\lambda$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接下来讨论进一步的做法。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$dp(n,j)$显然是不增的，我们说$dp$是凸的，是指下面的不等式成立： dp(n,j)-dp(n,j-1)\leq dp(n,j+1)-dp(n,j),1\leq j]]></content>
+      <categories>
+        <category>ACM</category>
+      </categories>
+      <tags>
+        <tag>Codeforces</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Codeforces Round #614 (Div. 2)]]></title>
     <url>%2F2020%2F01%2F23%2FCodeforces-Round-614-Div-2%2F</url>
     <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Codeforces Round #614 (Div. 2)题解。第一次上蓝名(*&gt;ᴗ&lt;*)（话说比赛才打过几场。。。） A. ConneR and the A.R.C. Markland-N&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个可以暴力扫，因为被选上的点一共才1000个，暴力的话也不会超过1000次。12345678910111213141516171819202122232425262728293031#include &lt;bits/stdc++.h&gt;using namespace std;int n, s, k;set&lt;int&gt; ssp;int main()&#123; int t; scanf("%d", &amp;t); while (t--) &#123; scanf("%d%d%d", &amp;n, &amp;s, &amp;k), ssp.clear(); for (int i = 1, x; i &lt;= k; i++) &#123; scanf("%d", &amp;x); ssp.insert(x); &#125; int ans = 0x7fffffff; for (int i = s; i &gt;= 1; i--) &#123; if (ssp.count(i) == 0) &#123; ans = s - i; break; &#125; &#125; for (int i = s + 1; i &lt;= n; i++) &#123; if (ssp.count(i) == 0) &#123; ans = min(ans, i - s); break; &#125; &#125; printf("%d\n", ans); &#125; return 0;&#125; B. JOE is on TV!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里需要一个$O(n^2)$的$DP$，方程是这样： dp(x)=\max\{dp(s-k)+\frac {k}{s}\},0< k\leq s&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;复杂度肯定不行，我们证明： dp(x)=\sum_{i=1}^x\frac {1}{i}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考虑数学归纳法，$dp(1)=1$没有任何问题。假设$i\leq k$均成立，则$i=k+1$时，有： dp(k+1)=\max\{\sum_{i=1}^{k+1-t}\frac {1}{i}+\frac {t}{k+1}\},0]]></content>
@@ -88,8 +99,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>数学</tag>
         <tag>数论</tag>
+        <tag>数学</tag>
       </tags>
   </entry>
   <entry>
@@ -190,9 +201,9 @@
         <category>ACM</category>
       </categories>
       <tags>
+        <tag>数论</tag>
         <tag>数学</tag>
         <tag>动态规划</tag>
-        <tag>数论</tag>
       </tags>
   </entry>
   <entry>
@@ -334,8 +345,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>数学</tag>
         <tag>数论</tag>
+        <tag>数学</tag>
       </tags>
   </entry>
   <entry>
@@ -513,9 +524,9 @@
         <category>ACM</category>
       </categories>
       <tags>
+        <tag>数论</tag>
         <tag>数学</tag>
         <tag>莫队算法</tag>
-        <tag>数论</tag>
       </tags>
   </entry>
   <entry>
@@ -551,8 +562,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>图论</tag>
         <tag>数论</tag>
+        <tag>图论</tag>
         <tag>网络流</tag>
       </tags>
   </entry>
@@ -716,8 +727,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>数学</tag>
         <tag>数论</tag>
+        <tag>数学</tag>
       </tags>
   </entry>
   <entry>
@@ -768,8 +779,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>数学</tag>
         <tag>数论</tag>
+        <tag>数学</tag>
       </tags>
   </entry>
   <entry>
@@ -781,8 +792,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>数学</tag>
         <tag>数论</tag>
+        <tag>数学</tag>
         <tag>群论</tag>
       </tags>
   </entry>
@@ -795,8 +806,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>数学</tag>
         <tag>数论</tag>
+        <tag>数学</tag>
       </tags>
   </entry>
   <entry>
@@ -832,8 +843,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>数学</tag>
         <tag>数论</tag>
+        <tag>数学</tag>
       </tags>
   </entry>
   <entry>
@@ -974,8 +985,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>搜索</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -1962,8 +1973,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>动态规划</tag>
         <tag>数论</tag>
+        <tag>动态规划</tag>
         <tag>离散化</tag>
       </tags>
   </entry>
