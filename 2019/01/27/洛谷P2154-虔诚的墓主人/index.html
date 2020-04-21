@@ -119,19 +119,19 @@
 
 
 
-  <meta name="description" content="难度：省选/NACM- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;小W是一片新造公墓的管理人。公墓可以看成一块N×M的矩形，矩形的每个格点，要么种着一棵常青树，要么是一块还没有归属的墓地。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;当地的居民都是非常虔诚的基督徒，他们愿意提前为自己找一">
+  <meta name="description" content="难度：省选/NOI- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;小W是一片新造公墓的管理人。公墓可以看成一块N×M的矩形，矩形的每个格点，要么种着一棵常青树，要么是一块还没有归属的墓地。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;当地的居民都是非常虔诚的基督徒，他们愿意提前为自己找一块">
 <meta name="keywords" content="提高算法,数论,树状数组,离散化">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[洛谷P2154]虔诚的墓主人">
 <meta property="og:url" content="https://twifor.github.io/2019/01/27/洛谷P2154-虔诚的墓主人/index.html">
 <meta property="og:site_name" content="Twifor~Liyh">
-<meta property="og:description" content="难度：省选/NACM- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;小W是一片新造公墓的管理人。公墓可以看成一块N×M的矩形，矩形的每个格点，要么种着一棵常青树，要么是一块还没有归属的墓地。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;当地的居民都是非常虔诚的基督徒，他们愿意提前为自己找一">
+<meta property="og:description" content="难度：省选/NOI- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;小W是一片新造公墓的管理人。公墓可以看成一块N×M的矩形，矩形的每个格点，要么种着一棵常青树，要么是一块还没有归属的墓地。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;当地的居民都是非常虔诚的基督徒，他们愿意提前为自己找一块">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://twifor.github.io/2019/01/27/洛谷P2154-虔诚的墓主人/ph.png">
-<meta property="og:updated_time" content="2020-01-14T04:50:55.149Z">
+<meta property="og:updated_time" content="2020-04-08T03:00:51.132Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[洛谷P2154]虔诚的墓主人">
-<meta name="twitter:description" content="难度：省选/NACM- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;小W是一片新造公墓的管理人。公墓可以看成一块N×M的矩形，矩形的每个格点，要么种着一棵常青树，要么是一块还没有归属的墓地。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;当地的居民都是非常虔诚的基督徒，他们愿意提前为自己找一">
+<meta name="twitter:description" content="难度：省选/NOI- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;小W是一片新造公墓的管理人。公墓可以看成一块N×M的矩形，矩形的每个格点，要么种着一棵常青树，要么是一块还没有归属的墓地。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;当地的居民都是非常虔诚的基督徒，他们愿意提前为自己找一块">
 <meta name="twitter:image" content="https://twifor.github.io/2019/01/27/洛谷P2154-虔诚的墓主人/ph.png">
 
 
@@ -454,7 +454,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-14 12:50:55" itemprop="dateModified" datetime="2020-01-14T12:50:55+08:00">2020-01-14</time>
+                <time title="修改时间：2020-04-08 11:00:51" itemprop="dateModified" datetime="2020-04-08T11:00:51+08:00">2020-04-08</time>
               
             
           </span>
@@ -515,7 +515,7 @@
       
 
       
-        <p>难度：省选/NACM-</p>
+        <p>难度：省选/NOI-</p>
 <h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小W是一片新造公墓的管理人。公墓可以看成一块N×M的矩形，矩形的每个格点，要么种着一棵常青树，要么是一块还没有归属的墓地。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当地的居民都是非常虔诚的基督徒，他们愿意提前为自己找一块合适墓地。为了体现自己对主的真诚，他们希望自己的墓地拥有着较高的虔诚度。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一块墓地的虔诚度是指以这块墓地为中心的十字架的数目。一个十字架可以看成中间是墓地，墓地的正上、正下、正左、正右都有恰好k棵常青树。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小W希望知道他所管理的这片公墓中所有墓地的虔诚度总和是多少。<br><a id="more"></a></p>
 <h3 id="输入输出格式"><a href="#输入输出格式" class="headerlink" title="输入输出格式"></a>输入输出格式</h3><h4 id="输入格式："><a href="#输入格式：" class="headerlink" title="输入格式："></a>输入格式：</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输入文件religious.in的第一行包含两个用空格分隔的正整数N和M，表示公墓的宽和长，因此这个矩形公墓共有(N+1) ×(M+1)个格点，左下角的坐标为(0, 0)，右上角的坐标为(N, M)。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第二行包含一个正整数W，表示公墓中常青树的个数。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第三行起共W行，每行包含两个用空格分隔的非负整数xi和yi，表示一棵常青树的坐标。输入保证没有两棵常青树拥有相同的坐标。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最后一行包含一个正整数k，意义如题目所示。</p>
 <h4 id="输出格式："><a href="#输出格式：" class="headerlink" title="输出格式："></a>输出格式：</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输出文件religious.out仅包含一个非负整数，表示这片公墓中所有墓地的虔诚度总和。为了方便起见，答案对2,147,483,648取模。</p>
@@ -658,7 +658,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">184</span>
+                    <span class="site-state-item-count">185</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

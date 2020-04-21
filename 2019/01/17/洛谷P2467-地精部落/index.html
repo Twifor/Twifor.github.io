@@ -119,18 +119,18 @@
 
 
 
-  <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;记录一道简单的省选题  难度：省选/NACM-（个人感觉难度虚高） 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;传说很久以前，大地上居住着一种神秘的生物：地精。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;">
+  <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;记录一道简单的省选题  难度：省选/NOI-（个人感觉难度虚高） 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;传说很久以前，大地上居住着一种神秘的生物：地精。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;">
 <meta name="keywords" content="提高算法,动态规划,滚动数组">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[洛谷P2467]地精部落">
 <meta property="og:url" content="https://twifor.github.io/2019/01/17/洛谷P2467-地精部落/index.html">
 <meta property="og:site_name" content="Twifor~Liyh">
-<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;记录一道简单的省选题  难度：省选/NACM-（个人感觉难度虚高） 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;传说很久以前，大地上居住着一种神秘的生物：地精。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;">
+<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;记录一道简单的省选题  难度：省选/NOI-（个人感觉难度虚高） 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;传说很久以前，大地上居住着一种神秘的生物：地精。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-01-14T04:50:55.155Z">
+<meta property="og:updated_time" content="2020-04-08T03:01:43.704Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[洛谷P2467]地精部落">
-<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;记录一道简单的省选题  难度：省选/NACM-（个人感觉难度虚高） 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;传说很久以前，大地上居住着一种神秘的生物：地精。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;">
+<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;记录一道简单的省选题  难度：省选/NOI-（个人感觉难度虚高） 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;传说很久以前，大地上居住着一种神秘的生物：地精。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;">
 
 
 
@@ -452,7 +452,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-14 12:50:55" itemprop="dateModified" datetime="2020-01-14T12:50:55+08:00">2020-01-14</time>
+                <time title="修改时间：2020-04-08 11:01:43" itemprop="dateModified" datetime="2020-04-08T11:01:43+08:00">2020-04-08</time>
               
             
           </span>
@@ -515,7 +515,7 @@
       
         <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;记录一道简单的省选题</p>
 <hr>
-<p>难度：省选/NACM-（个人感觉难度虚高）</p>
+<p>难度：省选/NOI-（个人感觉难度虚高）</p>
 <h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;传说很久以前，大地上居住着一种神秘的生物：地精。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;地精喜欢住在连绵不绝的山脉中。具体地说，一座长度为N的山脉H可分为从左到右的N段，每段有一个独一无二的高度Hi，其中Hi是1到N之间的正整数。<br><a id="more"></a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果一段山脉比所有与它相邻的山脉都高，则这段山脉是一个山峰。位于边缘的山脉只有一段相邻的山脉，其他都有两段（即左边和右边）。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;类似地，如果一段山脉比所有它相邻的山脉都低，则这段山脉是一个山谷。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;地精们有一个共同的爱好——饮酒，酒馆可以设立在山谷之中。地精的酒馆不论白天黑夜总是人声鼎沸，地精美酒的香味可以飘到方圆数里的地方。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;地精还是一种非常警觉的生物，他们在每座山峰上都可以设立瞭望台，并轮流担当瞭望工作，以确保在第一时间得知外敌的入侵。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;地精们希望这N段山脉每段都可以修建瞭望台或酒馆的其中之一，只有满足这个条件的整座山脉才可能有地精居住。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在你希望知道，长度为N的可能有地精居住的山脉有多少种。两座山脉A和B不同当且仅当存在一个i，使得Ai≠Bi。由于这个数目可能很大，你只对它除以P的余数感兴趣。</p>
 <h3 id="输入输出格式"><a href="#输入输出格式" class="headerlink" title="输入输出格式"></a>输入输出格式</h3><h4 id="输入格式："><a href="#输入格式：" class="headerlink" title="输入格式："></a>输入格式：</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输入文件goblin.in仅含一行，两个正整数N, P。</p>
 <h4 id="输出格式："><a href="#输出格式：" class="headerlink" title="输出格式："></a>输出格式：</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输出文件goblin.out仅含一行，一个非负整数，表示你所求的答案对P取余之后的结果。</p>
@@ -657,7 +657,7 @@ dp(x,1,i)=dp(x,1,i-1)+dp(x-1,0,i-1),1\leq i \leq x</script><p>&nbsp;&nbsp;&nbsp;
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">184</span>
+                    <span class="site-state-item-count">185</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

@@ -119,18 +119,18 @@
 
 
 
-  <meta name="description" content="难度：省选/NACM- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;策策同学特别喜欢逛公园。公园可以看成一张$N$个点$M$条边构成的有向图，且没有自环和重边。其中1号点是公园的入口，$N$号点是公园的出口，每条边有一个非负权值， 代表策策经过这条边所要花的时间。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;n">
+  <meta name="description" content="难度：省选/NOI- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;策策同学特别喜欢逛公园。公园可以看成一张$N$个点$M$条边构成的有向图，且没有自环和重边。其中1号点是公园的入口，$N$号点是公园的出口，每条边有一个非负权值， 代表策策经过这条边所要花的时间。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nb">
 <meta name="keywords" content="搜索,图的最短路,数据结构,图">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[洛谷P3953]逛公园">
 <meta property="og:url" content="https://twifor.github.io/2019/07/14/洛谷P3953-逛公园/index.html">
 <meta property="og:site_name" content="Twifor~Liyh">
-<meta property="og:description" content="难度：省选/NACM- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;策策同学特别喜欢逛公园。公园可以看成一张$N$个点$M$条边构成的有向图，且没有自环和重边。其中1号点是公园的入口，$N$号点是公园的出口，每条边有一个非负权值， 代表策策经过这条边所要花的时间。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;n">
+<meta property="og:description" content="难度：省选/NOI- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;策策同学特别喜欢逛公园。公园可以看成一张$N$个点$M$条边构成的有向图，且没有自环和重边。其中1号点是公园的入口，$N$号点是公园的出口，每条边有一个非负权值， 代表策策经过这条边所要花的时间。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nb">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-01-14T04:50:55.174Z">
+<meta property="og:updated_time" content="2020-04-08T03:08:46.010Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[洛谷P3953]逛公园">
-<meta name="twitter:description" content="难度：省选/NACM- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;策策同学特别喜欢逛公园。公园可以看成一张$N$个点$M$条边构成的有向图，且没有自环和重边。其中1号点是公园的入口，$N$号点是公园的出口，每条边有一个非负权值， 代表策策经过这条边所要花的时间。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;n">
+<meta name="twitter:description" content="难度：省选/NOI- 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;策策同学特别喜欢逛公园。公园可以看成一张$N$个点$M$条边构成的有向图，且没有自环和重边。其中1号点是公园的入口，$N$号点是公园的出口，每条边有一个非负权值， 代表策策经过这条边所要花的时间。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nb">
 
 
 
@@ -452,7 +452,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-14 12:50:55" itemprop="dateModified" datetime="2020-01-14T12:50:55+08:00">2020-01-14</time>
+                <time title="修改时间：2020-04-08 11:08:46" itemprop="dateModified" datetime="2020-04-08T11:08:46+08:00">2020-04-08</time>
               
             
           </span>
@@ -513,7 +513,7 @@
       
 
       
-        <p>难度：省选/NACM-</p>
+        <p>难度：省选/NOI-</p>
 <h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;策策同学特别喜欢逛公园。公园可以看成一张$N$个点$M$条边构成的有向图，且没有自环和重边。其中1号点是公园的入口，$N$号点是公园的出口，每条边有一个非负权值， 代表策策经过这条边所要花的时间。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;策策每天都会去逛公园，他总是从1号点进去，从$N$号点出来。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;策策喜欢新鲜的事物，它不希望有两天逛公园的路线完全一样，同时策策还是一个 特别热爱学习的好孩子，它不希望每天在逛公园这件事上花费太多的时间。如果1号点到$N$号点的最短路长为$d$，那么策策只会喜欢长度不超过$d + K$的路线。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;策策同学想知道总共有多少条满足条件的路线，你能帮帮它吗？<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为避免输出过大，答案对$P$取模。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果有无穷多条合法的路线，请输出-1。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于$100\%$的数据, $1 \le P \le 10^9,1 \le a_i,b_i \le N ,0 \le c_i \le 1000,k\leq 50$。<br><a id="more"></a></p>
 <h3 id="输入输出格式"><a href="#输入输出格式" class="headerlink" title="输入输出格式"></a>输入输出格式</h3><h4 id="输入格式："><a href="#输入格式：" class="headerlink" title="输入格式："></a>输入格式：</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第一行包含一个整数$T$, 代表数据组数。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接下来$T$组数据，对于每组数据：第一行包含四个整数$N,M,K,P$每两个整数之间用一个空格隔开。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接下来MM行，每行三个整数$a_i,b_i,c_i$，代表编号为$a_i,b_i$的点之间有一条权值为$c_i$的有向边，每两个整数之间用一个空格隔开。</p>
 <h4 id="输出格式："><a href="#输出格式：" class="headerlink" title="输出格式："></a>输出格式：</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输出文件包含$T$行，每行一个整数代表答案。</p>
@@ -654,7 +654,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">184</span>
+                    <span class="site-state-item-count">185</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
