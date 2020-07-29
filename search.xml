@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Codeforces Round #652 (Div. 2)]]></title>
+    <url>%2F2020%2F07%2F29%2FCodeforces-Round-652-Div-2%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Codeforces Round #652 (Div. 2)。 D. TediousLee&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;容易发现这个树是有规律的，可以直接上$DP$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;定义$dp(x,y)$表示第$x$轮，根是否涂色（用$y=0$和$y=1$区分）情况下，能够找到的最多的$claw$数量。这样有状态转移方程： dp(x,0)=2\max(dp(x-2,0),dp(x-2,1))+\max(dp(x-1,0),dp(x-1,1))\\ dp(x,1)=2dp(x-2,0)+dp(x-1,0)+1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;答案就是$4\max(dp(n,0),dp(n,1))$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样看起来好像没有什么问题，但是仔细一想是没法操作的。方程中有取$\max$的成分，但是一旦取了模，就没法比较大小。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;仔细观察方程，我们可以发现$dp(x,0)$与$dp(x,1)$的大小关系是有一些情况的，具体来说有以下几种（下面情况按顺序依次判断）： 若$dp(x-2,1)&gt;dp(x-2,0)$，必然有$dp(x,0)&gt;dp(x,1)$。 若$dp(x-1,1)&gt;dp(x-1,0)$，必然有$dp(x,0)=dp(x,1)$。 其余情况$dp(x,0)&lt;dp(x,1)$。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在递推$dp$时，同时维护每一个$dp$值对应的大小关系，递推出后来的大小关系，这样就可以边取模，边比较大小了。123456789101112131415161718192021222324252627282930313233343536373839#include &lt;bits/stdc++.h&gt;#define MOD (int(1e9 + 7))using namespace std;typedef long long ll;int n;ll dp[2000005][2], xz[2000005];int main()&#123; int t; scanf("%d", &amp;t); dp[1][0] = dp[1][1] = dp[2][0] = dp[2][1] = 0; xz[1] = xz[2] = 0; for (int i = 3; i &lt;= 2000000; i++) &#123; if (xz[i - 2] &gt;= 0) dp[i][0] = 2 * dp[i - 2][1]; else dp[i][0] = 2 * dp[i - 2][0]; if (xz[i - 1] &gt;= 0) dp[i][0] += dp[i - 1][1]; else dp[i][0] += dp[i - 1][0]; dp[i][0] %= MOD; dp[i][1] = (2 * dp[i - 2][0] + dp[i - 1][0] + 1) % MOD; if (xz[i - 2] == 1) xz[i] = -1; else if (xz[i - 1] == 1) xz[i] = 0; else xz[i] = 1; &#125; while (t--) &#123; scanf("%d", &amp;n); if (xz[n] &gt;= 1) printf("%lld\n", dp[n][1] * 4ll % MOD); else printf("%lld\n", dp[n][0] * 4ll % MOD); &#125; return 0;&#125; E. DeadLee&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于每一种事物，求出其需求量$s(i)$，若$w(i)\geq s(i)$，则食物$i$的喜爱者必然都是可满足的。这是因为无论如何这些人都可以吃食物$i$。这时我们就认为他们只吃食物$i$，让他们把其余的食物让出来给别人。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面这些人全部放到答案序列的最后，他们一定是可满足的。同时，使他们腾出各自的另一种喜爱的食物（使对应的需求量减少）。这样会得到更多的满足$w(i)\geq s(i)$的食物，递归进行以上操作。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;容易证明，如果最后没有一种食物满足$w(i)\geq s(i)$，就是无解的。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是纯暴力是$O(nm)$，可以使用队列优化，复杂度降至$O(n+m)$。123456789101112131415161718192021222324252627282930313233343536373839404142#include &lt;bits/stdc++.h&gt;#define N 200005using namespace std;int n, m, w[N], a[N], b[N], xq[N], sw[N], gg[N];queue&lt;int&gt; que;vector&lt;int&gt; ans, gk[N];int main()&#123; scanf("%d%d", &amp;n, &amp;m); for (int i = 1; i &lt;= n; i++) scanf("%d", w + i); for (int i = 1; i &lt;= m; i++) &#123; scanf("%d%d", a + i, b + i), ++xq[a[i]], ++xq[b[i]]; gk[a[i]].push_back(i); gk[b[i]].push_back(i); &#125; for (int i = 1; i &lt;= n; i++) &#123; if (w[i] &gt;= xq[i]) que.push(i), sw[i] = 1; &#125; while (!que.empty()) &#123; int f = que.front(); que.pop(); for (int i = 0; i &lt; gk[f].size(); i++) &#123; if (gg[gk[f][i]] == 0) &#123; gg[gk[f][i]] = 1, ans.push_back(gk[f][i]); int other = a[gk[f][i]] == f ? b[gk[f][i]] : a[gk[f][i]]; --xq[other]; if (sw[other] == 0) &#123; if (sw[other] == 0) &#123; if (w[other] &gt;= xq[other]) que.push(other), sw[other] = 1; &#125; &#125; &#125; &#125; &#125; if (ans.size() != m) &#123; printf("DEAD"); &#125; else &#123; printf("ALIVE\n"); for (int i = ans.size() - 1; i &gt;= 0; i--) printf("%d ", ans[i]); &#125; return 0;&#125; F. BareLee&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;博弈论，先考虑一轮的情况。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设$win(s,e)$表示在$(s,e)$的情况下，先手是否能必胜，同理可有$lose(s,e)$。其中$win(s,e)$的取值有以下几种情况： $e$为奇数，此时只有$s$是偶数时，先手才能必胜。可以使用数学归纳法证明。可以见得$e$是必输点，而$e-1$是必胜点。假设对于$i&gt;k$都有：$i$是奇数时必输，偶数时必胜，那么取$k$时，有$2k$和$k+1$两种转移。若$k$是奇数，则$2k$和$k+1$都是偶数，都必胜，那么$k$必输；若$k$是偶数，则$k+1$是奇数，必输，那么$k$必胜。 当$2s&gt;e$时，只有$s$是奇数才能必胜。因为此时双方都不会采取$2s$这样的决策，都只会$s+1$，这样当$s$是奇数时才能胜。 当$4s&gt;e$时，先手必胜。这是因为此时采取$2s$的决策会进入上一种情况，而此时$2s$是偶数，必胜。 其余情况与答案与$win(s,\lfloor\frac {e}{4}\rfloor)$相同。由于$4s&gt;e$时先手必胜，双方都会尽量使值不超过$\lfloor\frac {e}{4}\rfloor$。如果能让后手先超过$\lfloor\frac {e}{4}\rfloor$，先手必胜，问题即转化为$win(s,\lfloor\frac {e}{4}\rfloor)$。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$lose(s,e)$的情况： $2s&gt;e$时，只需要进行一次$2s$操作就输了，先手必输。 其余情况答案与$win(s,\lfloor\frac {e}{2}\rfloor)$相同。因为$2s&gt;e$时先手就必输了，所以双方都尽量使值不超过$\lfloor\frac {e}{2}\rfloor$，首先超过的必胜。如果能让后手先超过，则先手必输，即$win(s,\lfloor\frac {e}{2}\rfloor)$。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是我们可以在$O(log(e)$复杂度下求出$win$和$lose$。再考虑多轮比赛的情况，可以$DP$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设$dp(x,y)$表示将要进行第$x$轮比赛，现在$Lee$是不是先手（$y=0$是先手，$y=1$不是），采取策略必胜的情况（值为$0$或$1$），那么可以进行如下操作序列（伪代码）来更新$DP$： dp(x,y)=0\\ if(win(s[x], e[x])+y==1) dp(x,y)|=dp(x+1,1)\\ if(lose(s[x], e[x]) +y==1) dp(x,y)|=dp(x+1,0)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;必输的类似可得。12345678910111213141516171819202122232425262728293031323334353637383940414243#include &lt;bits/stdc++.h&gt;#define N 100005using namespace std;typedef long long ll;int t, dp[N][2];int win(ll s, ll e)&#123; if (s &gt; e) return 0; if (e &amp; 1) return (~(s &amp; 1)) &amp; 1; if ((s &lt;&lt; 1) &gt; e) return s &amp; 1; if ((s &lt;&lt; 2) &gt; e) return 1; return win(s, e &gt;&gt; 2);&#125;int lose(ll s, ll e)&#123; if ((s &lt;&lt; 1) &gt; e) return 1; return win(s, e &gt;&gt; 1);&#125;ll s[N], e[N];int main()&#123; scanf("%d", &amp;t); for (int i = 1; i &lt;= t; i++) scanf("%lld%lld", s + i, e + i); dp[t + 1][1] = 1, dp[t + 1][0] = 0; for (int rd = t; rd &gt;= 1; rd--) &#123; for (int who = 0; who &lt; 2; who++) &#123; dp[rd][who] = 0; if (win(s[rd], e[rd]) ^ who) dp[rd][who] |= dp[rd + 1][1]; if (lose(s[rd], e[rd]) ^ who) dp[rd][who] |= dp[rd + 1][0]; &#125; &#125; printf("%d ", dp[1][0]); dp[t + 1][1] = 0, dp[t + 1][0] = 1; for (int rd = t; rd &gt;= 1; rd--) &#123; for (int who = 0; who &lt; 2; who++) &#123; dp[rd][who] = 0; if (win(s[rd], e[rd]) ^ who) dp[rd][who] |= dp[rd + 1][1]; if (lose(s[rd], e[rd]) ^ who) dp[rd][who] |= dp[rd + 1][0]; &#125; &#125; printf("%d", dp[1][0]); return 0;&#125;]]></content>
+      <categories>
+        <category>ACM</category>
+      </categories>
+      <tags>
+        <tag>Codeforces</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Educational Codeforces Round 90]]></title>
     <url>%2F2020%2F07%2F29%2FEducational-Codeforces-Round-90-Rated-for-Div-2%2F</url>
     <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Educational Codeforces Round 90。以后水题就不写题解了。 E. Sum of Digits&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一个比较麻烦的模拟(？)，纯实现类题目。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于$k\leq 9$，最多只有一次进位，进位时会造成许多$9$消失，这是最麻烦的。实际上，假如不消去$9$，最后的和应该有如下的形式： \sum f(x+i)=(k+1)f(x)+\frac {k(k+1)}{2}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;原理是个位数不停的上升，即使9进位变成了0，也会加一个一到高位上，相当于还是加了一。但是进位时$9$会消失，于是再减去若干个$9$，假设有$p$个$9$（含个位后来得到的那一个）。那么有： \sum f(x+i)=(k+1)f(x)+\frac {k(k+1)}{2}-9p\max(0,(k+a-9))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其中$a$是$x$个位上的数字。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接下来就可以枚举$a$和$p$，计算出一个合法的$f(x)$，然后贪心地构造出这个$x$。贪心时需要保证个位数字是$a$，并且$9$的数量必须是$p$，高位尽量填$8$和$9$。这样会得到很多数，最后在里面找个最小的。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263#include &lt;bits/stdc++.h&gt;using namespace std;int n, k;vector&lt;vector&lt;int&gt;&gt; kn;inline void solve(int fx, int a, int b)&#123; vector&lt;int&gt; ans; ans.push_back(a), fx -= a; if (fx &lt; 0) return; for (int i = 1; i &lt; b; i++) ans.push_back(9); if (b &gt;= 1) fx -= (b - 1) * 9; if (fx &lt; 0) return; if (fx != 0) &#123; if (fx &lt; 9) ans.push_back(fx); else &#123; if (b == 0) ans.push_back(9), fx -= 9; else ans.push_back(8), fx -= 8; while (fx &gt;= 9) ans.push_back(9), fx -= 9; if (fx) ans.push_back(fx); &#125; &#125; // for (int i = ans.size() - 1; i &gt;= 0; i--) cout &lt;&lt; ans[i]; // cout &lt;&lt; endl; kn.push_back(ans);&#125;int cmp(int x, int y)&#123; if (kn[x].size() != kn[y].size()) return kn[x].size() &lt; kn[y].size() ? -1 : 1; for (int i = kn[x].size() - 1; i &gt;= 0; i--) &#123; if (kn[x][i] &lt; kn[y][i]) return -1; if (kn[x][i] &gt; kn[y][i]) return 1; &#125; return 0;&#125;int main()&#123; int t; scanf("%d", &amp;t); while (t--) &#123; scanf("%d%d", &amp;n, &amp;k), kn.clear(); for (int i = 0; i &lt; 10; i++) &#123; for (int j = 0; j &lt;= 200; j++) &#123; int s = n + 9 * j * max(0, k + i - 9) - k * (k + 1) / 2; if (k + i - 9 &gt; 0 &amp;&amp; j == 0) continue; if (s % (k + 1) == 0) solve(s / (k + 1), i, j); &#125; &#125; if (kn.empty()) printf("-1\n"); else &#123; int a = 0; for (int i = 1; i &lt; kn.size(); i++) &#123; if (cmp(a, i) == 1) a = i; &#125; for (int i = kn[a].size() - 1; i &gt;= 0; i--) printf("%d", kn[a][i]); printf("\n"); &#125; &#125; return 0;&#125; F. Network Coverage&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;看起来像网络流，然而网络流是没法做的。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可以预见的一个事实是，当一个站向某个城市提供的量确定时，整个网络的流量都是确定的，这个可以$O(n)$递推出来。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假设我们令$n$号站向$1$号城市提供$x$流量，必然有$0\leq x\leq \min(b_n,a_1)$。这时若递推下去，会有两个结果，其中一个是成功递推到$n$号城市，需要$n$号站提供至少$f(x)$流量，另一个就是递推途中中断（中间就不够了），我们认为此时$f(x)$是无穷大。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在问题转化为是否存在$x$满足$0\leq x\leq \min(b_n,a_1)$使得$x+f(x)\leq b_n$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在$f(x)$不是无穷大时，可以发现$f(x)$随$x$的增长是不增的，并且当$x$增加一时，$f(x)$最多减少一。这意味着$x+f(x)$是一个不减的函数（在f(x)不是无穷大时），于是可以二分。我们找到最小的使得$f(x)$不是无穷大（即成功递推）的$x$，判断$x+f(x)$是否不大于$b_n$即可。12345678910111213141516171819202122232425262728293031323334353637383940#include &lt;bits/stdc++.h&gt;#define N 1000005using namespace std;int n, a[N], b[N];inline int check(int x)&#123; int last = x; for (int i = 1; i &lt;= n; i++) &#123; int re = a[i] - min(last, a[i]); if (i == n) return 1 + re; if (b[i] &lt; re) return 0; last = b[i] - re; &#125;&#125;int main()&#123; int t; scanf("%d", &amp;t); while (t--) &#123; scanf("%d", &amp;n); for (int i = 1; i &lt;= n; i++) scanf("%d", a + i); for (int i = 1; i &lt;= n; i++) scanf("%d", b + i); int l = -1, r = min(b[n], a[1]), mid; while (l &lt; r) &#123; //(,] if (r == l + 1) break; mid = (l + r) &gt;&gt; 1; if (check(mid)) r = mid; else l = mid; &#125; // cout &lt;&lt; r &lt;&lt; " " &lt;&lt; check(r) - 1 &lt;&lt; endl; if (check(r) == 0 || check(r) - 1 + r &gt; b[n]) &#123; printf("NO\n"); &#125; else &#123; printf("YES\n"); &#125; &#125; return 0;&#125; G. Pawns&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先发现一个位于$(x,y)$的格子如果要到$k$列上，它至少需要到达$y+|x-k|$这一行。我们定义第$i$个格子的$v_i=y+|x-k|$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将$v_i$升序排序，假设有$m$个。可以$O(m)$地递推出最后的结果。设$f(i)$为前$i$个格子（按$v_i$排序后的）全部到$k$列上时，最小的行数，那么有递推关系： f(i)=\max(f(i-1)+1,v_i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这是一个贪心思想。要么放到自己能放的最小位置，要么放到上一个的下面，取一个最大值。初始化$f(1)=v_1$。最后答案就是$\max(f(m)-n,0)$&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将上式两边减去$i$得到： f(i)-i=\max(f(i-1)-(i-1),v_i-i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设$g(i)=f(i)-i$，则有： g(1)=v_1-1\\ g(i)=\max(g(i-1),v_i-i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这很明显$g(m)$就是$v_i-i$的最大值。那么答案就是$\max(0,g(m)+m-n)$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在问题转化为，动态维护$v_i$的有序序列，求$v_i-i$的最大值。这是一个平衡树的入门级问题，可以使用平衡树解决。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384#include &lt;bits/stdc++.h&gt;#define N 200005using namespace std;int n, k, m;set&lt;pair&lt;int, int&gt;&gt; ssp;struct Node&#123; int l, r, v, key, sum, lz, maxn, hexin;&#125; nd[N &lt;&lt; 1];int cnt = 1, root;inline int newNode(int x, int hx)&#123; nd[cnt].hexin = hx, nd[cnt].key = rand(), nd[cnt].sum = 1, nd[cnt].v = nd[cnt].maxn = x; return cnt++;&#125;inline void upd(int x)&#123; nd[x].sum = 1 + nd[nd[x].l].sum + nd[nd[x].r].sum; nd[x].maxn = max(nd[x].v, max(nd[nd[x].l].maxn, nd[nd[x].r].maxn));&#125;inline void make(int x, int p)&#123; nd[x].v += p, nd[x].maxn += p, nd[x].lz += p;&#125;inline void pud(int x)&#123; if (nd[x].lz == 0) return; if (nd[x].l) make(nd[x].l, nd[x].lz); if (nd[x].r) make(nd[x].r, nd[x].lz); nd[x].lz = 0;&#125;void split(int rt, int&amp; a, int&amp; b, int v)&#123; if (rt == 0) &#123; a = b = 0; return; &#125; pud(rt); if (nd[rt].hexin &lt; v) a = rt, split(nd[rt].r, nd[a].r, b, v); else b = rt, split(nd[rt].l, a, nd[b].l, v); upd(rt);&#125;void merge(int&amp; rt, int a, int b)&#123; if (a == 0 || b == 0) &#123; rt = a + b; return; &#125; pud(a), pud(b); if (nd[a].key &gt; nd[b].key) rt = a, merge(nd[rt].r, nd[a].r, b); else rt = b, merge(nd[rt].l, a, nd[b].l); upd(rt);&#125;int main()&#123; srand(time(nullptr)); scanf("%d%d%d", &amp;n, &amp;k, &amp;m); nd[0].maxn = -0x3f3f3f3f; while (m--) &#123; int x, y, a, b, c, v; scanf("%d%d", &amp;x, &amp;y); v = y + abs(x - k); if (ssp.count(make_pair(x, y))) &#123; ssp.erase(make_pair(x, y)); split(root, a, c, v), split(c, b, c, v + 1); merge(a, a, nd[b].l), merge(c, nd[b].r, c); if (c) make(c, 1); merge(root, a, c); &#125; else &#123; ssp.insert(make_pair(x, y)); split(root, a, c, v); merge(a, a, newNode(v - nd[a].sum - 1, v)); if (c) make(c, -1); // cout &lt;&lt; nd[c].maxn &lt;&lt; endl; merge(root, a, c); &#125; printf("%d\n", max(nd[root].sum + nd[root].maxn - n, 0)); &#125; return 0;&#125;]]></content>
@@ -465,8 +476,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>数学</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -632,9 +643,9 @@
         <category>ACM</category>
       </categories>
       <tags>
+        <tag>莫队算法</tag>
         <tag>数学</tag>
         <tag>数论</tag>
-        <tag>莫队算法</tag>
       </tags>
   </entry>
   <entry>
@@ -657,8 +668,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>数学</tag>
+        <tag>提高算法</tag>
         <tag>多项式</tag>
       </tags>
   </entry>
@@ -670,8 +681,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>图论</tag>
         <tag>数论</tag>
+        <tag>图论</tag>
         <tag>网络流</tag>
       </tags>
   </entry>
@@ -834,9 +845,9 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>数学</tag>
         <tag>数论</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -847,8 +858,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>数论</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -873,9 +884,9 @@
         <category>ACM</category>
       </categories>
       <tags>
+        <tag>数学</tag>
         <tag>提高算法</tag>
         <tag>图论</tag>
-        <tag>数学</tag>
       </tags>
   </entry>
   <entry>
@@ -886,9 +897,9 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>数学</tag>
         <tag>数论</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -899,9 +910,9 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>数学</tag>
         <tag>数论</tag>
+        <tag>提高算法</tag>
         <tag>群论</tag>
       </tags>
   </entry>
@@ -913,9 +924,9 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>数学</tag>
         <tag>数论</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -926,8 +937,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>数学</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -938,8 +949,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>数学</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -950,9 +961,9 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>数学</tag>
         <tag>数论</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -963,8 +974,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>数学</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -1168,8 +1179,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>莫队算法</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -1437,8 +1448,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>数论</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -1460,10 +1471,10 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>数论</tag>
-        <tag>离散化</tag>
+        <tag>提高算法</tag>
         <tag>树状数组</tag>
+        <tag>离散化</tag>
       </tags>
   </entry>
   <entry>
@@ -1474,8 +1485,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>数论</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -1677,9 +1688,9 @@
         <tag>基础算法</tag>
         <tag>数据结构</tag>
         <tag>区间最值</tag>
-        <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
+        <tag>区间</tag>
       </tags>
   </entry>
   <entry>
@@ -1695,9 +1706,9 @@
         <tag>矩阵</tag>
         <tag>区间最值</tag>
         <tag>ST表</tag>
-        <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
+        <tag>区间</tag>
       </tags>
   </entry>
   <entry>
@@ -2068,8 +2079,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>数论</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -2080,8 +2091,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>数论</tag>
+        <tag>提高算法</tag>
         <tag>动态规划</tag>
         <tag>离散化</tag>
       </tags>
