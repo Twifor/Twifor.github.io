@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Codeforces Round #649 (Div. 2)]]></title>
+    <url>%2F2020%2F07%2F31%2FCodeforces-Round-649-Div-2%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Codeforces Round #649 (Div. 2)。 A. XXXXX&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;求出模$x$的前缀和，然后对于一个下标$i$，找出满足$j &lt; i$并且两个前缀和不同的$j$，从中找出最大长度。1234567891011121314151617181920212223242526272829#include &lt;bits/stdc++.h&gt;using namespace std;int n, x, op[100005], sum[100005], fk[100005];int main()&#123; int T; scanf("%d", &amp;T); while (T--) &#123; scanf("%d%d", &amp;n, &amp;x); for (int i = 1; i &lt;= n; i++) &#123; scanf("%d", op + i); sum[i] = (sum[i - 1] + op[i]) % x; &#125; for (int i = 0; i &lt; x; i++) fk[i] = -1; int ans = 0; for (int i = 0; i &lt;= n; i++) &#123; if (fk[sum[i]] == i - 1) fk[sum[i]] = i; &#125; for (int i = 1; i &lt;= n; i++) &#123; ans = max(ans, i - (fk[sum[i]] + 1)); &#125; if (ans == 0) &#123; printf("-1\n"); &#125; else &#123; printf("%d\n", ans); &#125; &#125; return 0;&#125; B. Most socially-distanced subsequence&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;显然可以发现只有数拐弯（增减状态改变）时需要加入答案。1234567891011121314151617181920212223242526272829303132333435363738#include &lt;bits/stdc++.h&gt;using namespace std;int n, p[100005], sta[100005], ct = 0;vector&lt;int&gt; vec;inline void push(int x)&#123; if (ct &lt;= 1) &#123; sta[ct++] = x; return; &#125; if ((x - sta[ct - 1] &gt; 0 &amp;&amp; sta[ct - 1] - sta[ct - 2] &gt; 0) || x - sta[ct - 1] &lt; 0 &amp;&amp; sta[ct - 1] - sta[ct - 2] &lt; 0) &#123; sta[ct++] = x; &#125; else &#123; if (vec.empty() || vec.back() != sta[0]) vec.push_back(sta[0]); if (vec.empty() || vec.back() != sta[ct - 1]) vec.push_back(sta[ct - 1]); sta[0] = sta[ct - 1]; sta[1] = x; ct = 2; &#125;&#125;int main()&#123; int T; scanf("%d", &amp;T); while (T--) &#123; scanf("%d", &amp;n), ct = 0, vec.clear(); for (int i = 1; i &lt;= n; i++) scanf("%d", p + i); for (int i = 1; i &lt;= n; i++) &#123; push(p[i]); &#125; if (vec.empty() || vec.back() != sta[0]) vec.push_back(sta[0]); if (vec.empty() || vec.back() != sta[ct - 1]) vec.push_back(sta[ct - 1]); printf("%d\n", vec.size()); for (int i : vec) printf("%d ", i); printf("\n"); &#125; return 0;&#125; C. Ehab and Prefix MEXs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可怕的构造题。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可以发现$a_{i-1} &lt; a_{i}$时，$b_i$只能是$a_{i-1}$，其余情况下$b_{i}$是$a_i$到$a_n$中最小的没有出现过的数。12345678910111213141516171819#include &lt;bits/stdc++.h&gt;using namespace std;int a[100005], n, b[100005], vis[100005];int main()&#123; scanf("%d", &amp;n), memset(b, -1, sizeof(b)); for (int i = 1; i &lt;= n; i++) scanf("%d", a + i), vis[a[i]] = 1; for (int i = 1; i &lt;= n; i++) &#123; if (a[i] != a[i - 1]) b[i] = a[i - 1]; &#125; int num = 0; for (int i = 1; i &lt;= n; i++) &#123; if (b[i] != -1) continue; while (num &lt; a[i] || vis[num]) ++num; b[i] = num++; &#125; for (int i = 1; i &lt;= n; i++) printf("%d ", b[i]); return 0;&#125; D. Ehab’s Last Corollary&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当给的图是一个树时，直接黑白染色，找出一些点来即可，从而解决问题一。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;若给的图不是树，那么它必然有环。考察一个合法环的长度，若其大于$k$，则其中的点必然可以隔项取出，解决问题一，否则这个环可以直接解决问题二。这里说一下什么环是合法的，如果一个环内任意两个不相邻的点都没有多余的边连接它们，就是合法的。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;使用一遍$DFS$可以在$O(n)$复杂度内找到一个合法的环。在$DFS$时，我们只保留最小的那一个环，可以证明这个环必然是合法的。12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061#include &lt;bits/stdc++.h&gt;#define N 100005using namespace std;struct Edge&#123; int next, to;&#125; edge[N &lt;&lt; 2];int head[N], cnt = 1, n, m, k, vis[N], dep[N], fa[N], minn;vector&lt;int&gt; ans[2];inline void add(int x, int y)&#123; edge[cnt].to = y, edge[cnt].next = head[x], head[x] = cnt++;&#125;void DFS_tr(int x, int t)&#123; ans[t].push_back(x); for (int i = head[x]; i; i = edge[i].next) &#123; if (vis[edge[i].to]) continue; vis[edge[i].to] = 1, DFS_tr(edge[i].to, t ^ 1); &#125;&#125;void DFS(int x, int f)&#123; for (int i = head[x]; i; i = edge[i].next) &#123; if (edge[i].to == f) continue; if (!vis[edge[i].to]) &#123; vis[edge[i].to] = 1, dep[edge[i].to] = dep[x] + 1, fa[edge[i].to] = x, DFS(edge[i].to, x); &#125; else if (dep[x] - dep[edge[i].to] &gt; 1) &#123; int huan = dep[x] - dep[edge[i].to] + 1, t; if (huan &lt; minn) &#123; minn = huan, ans[0].clear(), t = x; while (t != edge[i].to) ans[0].push_back(t), t = fa[t]; ans[0].push_back(edge[i].to); &#125; &#125; &#125;&#125;int main()&#123; scanf("%d%d%d", &amp;n, &amp;m, &amp;k); for (int i = 1, x, y; i &lt;= m; i++) scanf("%d%d", &amp;x, &amp;y), add(x, y), add(y, x); if (m == n - 1) &#123; printf("1\n"); vis[1] = 1, DFS_tr(1, 0); if (ans[0].size() * 2 &gt;= k) &#123; for (int i = 0; i &lt; (k % 2 == 0 ? k / 2 : k / 2 + 1); i++) printf("%d ", ans[0][i]); &#125; else &#123; for (int i = 0; i &lt; (k % 2 == 0 ? k / 2 : k / 2 + 1); i++) printf("%d ", ans[1][i]); &#125; return 0; &#125; minn = n + 1, dep[1] = 1, vis[1] = 1, DFS(1, 0); if (minn &lt;= k) &#123; printf("2\n%d\n", ans[0].size()); for (int i : ans[0]) printf("%d ", i); &#125; else &#123; printf("1\n"); for (int i = 0; i &lt; (k % 2 == 0 ? k / 2 : k / 2 + 1); i++) printf("%d ", ans[0][i &lt;&lt; 1]); &#125; return 0;&#125; E. X-OR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果我们能定位零的位置，这个问题就很好解决。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考虑两个候选的位置$a$和$b$，查询出两者的按位或$ab$，对于第三个位置$c$，查询$bc$，有以下几种情况： 若$ab&gt;bc$，则$a$必然不是$0$，将$a$换成$c$。 若$ab&lt;bc$，则$c$必然不是$0$。 若$ab=bc$，则$b$必然不是$0$，将$b$换成$c$，但是此时需要多查询$ac$的值。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对查询的位置顺序进行随机排列，可以发现上面第三种情况的期望次数很小，即额外查询次数很小。通过这种方法就能定位$0$的位置。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748#include &lt;bits/stdc++.h&gt;using namespace std;int n, op[1 &lt;&lt; 12], ans[1 &lt;&lt; 12];inline int query(int x, int y)&#123; printf("? %d %d\n", x, y); fflush(stdout); scanf("%d", &amp;x); if (x == -1) exit(0); return x;&#125;int main()&#123; srand(time(0)); scanf("%d", &amp;n); for (int i = 1; i &lt;= n; i++) op[i] = i; random_shuffle(op + 1, op + n + 1); int a = op[1], b = op[2], ab = query(a, b); for (int i = 3; i &lt;= n; i++) &#123; int c = op[i]; int bc = query(b, c); if (ab &gt; bc) a = c, ab = bc; else if (ab == bc) b = c, ab = query(a, c); &#125; int zero; for (int i = 1; i &lt;= n; i++) &#123; if (op[i] != a &amp;&amp; op[i] != b) &#123; int aa = query(a, op[i]); int bb = query(b, op[i]); if (aa != bb) &#123; if (aa &gt; bb) zero = b; else zero = a; break; &#125; &#125; &#125; for (int i = 1; i &lt;= n; i++) &#123; if (i != zero) ans[i] = query(zero, i); &#125; printf("! "); for (int i = 1; i &lt;= n; i++) printf("%d ", ans[i]); fflush(stdout); return 0;&#125;]]></content>
+      <categories>
+        <category>ACM</category>
+      </categories>
+      <tags>
+        <tag>Codeforces</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Codeforces Round #651 (Div. 2)]]></title>
+    <url>%2F2020%2F07%2F31%2FCodeforces-Round-651-Div-2%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Codeforces Round #651 (Div. 2)。因为前四个题太水，就不写题解了。 E. Binary Subsequence Rotation&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;容易发现一开始就相同的部分不用处理，只处理不同的部分。将两个串不同的成分拿出来，那么它们是取反的关系。由于旋转操作不会改变$0$和$1$的数量，于是它们各自的$0$和$1$数量必须相等，否则无解。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然后问题就是如何对于这个串，找出最小的旋转次数，可以直接贪心。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们定义四个量：$f(x,y)$，其中$x,y$取$0$或$1$，表示当前以$x$开始，以$y$结束的链有多少条。可以发现形如$f(0,1)$和$f(1,0)$的串都可以对应到一个旋转操作上。遍历串，对于一个$0$或$1$，我们总是贪心地将它放到合理的链后面（即尽可能延长向已有的链，而不是开一个新的链）。由于$0$和$1$的数量相等，可以证明最后得到的链总是合法的。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051#include &lt;bits/stdc++.h&gt;#define N 1000005using namespace std;int n, sum0[N], sum1[N], dp[2][2], ct;char s1[N], s2[N], ps[N]; int main()&#123; scanf("%d%s%s", &amp;n, s1 + 1, s2 + 1); for (int i = 1; i &lt;= n; i++) &#123; if (s1[i] != s2[i]) ps[++ct] = s1[i]; &#125; n = ct; int n0 = 0, n1 = 0; for (int i = 1; i &lt;= n; i++) &#123; if (ps[i] == '0') &#123; ++n0; &#125; else &#123; ++n1; &#125; &#125; if (n0 != n1) &#123; printf("-1"); return 0; &#125; for (int i = n; i &gt;= 1; i--) &#123; sum0[i] = sum0[i + 1] + (ps[i] == '0'); sum1[i] = sum1[i + 1] + (ps[i] == '1'); &#125; for (int i = 1; i &lt;= n; i++) &#123; if (ps[i] == '0') &#123; if (dp[1][1]) &#123; --dp[1][1], ++dp[1][0]; &#125; else if (dp[0][1]) &#123; --dp[0][1], ++dp[0][0]; &#125; else &#123; ++dp[0][0]; &#125; &#125; else &#123; if (dp[0][0]) &#123; --dp[0][0], ++dp[0][1]; &#125; else if (dp[1][0]) &#123; --dp[1][0], ++dp[1][1]; &#125; else &#123; ++dp[1][1]; &#125; &#125; &#125; printf("%d", dp[0][1] + dp[1][0]); return 0;&#125; F. The Hidden Pair&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;交互题。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可以发现，距离和最小的点必然在两个特殊点的路径上。首先来一遍全部点的查询，可以得到这两个特殊点的距离，并且找到一个在它们路径上的点。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接下来，以这个点为根进行$DFS$，按深度划分所有点。然后二分深度，就可以找到两个特殊点中的一个。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当我们找到一个特殊点后，以其为根，再来一遍$DFS$，查询对应深度的点，就能找到另一个特殊点。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;以上操作二分需要$10$次查询，还有两次额外查询，最多需要$12$次，其实可以再压缩一次。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;若距离和为$d$，我们可以将二分区间定义为$[\lfloor\frac {d}{2}\rfloor,d]$，这是因为不可能两个特殊点到该点的距离都小于$\lfloor\frac {d}{2}\rfloor$，这样又可以减少一次查询，最多为$11$次。1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980#include &lt;bits/stdc++.h&gt;using namespace std;struct Edge&#123; int next, to;&#125; edge[2005];int head[1005], cnt, n, D;vector&lt;int&gt; dep[1005];inline void add(int x, int y)&#123; edge[cnt].next = head[x], edge[cnt].to = y, head[x] = cnt++;&#125;inline vector&lt;int&gt; query(vector&lt;int&gt; w)&#123; if (w.empty()) &#123; vector&lt;int&gt; s; s.push_back(-1); return s; &#125; printf("? %d", w.size()); for (int i : w) printf(" %d", i); printf("\n"); fflush(stdout); int a, b; vector&lt;int&gt; ans; scanf("%d%d", &amp;a, &amp;b); ans.push_back(a), ans.push_back(b); return ans;&#125; void DFS(int x, int f, int d)&#123; dep[d].push_back(x); for (int i = head[x]; i; i = edge[i].next) &#123; if (edge[i].to == f) continue; DFS(edge[i].to, x, d + 1); &#125;&#125;inline int solve(int x)&#123; int now = x; for (int j = 0; j &lt;= 1000; j++) dep[j].clear(); DFS(x, 0, 0); vector&lt;int&gt; tmp; int l = (D &gt;&gt; 1) - 1, r = D + 1, mid; while (l &lt; r) &#123; //[,) if (r == l + 1) break; mid = (l + r) &gt;&gt; 1; tmp = query(dep[mid]); if (tmp[0] != -1 &amp;&amp; tmp[1] == D) l = mid, now = tmp[0]; else r = mid; &#125; return now;&#125;char opt[15];int main()&#123; int T; scanf("%d", &amp;T); while (T--) &#123; scanf("%d", &amp;n); for (int i = 1; i &lt;= 1000; i++) head[i] = 0; cnt = 1; for (int i = 1, x, y; i &lt; n; i++) scanf("%d%d", &amp;x, &amp;y), add(x, y), add(y, x); vector&lt;int&gt; tmp; for (int i = 1; i &lt;= n; i++) tmp.push_back(i); tmp = query(tmp), D = tmp[1]; int a = solve(tmp[0]); for (int j = 0; j &lt;= 1000; j++) dep[j].clear(); DFS(a, 0, 0); tmp = query(dep[D]); printf("! %d %d\n", a, tmp[0]); fflush(stdout); scanf("%s", opt); if (opt[0] == 'I') return 0; &#125; return 0;&#125;]]></content>
+      <categories>
+        <category>ACM</category>
+      </categories>
+      <tags>
+        <tag>Codeforces</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Codeforces Round #652 (Div. 2)]]></title>
     <url>%2F2020%2F07%2F29%2FCodeforces-Round-652-Div-2%2F</url>
     <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Codeforces Round #652 (Div. 2)。 D. TediousLee&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;容易发现这个树是有规律的，可以直接上$DP$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;定义$dp(x,y)$表示第$x$轮，根是否涂色（用$y=0$和$y=1$区分）情况下，能够找到的最多的$claw$数量。这样有状态转移方程： dp(x,0)=2\max(dp(x-2,0),dp(x-2,1))+\max(dp(x-1,0),dp(x-1,1))\\ dp(x,1)=2dp(x-2,0)+dp(x-1,0)+1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;答案就是$4\max(dp(n,0),dp(n,1))$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样看起来好像没有什么问题，但是仔细一想是没法操作的。方程中有取$\max$的成分，但是一旦取了模，就没法比较大小。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;仔细观察方程，我们可以发现$dp(x,0)$与$dp(x,1)$的大小关系是有一些情况的，具体来说有以下几种（下面情况按顺序依次判断）： 若$dp(x-2,1)&gt;dp(x-2,0)$，必然有$dp(x,0)&gt;dp(x,1)$。 若$dp(x-1,1)&gt;dp(x-1,0)$，必然有$dp(x,0)=dp(x,1)$。 其余情况$dp(x,0)&lt;dp(x,1)$。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在递推$dp$时，同时维护每一个$dp$值对应的大小关系，递推出后来的大小关系，这样就可以边取模，边比较大小了。123456789101112131415161718192021222324252627282930313233343536373839#include &lt;bits/stdc++.h&gt;#define MOD (int(1e9 + 7))using namespace std;typedef long long ll;int n;ll dp[2000005][2], xz[2000005];int main()&#123; int t; scanf("%d", &amp;t); dp[1][0] = dp[1][1] = dp[2][0] = dp[2][1] = 0; xz[1] = xz[2] = 0; for (int i = 3; i &lt;= 2000000; i++) &#123; if (xz[i - 2] &gt;= 0) dp[i][0] = 2 * dp[i - 2][1]; else dp[i][0] = 2 * dp[i - 2][0]; if (xz[i - 1] &gt;= 0) dp[i][0] += dp[i - 1][1]; else dp[i][0] += dp[i - 1][0]; dp[i][0] %= MOD; dp[i][1] = (2 * dp[i - 2][0] + dp[i - 1][0] + 1) % MOD; if (xz[i - 2] == 1) xz[i] = -1; else if (xz[i - 1] == 1) xz[i] = 0; else xz[i] = 1; &#125; while (t--) &#123; scanf("%d", &amp;n); if (xz[n] &gt;= 1) printf("%lld\n", dp[n][1] * 4ll % MOD); else printf("%lld\n", dp[n][0] * 4ll % MOD); &#125; return 0;&#125; E. DeadLee&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于每一种事物，求出其需求量$s(i)$，若$w(i)\geq s(i)$，则食物$i$的喜爱者必然都是可满足的。这是因为无论如何这些人都可以吃食物$i$。这时我们就认为他们只吃食物$i$，让他们把其余的食物让出来给别人。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面这些人全部放到答案序列的最后，他们一定是可满足的。同时，使他们腾出各自的另一种喜爱的食物（使对应的需求量减少）。这样会得到更多的满足$w(i)\geq s(i)$的食物，递归进行以上操作。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;容易证明，如果最后没有一种食物满足$w(i)\geq s(i)$，就是无解的。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是纯暴力是$O(nm)$，可以使用队列优化，复杂度降至$O(n+m)$。123456789101112131415161718192021222324252627282930313233343536373839404142#include &lt;bits/stdc++.h&gt;#define N 200005using namespace std;int n, m, w[N], a[N], b[N], xq[N], sw[N], gg[N];queue&lt;int&gt; que;vector&lt;int&gt; ans, gk[N];int main()&#123; scanf("%d%d", &amp;n, &amp;m); for (int i = 1; i &lt;= n; i++) scanf("%d", w + i); for (int i = 1; i &lt;= m; i++) &#123; scanf("%d%d", a + i, b + i), ++xq[a[i]], ++xq[b[i]]; gk[a[i]].push_back(i); gk[b[i]].push_back(i); &#125; for (int i = 1; i &lt;= n; i++) &#123; if (w[i] &gt;= xq[i]) que.push(i), sw[i] = 1; &#125; while (!que.empty()) &#123; int f = que.front(); que.pop(); for (int i = 0; i &lt; gk[f].size(); i++) &#123; if (gg[gk[f][i]] == 0) &#123; gg[gk[f][i]] = 1, ans.push_back(gk[f][i]); int other = a[gk[f][i]] == f ? b[gk[f][i]] : a[gk[f][i]]; --xq[other]; if (sw[other] == 0) &#123; if (sw[other] == 0) &#123; if (w[other] &gt;= xq[other]) que.push(other), sw[other] = 1; &#125; &#125; &#125; &#125; &#125; if (ans.size() != m) &#123; printf("DEAD"); &#125; else &#123; printf("ALIVE\n"); for (int i = ans.size() - 1; i &gt;= 0; i--) printf("%d ", ans[i]); &#125; return 0;&#125; F. BareLee&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;博弈论，先考虑一轮的情况。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设$win(s,e)$表示在$(s,e)$的情况下，先手是否能必胜，同理可有$lose(s,e)$。其中$win(s,e)$的取值有以下几种情况： $e$为奇数，此时只有$s$是偶数时，先手才能必胜。可以使用数学归纳法证明。可以见得$e$是必输点，而$e-1$是必胜点。假设对于$i&gt;k$都有：$i$是奇数时必输，偶数时必胜，那么取$k$时，有$2k$和$k+1$两种转移。若$k$是奇数，则$2k$和$k+1$都是偶数，都必胜，那么$k$必输；若$k$是偶数，则$k+1$是奇数，必输，那么$k$必胜。 当$2s&gt;e$时，只有$s$是奇数才能必胜。因为此时双方都不会采取$2s$这样的决策，都只会$s+1$，这样当$s$是奇数时才能胜。 当$4s&gt;e$时，先手必胜。这是因为此时采取$2s$的决策会进入上一种情况，而此时$2s$是偶数，必胜。 其余情况与答案与$win(s,\lfloor\frac {e}{4}\rfloor)$相同。由于$4s&gt;e$时先手必胜，双方都会尽量使值不超过$\lfloor\frac {e}{4}\rfloor$。如果能让后手先超过$\lfloor\frac {e}{4}\rfloor$，先手必胜，问题即转化为$win(s,\lfloor\frac {e}{4}\rfloor)$。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$lose(s,e)$的情况： $2s&gt;e$时，只需要进行一次$2s$操作就输了，先手必输。 其余情况答案与$win(s,\lfloor\frac {e}{2}\rfloor)$相同。因为$2s&gt;e$时先手就必输了，所以双方都尽量使值不超过$\lfloor\frac {e}{2}\rfloor$，首先超过的必胜。如果能让后手先超过，则先手必输，即$win(s,\lfloor\frac {e}{2}\rfloor)$。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是我们可以在$O(log(e)$复杂度下求出$win$和$lose$。再考虑多轮比赛的情况，可以$DP$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设$dp(x,y)$表示将要进行第$x$轮比赛，现在$Lee$是不是先手（$y=0$是先手，$y=1$不是），采取策略必胜的情况（值为$0$或$1$），那么可以进行如下操作序列（伪代码）来更新$DP$： dp(x,y)=0\\ if(win(s[x], e[x])+y==1) dp(x,y)|=dp(x+1,1)\\ if(lose(s[x], e[x]) +y==1) dp(x,y)|=dp(x+1,0)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;必输的类似可得。12345678910111213141516171819202122232425262728293031323334353637383940414243#include &lt;bits/stdc++.h&gt;#define N 100005using namespace std;typedef long long ll;int t, dp[N][2];int win(ll s, ll e)&#123; if (s &gt; e) return 0; if (e &amp; 1) return (~(s &amp; 1)) &amp; 1; if ((s &lt;&lt; 1) &gt; e) return s &amp; 1; if ((s &lt;&lt; 2) &gt; e) return 1; return win(s, e &gt;&gt; 2);&#125;int lose(ll s, ll e)&#123; if ((s &lt;&lt; 1) &gt; e) return 1; return win(s, e &gt;&gt; 1);&#125;ll s[N], e[N];int main()&#123; scanf("%d", &amp;t); for (int i = 1; i &lt;= t; i++) scanf("%lld%lld", s + i, e + i); dp[t + 1][1] = 1, dp[t + 1][0] = 0; for (int rd = t; rd &gt;= 1; rd--) &#123; for (int who = 0; who &lt; 2; who++) &#123; dp[rd][who] = 0; if (win(s[rd], e[rd]) ^ who) dp[rd][who] |= dp[rd + 1][1]; if (lose(s[rd], e[rd]) ^ who) dp[rd][who] |= dp[rd + 1][0]; &#125; &#125; printf("%d ", dp[1][0]); dp[t + 1][1] = 0, dp[t + 1][0] = 1; for (int rd = t; rd &gt;= 1; rd--) &#123; for (int who = 0; who &lt; 2; who++) &#123; dp[rd][who] = 0; if (win(s[rd], e[rd]) ^ who) dp[rd][who] |= dp[rd + 1][1]; if (lose(s[rd], e[rd]) ^ who) dp[rd][who] |= dp[rd + 1][0]; &#125; &#125; printf("%d", dp[1][0]); return 0;&#125;]]></content>
@@ -476,8 +498,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>数学</tag>
         <tag>提高算法</tag>
+        <tag>数学</tag>
       </tags>
   </entry>
   <entry>
@@ -643,8 +665,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>莫队算法</tag>
         <tag>数学</tag>
+        <tag>莫队算法</tag>
         <tag>数论</tag>
       </tags>
   </entry>
@@ -668,8 +690,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>数学</tag>
         <tag>提高算法</tag>
+        <tag>数学</tag>
         <tag>多项式</tag>
       </tags>
   </entry>
@@ -681,8 +703,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>数论</tag>
         <tag>图论</tag>
+        <tag>数论</tag>
         <tag>网络流</tag>
       </tags>
   </entry>
@@ -845,9 +867,9 @@
         <category>ACM</category>
       </categories>
       <tags>
+        <tag>提高算法</tag>
         <tag>数学</tag>
         <tag>数论</tag>
-        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -858,8 +880,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>数论</tag>
         <tag>提高算法</tag>
+        <tag>数论</tag>
       </tags>
   </entry>
   <entry>
@@ -884,9 +906,9 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>数学</tag>
         <tag>提高算法</tag>
         <tag>图论</tag>
+        <tag>数学</tag>
       </tags>
   </entry>
   <entry>
@@ -897,9 +919,9 @@
         <category>ACM</category>
       </categories>
       <tags>
+        <tag>提高算法</tag>
         <tag>数学</tag>
         <tag>数论</tag>
-        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -910,9 +932,9 @@
         <category>ACM</category>
       </categories>
       <tags>
+        <tag>提高算法</tag>
         <tag>数学</tag>
         <tag>数论</tag>
-        <tag>提高算法</tag>
         <tag>群论</tag>
       </tags>
   </entry>
@@ -924,9 +946,9 @@
         <category>ACM</category>
       </categories>
       <tags>
+        <tag>提高算法</tag>
         <tag>数学</tag>
         <tag>数论</tag>
-        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -937,8 +959,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>数学</tag>
         <tag>提高算法</tag>
+        <tag>数学</tag>
       </tags>
   </entry>
   <entry>
@@ -949,8 +971,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>数学</tag>
         <tag>提高算法</tag>
+        <tag>数学</tag>
       </tags>
   </entry>
   <entry>
@@ -961,9 +983,9 @@
         <category>ACM</category>
       </categories>
       <tags>
+        <tag>提高算法</tag>
         <tag>数学</tag>
         <tag>数论</tag>
-        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -974,8 +996,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>数学</tag>
         <tag>提高算法</tag>
+        <tag>数学</tag>
       </tags>
   </entry>
   <entry>
@@ -1179,8 +1201,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>莫队算法</tag>
         <tag>提高算法</tag>
+        <tag>莫队算法</tag>
       </tags>
   </entry>
   <entry>
@@ -1404,7 +1426,7 @@
   <entry>
     <title><![CDATA[Tarjan算法(割点&割边)]]></title>
     <url>%2F2019%2F02%2F19%2FTarjan%E7%AE%97%E6%B3%95(%E5%89%B2%E7%82%B9%26%E5%89%B2%E8%BE%B9)%2F</url>
-    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本节探讨另一种Tarjan算法来求无向图的割点和割边。本文是这篇文章的延伸。 割点&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先认识什么是割点。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在一个连通无向图中，如果删去某一个点以及与其相连的边后图不再联通，则称这个点为一个割点。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tarjan算法可以用来求割点，它的步骤与求强联通分量的算法十分相似，只是多了下面几个判断： 如果该点为搜索树的根结点（一个连通图搜索树有且仅有一个根结点），判断其子结点数目。如果子结点数目多于一个，说明两个子树只能通过根结点来往，由此判断根结点为割点。也就是说，根结点为割点的充要条件是子结点多于一个。 对于非根结点u，如果其有子结点并且存在某个子结点v的LOW值满足LOW[v]≥DFN[u]，则说明该子树上的结点不能访问父结点以上的结点，即父结点为割点。也就是说，非根结点为割点的充要条件是存在至少一个子结点满足LOW[v]≥DFN[u]。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;求割点时不需要开栈，如果子结点已经被访问过，直接更新即可。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在求割点时，事实证明子结点是可以回溯到父结点的。但仍然建议在无向图中不允许子结点回溯父结点，这是为了与割边算法统一（见下文）。1234567891011void tarjan(int x, int last) &#123; DFN[x] = LOW[x] = cunt++; for (int i = head[x]; i != -1; i = edge[i].next) &#123; if (!DFN[edge[i].to]) &#123; tarjan(edge[i].to, x), LOW[x] = min(LOW[x], LOW[edge[i].to]); if (x != root &amp;&amp; LOW[edge[i].to] &gt;= DFN[x])Ans[x] = 1; else if (x == root)c++; &#125; else if (edge[i].to != last)LOW[x] = min(LOW[x], DFN[edge[i].to]); &#125; if (x == root &amp;&amp; c &gt;= 2)Ans[x] = 1;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意：Tarjan算法得出的割点可能会重复。 割边&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在一个连通无向图中，如果删去一条边后图不再连通，则该边为一条割边，也称为桥。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;找割边的算法比割点容易，因为它不需要考虑根结点的问题。对于一条边(u，v)，u为父结点，则该边是割边的充要条件是LOW[v]&gt;DFN[u]。这说明子结点不能通过其它边访问包含父结点在内的所有祖先结点，即父子边为割边。值得注意的是，判割边时，子结点不能回溯到父结点。12345678910void tarjan(int x, int last) &#123; DFN[x] = LOW[x] = cunt++; for (int i = head[x]; i != -1; i = edge[i].next) &#123; if (edge[i].to == last) continue;//不能回溯到父结点 if (!DFN[edge[i].to]) &#123; tarjan(edge[i].to, x), LOW[x] = min(LOW[x], LOW[edge[i].to]); if (LOW[edge[i].to] &gt; DFN[x])Ans[i] = 1;//标记边序号 &#125; else if (edge[i].to != last)LOW[x] = min(LOW[x], DFN[edge[i].to]); &#125;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意：如果一条边有重边，那么它一定不是割边。Tarjan算法不能排除重边的干扰，需要特判。]]></content>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本节探讨另一种Tarjan算法来求无向图的割点和割边。本文是这篇文章的延伸。 割点&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先认识什么是割点。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在一个连通无向图中，如果删去某一个点以及与其相连的边后图不再联通，则称这个点为一个割点。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tarjan算法可以用来求割点，它的步骤与求强联通分量的算法十分相似，只是多了下面几个判断： 如果该点为搜索树的根结点（一个连通图搜索树有且仅有一个根结点），判断其子结点数目。如果子结点数目多于一个，说明两个子树只能通过根结点来往，由此判断根结点为割点。也就是说，根结点为割点的充要条件是子结点多于一个。 对于非根结点u，如果其有子结点并且存在某个子结点v的LOW值满足LOW[v]≥DFN[u]，则说明该子树上的结点不能访问父结点以上的结点，即父结点为割点。也就是说，非根结点为割点的充要条件是存在至少一个子结点满足LOW[v]≥DFN[u]。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;求割点时不需要开栈，如果子结点已经被访问过，直接更新即可。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在求割点时，事实证明子结点是可以回溯到父结点的。但仍然建议在无向图中不允许子结点回溯父结点，这是为了与割边算法统一（见下文）。1234567891011void tarjan(int x, int last) &#123; DFN[x] = LOW[x] = cunt++; for (int i = head[x]; i != -1; i = edge[i].next) &#123; if (!DFN[edge[i].to]) &#123; tarjan(edge[i].to, x), LOW[x] = min(LOW[x], LOW[edge[i].to]); if (x != root &amp;&amp; LOW[edge[i].to] &gt;= DFN[x])Ans[x] = 1; else if (x == root)c++; &#125; else if (edge[i].to != last)LOW[x] = min(LOW[x], DFN[edge[i].to]); &#125; if (x == root &amp;&amp; c &gt;= 2)Ans[x] = 1;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意：Tarjan算法得出的割点可能会重复。 割边&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在一个连通无向图中，如果删去一条边后图不再连通，则该边为一条割边，也称为桥。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;找割边的算法比割点容易，因为它不需要考虑根结点的问题。对于一条边(u，v)，u为父结点，则该边是割边的充要条件是LOW[v]&gt;DFN[u]。这说明子结点不能通过其它边访问包含父结点在内的所有祖先结点，即父子边为割边。值得注意的是，判割边时，子结点不能回溯到父结点。12345678910void tarjan(int x, int last) &#123; DFN[x] = LOW[x] = cunt++; for (int i = head[x]; i != -1; i = edge[i].next) &#123; if (edge[i].to == last) continue;//不能回溯到父结点 if (!DFN[edge[i].to]) &#123; tarjan(edge[i].to, x), LOW[x] = min(LOW[x], LOW[edge[i].to]); if (LOW[edge[i].to] &gt; DFN[x])Ans[i] = 1;//标记边序号 &#125; else if (edge[i].to != last)LOW[x] = min(LOW[x], DFN[edge[i].to]); &#125;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意：如果一条边有重边，那么它一定不是割边。Tarjan算法不能排除重边的干扰，需要特判。 双连通分量&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里补充一下双连通分量的部分。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于一个无向连通图，如果其不存在割点，那么称这两个点是点双连通的，简称双连通。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果一个无向连通图中任何两个不同的点之间都是双连通的，那么称其为双连通图。对于一个无向图，其极大双连通子图称为双连通分量。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于点双连通图来说，它有很多优秀的性质，下面提几个。 【性质I】一个点双连通图中，任何两个互异点之间都会有至少两条路径，它们经过的点（除去起点终点）交集为空。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于这个性质，如果两个点之间的所有路径总需要经过一个点$p$，那么$p$是割点，这与双连通图矛盾。如果对于三条路径$l_1,l_2,l_3$，它们之间两两之间交集不为空，但是总交集为空，这种情况下总可以构造出另外两条路径使得它们交集为空。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另一个性质: 【性质II】点双连通图上任意两个互异点，都必然在一个环中。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这是显然的，由性质I很容易证明。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接下来是一个很有用的性质： 【性质III】若一个点双连通图上存在奇环，则其中所有点都可以放到一个奇环中。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一个不是很严谨的证明：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于这是一个奇环， 它的点数不小于3。任取一个环外点$s$，它必然存在一条最短路径到达环上一点$v_1$，并且该路径除去$v_1$不存在环上其它的点。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于这是双连通图，根据性质II，$s$至少有两条路径能够到达$v_1$，对于另一条路径，它必然与环上另一点有交集（否则说明$s$只能通过$v_1$到达环，这样$v_1$就是割点了），设该点为$v_2$。这样我们找到了从环外一点$x$，与$v_1,v_2$组成了环，并且与奇环的公共部分只有$v_1v_2$这一段路径，这样我们就会发现，$s$经过$v_1v_2$再回到$s$就有了两种方式（环），这两种环的奇偶性不同，即说明其中必有奇环。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点双连通分量可以使用tarjan算法求解。当我们找出一个割点时，将被割的子树（满足$LOW\geq DFN$）的子树点全部取出，再补充上割点（是补充，不用出栈），就能得到一个点双连通分量。这个算法基于一个事实，割点时划分双连通分量的点，并且割点至少存在于两个双连通分量中。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里需要注意，求点双连通分量时，不用特判根节点。不特判根节点会导致根总是被识别成割点，但是需要注意到，根不是割点并且返回时，这已经是算法的最后一步了（最后一个连通分量），将根判成割点并不会影响答案。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例题POJ2942。它的思路就是求出补图后，判断哪些点不能放到一个奇环中。根据上面的性质III，我们可以求出它所有的点双连通分量，然后分别看其中是否存在奇环，若存在，则其上的点都必然在一个奇环中，判奇环可以使用二分图染色法。12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879#include &lt;cstdio&gt;#include &lt;iostream&gt;#include &lt;stack&gt;#define N 1001using namespace std;struct Edge&#123; int next, to;&#125; edge[2000005];int op[N][N], head[N], cnt = 1, n, m, low[N], dfn[N], DFN, vis[N], in[N], c[N], C, ok[N], sv[N], flag;int tmp[N], top;stack&lt;int&gt; sta;inline int read()&#123; char e = getchar(); int s = 0; while (e &lt; '-') e = getchar(); while (e &gt; '-') s = (s &lt;&lt; 1) + (s &lt;&lt; 3) + (e &amp; 15), e = getchar(); return s;&#125;inline void add(int x, int y)&#123; edge[cnt].to = y, edge[cnt].next = head[x], head[x] = cnt++;&#125;void DFS(int x)//判断二分图的部分&#123; for (int i = head[x]; i; i = edge[i].next) &#123; if (c[edge[i].to] == C) &#123; if (sv[edge[i].to] == -1) &#123; sv[edge[i].to] = sv[x] ^ 1, DFS(edge[i].to); &#125; else if (sv[edge[i].to] == sv[x]) flag = 0; &#125; &#125;&#125;void tarjan(int x, int la)//不能回溯到父节点la&#123; low[x] = dfn[x] = ++DFN, sta.push(x), in[x] = 1; for (int i = head[x]; i; i = edge[i].next) &#123; if (edge[i].to == la) continue; if (dfn[edge[i].to] == 0) &#123; tarjan(edge[i].to, x), low[x] = min(low[x], low[edge[i].to]); if (low[edge[i].to] &gt;= dfn[x]) &#123;//有一个子节点low&gt;=dfn top = 0; int to; do &#123; to = sta.top(), c[to] = C, in[to] = 0, tmp[top++] = to, sv[to] = -1, sta.pop(); &#125; while (to != edge[i].to);//该子树出栈，注意不是to!=x c[x] = C, flag = 1, tmp[top++] = x, sv[x] = 0, DFS(x), ++C;//点x也需要加入双连通分量，但是不出栈 if (flag == 0) &#123; for (int j = 0; j &lt; top; j++) ok[tmp[j]] = 1; &#125; &#125; &#125; else if (in[edge[i].to]) &#123; low[x] = min(low[x], dfn[edge[i].to]); &#125; &#125;&#125;int main()&#123; // DEBUG; while (n = read(), m = read()) &#123; for (int i = 1; i &lt;= n; i++) &#123; ok[i] = c[i] = in[i] = head[i] = vis[i] = low[i] = dfn[i] = 0; for (int j = i + 1; j &lt;= n; j++) op[i][j] = 0; &#125; DFN = 0, cnt = 1, C = 1; for (int i = 1, x, y; i &lt;= m; i++) x = read(), y = read(), op[min(x, y)][max(x, y)] = 1; for (int i = 1; i &lt;= n; i++) &#123; for (int j = i + 1; j &lt;= n; j++) &#123; if (op[i][j] == 0) add(i, j), add(j, i); &#125; &#125; for (int i = 1; i &lt;= n; i++) tarjan(i, 0); int ans = 0; for (int i = 1; i &lt;= n; i++) ans += ok[i] == 0; printf("%d\n", ans); &#125; return 0;]]></content>
       <categories>
         <category>ACM</category>
       </categories>
@@ -1448,8 +1470,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>数论</tag>
         <tag>提高算法</tag>
+        <tag>数论</tag>
       </tags>
   </entry>
   <entry>
@@ -1471,8 +1493,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>数论</tag>
         <tag>提高算法</tag>
+        <tag>数论</tag>
         <tag>树状数组</tag>
         <tag>离散化</tag>
       </tags>
@@ -1485,8 +1507,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>数论</tag>
         <tag>提高算法</tag>
+        <tag>数论</tag>
       </tags>
   </entry>
   <entry>
@@ -1688,9 +1710,9 @@
         <tag>基础算法</tag>
         <tag>数据结构</tag>
         <tag>区间最值</tag>
+        <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
-        <tag>区间</tag>
       </tags>
   </entry>
   <entry>
@@ -1706,9 +1728,9 @@
         <tag>矩阵</tag>
         <tag>区间最值</tag>
         <tag>ST表</tag>
+        <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
-        <tag>区间</tag>
       </tags>
   </entry>
   <entry>
@@ -2079,8 +2101,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>数论</tag>
         <tag>提高算法</tag>
+        <tag>数论</tag>
       </tags>
   </entry>
   <entry>
@@ -2091,8 +2113,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>数论</tag>
         <tag>提高算法</tag>
+        <tag>数论</tag>
         <tag>动态规划</tag>
         <tag>离散化</tag>
       </tags>
