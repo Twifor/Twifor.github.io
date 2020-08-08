@@ -127,7 +127,7 @@
 <meta property="og:site_name" content="Twifor~Liyh">
 <meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Codeforces Round #652 (Div. 2)。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-07-29T12:32:17.960Z">
+<meta property="og:updated_time" content="2020-08-08T02:51:39.490Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Codeforces Round #652 (Div. 2)">
 <meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Codeforces Round #652 (Div. 2)。">
@@ -452,7 +452,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-07-29 20:32:17" itemprop="dateModified" datetime="2020-07-29T20:32:17+08:00">2020-07-29</time>
+                <time title="修改时间：2020-08-08 10:51:39" itemprop="dateModified" datetime="2020-08-08T10:51:39+08:00">2020-08-08</time>
               
             
           </span>
@@ -536,7 +536,7 @@ dp(x,1)=2dp(x-2,0)+dp(x-1,0)+1</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n
 <li>$2s&gt;e$时，只需要进行一次$2s$操作就输了，先手必输。</li>
 <li>其余情况答案与$win(s,\lfloor\frac {e}{2}\rfloor)$相同。因为$2s&gt;e$时先手就必输了，所以双方都尽量使值不超过$\lfloor\frac {e}{2}\rfloor$，首先超过的必胜。如果能让后手先超过，则先手必输，即$win(s,\lfloor\frac {e}{2}\rfloor)$。</li>
 </ul>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是我们可以在$O(log(e)$复杂度下求出$win$和$lose$。再考虑多轮比赛的情况，可以$DP$。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设$dp(x,y)$表示将要进行第$x$轮比赛，现在$Lee$是不是先手（$y=0$是先手，$y=1$不是），采取策略必胜的情况（值为$0$或$1$），那么可以进行如下操作序列（伪代码）来更新$DP$：</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是我们可以在$O(log(e))$复杂度下求出$win$和$lose$。再考虑多轮比赛的情况，可以$DP$。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设$dp(x,y)$表示将要进行第$x$轮比赛，现在$Lee$是不是先手（$y=0$是先手，$y=1$不是），采取策略必胜的情况（值为$0$或$1$），那么可以进行如下操作序列（伪代码）来更新$DP$：</p>
 <script type="math/tex; mode=display">
 dp(x,y)=0\\
 if(win(s[x], e[x])+y==1) dp(x,y)|=dp(x+1,1)\\
@@ -665,7 +665,7 @@ if(lose(s[x], e[x]) +y==1) dp(x,y)|=dp(x+1,0)</script><p>&nbsp;&nbsp;&nbsp;&nbsp
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">193</span>
+                    <span class="site-state-item-count">196</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

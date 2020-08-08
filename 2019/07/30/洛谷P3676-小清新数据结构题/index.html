@@ -127,7 +127,7 @@
 <meta property="og:site_name" content="Twifor~Liyh">
 <meta property="og:description" content="难度：NOI/NOI+/CTSC 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在很久很久以前，有一棵n个点的树，每个点有一个点权。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;现在有q次操作，每次操作是修改一个点的点权或指定一个点，询问以这个点为根时每棵子树点权和的平方和。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-04-08T02:54:54.017Z">
+<meta property="og:updated_time" content="2020-08-05T09:52:54.427Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[洛谷P3676]小清新数据结构题">
 <meta name="twitter:description" content="难度：NOI/NOI+/CTSC 题目描述&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在很久很久以前，有一棵n个点的树，每个点有一个点权。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;现在有q次操作，每次操作是修改一个点的点权或指定一个点，询问以这个点为根时每棵子树点权和的平方和。">
@@ -452,7 +452,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-04-08 10:54:54" itemprop="dateModified" datetime="2020-04-08T10:54:54+08:00">2020-04-08</time>
+                <time title="修改时间：2020-08-05 17:52:54" itemprop="dateModified" datetime="2020-08-05T17:52:54+08:00">2020-08-05</time>
               
             
           </span>
@@ -525,7 +525,7 @@
 </blockquote>
 <h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于100%的数据，$1 \leq n,q \leq 200000$, $−10≤$输入的每个点权$\leq 10$。</p>
 <h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;直接求不好求，考虑以1为根时，给某个结点点权加上$a$对答案的贡献。假设一开始子树$i$的点权和为$s_i$。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;显然给修改一个结点的点权，只会影响其到根这一段路径$P$上的子树点权和，其贡献为：</p>
-<script type="math/tex; mode=display">\sum_{i\in P}((s_i+a)^2-s_i)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;化简这个式子，得到：</p>
+<script type="math/tex; mode=display">\sum_{i\in P}((s_i+a)^2-s_i^2)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;化简这个式子，得到：</p>
 <script type="math/tex; mode=display">\sum_{i\in P}(2as_i+a^2)=2a\sum_{i\in P}s_i+|P|a^2</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;维护一下每一个点对应的子树点权和，求这条路径上的子树点权和之和以及结点数量就可以求出贡献。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面考虑换根。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当换$x$为根时，容易发现只有从1号结点到$x$这一段路径上的结点的子树点权和发生了变化，设这一段路径为$P$，结点$i$在以1为根时的子树点权和为$a_i$，以$x$为根时的点权和为$b_i$。设路径$P$上从1开始到$x$这一段连续的路径结点为$k_1,k_2,\cdots,k_p$那么有：</p>
 <script type="math/tex; mode=display">a_{k_{i+1}}+b_{k_i}=a_1=b_{k_p}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么答案设为$Ans_x$，原有（以1为根）答案为$Ans_1$，则：</p>
 <script type="math/tex; mode=display">Ans_x=Ans_1-\sum_{i\in P}a_i^2+\sum_{i\in P}b_i^2\\
@@ -661,7 +661,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">193</span>
+                    <span class="site-state-item-count">196</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
