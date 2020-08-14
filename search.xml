@@ -1,6 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Codeforces Round #647 (Div. 2)]]></title>
+    <url>%2F2020%2F08%2F14%2FCodeforces-Round-647-Div-2%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Codeforces Round #647 (Div. 2)。 D. Johnny and Contribution&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可以预见的是，如果两个点相邻，但是它们的权值是相同的，这样必然是无解的，因为无论先选哪一个，都没有办法使得另一个可以选。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们应该从小到大来进行选点，若某一个点的值为$v$，它周围相邻点必须包含全部的，权值为$1$到$v-1$的点（否则无解），并且这些点必须先选。根据选点的顺序关系，我们建立一个有向图，从这些权值较小的点，连向较大的相邻点，建出的图明显是一个$DAG$，这样只需要跑一个拓扑排序就行了。12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152#include &lt;bits/stdc++.h&gt;using namespace std;const int N = 500000 + 5;typedef long long ll;struct Edge&#123; int next, to;&#125;;struct Graph&#123; Edge edge[N &lt;&lt; 1]; int head[N], cnt = 1; inline void add(int x, int y) &#123; edge[cnt].next = head[x], edge[cnt].to = y, head[x] = cnt++; &#125;&#125; g1, g2;int n, m, v[N], in[N];queue&lt;int&gt; que;int main()&#123; scanf("%d%d", &amp;n, &amp;m); for (int i = 1, a, b; i &lt;= m; i++) scanf("%d%d", &amp;a, &amp;b), g1.add(a, b), g1.add(b, a); for (int i = 1; i &lt;= n; i++) scanf("%d", v + i); for (int i = 1; i &lt;= n; i++) &#123; set&lt;int&gt; ssp; for (int j = g1.head[i]; j; j = g1.edge[j].next) &#123; if (v[g1.edge[j].to] == v[i]) &#123; printf("-1"); return 0; &#125; if (v[g1.edge[j].to] &lt; v[i]) g2.add(g1.edge[j].to, i), ++in[i], ssp.insert(v[g1.edge[j].to]); &#125; if (int(ssp.size()) != v[i] - 1) &#123; printf("-1"); return 0; &#125; &#125; for (int i = 1; i &lt;= n; i++) &#123; if (in[i] == 0) que.push(i); &#125; while (!que.empty()) &#123; int f = que.front(); printf("%d ", f); que.pop(); for (int i = g2.head[f]; i; i = g2.edge[i].next) &#123; --in[g2.edge[i].to]; if (in[g2.edge[i].to] == 0) que.push(g2.edge[i].to); &#125; &#125; return 0;&#125; E. Johnny and Grandmaster&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这题出得很不错。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们首先对$k$从大到小排一个序，如果我们选出最大的$p^{k}$，剩下的数之和不大于它，这样答案必然就是两者之差。如果后者大于前者，则有这样一个断言：从后者中必然可以找出一些数，使其和为$p_{k}$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个结论可以推广为下面的形式： 给出一个可重数集$S=\{p^i|0\leq i\leq k\}$，若该集合的和大于$p^k$，则必然可以从$S$中选出一些数，使其和恰好为$p^k$。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用数学归纳法不难证明上面的结论。并且，根据归纳的过程，我们还可以知道必然是$S$中前若干个数的和等于$p^k$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样我们就有了一个优雅的贪心思路：起初两个数集都是空，我们记录两者的差（一开始当然是$0$），从大到小枚举数，若这个差为$0$，我们将其加入第一个数集，否则加入第二个数集，更新这个差。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;根据上面证明的结论，也容易理解算法的正确性。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;差可能是一个很大的数，我们需要模一个大质数，但是这个差也可能被大质数整除，从而出错，于是我们需要模两个大质数来保证正确性。实测本题卡常用质数，比如同时用$1e9+7$和$998244353$会$WA$。123456789101112131415161718192021222324252627282930313233343536#include &lt;bits/stdc++.h&gt;using namespace std;const int mod1 = 1e9 + 7, mod2 = 1004535809, N = 1000005;typedef long long ll;int n, p, k[N];inline int qpow(int x, int y, int mod)&#123; int ans = 1, sta = x; while (y) &#123; if (y &amp; 1) ans = 1ll * ans * sta % mod; sta = 1ll * sta * sta % mod, y &gt;&gt;= 1; &#125; return ans;&#125;int main()&#123; int T; scanf("%d", &amp;T); while (T--) &#123; scanf("%d%d", &amp;n, &amp;p); for (int i = 1; i &lt;= n; i++) scanf("%d", k + i); sort(k + 1, k + n + 1, greater&lt;int&gt;()); int n1 = 0, n2 = 0; for (int i = 1; i &lt;= n; i++) &#123; if (n1 == 0 &amp;&amp; n2 == 0) &#123; n1 = (n1 + qpow(p, k[i], mod1)) % mod1; n2 = (n2 + qpow(p, k[i], mod2)) % mod2; &#125; else &#123; n1 = ((n1 - qpow(p, k[i], mod1)) % mod1 + mod1) % mod1; n2 = ((n2 - qpow(p, k[i], mod2)) % mod2 + mod2) % mod2; &#125; &#125; printf("%d\n", n1); &#125; return 0;&#125; F. Johnny and Megan’s Necklace&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;看到答案域很小，直接从大到小枚举答案$k$，然后判断其正确性。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;容易发现，只有两个数它们满足$a\&amp;(2^k-1)==b\&amp;(2^k-1)$才能保证$a$与$b$的异或和能被$2^k$整除，然后下面就有了一个抽象建图的方法。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将给的$n$个数对$(a,b)$看成边，取它们二进制表示的末尾$k$位，将这些可能的末尾$k$位（从$0$到$2^k-1$）看成点，建无向图。问题转化为求一个回路使得可以遍历所有的边，即求欧拉回路。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;欧拉回路不同于哈密顿回路，欧拉回路可以在$O(n+m)$复杂度下求出。在求欧拉回路之前，需要先判断欧拉回路的存在性：连通图，并且各个点度数都是偶数。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;求欧拉回路可以使用下面这个（参考题解得到的）$DFS$方法。注意在使用这种方法时，需要动态删边（走过的边需要删掉，否则不能保证复杂度），最好用vector而不是链式前向星存图。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263#include &lt;bits/stdc++.h&gt;using namespace std;const int N = 2000000 + 5;const int nn = 5e6 + 5;typedef long long ll;int head[N], cnt = 1, n, p1[nn], p2[nn], Mask, vis[nn], deg[N], fa[N];vector&lt;pair&lt;int, int&gt;&gt; vec[N];int dep = 0;void DFS(int x)&#123; while (!vec[x].empty()) &#123; int to = vec[x].back().first, tag = vec[x].back().second; vec[x].pop_back(); if (vis[(tag + 1) &gt;&gt; 1]) continue; vis[(tag + 1) &gt;&gt; 1] = 1, DFS(to); printf("%d %d ", tag, ((tag - 1) ^ 1) + 1); &#125;&#125;int ff(int x)&#123; return fa[x] == x ? x : fa[x] = ff(fa[x]);&#125;inline int check(int x)&#123; Mask = (1 &lt;&lt; x) - 1; for (int i = 0; i &lt;= Mask; i++) vec[i].clear(), deg[i] = 0, fa[i] = i; for (int i = 1; i &lt;= n; i++) vis[i] = 0; for (int i = 1; i &lt;= n; i++) &#123; vec[p1[i] &amp; Mask].push_back(&#123;p2[i] &amp; Mask, i &lt;&lt; 1&#125;); vec[p2[i] &amp; Mask].push_back(&#123;p1[i] &amp; Mask, (i &lt;&lt; 1) - 1&#125;); ++deg[p1[i] &amp; Mask], ++deg[p2[i] &amp; Mask]; fa[ff(p1[i] &amp; Mask)] = ff(p2[i] &amp; Mask); &#125; int rt = -1; for (int i = 0; i &lt;= Mask; i++) &#123; if (deg[i] &amp; 1) return 0; if (deg[i]) &#123; if (rt == -1) rt = ff(i); if (ff(i) != rt) return 0; &#125; &#125; printf("%d\n", x); for (int i = 0; i &lt;= Mask; i++) &#123; if (deg[i]) &#123; DFS(i); break; &#125; &#125; return 1;&#125;int main()&#123; scanf("%d", &amp;n); // n = 500000; for (int i = 1; i &lt;= n; i++) &#123; scanf("%d%d", p1 + i, p2 + i); // p1[i] = (i &lt;&lt; 1) - 1, p2[i] = i &lt;&lt; 1; &#125; for (int i = 20; i &gt;= 0; i--) &#123; if (check(i)) break; &#125; return 0;&#125;]]></content>
+      <categories>
+        <category>ACM</category>
+      </categories>
+      <tags>
+        <tag>Codeforces</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Codeforces Round #664 (Div. 2)]]></title>
+    <url>%2F2020%2F08%2F13%2FCodeforces-Round-664-Div-2%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;https://codeforces.com/contest/1395。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;论脑抽写错代码导致FST是一种什么体验。水题忽略。 C. Boboniu and Bit Operations&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先最小化$c_i$是不对的。假设有一个是$1000$，此时另一个数是$1000$比$0111$更优，因为前者得到$1000$，后者得到$1111$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在这种情况下，注意到$k$很小，我们可以枚举最后的答案，然后暴力判断每一个$a_i$是否都能找到合法的$b_j$。复杂度$O(nm2^9)$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;据说本题还可以$DP$做，不过和暴力本质上是一样的。123456789101112131415161718192021222324252627282930313233#include &lt;bits/stdc++.h&gt;using namespace std;const int N = 500 + 5;typedef long long ll;int n, m, a[N], b[N];inline int solve(int x, int y)&#123; for (int i = 1; i &lt;= m; i++) &#123; if (((a[y] &amp; b[i]) | x) == x) return 1; &#125; return 0;&#125;int main()&#123; scanf("%d%d", &amp;n, &amp;m); for (int i = 1; i &lt;= n; i++) scanf("%d", a + i); for (int i = 1; i &lt;= m; i++) scanf("%d", b + i); int ans = 0; for (int i = 0; i &lt; 2048; i++) &#123; int flag = 1; for (int j = 1; j &lt;= n; j++) &#123; if (!solve(i, j)) &#123; flag = 0; break; &#125; &#125; if (flag) &#123; printf("%d", i); return 0; &#125; &#125; return 0;&#125; D. Boboniu Chats with Du&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可能我的做法比较傻。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考虑枚举被禁言的天数$x$，根据这个天数推导出有几天$a_i&gt;m$。如果$x$不能被$d+1$整除，则$a_i&gt;m$就有$\lceil \frac {x}{d+1}\rceil$天。若能整除，则有两种情况，一种仍然是$\lceil \frac {x}{d+1}\rceil$天，另一种则是将最后一个$a_i&gt;m$的$a_i$放到了最后一天，这样就有$\lceil \frac {x}{d+1}\rceil+1$天。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;有了被禁言的天数以及$a_i&gt;m$的数量后，就可以得到$a_i\leq m$的数量，此时可以贪心。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于$s$天$a_i&gt;m$的$a_i$，我们当然要选前$s$大的数，对于剩下的$a_i\leq m$的天，也要选里面最大的。这里我还做了一步合法性的判断，对于被禁言的天，那些多余的$a_i&gt;m$都会被塞到这里，如果还多余，则是非法的。同时$a_i&gt;m$以及$a_i\leq m$的数量也需要限制。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;总体来说算是一道比较坑的贪心水题吧。123456789101112131415161718192021222324252627282930313233343536373839404142#include &lt;bits/stdc++.h&gt;using namespace std;const int N = 300000 + 5;typedef long long ll;int a[N], n, d, m, num;ll ss[N];int main()&#123; scanf("%d%d%d", &amp;n, &amp;d, &amp;m); for (int i = 1; i &lt;= n; i++) scanf("%d", a + i); sort(a + 1, a + n + 1); for (int i = 1; i &lt;= n; i++) ss[i] = ss[i - 1] + a[i]; for (int i = 1; i &lt;= n; i++) num += a[i] &gt; m; ll ans = 0; for (int i = 0; i &lt;= n; i++) &#123; int dayu = i % d == 0 ? i / d : i / d + 1; if (dayu &gt; num || dayu + i &gt; n) continue; int ts = i; int remain = n - dayu - ts, buchong; ll sum; if (remain &gt; n - num) goto to; if (num - dayu &gt; ts) goto to; buchong = ts - (num - dayu); sum = ss[n - num] - ss[buchong] + ss[n] - ss[n - dayu]; ans = max(ans, sum); to:; if (i % d == 0) &#123; dayu = i / d + 1; // cout &lt;&lt; i &lt;&lt; " " &lt;&lt; dayu &lt;&lt; endl; if (dayu &gt; num || dayu + i &gt; n) continue; ts = i; remain = n - dayu - ts; if (remain &gt; n - num) continue; if (num - dayu &gt; ts) continue; buchong = ts - (num - dayu); ll sum = ss[n - num] - ss[buchong] + ss[n] - ss[n - dayu]; ans = max(ans, sum); &#125; &#125; printf("%lld", ans); return 0;&#125; E. Boboniu Walks on Graph&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意到最后每一个点有且仅有一条出边(即有恰好$n$条边)，那么最后得到的图如果每一个都可以回到自身，这说明这个图必然是一个环。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于$n$个点，每一个点有且仅有一条出边，并且形成环，它有一个等价的说法：每一个点的出点组成集合大小为$n$。这很容易证明：如果集合大小小于$n$，说明有的点没有入边，显然形不成环，而集合大小为$n$时，说明每一个点都有入边，而边只有$n$条，那么只能是一个环。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么问题转化为，找有哪些$c_i$序列，能够使加入的边的出点组成集合大小为$n$，或者等价地说，这些边的出点恰好为$\{1,\cdots,n\}$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;判断一些数是不是$\{1,\cdots,n\}$有一个优雅的做法：求它们的和以及乘积，模一个大质数（不放心可以模两个大质数），然后与标准的结果对比，撞车概率极低。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们预处理出每一条边什么时候才会被加入，然后暴力枚举$c_i$（有$9!$种情况）。如果每一次枚举暴力判断出点集合是否合法，这样计算量是$9!n$，和$n^2$类似，显然$TLE$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意到上面方法慢的主要原因是，我们枚举到$c_i=j$时，可能有很多条边同时符合条件，这样就得$O(n)$地处理它们，导致复杂度提升。我们可以记录它们的和以及乘积，直接提出来参与后面的计算，这样便是$9!$的计算量。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;复杂度$O(n+m+9!)$。123456789101112131415161718192021222324252627282930313233343536#include &lt;bits/stdc++.h&gt;using namespace std;const int N = 300000 + 5;const int mod = 1e9 + 7;typedef long long ll;vector&lt;pair&lt;int, int&gt;&gt; vec[N];int sum[10][10], ji[10][10], n, m, k, bs, bj, ans; void DFS(int x, int ss, int jj)&#123; if (x == k + 1) &#123; ans += ss == bs &amp;&amp; jj == bj; return; &#125; for (int i = 1; i &lt;= x; i++) DFS(x + 1, (ss + sum[x][i]) % mod, 1ll * jj * ji[x][i] % mod);&#125;int main()&#123; scanf("%d%d%d", &amp;n, &amp;m, &amp;k); for (int i = 1, a, b, c; i &lt;= m; i++) scanf("%d%d%d", &amp;a, &amp;b, &amp;c), vec[a].push_back(&#123;c, b&#125;); for (int i = 1; i &lt;= n; i++) sort(vec[i].begin(), vec[i].end()); for (int i = 1; i &lt;= k; i++) &#123; for (int j = 1; j &lt;= i; j++) sum[i][j] = 0, ji[i][j] = 1; &#125; for (int i = 1; i &lt;= n; i++) &#123; for (int j = 0; j &lt; vec[i].size(); j++) &#123; sum[vec[i].size()][j + 1] = (sum[vec[i].size()][j + 1] + vec[i][j].second) % mod; ji[vec[i].size()][j + 1] = 1ll * ji[vec[i].size()][j + 1] * vec[i][j].second % mod; &#125; &#125; bs = 0, bj = 1, ans = 0; for (int i = 1; i &lt;= n; i++) bs = (bs + i) % mod, bj = 1ll * bj * i % mod; DFS(1, 0, 1); printf("%d", ans); return 0;&#125; F. Boboniu and String&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意到这个串的$BN$顺序其实根本无所谓，重要的是它们的数量，这样每一个串可以看成一个二元组$(x,y)$。对于两个二元组$(x_1,y_1)$和$(x_2,y_2)$，它们的距离可以这样求： dis=\begin{cases} \max(|x_1-x_2|,|y_1-y_2|) & (x_1-x_2)(y_1-y_2)\geq 0\\ |x_1-x_1|+|y_1-y_2| & (x_1-x_2)(y_1-y_2)< 0 \end{cases}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;问题转化为，求一个$(x_t,y_t)$，使得它到$n$个二元组的距离最大值最小。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;距离的最大值随$(x_t,y_t)$在$xOy$平面上是单峰的，这意味着，若固定$x_t$，则距离最大值随$y_t$的增大先减后增，$x_t$同理。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于一维的单峰函数，可以使用三分查找来解决，对于二维的，可以使用三分套三分来解决，复杂度$O(nlog^2n)$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实测三分的上界不能太大，设置成$n$个串中$B(N)$最大的出现次数即可，否则会$T$。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566#include &lt;bits/stdc++.h&gt;using namespace std;const int N = 500000 + 5;typedef long long ll;int nb[N], nn[N], n, who, lx, ly;char s[N];inline int dis(int x, int y, int to)&#123; if (1ll * (x - nb[to]) * (y - nn[to]) &gt;= 0) return max(abs(x - nb[to]), abs(y - nn[to])); return abs(x - nb[to]) + abs(y - nn[to]);&#125;inline int getMin(int x, int y)&#123; int dd = 0; for (int i = 1; i &lt;= n; i++) dd = max(dd, dis(x, y, i)); return dd;&#125;inline int f(int x)&#123; int l = 0, r = ly, a, b, dd = 0x3f3f3f3f; if (x == 0) l = 1; while (r - l &gt;= 10) &#123; a = l + (r - l + 1) / 3, b = r - (r - l + 1) / 3; if (getMin(x, a) &gt; getMin(x, b)) &#123; l = a; &#125; else &#123; r = b; &#125; &#125; for (int i = l; i &lt;= r; i++) &#123; if (getMin(x, i) &lt; dd) dd = getMin(x, i), who = i; &#125; return dd;&#125;int main()&#123; scanf("%d", &amp;n); for (int i = 1; i &lt;= n; i++) &#123; scanf("%s", s); for (int j = 0; s[j]; j++) &#123; if (s[j] == 'B') &#123; ++nb[i]; &#125; else &#123; ++nn[i]; &#125; lx = max(lx, nb[i]), ly = max(ly, nn[i]); &#125; &#125; int l = 0, r = lx, a, b; while (r - l &gt;= 10) &#123; a = l + (r - l + 1) / 3, b = r - (r - l + 1) / 3; if (f(a) &gt; f(b)) &#123; l = a; &#125; else &#123; r = b; &#125; &#125; int ans = 0x3f3f3f3f, ax, ay; for (int i = l; i &lt;= r; i++) &#123; if (f(i) &lt; ans) ans = f(i), ax = i, ay = who; &#125; printf("%d\n", ans); for (int i = 1; i &lt;= ax; i++) printf("B"); for (int i = 1; i &lt;= ay; i++) printf("N"); return 0;&#125;]]></content>
+      <categories>
+        <category>ACM</category>
+      </categories>
+      <tags>
+        <tag>Codeforces</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Codeforces Round #657 (Div. 2)]]></title>
+    <url>%2F2020%2F08%2F12%2FCodeforces-Round-657-Div-2%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Codeforces Round #657 (Div. 2)。E题待补。 A. Acacius and String&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$div2$上来1500评分的题？&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于$n$很小，暴力枚举哪里匹配，然后判别的地方不要匹配即可。1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253#include &lt;bits/stdc++.h&gt;using namespace std;const int N = 10000 + 5;typedef long long ll;int n;char op[N], tmp[N];const char* P = "abacaba";inline int check3(int l, int r)&#123; for (int i = l, z = 0; i &lt;= r; i++, z++) &#123; if (tmp[i] != P[z]) return 0; &#125; return 1;&#125;inline int check(int x)&#123; for (int i = 7; i &lt;= n; i++) &#123; if (i != x &amp;&amp; check3(i - 6, i)) return 0; &#125; // cout &lt;&lt; 1 &lt;&lt; endl; return 1;&#125;inline int check2(int l, int r)&#123; for (int i = l, j = 0; i &lt;= r; i++, j++) &#123; if (op[i] != P[j] &amp;&amp; op[i] != '?') return 0; &#125; return 1;&#125;int main()&#123; int T; scanf("%d", &amp;T); while (T--) &#123; scanf("%d%s", &amp;n, op + 1); for (int i = 7; i &lt;= n; i++) &#123; if (check2(i - 6, i)) &#123; for (int j = 1; j &lt;= n; j++) tmp[j] = op[j]; for (int j = i - 6, z = 0; j &lt;= i; j++, z++) tmp[j] = P[z]; if (check(i)) &#123; for (int j = 1; j &lt;= n; j++) tmp[j] = tmp[j] == '?' ? 'z' : tmp[j]; printf("Yes\n"); for (int j = 1; j &lt;= n; j++) printf("%c", tmp[j]); printf("\n"); goto to; &#125; &#125; &#125; printf("No\n"); to:; &#125; return 0;&#125; B. Dubious Cyrpto&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;移项，得到： na=m+c-b\in[m+l-r,m+r-l]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然后暴力枚举$a$，判$n$的存在性。123456789101112131415161718192021222324252627282930#include &lt;bits/stdc++.h&gt;using namespace std;const int N = 10000 + 5;typedef long long ll; int main()&#123; int T; scanf("%d", &amp;T); while (T--) &#123; long long l, r, m, a, b, c, cha; scanf("%lld%lld%lld", &amp;l, &amp;r, &amp;m); for (long long i = l; i &lt;= r; i++) &#123; long long up = (m + r - l) / i; long long down = (m + l - r) % i == 0 ? (m + l - r) / i : (m + l - r) / i + 1; down = max(down, 1ll); if (up &gt;= down) &#123; a = i, cha = up * a - m; break; &#125; &#125; if (cha &lt; 0) &#123; b = r, c = r + cha; &#125; else &#123; b = l, c = l + cha; &#125; printf("%lld %lld %lld\n", a, b, c); &#125; return 0;&#125; C. Choosing flowers&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;经过证明（或者根据合理的猜想），最多只有一种花会买一支以上。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;枚举那一个种类的花会买一支以上（设为$s$），然后别的花买一支，只买一支的花的$a_i$必然需要大于$b_s$才会使答案更优。于是我们根据$a_i$排序，然后二分出可行的区间，更新答案。1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253#include &lt;bits/stdc++.h&gt;using namespace std;const int N = 100000 + 5;typedef long long ll;int n, m;struct Node&#123; int a, b; bool operator&lt;(Node s) &#123; return a &lt; s.a; &#125;&#125; nd[N];long long sum[N];int main()&#123; int T; scanf("%d", &amp;T); while (T--) &#123; scanf("%d%d", &amp;n, &amp;m); for (int i = 1; i &lt;= m; i++) scanf("%d%d", &amp;nd[i].a, &amp;nd[i].b); sort(nd + 1, nd + m + 1); sum[m] = nd[m].a, sum[m + 1] = 0; for (int i = m - 1; i &gt;= 1; i--) sum[i] = sum[i + 1] + nd[i].a; long long ans = 0; for (int i = 1; i &lt;= m; i++) &#123; int l = 0, r = m, mid; while (l &lt; r) &#123; if (r == l + 1) break; mid = (l + r) &gt;&gt; 1; if (nd[mid].a &gt;= nd[i].b) r = mid; else l = mid; &#125; ans = max(ans, nd[i].a + 1ll * (n - 1) * nd[i].b); if (n &lt;= m - r + 1) &#123; ans = max(ans, sum[m - n + 1]); &#125; else &#123; long long tmp = 0, num = n; tmp += sum[r], num -= m - r + 1; // cout &lt;&lt; "x" &lt;&lt; tmp &lt;&lt; " " &lt;&lt; num &lt;&lt; " " &lt;&lt; m - r + 1 &lt;&lt; " " &lt;&lt; i &lt;&lt; endl; if (r &gt; i) tmp += nd[i].a + 1ll * (num - 1) * nd[i].b; else tmp += 1ll * num * nd[i].b; ans = max(ans, tmp); &#125; &#125; printf("%lld\n", ans); &#125; return 0;&#125; D. New Passenger Trams&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;容易发现，一个货运列车与电车是否冲突（$t=0$），只与它的出现时间对$\frac {m}{2}$的模有关。具体来说，如果这个模在区间$[0,\frac{m}{2}-k]$中，则是可行的。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;改变$t$会导致所有货运列车的模数同时增加或减少一个固定的值。我们为了最大化位于$[0,\frac{m}{2}-k]$中的值，可以$O(n)$地（尺取法）枚举左端点，得到右端点，然后更新答案。1234567891011121314151617181920212223242526272829303132#include &lt;bits/stdc++.h&gt;using namespace std;const int N = 100000 + 5;typedef long long ll;ll n, h, m, k, hh[N], mm[N];vector&lt;pair&lt;ll, int&gt;&gt; vec;int main()&#123; scanf("%lld%lld%lld%lld", &amp;n, &amp;h, &amp;m, &amp;k); for (int i = 1; i &lt;= n; i++) &#123; scanf("%lld%lld", hh + i, mm + i); mm[i] = mm[i] % (m / 2); vec.push_back(&#123;mm[i], i&#125;); &#125; sort(vec.begin(), vec.end()); int len = vec.size(); for (int i = 0; i &lt; len; i++) vec.push_back(&#123;vec[i].first + m / 2, vec[i].second&#125;); int ans = 0, r = 0, who = 0, at; for (int i = 0; i &lt; len; i++) &#123; while (r + 1 &lt; vec.size() &amp;&amp; vec[r + 1].first - vec[i].first &lt; m / 2 - k + 1) ++r; if (r - i + 1 &gt; ans) &#123; ans = r - i + 1; who = vec[i].first; at = i; &#125; &#125; printf("%lld %d\n", n - ans, who); for (int i = at; i &lt; at + n; i++) &#123; if (vec[i].first - vec[at].first &gt;= m / 2 - k + 1) printf("%d ", vec[i].second); &#125; return 0;&#125; F. Chess Strikes Back&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们将棋盘划分为若干个$2\times 2$的块，每一个块的左上角和右下角都是白块。这样每一个块里有且仅有一个$king$。每一个块用其左上角坐标表示。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;有一个结论：当一个块$(x_1,y_1)$的左上角被堵上，另一个块（可以相同）$(x_2,y_2)$的右下角被堵上，且$x_1\leq x_2,y_1\leq y_2$时，答案为$NO$，否则为$YES$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样我们建立线段树维护这两种块的坐标，进而在$O(nlogn)$复杂度下求解。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051#include &lt;bits/stdc++.h&gt;using namespace std;const int N = 400000 + 5;typedef long long ll;int n, m, tr[N &lt;&lt; 2][3], q;set&lt;int&gt; ssp[N][2];void modify(int x, int who, int v, int l = 1, int r = n, int k = 1)&#123; if (l == r) &#123; if (ssp[l][who].count(v)) ssp[l][who].erase(v); else ssp[l][who].insert(v); tr[k][0] = ssp[l][0].empty() ? 0x3f3f3f3f : *ssp[l][0].begin(); tr[k][1] = ssp[l][1].empty() ? 0 : *ssp[l][1].rbegin(); tr[k][2] = tr[k][1] &gt;= tr[k][0]; return; &#125; int mid = (l + r) &gt;&gt; 1; if (x &lt;= mid) modify(x, who, v, l, mid, k &lt;&lt; 1); else modify(x, who, v, mid + 1, r, k &lt;&lt; 1 | 1); tr[k][1] = max(tr[k &lt;&lt; 1][1], tr[k &lt;&lt; 1 | 1][1]); tr[k][0] = min(tr[k &lt;&lt; 1][0], tr[k &lt;&lt; 1 | 1][0]); tr[k][2] = (tr[k &lt;&lt; 1 | 1][1] &gt;= tr[k &lt;&lt; 1][0]) | tr[k &lt;&lt; 1][2] | tr[k &lt;&lt; 1 | 1][2];&#125;void build(int l = 1, int r = n, int k = 1)&#123; tr[k][0] = 0x3f3f3f3f, tr[k][1] = tr[k][2] = 0; if (l == r) return; int mid = (l + r) &gt;&gt; 1; build(l, mid, k &lt;&lt; 1), build(mid + 1, r, k &lt;&lt; 1 | 1);&#125;int main()&#123; scanf("%d%d%d", &amp;n, &amp;m, &amp;q); n &lt;&lt;= 1, m &lt;&lt;= 1, build(); while (q--) &#123; int x, y; scanf("%d%d", &amp;x, &amp;y); if (x &amp; 1) &#123; modify(x, 0, y); &#125; else &#123; --x, --y; modify(x, 1, y); &#125; printf("%s\n", !tr[1][2] ? "YES" : "NO"); &#125; return 0;&#125;]]></content>
+      <categories>
+        <category>ACM</category>
+      </categories>
+      <tags>
+        <tag>Codeforces</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Codeforces Round #658 (Div. 2)]]></title>
+    <url>%2F2020%2F08%2F12%2FCodeforces-Round-658-Div-2%2F</url>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Codeforces Round #658 (Div. 2)。 A. Common Subsequence&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;显然，找一个两者都有的数即可。123456789101112131415161718192021222324252627#include &lt;bits/stdc++.h&gt;using namespace std;const int N = 10000 + 5;typedef long long ll;int vis[N];int main()&#123; int T; scanf("%d", &amp;T); while (T--) &#123; int a, b; for (int i = 1; i &lt;= 1000; i++) vis[i] = 0; scanf("%d%d", &amp;a, &amp;b); for (int i = 1, x; i &lt;= a; i++) scanf("%d", &amp;x), vis[x] = 1; int flag = 0; for (int i = 1, x; i &lt;= b; i++) &#123; scanf("%d", &amp;x); if (vis[x] == 1 &amp;&amp; flag == 0) &#123; printf("YES\n1 %d\n", x); flag = 1; &#125; &#125; if (flag == 0) printf("NO\n"); // to:; &#125; return 0;&#125; B. Sequential Nim&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于某一堆石子，它影响后来决策的只有谁拿走了里面的最后一个石子，而至于两人怎么拿的，这不重要。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意到如果这一堆石子只有一个，那么只能面临这个局面的人拿走所有石子，否则这个人可以选择是谁拿走它。根据这个思考可以写一个$O(n)$的$DP$。12345678910111213141516171819202122232425262728include &lt;bits/stdc++.h&gt;using namespace std;const int N = 100000 + 5;typedef long long ll;int sg[N][2], a[N], n;int SG(int x, int y)&#123; if (x == n) return 1; if (~sg[x][y]) return sg[x][y]; if (y == 1) return sg[x][y] = !SG(x + 1, a[x + 1] == 1); return sg[x][y] = (SG(x, 1) == 0 || SG(x + 1, a[x + 1] == 1) == 0);&#125;int main()&#123; int T; scanf("%d", &amp;T); while (T--) &#123; scanf("%d", &amp;n); for (int i = 1; i &lt;= n; i++) scanf("%d", a + i), sg[i][0] = sg[i][1] = -1; int ans = SG(1, a[1] == 1); // for (int i = 1; i &lt;= n; i++) cout &lt;&lt; SG(i, 0) &lt;&lt; " " &lt;&lt; SG(i, 1) &lt;&lt; endl; if (ans) &#123; printf("First\n"); &#125; else &#123; printf("Second\n"); &#125; &#125; return 0; C. Prefix Flip&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于简单版本可以暴力$O(n^2)$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;困难版本主要是翻转不好处理，头铁的话可以上平衡树解决这个问题。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;事实上有一个优雅的构造解可以避免翻转。我们将第一个串变为全$0$或者全$1$的形式，这样进行$n$次操作，并且可以忽略翻转，然后再考虑将第二个串也变成这样，由于操作是可逆的，所以方法可行。这个构造性解法的巧妙之处在于它也满足了$2n$的限制，但是同时可以忽略翻转操作。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面给出一个平衡树的无脑代码。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111#include &lt;bits/stdc++.h&gt;using namespace std;const int N = 200000 + 5;typedef long long ll;char a[N], b[N], tmp[N];int n, cnt, root;vector&lt;int&gt; ans;struct Node&#123; int l, r, v, key, ctag, rtag, num;&#125; nd[N];inline int newNode(int x)&#123; nd[cnt].num = 1, nd[cnt].l = nd[cnt].r = nd[cnt].ctag = nd[cnt].rtag = 0; nd[cnt].v = x, nd[cnt].key = rand(); return cnt++;&#125;inline void update(int x)&#123; nd[x].num = nd[nd[x].l].num + nd[nd[x].r].num + 1;&#125;inline void pud(int x)&#123; if (nd[x].ctag) &#123; nd[nd[x].l].v ^= 1, nd[nd[x].r].v ^= 1, nd[nd[x].l].ctag ^= 1, nd[nd[x].r].ctag ^= 1; nd[x].ctag = 0; &#125; if (nd[x].rtag) &#123; nd[nd[x].l].rtag ^= 1, swap(nd[nd[x].l].l, nd[nd[x].l].r); nd[nd[x].r].rtag ^= 1, swap(nd[nd[x].r].l, nd[nd[x].r].r); nd[x].rtag = 0; &#125;&#125;void split(int rt, int&amp; a, int&amp; b, int v)&#123; if (rt == 0) &#123; a = b = 0; return; &#125; pud(rt); if (nd[nd[rt].l].num &lt; v) a = rt, split(nd[rt].r, nd[a].r, b, v - nd[nd[rt].l].num - 1); else b = rt, split(nd[rt].l, a, nd[b].l, v); update(rt);&#125;void merge(int&amp; rt, int a, int b)&#123; if (a == 0 || b == 0) &#123; rt = a + b; return; &#125; pud(a), pud(b); if (nd[a].key &gt; nd[b].key) rt = a, merge(nd[rt].r, nd[a].r, b); else rt = b, merge(nd[rt].l, a, nd[b].l); update(rt);&#125;inline void solve(int x)&#123; int a, b; split(root, a, b, x); // cout &lt;&lt; nd[a].v &lt;&lt; endl; nd[a].v ^= 1, nd[a].ctag ^= 1, swap(nd[a].l, nd[a].r), nd[a].rtag ^= 1; merge(root, a, b);&#125;inline int get(int x)&#123; int a, b, c, ans; split(root, a, c, x), split(a, a, b, x - 1); ans = nd[b].v; merge(a, a, b), merge(root, a, c); // cout &lt;&lt; x &lt;&lt; " " &lt;&lt; ans &lt;&lt; endl; return ans;&#125; int main()&#123; srand(time(0)); int T; scanf("%d", &amp;T); while (T--) &#123; scanf("%d%s%s", &amp;n, a + 1, b + 1); ans.clear(), cnt = 1, root = 0; for (int i = 1; i &lt;= n; i++) &#123; merge(root, root, newNode(a[i] - '0')); &#125; for (int i = n; i &gt;= 1; i--) &#123; if (get(i) + '0' == b[i]) continue; if (i == 1) &#123; ans.push_back(1); solve(1); continue; &#125; if (get(1) + '0' != b[i]) &#123; ans.push_back(i); solve(i); continue; &#125; ans.push_back(1), solve(1); ans.push_back(i), solve(i); // DFS(root); // cout &lt;&lt; endl; &#125; printf("%d", ans.size()); for (int i : ans) printf(" %d", i); printf("\n"); &#125; return 0;&#125; D. Unmerge&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意到如果数$x$在序列$A$中，那么它之后的一系列满足$y &lt; x$的$y$都应该在序列$A$中，否则它会在序列$B$中，这样由于$y &lt; x$，$y$会出现在$x$前面。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;根据以上思考，我们可以从第一位开始，找它后面第一个比它大的数，然后继续向后找，将序列划分为若干个段。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;显然，两个序列都必须由这些段组成的，现在问题转化为给定若干个数，问它们能不能找出其中一些数，相加得到$n$，这是一个经典的$01$背包问题，然后跑一个背包本题就解决了。1234567891011121314151617181920212223242526272829#include &lt;bits/stdc++.h&gt;using namespace std;const int N = 10000 + 5;typedef long long ll;int p[N], n, dp[N];vector&lt;int&gt; vec;int main()&#123; int T; scanf("%d", &amp;T); while (T--) &#123; vec.clear(), vec.push_back(0); scanf("%d", &amp;n); for (int i = 1; i &lt;= (n &lt;&lt; 1); i++) scanf("%d", p + i); for (int i = 1; i &lt;= (n &lt;&lt; 1);) &#123; int r = i; while (r + 1 &lt;= (n &lt;&lt; 1) &amp;&amp; p[r + 1] &lt; p[i]) ++r; vec.push_back(r - i + 1), i = r + 1; &#125; for (int i = 0; i &lt;= n; i++) dp[i] = 0; for (int i = 1; i &lt; vec.size(); i++) &#123; for (int j = n; j &gt;= 0; j--) &#123; if (j &gt;= vec[i]) dp[j] = max(dp[j], dp[j - vec[i]] + vec[i]); &#125; &#125; printf("%s\n", dp[n] == n ? "YES" : "NO"); &#125; return 0;&#125; E. Mastermind&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;先考虑这样一个问题：给定一个序列，将其打乱，可以得到的最小匹配数为多少？（第$i$位匹配当且仅当打乱后这一位和之前相同）。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;容易发现这个最小匹配数就是$2f-n$，其中$f$是里面出现最多的数出现的次数，$n$是序列长度。这个最小匹配的方案可以通过如下的方法构造性地得到： 对序列重新标号，使得相同的数总是相邻的。 将序列旋转$\lfloor\frac {n}{2}\rfloor$。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;有了上面的思考后，就可以解决本题。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先需要找$x$个完全匹配的位，这样会剩下$n-x$位，我们将它们按照上面的思路进行乱序，使得匹配数最少。为了使匹配数最小，我们应该最小化出现最多颜色的数量，于是这里贪心地每次都选出现次数最多的颜色的某一位。这一步可以通过记录每一位在它对应颜色中的排名，排序后完成。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于乱序后仍然匹配的位，它们本不应该出现，于是我们需要将这一位换掉。由于颜色有$n+1$个，所以我们可以选一个没有出现的颜色$s$，来替换掉当前的颜色。但是这里需要注意替换的次数不能超过$n-y$，否则就是无解的。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;剩下的都是不能匹配的部分，此时如果$n-y$的次数还没有用完，就将它们对应的部分也换成$s$。12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061#include &lt;bits/stdc++.h&gt;using namespace std;const int N = 100000 + 5;typedef long long ll;int b[N], n, x, y, c[N], ans[N];vector&lt;pair&lt;int, int&gt;&gt; vec;vector&lt;int&gt; tmp;int cmp(int x, int y)&#123; return b[x] &lt; b[y];&#125;int main()&#123; int T; scanf("%d", &amp;T); while (T--) &#123; int other; scanf("%d%d%d", &amp;n, &amp;x, &amp;y), vec.clear(); for (int i = 1; i &lt;= n + 1; i++) c[i] = 0, ans[i] = 0; for (int i = 1; i &lt;= n; i++) &#123; scanf("%d", b + i); vec.push_back(&#123;++c[b[i]], i&#125;); &#125; for (int i = 1; i &lt;= n + 1; i++) &#123; if (c[i] == 0) &#123; other = i; break; &#125; &#125; sort(vec.begin(), vec.end(), greater&lt;pair&lt;int, int&gt;&gt;()); for (int i = 0; i &lt; x; i++) ans[vec[i].second] = b[vec[i].second]; tmp.clear(); for (int i = 1; i &lt;= n; i++) &#123; if (ans[i] == 0) tmp.push_back(i); &#125; sort(tmp.begin(), tmp.end(), cmp); int len = (n - x) &gt;&gt; 1, remain = n - y, sz = tmp.size(); for (int i = 0; i &lt; sz; i++) tmp.push_back(tmp[i]); for (int i = 0, j = len; i &lt; sz; i++, j++) &#123; if (b[tmp[i]] != b[tmp[j]]) &#123; ans[tmp[i]] = -b[tmp[j]]; &#125; else if (remain) &#123; ans[tmp[i]] = other, --remain; &#125; else &#123; printf("NO\n"); goto tag; &#125; &#125; for (int i = 1; i &lt;= n &amp;&amp; remain; i++) &#123; if (ans[i] &lt; 0) ans[i] = other, --remain; &#125; for (int i = 1; i &lt;= n; i++) &#123; if (ans[i] &lt; 0) ans[i] = -ans[i]; &#125; printf("YES\n"); for (int i = 1; i &lt;= n; i++) printf("%d ", ans[i]); printf("\n"); tag:; &#125; return 0;&#125;]]></content>
+      <categories>
+        <category>ACM</category>
+      </categories>
+      <tags>
+        <tag>Codeforces</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[[NowCoder5674B]Groundhog and Apple Tree]]></title>
     <url>%2F2020%2F08%2F08%2FNowCoder5674B-Groundhog-and-Apple-Tree%2F</url>
     <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Groundhog and Apple Tree。 Solution&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;题面略，话说很久都没有因为一道题而单独开一篇文章了。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在某一个节点休息（恢复HP），可以认为是它在父节点休息够了再下来，这样所有的休息操作都可以放到根节点上。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设置一个$dp(x)$，表示到$x$子树上，至少需要多少的HP才能完整地遍历这棵树，答案就是$dp(1)$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意到若按照最优决策进行，假设从某一个节点开始时HP是$x$，返回回来时是$y$，则$x-y$应是一个定值，设其为$c_i$，$c_i$可以通过下面的递推式计算得到： c_i=\sum_{j\in son(i)}(2e(i,j)+c(j))-a_i&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其中$son(i)$是$i$的子节点集合，$e(i,j)$是$(i,j)$边的边权，$a_i$是$i$上苹果的值。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然后考虑如何进行$dp$的递推，主要是子节点访问顺序的问题，假设我们按照$s_1,\cdots,s_k$的顺序进行，其中$k=|son(i)|$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为了简化这个问题，我们先忽略$i$处的苹果，最后把它单独减去即可，然后定义一个函数$f_i$表示已经遍历了前$i-1$棵子树回到根节点$i$时的HP，这样由如下的递推关系（下面把$e(i,son_j)$简写成$e(j)$）： f_i-e_i\geq dp(i)\\ f_{i+1}=f_i-(2e_i+c_i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假设$f_1=x$，则简化这个式子后可以得到： x-\sum_{j=1}^i(2e_j+c_j)-e_{i+1}\geq dp(i+1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;综合来看，就有： x\geq \sum_{j=1}^i(2e_j+c_j)+e_{i+1}+dp(i+1),0\leq i\leq k&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里认为$e_{k+1}+dp(k+1)=0$，于是$x$就应该为右侧的最大值，容易发现$dp(i)=\max(0,x-a_i)$。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;根据贪心相邻最优的观点，假设有$i$和$j$相邻，并假设之前的前缀和是$S$，那么不交换的两者较大值为： \max(S+e_i+dp(i),S+2e_i+c_i+e_j+dp(j))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;交换后就是： \max(S+e_j+dp(j),S+2e_j+c_j+e_i+dp(i))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假设交换后更优，则有两种情况，第一种情况： S+e_i+dp(i)>S+e_j+dp(j)\\ S+e_i+dp(i)>S+2e_j+c_j+e_i+dp(i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;它等价于： e_i+dp(i)>e_j+dp(j)\\ 2e_j+c_jS+e_j+dp(j)\\ S+2e_i+c_i+e_j+dp(j)>S+2e_j+c_j+e_i+dp(i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;它等价于： 2e_i+c_i>0\\ dp(j)-e_j-c_j>dp(i)-e_i-c_i&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面证明几个观点： 若$2e_i+c_i&gt;0$，而$2e_j+c_j&lt;0$（$j=i+1$），则两者必交换。即满足$2e_j+c_j&lt;0$者顺序靠前。 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先，若$e_i+dp(i)&gt;e_j+dp(j)$成立，则满足第一种情况，交换两者更优。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;若$e_i+dp(i)&lt;e_j+dp(j)$，则有： e_i+dp(i)]]></content>
@@ -399,8 +443,8 @@
       </categories>
       <tags>
         <tag>数学</tag>
-        <tag>动态规划</tag>
         <tag>数论</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -518,8 +562,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>字符串</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -554,8 +598,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>数学</tag>
         <tag>提高算法</tag>
+        <tag>数学</tag>
       </tags>
   </entry>
   <entry>
@@ -746,9 +790,9 @@
         <category>ACM</category>
       </categories>
       <tags>
+        <tag>提高算法</tag>
         <tag>数学</tag>
         <tag>多项式</tag>
-        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -772,8 +816,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>数据结构</tag>
         <tag>树</tag>
       </tags>
@@ -858,8 +902,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>树</tag>
       </tags>
   </entry>
@@ -885,8 +929,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>单调队列</tag>
       </tags>
   </entry>
@@ -898,8 +942,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>字符串</tag>
+        <tag>动态规划</tag>
         <tag>基础算法</tag>
       </tags>
   </entry>
@@ -923,8 +967,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>数学</tag>
         <tag>提高算法</tag>
+        <tag>数学</tag>
         <tag>数论</tag>
       </tags>
   </entry>
@@ -962,9 +1006,9 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>数学</tag>
         <tag>提高算法</tag>
         <tag>图论</tag>
+        <tag>数学</tag>
       </tags>
   </entry>
   <entry>
@@ -975,8 +1019,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>数学</tag>
         <tag>提高算法</tag>
+        <tag>数学</tag>
         <tag>数论</tag>
       </tags>
   </entry>
@@ -988,8 +1032,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>数学</tag>
         <tag>提高算法</tag>
+        <tag>数学</tag>
         <tag>数论</tag>
         <tag>群论</tag>
       </tags>
@@ -1002,8 +1046,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>数学</tag>
         <tag>提高算法</tag>
+        <tag>数学</tag>
         <tag>数论</tag>
       </tags>
   </entry>
@@ -1015,8 +1059,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>数学</tag>
         <tag>提高算法</tag>
+        <tag>数学</tag>
       </tags>
   </entry>
   <entry>
@@ -1027,8 +1071,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>数学</tag>
         <tag>提高算法</tag>
+        <tag>数学</tag>
       </tags>
   </entry>
   <entry>
@@ -1039,8 +1083,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>数学</tag>
         <tag>提高算法</tag>
+        <tag>数学</tag>
         <tag>数论</tag>
       </tags>
   </entry>
@@ -1052,8 +1096,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>数学</tag>
         <tag>提高算法</tag>
+        <tag>数学</tag>
       </tags>
   </entry>
   <entry>
@@ -1512,8 +1556,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>单调队列</tag>
         <tag>背包问题</tag>
       </tags>
@@ -1673,8 +1717,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>单调队列</tag>
       </tags>
   </entry>
@@ -1722,8 +1766,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>滚动数组</tag>
       </tags>
   </entry>
@@ -1735,10 +1779,10 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
-        <tag>矩阵</tag>
+        <tag>动态规划</tag>
         <tag>ST表</tag>
+        <tag>矩阵</tag>
       </tags>
   </entry>
   <entry>
@@ -1749,8 +1793,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>状态压缩</tag>
         <tag>位运算</tag>
       </tags>
@@ -1781,9 +1825,9 @@
       <tags>
         <tag>动态规划</tag>
         <tag>基础算法</tag>
-        <tag>矩阵</tag>
         <tag>区间最值</tag>
         <tag>ST表</tag>
+        <tag>矩阵</tag>
         <tag>区间</tag>
         <tag>队列</tag>
         <tag>单调队列</tag>
@@ -1797,9 +1841,9 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
         <tag>字符串</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -1810,8 +1854,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -1822,8 +1866,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -1834,8 +1878,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>贪心</tag>
       </tags>
   </entry>
@@ -1873,8 +1917,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -1885,8 +1929,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>滚动数组</tag>
       </tags>
   </entry>
@@ -1898,9 +1942,9 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
         <tag>图论</tag>
+        <tag>动态规划</tag>
         <tag>图的最短路</tag>
         <tag>数学期望</tag>
       </tags>
@@ -1937,8 +1981,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>状态压缩</tag>
       </tags>
   </entry>
@@ -2003,8 +2047,8 @@
       <tags>
         <tag>动态规划</tag>
         <tag>基础算法</tag>
-        <tag>区间</tag>
         <tag>贪心</tag>
+        <tag>区间</tag>
       </tags>
   </entry>
   <entry>
@@ -2118,8 +2162,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
         <tag>矩阵</tag>
         <tag>DFS</tag>
       </tags>
@@ -2145,8 +2189,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -2169,9 +2213,9 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
         <tag>数论</tag>
+        <tag>动态规划</tag>
         <tag>离散化</tag>
       </tags>
   </entry>
@@ -2183,8 +2227,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -2247,8 +2291,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>动态规划</tag>
         <tag>提高算法</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
