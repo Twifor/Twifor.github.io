@@ -60,7 +60,7 @@
   <entry>
     <title><![CDATA[多项式及其求和]]></title>
     <url>%2F2020%2F08%2F19%2F%E5%A4%9A%E9%A1%B9%E5%BC%8F%E5%8F%8A%E5%85%B6%E6%B1%82%E5%92%8C%2F</url>
-    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本文思路来源：杜教—-多项式及求和。待更新。 引入&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本文主要讨论如何求解如下的求和式： \sum_{i=1}^ni^d解法1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;规定： S_d(n)=\sum_{i=0}^{n-1}i^d&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;构造向量： V_n=\begin{bmatrix} S_d(n) & n^0 &\cdots & n^d \end{bmatrix}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意到： S_d(n)=S_d(n-1)+n^d&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;以及根据二项式定理： (n+1)^i=\sum_{j=0}^iC_i^jn^j&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是我们可以预处理组合数，然后构造矩阵$A$满足： V_{n+1}=V_nA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$A$是一个$(d+2)*(d+2)$的矩阵，容易得到： V_{n+1}=V_1A^n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;利用矩阵快速幂可以在$O(d^3logn)$的时间复杂度下解决这个问题。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748#include &lt;bits/stdc++.h&gt;using namespace std;const int mod = 1e9 + 7;typedef long long ll;struct Matrix&#123; int op[51][51], n; void operator*=(const Matrix&amp; s) &#123; int tmp[51][51]; for (int i = 1; i &lt;= n; i++) &#123; for (int j = 1; j &lt;= n; j++) tmp[i][j] = 0; &#125; for (int i = 1; i &lt;= n; i++) &#123; for (int j = 1; j &lt;= n; j++) &#123; for (int k = 1; k &lt;= n; k++) tmp[i][j] = (tmp[i][j] + 1ll * op[i][k] * s.op[k][j] % mod) % mod; &#125; &#125; for (int i = 1; i &lt;= n; i++) &#123; for (int j = 1; j &lt;= n; j++) op[i][j] = tmp[i][j]; &#125; &#125;&#125; sta, ans;int C[51][51];int main()&#123; int d; ll n; scanf("%d%lld", &amp;d, &amp;n); C[0][0] = C[1][0] = C[1][1] = 1; for (int i = 2; i &lt;= 50; i++) &#123; C[i][0] = C[i][i] = 1; for (int j = 1; j &lt; i; j++) C[i][j] = (C[i - 1][j - 1] + C[i - 1][j]) % mod; &#125; ans.n = sta.n = d + 2, sta.op[1][1] = 1, sta.op[d + 2][1] = 1; for (int i = 2; i &lt;= d + 2; i++) &#123; for (int j = 2; j &lt;= i; j++) sta.op[j][i] = C[i - 2][j - 2]; &#125; for (int i = 1; i &lt;= d + 2; i++) ans.op[i][i] = 1; while (n) &#123; if (n &amp; 1) ans *= sta; sta *= sta, n &gt;&gt;= 1; &#125; int tot = 0; for (int i = 2; i &lt;= d + 2; i++) tot = (tot + ans.op[i][1]) % mod; printf("%d", tot); return 0;&#125; 解法2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意到： (j+1)^{d+1}-j^{d+1}=\sum_{i=0}^dC_{d+1}^ij^i&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对其两边求和： \sum_{j=0}^{n-1}((j+1)^{d+1}-j^{d+1})=\sum_{j=1}^{n-1}\sum_{i=0}^dC_{d+1}^ij^i&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;即为： n^{d+1}=\sum_{i=0}^dC_{d+1}^iS_i(n)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将$S_d(n)$移出来： (d+1)S_d(n)=n^{d+1}-\sum_{i=0}^{d-1}C_{d+1}^iS_i(n)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;之后就可以递推出$S_d(n)$，时间复杂度$O(d^2+dlogd)$。这种方法需要$2$到$d+1$总是与模数互质。 1234567891011121314151617181920212223242526272829303132333435363738#include &lt;bits/stdc++.h&gt;using namespace std;const int mod = 1e9 + 7;typedef long long ll;int C[1005][1005], S[1005];inline int qpow(ll x, int y)&#123; int ans = 1, sta = x; while (y) &#123; if (y &amp; 1) ans = 1ll * ans * sta % mod; sta = 1ll * sta * sta % mod, y &gt;&gt;= 1; &#125; return ans;&#125;inline int inv(int x)&#123; return qpow(x, mod - 2);&#125;int main()&#123; int d; ll n; scanf("%d%lld", &amp;d, &amp;n); C[0][0] = C[1][0] = C[1][1] = 1; for (int i = 2; i &lt;= 1000; i++) &#123; C[i][0] = C[i][i] = 1; for (int j = 1; j &lt; i; j++) C[i][j] = (C[i - 1][j - 1] + C[i - 1][j]) % mod; &#125; ++n, S[0] = n % mod; for (int i = 1; i &lt;= d; i++) &#123; S[i] = 0; for (int j = 0; j &lt; i; j++) S[i] = (S[i] + 1ll * S[j] * C[i + 1][j] % mod) % mod; S[i] = (qpow(n, i + 1) - S[i]) % mod; S[i] = 1ll * S[i] * inv(i + 1) % mod; &#125; printf("%d", (S[d] + mod) % mod); return 0;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]]></content>
+    <content type="text"><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本文思路来源：杜教—-多项式及求和。待更新。 引入&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本文主要讨论如何求解如下的求和式： \sum_{i=1}^ni^d解法1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;规定： S_d(n)=\sum_{i=0}^{n-1}i^d&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;构造向量： V_n=\begin{bmatrix} S_d(n) & n^0 &\cdots & n^d \end{bmatrix}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意到： S_d(n)=S_d(n-1)+n^d&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;以及根据二项式定理： (n+1)^i=\sum_{j=0}^iC_i^jn^j&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是我们可以预处理组合数，然后构造矩阵$A$满足： V_{n+1}=V_nA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$A$是一个$(d+2)*(d+2)$的矩阵，容易得到： V_{n+1}=V_1A^n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;利用矩阵快速幂可以在$O(d^3logn)$的时间复杂度下解决这个问题。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748#include &lt;bits/stdc++.h&gt;using namespace std;const int mod = 1e9 + 7;typedef long long ll;struct Matrix&#123; int op[51][51], n; void operator*=(const Matrix&amp; s) &#123; int tmp[51][51]; for (int i = 1; i &lt;= n; i++) &#123; for (int j = 1; j &lt;= n; j++) tmp[i][j] = 0; &#125; for (int i = 1; i &lt;= n; i++) &#123; for (int j = 1; j &lt;= n; j++) &#123; for (int k = 1; k &lt;= n; k++) tmp[i][j] = (tmp[i][j] + 1ll * op[i][k] * s.op[k][j] % mod) % mod; &#125; &#125; for (int i = 1; i &lt;= n; i++) &#123; for (int j = 1; j &lt;= n; j++) op[i][j] = tmp[i][j]; &#125; &#125;&#125; sta, ans;int C[51][51];int main()&#123; int d; ll n; scanf("%d%lld", &amp;d, &amp;n); C[0][0] = C[1][0] = C[1][1] = 1; for (int i = 2; i &lt;= 50; i++) &#123; C[i][0] = C[i][i] = 1; for (int j = 1; j &lt; i; j++) C[i][j] = (C[i - 1][j - 1] + C[i - 1][j]) % mod; &#125; ans.n = sta.n = d + 2, sta.op[1][1] = 1, sta.op[d + 2][1] = 1; for (int i = 2; i &lt;= d + 2; i++) &#123; for (int j = 2; j &lt;= i; j++) sta.op[j][i] = C[i - 2][j - 2]; &#125; for (int i = 1; i &lt;= d + 2; i++) ans.op[i][i] = 1; while (n) &#123; if (n &amp; 1) ans *= sta; sta *= sta, n &gt;&gt;= 1; &#125; int tot = 0; for (int i = 2; i &lt;= d + 2; i++) tot = (tot + ans.op[i][1]) % mod; printf("%d", tot); return 0;&#125; 解法2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意到： (j+1)^{d+1}-j^{d+1}=\sum_{i=0}^dC_{d+1}^ij^i&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对其两边求和： \sum_{j=0}^{n-1}((j+1)^{d+1}-j^{d+1})=\sum_{j=1}^{n-1}\sum_{i=0}^dC_{d+1}^ij^i&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;即为： n^{d+1}=\sum_{i=0}^dC_{d+1}^iS_i(n)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将$S_d(n)$移出来： (d+1)S_d(n)=n^{d+1}-\sum_{i=0}^{d-1}C_{d+1}^iS_i(n)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;之后就可以递推出$S_d(n)$，时间复杂度$O(d^2+dlogd)$。这种方法需要$2$到$d+1$总是与模数互质。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本方法在$d=0$时需要特判掉，否则会导致答案多一。 123456789101112131415161718192021222324252627282930313233343536373839404142#include &lt;bits/stdc++.h&gt;using namespace std;const int mod = 1e9 + 7;typedef long long ll;int C[1005][1005], S[1005];inline int qpow(ll x, int y)&#123; int ans = 1, sta = x; while (y) &#123; if (y &amp; 1) ans = 1ll * ans * sta % mod; sta = 1ll * sta * sta % mod, y &gt;&gt;= 1; &#125; return ans;&#125;inline int inv(int x)&#123; return qpow(x, mod - 2);&#125;int main()&#123; int d; ll n; scanf("%d%lld", &amp;d, &amp;n); C[0][0] = C[1][0] = C[1][1] = 1; for (int i = 2; i &lt;= 1000; i++) &#123; C[i][0] = C[i][i] = 1; for (int j = 1; j &lt; i; j++) C[i][j] = (C[i - 1][j - 1] + C[i - 1][j]) % mod; &#125; ++n, S[0] = n % mod; for (int i = 1; i &lt;= d; i++) &#123; S[i] = 0; for (int j = 0; j &lt; i; j++) S[i] = (S[i] + 1ll * S[j] * C[i + 1][j] % mod) % mod; S[i] = (qpow(n, i + 1) - S[i]) % mod; S[i] = 1ll * S[i] * inv(i + 1) % mod; &#125; if (d == 0) &#123; //very important!! printf("%d", S[0] - 1); &#125; else &#123; printf("%d", (S[d] + mod) % mod); &#125; return 0;&#125; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]]></content>
       <categories>
         <category>ACM</category>
       </categories>
@@ -846,8 +846,8 @@
       </categories>
       <tags>
         <tag>数学</tag>
-        <tag>莫队算法</tag>
         <tag>数论</tag>
+        <tag>莫队算法</tag>
       </tags>
   </entry>
   <entry>
@@ -1306,8 +1306,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>搜索</tag>
         <tag>提高算法</tag>
+        <tag>搜索</tag>
       </tags>
   </entry>
   <entry>
@@ -1891,8 +1891,8 @@
         <tag>数据结构</tag>
         <tag>区间最值</tag>
         <tag>区间</tag>
-        <tag>单调队列</tag>
         <tag>队列</tag>
+        <tag>单调队列</tag>
       </tags>
   </entry>
   <entry>
@@ -1909,8 +1909,8 @@
         <tag>区间最值</tag>
         <tag>ST表</tag>
         <tag>区间</tag>
-        <tag>单调队列</tag>
         <tag>队列</tag>
+        <tag>单调队列</tag>
       </tags>
   </entry>
   <entry>
