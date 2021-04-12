@@ -570,8 +570,8 @@
       </categories>
       <tags>
         <tag>数学</tag>
-        <tag>动态规划</tag>
         <tag>数论</tag>
+        <tag>动态规划</tag>
       </tags>
   </entry>
   <entry>
@@ -749,8 +749,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>数据结构</tag>
         <tag>平衡树</tag>
+        <tag>数据结构</tag>
         <tag>线段树</tag>
       </tags>
   </entry>
@@ -820,8 +820,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>数据结构</tag>
         <tag>平衡树</tag>
+        <tag>数据结构</tag>
       </tags>
   </entry>
   <entry>
@@ -832,8 +832,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>数据结构</tag>
         <tag>平衡树</tag>
+        <tag>数据结构</tag>
       </tags>
   </entry>
   <entry>
@@ -1249,10 +1249,10 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>数据结构</tag>
-        <tag>树</tag>
         <tag>平衡树</tag>
         <tag>文艺平衡树</tag>
+        <tag>数据结构</tag>
+        <tag>树</tag>
       </tags>
   </entry>
   <entry>
@@ -1353,8 +1353,8 @@
         <category>ACM</category>
       </categories>
       <tags>
-        <tag>提高算法</tag>
         <tag>搜索</tag>
+        <tag>提高算法</tag>
       </tags>
   </entry>
   <entry>
@@ -1441,8 +1441,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>数据结构</tag>
         <tag>平衡树</tag>
+        <tag>数据结构</tag>
       </tags>
   </entry>
   <entry>
@@ -1454,10 +1454,10 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>数据结构</tag>
-        <tag>树</tag>
         <tag>平衡树</tag>
         <tag>文艺平衡树</tag>
+        <tag>数据结构</tag>
+        <tag>树</tag>
       </tags>
   </entry>
   <entry>
@@ -1469,9 +1469,9 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
+        <tag>平衡树</tag>
         <tag>数据结构</tag>
         <tag>树</tag>
-        <tag>平衡树</tag>
       </tags>
   </entry>
   <entry>
@@ -1483,10 +1483,10 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>数据结构</tag>
-        <tag>树</tag>
         <tag>平衡树</tag>
         <tag>文艺平衡树</tag>
+        <tag>数据结构</tag>
+        <tag>树</tag>
       </tags>
   </entry>
   <entry>
@@ -2341,8 +2341,8 @@
       </categories>
       <tags>
         <tag>提高算法</tag>
-        <tag>动态规划</tag>
         <tag>数论</tag>
+        <tag>动态规划</tag>
         <tag>离散化</tag>
       </tags>
   </entry>
