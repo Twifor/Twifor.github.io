@@ -1,519 +1,115 @@
+
 <!DOCTYPE html>
+<html lang="en">
 
 
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#202020" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
 
-
-
-
-
-
-
-
-
-
-  
-
-
-<html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.8.0">
-<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
-  <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<script>
-    (function () {
-        if ('') {
-            if (prompt('请输入文章密码') !== '') {
-                alert('密码错误！');
-                if (history.length === 1) {
-                    location.replace("http://twifor.github.io"); // 这里替换成你的首页
-                } else {
-                    history.back();
-                }
-            }
-        }
-    })();
-</script>
-
-
-
-
-  
-  
     
-    
-  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
-  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
-
-<link rel="stylesheet" href="/css/main.css?v=6.7.0">
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico?v=6.7.0">
-
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico?v=6.7.0">
-
-
-  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
-
-
-
-
-
-
-
-<script id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Gemini',
-    version: '6.7.0',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
-    fancybox: false,
-    fastclick: false,
-    lazyload: false,
-    tabs: true,
-    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
-
-
-  
-
-
-
-
-  <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;min25筛，要理解本文最好先阅读过杜教筛。">
-<meta name="keywords" content="数学,数论">
-<meta property="og:type" content="article">
-<meta property="og:title" content="min25筛">
-<meta property="og:url" content="https://twifor.github.io/2020/08/07/min25筛/index.html">
-<meta property="og:site_name" content="Twifor~Liyh">
-<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;min25筛，要理解本文最好先阅读过杜教筛。">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-08-15T13:05:36.761Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="min25筛">
-<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;min25筛，要理解本文最好先阅读过杜教筛。">
-
-
-
-
-
-
-  <link rel="canonical" href="https://twifor.github.io/2020/08/07/min25筛/">
-
-
-
-<script id="page.configurations">
-  CONFIG.page = {
-    sidebar: "",
-  };
-</script>
-
-  <title>min25筛 | Twifor~Liyh</title>
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <noscript>
-  <style>
-  .use-motion .motion-element,
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-title { opacity: initial; }
-
-  .use-motion .logo,
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
-</head>
-
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
-
-
-  
-  
-    
-  
-
-  <div class="container sidebar-position-left page-post-detail">
-    <div class="headband"></div>
-	<a href="https://github.com/Twifor" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta">
-    
-
-    <div class="custom-logo-site-title">
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Twifor~Liyh</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-    
-    
-  </div>
-
-  <div class="site-nav-toggle">
-    <button aria-label="切换导航栏">
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
-  </div>
-</div>
-
-
-
-<nav class="site-nav">
-  
-    <ul id="menu" class="menu">
+      <meta name="keywords" content="数学,数论," />
       
-        
-        
-        
+
           
-          <li class="menu-item menu-item-home">
+              <meta name="description"
+                content="min25筛" />
+              
 
-    
-    
+                <link rel="icon" type="image/x-icon" href="/logo.ico">
+                <title>
+                  min25筛lyh&#39;s blog
+                </title>
+                
+                  <!-- stylesheets list from config.yml -->
+                  
+                    <link rel="stylesheet" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css">
+                    
+                    <link rel="stylesheet" href="/css/xoxo.css">
+                    
+                      
+  <meta name="generator" content="Hexo 7.0.0"></head>
+
+<body>
+  <div class="nav-container">
+    <nav class="home-menu pure-menu pure-menu-horizontal">
+  <a class="pure-menu-heading" href="/">
+    <span class="title">
+      lyh&#39;s blog
+    </span>
+  </a>
+
+  <ul class="pure-menu-list clearfix">
     
       
-    
-
-    
-
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-about">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-tags">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-categories">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-archives">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
-
-  </li>
-
-      
-      
-        <li class="menu-item menu-item-search">
-          
-            <a href="javascript:;" class="popup-trigger">
+          <li class="pure-menu-item"><a href="/" class="pure-menu-link">
+              Home
+            </a></li>
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
-        </li>
       
-    </ul>
-  
-
-  
-
-  
-    <div class="site-search">
+          <li class="pure-menu-item"><a href="/archives" class="pure-menu-link">
+              Archives
+            </a></li>
+          
+            
       
-  <div class="popup search-popup local-search-popup">
-  <div class="local-search-header clearfix">
-    <span class="search-icon">
-      <i class="fa fa-search"></i>
-    </span>
-    <span class="popup-btn-close">
-      <i class="fa fa-times-circle"></i>
-    </span>
-    <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
-    </div>
-  </div>
-  <div id="local-search-result"></div>
-</div>
+          <li class="pure-menu-item"><a href="/tags" class="pure-menu-link">
+              Tags
+            </a></li>
+          
+            
+      
+          <li class="pure-menu-item"><a href="/search" class="pure-menu-link">
+              Search
+            </a></li>
+          
+            
+      
+          <li class="pure-menu-item"><a href="/about" class="pure-menu-link">
+              About
+            </a></li>
+          
+            
+  </ul>
 
-
-
-    </div>
-  
 </nav>
+  </div>
 
-
-
-  
-
-
-
-</div>
+  <div class="container" id="content-outer">
+    <div class="inner" id="content-inner">
+      <div class="post-container">
+  <article class="post" id="post">
+    <header class="post-header text-center">
+      <h1 class="title">
+        min25筛
+      </h1>
+      <span>
+        
+        <time class="time" datetime="2020-08-07T08:52:25.000Z">
+        2020-08-07
+      </time>
+        
+      </span>
+      <span class="slash">/</span>
+      <span class="post-meta">
+      <span class="post-tags">
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E5%AD%A6/" rel="tag">数学</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E8%AE%BA/" rel="tag">数论</a></li></ul>
+      </span>
+    </span>
+      <span class="slash">/</span>
+      <span class="read">
+      <span id="busuanzi_value_page_pv"></span> 点击
+    </span>
+      <span class="slash">/</span>
+      <span class="read">阅读耗时 26 分钟</span>
     </header>
-    
 
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-            
-
-          
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://twifor.github.io/2020/08/07/min25筛/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Author">
-      <meta itemprop="description" content="弱鸡">
-      <meta itemprop="image" content="/images/header.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Twifor~Liyh">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">min25筛
-
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2020-08-07 16:52:25" itemprop="dateCreated datePublished" datetime="2020-08-07T16:52:25+08:00">2020-08-07</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-08-15 21:05:36" itemprop="dateModified" datetime="2020-08-15T21:05:36+08:00">2020-08-15</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/ACM/" itemprop="url" rel="index"><span itemprop="name">ACM</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/08/07/min25筛/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2020/08/07/min25筛/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;min25筛，要理解本文最好先阅读过<a href="https://twifor.github.io/2019/05/10/%E6%9D%9C%E6%95%99%E7%AD%9B/">杜教筛</a>。<br><a id="more"></a></p>
+    <div class="post-content">
+      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;min25筛，要理解本文最好先阅读过<a href="https://twifor.github.io/2019/05/10/%E6%9D%9C%E6%95%99%E7%AD%9B/">杜教筛</a>。<br><span id="more"></span></p>
 <h3 id="min25筛"><a href="#min25筛" class="headerlink" title="min25筛"></a>min25筛</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;min25筛是一种可以在低于线性复杂度下求积性函数的前缀和的筛法。它要求对于质数，其积性函数为多项式的函数，并且质数方幂的积性函数要容易求。</p>
 <script type="math/tex; mode=display">\sum_{i=1}^nF(i)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里$F(i)$是一个积性函数。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为了求这个前缀和，我们定义一个函数$S(n,j)$：</p>
 <script type="math/tex; mode=display">S(n,j)=\sum_{i=1}^nF(i)[\min(i)>P_j]</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里$\min(x)$取$x$的最小质因子。换句话说，$S(n,j)$记录在$1$到$n$中，最小质因子大于$P_j$（$P_j$是第$j$个质数，从$1$开始）的积性函数之和。那么要求的前缀和就是$S(n,0)$。显然当$j&gt;0$时，$F(1)$永远不会加入到答案中，我们完全可以最后再把$1$的答案加上，于是下面的过程均不考虑$1$。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考虑把里面的数分类成质数和合数，如果我们可以求出$1$到$n$中大于$P_j$的所有质数对应的函数值之和（把它表示成$w(n,j)$），就可以表示成：</p>
@@ -525,955 +121,224 @@ g(n,j-1)&P_j^2>n\\
 g(n,j-1)-f(P_j)(g(\lfloor\frac{n}{P_j}\rfloor,j-1)-\sum_{i=1}^{j-1}f(P_i))&P_j^2\leq n
 \end{cases}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那如何求$1$到$n$所有质数$f(i)$之和？很明显，它就是$g(n,x)$（这里$P_x^2\geq n$，简称$g(n)$）。由于$f(i)$在质数时与$F(i)$相同，所以它就是$F(i)$的和。</p>
 <h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在实现方面，我们先求$g$，再求$S$。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预处理出$\sqrt n$范围内的所有质数，并求出相应的积性函数$f(i)$前缀和。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意到$g(n,j)$的第一维一定是$\lfloor\frac{n}{x}\rfloor$的形式，它最多有$2\sqrt n$个。并且可以发现只有满足$P_j^2\leq n$的质数$P_j$才有意义，于是这里的$n$和$j$其实都是$O(\sqrt n)$的。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先我们对$n$，进行一步整数分块，对于所有可能的$\lfloor\frac {n}{x}\rfloor$，进行离散化。离散化不建议使用$map$或排序二分，这样会引入$logn$的额外复杂度。一个优雅的方法是直接放到数组里，记录$\lfloor\frac{n}{x}\rfloor$对应的数组下标。但是这样数可能过大，数组开不下，于是可以在$\lfloor\frac{n}{x}\rfloor\leq\sqrt n$时才放入数组，否则将$\frac {n}{\lfloor\frac{n}{x}\rfloor}$放入数组。这样只需要记两个大小为$2\sqrt n$的数组就可以离散化。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然后根据上文给出的公式，递推出$g$数组。求出$g$数组后，就可以表示出一开始提到的$w(n,j)$。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于$w(n,j)$中不能含有小于等于$P_j$的质数对应的$F(i)$和，于是需要减去，即：</p>
-<script type="math/tex; mode=display">S(n,j)=g(n)-\sum_{i=1}^jF(P_i)+\sum_{k>j}\sum_{e}F(P_k^e)(S(\lfloor\frac {n}{P_k^e}\rfloor,k)+[e\not=1])</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;再根据以上式子递推即可。min25筛时间复杂度$O(\frac {n^{\frac {3}{4}}}{logn})$。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.luogu.com.cn/problem/P5325" target="_blank" rel="noopener">模板题</a>。这里先构造一个完全积性函数$f(i)$。考虑到$f(p)=p(p-1)$不是积性函数，但是可以拆成$p^2-p$，这样前者和后者都是积性函数，分两次去求。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> N = <span class="number">200000</span> + <span class="number">5</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> mod = <span class="number">1e9</span> + <span class="number">7</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"><span class="keyword">int</span> idx1[N], idx2[N], SQRT, mk[N], pr[N], tot, fs1[N], fs2[N], num;</span><br><span class="line">ll to[N], g1[N], g2[N], n;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">F</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1l</span>l * x * (x - <span class="number">1</span>) % mod;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">ID</span><span class="params">(ll x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x &gt; SQRT ? idx2[n / x] : idx1[x];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">pre</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= x; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!mk[i]) pr[++tot] = i;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= tot; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="number">1l</span>l * pr[j] * i &gt; x) <span class="keyword">break</span>;</span><br><span class="line">            mk[pr[j] * i] = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (i % pr[j] == <span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= tot; i++) &#123;</span><br><span class="line">        fs1[i] = (fs1[i - <span class="number">1</span>] + pr[i]) % mod;</span><br><span class="line">        fs2[i] = (fs2[i - <span class="number">1</span>] + <span class="number">1l</span>l * pr[i] * pr[i] % mod) % mod;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">S</span><span class="params">(ll x, <span class="keyword">int</span> y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (pr[y] &gt;= x) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> ans = ((g2[ID(x)] - g1[ID(x)]) % mod - (fs2[y] - fs1[y]) % mod) % mod;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = y + <span class="number">1</span>; i &lt;= tot &amp;&amp; <span class="number">1l</span>l * pr[i] * pr[i] &lt;= x; i++) &#123;</span><br><span class="line">        ll pe = pr[i];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> e = <span class="number">1</span>; pe &lt;= x; e++, pe = pe * pr[i]) &#123;</span><br><span class="line">            ll xx = pe % mod;</span><br><span class="line">            ans = (ans + <span class="number">1l</span>l * F(xx) * (S(x / pe, i) + (e != <span class="number">1</span>))) % mod;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// freopen("out.txt", "w", stdout);</span></span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%lld"</span>, &amp;n), pre(SQRT = round(<span class="built_in">sqrt</span>(n)));</span><br><span class="line">    <span class="keyword">for</span> (ll l = <span class="number">1</span>, r, x; l &lt;= n; l = r + <span class="number">1</span>) &#123;</span><br><span class="line">        r = n / (n / l), x = n / l;</span><br><span class="line">        <span class="keyword">if</span> (x &gt; SQRT)</span><br><span class="line">            idx2[n / x] = ++num;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            idx1[x] = ++num;</span><br><span class="line">        to[num] = x, x %= mod;</span><br><span class="line">        g1[num] = <span class="number">1l</span>l * x * (x + <span class="number">1</span>) % mod * <span class="number">500000004l</span>l % mod - <span class="number">1</span>;</span><br><span class="line">        g2[num] = <span class="number">1l</span>l * x * (x + <span class="number">1</span>) % mod * (<span class="number">2l</span>l * x + <span class="number">1</span>) % mod * <span class="number">166666668l</span>l % mod - <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= tot; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= num &amp;&amp; <span class="number">1l</span>l * pr[i] * pr[i] &lt;= to[j]; j++) &#123;</span><br><span class="line">            g1[j] -= <span class="number">1l</span>l * pr[i] * ((g1[ID(to[j] / pr[i])] - fs1[i - <span class="number">1</span>]) % mod) % mod;</span><br><span class="line">            g1[j] %= mod;</span><br><span class="line">            g2[j] -= <span class="number">1l</span>l * pr[i] * pr[i] % mod * ((g2[ID(to[j] / pr[i])] - fs2[i - <span class="number">1</span>]) % mod) % mod;</span><br><span class="line">            g2[j] %= mod;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> ans = (S(n, <span class="number">0</span>) + <span class="number">1</span>) % mod;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d"</span>, (ans + mod) % mod);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<script type="math/tex; mode=display">S(n,j)=g(n)-\sum_{i=1}^jF(P_i)+\sum_{k>j}\sum_{e}F(P_k^e)(S(\lfloor\frac {n}{P_k^e}\rfloor,k)+[e\not=1])</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;再根据以上式子递推即可。min25筛时间复杂度$O(\frac {n^{\frac {3}{4}}}{logn})$。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P5325">模板题</a>。这里先构造一个完全积性函数$f(i)$。考虑到$f(p)=p(p-1)$不是积性函数，但是可以拆成$p^2-p$，这样前者和后者都是积性函数，分两次去求。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">200000</span> + <span class="number">5</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> mod = <span class="number">1e9</span> + <span class="number">7</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="type">long</span> <span class="type">long</span> ll;</span><br><span class="line"><span class="type">int</span> idx1[N], idx2[N], SQRT, mk[N], pr[N], tot, fs1[N], fs2[N], num;</span><br><span class="line">ll to[N], g1[N], g2[N], n;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">F</span><span class="params">(<span class="type">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1ll</span> * x * (x - <span class="number">1</span>) % mod;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">ID</span><span class="params">(ll x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x &gt; SQRT ? idx2[n / x] : idx1[x];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">pre</span><span class="params">(<span class="type">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">2</span>; i &lt;= x; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!mk[i]) pr[++tot] = i;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= tot; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="number">1ll</span> * pr[j] * i &gt; x) <span class="keyword">break</span>;</span><br><span class="line">            mk[pr[j] * i] = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (i % pr[j] == <span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= tot; i++) &#123;</span><br><span class="line">        fs1[i] = (fs1[i - <span class="number">1</span>] + pr[i]) % mod;</span><br><span class="line">        fs2[i] = (fs2[i - <span class="number">1</span>] + <span class="number">1ll</span> * pr[i] * pr[i] % mod) % mod;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">S</span><span class="params">(ll x, <span class="type">int</span> y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (pr[y] &gt;= x) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> ans = ((g2[<span class="built_in">ID</span>(x)] - g1[<span class="built_in">ID</span>(x)]) % mod - (fs2[y] - fs1[y]) % mod) % mod;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = y + <span class="number">1</span>; i &lt;= tot &amp;&amp; <span class="number">1ll</span> * pr[i] * pr[i] &lt;= x; i++) &#123;</span><br><span class="line">        ll pe = pr[i];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> e = <span class="number">1</span>; pe &lt;= x; e++, pe = pe * pr[i]) &#123;</span><br><span class="line">            ll xx = pe % mod;</span><br><span class="line">            ans = (ans + <span class="number">1ll</span> * <span class="built_in">F</span>(xx) * (<span class="built_in">S</span>(x / pe, i) + (e != <span class="number">1</span>))) % mod;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// freopen(&quot;out.txt&quot;, &quot;w&quot;, stdout);</span></span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%lld&quot;</span>, &amp;n), <span class="built_in">pre</span>(SQRT = <span class="built_in">round</span>(<span class="built_in">sqrt</span>(n)));</span><br><span class="line">    <span class="keyword">for</span> (ll l = <span class="number">1</span>, r, x; l &lt;= n; l = r + <span class="number">1</span>) &#123;</span><br><span class="line">        r = n / (n / l), x = n / l;</span><br><span class="line">        <span class="keyword">if</span> (x &gt; SQRT)</span><br><span class="line">            idx2[n / x] = ++num;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            idx1[x] = ++num;</span><br><span class="line">        to[num] = x, x %= mod;</span><br><span class="line">        g1[num] = <span class="number">1ll</span> * x * (x + <span class="number">1</span>) % mod * <span class="number">500000004ll</span> % mod - <span class="number">1</span>;</span><br><span class="line">        g2[num] = <span class="number">1ll</span> * x * (x + <span class="number">1</span>) % mod * (<span class="number">2ll</span> * x + <span class="number">1</span>) % mod * <span class="number">166666668ll</span> % mod - <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= tot; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= num &amp;&amp; <span class="number">1ll</span> * pr[i] * pr[i] &lt;= to[j]; j++) &#123;</span><br><span class="line">            g1[j] -= <span class="number">1ll</span> * pr[i] * ((g1[<span class="built_in">ID</span>(to[j] / pr[i])] - fs1[i - <span class="number">1</span>]) % mod) % mod;</span><br><span class="line">            g1[j] %= mod;</span><br><span class="line">            g2[j] -= <span class="number">1ll</span> * pr[i] * pr[i] % mod * ((g2[<span class="built_in">ID</span>(to[j] / pr[i])] - fs2[i - <span class="number">1</span>]) % mod) % mod;</span><br><span class="line">            g2[j] %= mod;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> ans = (<span class="built_in">S</span>(n, <span class="number">0</span>) + <span class="number">1</span>) % mod;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, (ans + mod) % mod);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h3 id="莫比乌斯函数与欧拉函数"><a href="#莫比乌斯函数与欧拉函数" class="headerlink" title="莫比乌斯函数与欧拉函数"></a>莫比乌斯函数与欧拉函数</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;既然是一个积性函数筛，必然脱不开求两个经典函数——莫比乌斯函数与欧拉函数的前缀和。这里只提一下思路。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于莫比乌斯函数，它在$x$为质数时有$\mu(x)=-1$，这可以很容易地把$f(x)=1$当做处理$g$数组的完全积性函数，而且在求$S$时，$\mu(p^e)=-1[e=1]$，也十分容易求。并且发现在$e&gt;1$时，$\mu(p^e)=0$，这样甚至可以省略第二个枚举次数的for循环。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于欧拉函数，其在质数时有$\phi(p)=p-1$，这处理成$f_1(x)=x$以及$f_2(x)=1$即可。求$S$时则可以使用如下公式：</p>
-<script type="math/tex; mode=display">\phi(p^e)=p^e(1-\frac{1}{p})</script><h3 id="素数和以及素数数量"><a href="#素数和以及素数数量" class="headerlink" title="素数和以及素数数量"></a>素数和以及素数数量</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;根据$g(n)$函数的性质，我们可以得到一个亚线性复杂度下，求素数和以及素数数量的算法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;规定$f(p)=1$，显然这是一个积性函数，而且它在素数中的前缀和显然就是素数的数量。修改筛法模板，可以得到如下代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//计算1到n的素数个数</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> N = <span class="number">5000000</span> + <span class="number">5</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"><span class="keyword">int</span> idx1[N], idx2[N], SQRT, mk[N], pr[N], tot, num;</span><br><span class="line">ll to[N], g[N], n, fs[N];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">ID</span><span class="params">(ll x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x &gt; SQRT ? idx2[n / x] : idx1[x];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">pre</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= x; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!mk[i]) pr[++tot] = i;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= tot; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="number">1l</span>l * pr[j] * i &gt; x) <span class="keyword">break</span>;</span><br><span class="line">            mk[pr[j] * i] = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (i % pr[j] == <span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= tot; i++) fs[i] = fs[i - <span class="number">1</span>] + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%lld"</span>, &amp;n), pre(SQRT = round(<span class="built_in">sqrt</span>(n)));</span><br><span class="line">    <span class="keyword">for</span> (ll l = <span class="number">1</span>, r, x; l &lt;= n; l = r + <span class="number">1</span>) &#123;</span><br><span class="line">        r = n / (n / l), x = n / l;</span><br><span class="line">        <span class="keyword">if</span> (x &gt; SQRT)</span><br><span class="line">            idx2[n / x] = ++num;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            idx1[x] = ++num;</span><br><span class="line">        to[num] = x, g[num] = x - <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= tot; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= num &amp;&amp; <span class="number">1l</span>l * pr[i] * pr[i] &lt;= to[j]; j++) &#123;</span><br><span class="line">            g[j] -= (g[ID(to[j] / pr[i])] - fs[i - <span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%lld"</span>, g[ID(n)]);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;同理，我们可以修改$f(x)=x$，进而得到素数和：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//求1到n的素数和</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> N = <span class="number">5000000</span> + <span class="number">5</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"><span class="keyword">int</span> idx1[N], idx2[N], SQRT, mk[N], pr[N], tot, num;</span><br><span class="line">ll to[N], g[N], n, fs[N];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">ID</span><span class="params">(ll x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x &gt; SQRT ? idx2[n / x] : idx1[x];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">pre</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= x; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!mk[i]) pr[++tot] = i;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= tot; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="number">1l</span>l * pr[j] * i &gt; x) <span class="keyword">break</span>;</span><br><span class="line">            mk[pr[j] * i] = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (i % pr[j] == <span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= tot; i++) fs[i] = fs[i - <span class="number">1</span>] + pr[i];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%lld"</span>, &amp;n), pre(SQRT = round(<span class="built_in">sqrt</span>(n)));</span><br><span class="line">    <span class="keyword">for</span> (ll l = <span class="number">1</span>, r, x; l &lt;= n; l = r + <span class="number">1</span>) &#123;</span><br><span class="line">        r = n / (n / l), x = n / l;</span><br><span class="line">        <span class="keyword">if</span> (x &gt; SQRT)</span><br><span class="line">            idx2[n / x] = ++num;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            idx1[x] = ++num;</span><br><span class="line">        to[num] = x, g[num] = x * (x + <span class="number">1</span>) / <span class="number">2</span> - <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= tot; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= num &amp;&amp; <span class="number">1l</span>l * pr[i] * pr[i] &lt;= to[j]; j++) &#123;</span><br><span class="line">            g[j] -= <span class="number">1l</span>l * pr[i] * (g[ID(to[j] / pr[i])] - fs[i - <span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%lld"</span>, g[ID(n)]);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h3><h4 id="Loj6053简单的函数"><a href="#Loj6053简单的函数" class="headerlink" title="Loj6053简单的函数"></a><a href="https://loj.ac/problem/6053" target="_blank" rel="noopener">Loj6053简单的函数</a></h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;定义完全积性函数$f(p)=p\oplus 1$，这样对于$p&gt;2$时的质数其实就是$p-1$，拆成$p$和$1$两个积性函数就和模板题一样了。处理完$g$数组后，再修改其中的值，把$2$缺少的部分补回来。然后再求$S$。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> N = <span class="number">200000</span> + <span class="number">5</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> mod = <span class="number">1e9</span> + <span class="number">7</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"><span class="keyword">int</span> idx1[N], idx2[N], SQRT, mk[N], pr[N], tot, fs1[N], fs2[N], num;</span><br><span class="line">ll to[N], g1[N], g2[N], n;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">F</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123; <span class="keyword">return</span> x ^ y; &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">ID</span><span class="params">(ll x)</span> </span>&#123; <span class="keyword">return</span> x &gt; SQRT ? idx2[n / x] : idx1[x]; &#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">pre</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= x; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!mk[i])</span><br><span class="line">            pr[++tot] = i;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= tot; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="number">1l</span>l * pr[j] * i &gt; x)</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            mk[pr[j] * i] = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (i % pr[j] == <span class="number">0</span>)</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= tot; i++) &#123;</span><br><span class="line">        fs1[i] = (fs1[i - <span class="number">1</span>] + pr[i]) % mod;</span><br><span class="line">        fs2[i] = (fs2[i - <span class="number">1</span>] + <span class="number">1</span>) % mod;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">S</span><span class="params">(ll x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (pr[y] &gt;= x)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> ans = ((g1[ID(x)] - g2[ID(x)]) % mod - (fs1[y] - fs2[y]) % mod) % mod;</span><br><span class="line">    <span class="keyword">if</span> (x &gt;= <span class="number">2</span> &amp;&amp; y &lt; <span class="number">1</span>)</span><br><span class="line">        ans += <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = y + <span class="number">1</span>; i &lt;= tot &amp;&amp; <span class="number">1l</span>l * pr[i] * pr[i] &lt;= x; i++) &#123;</span><br><span class="line">        ll pe = pr[i];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> e = <span class="number">1</span>; pe &lt;= x; e++, pe = pe * pr[i]) &#123;</span><br><span class="line">            ans = (ans + <span class="number">1l</span>l * F(pr[i], e) * (S(x / pe, i) + (e != <span class="number">1</span>))) % mod;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%lld"</span>, &amp;n), pre(SQRT = round(<span class="built_in">sqrt</span>(n)));</span><br><span class="line">    <span class="keyword">for</span> (ll l = <span class="number">1</span>, r, x; l &lt;= n; l = r + <span class="number">1</span>) &#123;</span><br><span class="line">        r = n / (n / l), x = n / l;</span><br><span class="line">        <span class="keyword">if</span> (x &gt; SQRT)</span><br><span class="line">            idx2[n / x] = ++num;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            idx1[x] = ++num;</span><br><span class="line">        to[num] = x, x %= mod;</span><br><span class="line">        g1[num] = <span class="number">1l</span>l * x * (x + <span class="number">1</span>) % mod * <span class="number">500000004l</span>l % mod - <span class="number">1</span>;</span><br><span class="line">        g2[num] = (x - <span class="number">1</span>) % mod;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= tot; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= num &amp;&amp; <span class="number">1l</span>l * pr[i] * pr[i] &lt;= to[j]; j++) &#123;</span><br><span class="line">            g1[j] -= <span class="number">1l</span>l * pr[i] * ((g1[ID(to[j] / pr[i])] - fs1[i - <span class="number">1</span>]) % mod) % mod;</span><br><span class="line">            g1[j] %= mod;</span><br><span class="line">            g2[j] -= ((g2[ID(to[j] / pr[i])] - fs2[i - <span class="number">1</span>]) % mod) % mod;</span><br><span class="line">            g2[j] %= mod;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> ans = (S(n, <span class="number">0</span>) + <span class="number">1</span>) % mod;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d"</span>, (ans + mod) % mod);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="HDU6834-Yukikaze-and-Smooth-numbers"><a href="#HDU6834-Yukikaze-and-Smooth-numbers" class="headerlink" title="HDU6834-Yukikaze and Smooth numbers"></a><a href="http://acm.hdu.edu.cn/showproblem.php?pid=6834" target="_blank" rel="noopener">HDU6834-Yukikaze and Smooth numbers</a></h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;问题问的很清楚，求$1$到$n$中，质因子不大于$k$的数的数量。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考虑大于$k$但是不大于$n$的质数有$s$个，它们分别是$P_1,\cdots,P_s$。需要删去的数必然就是它们倍数的并集，这个并集的大小可以使用容斥原理去求。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于多个质数$P_i$来说，$1$到$n$中它们的倍数并集的数量就是$\lfloor\frac{n}{p}\rfloor$，其中$p=\prod_iP_i$。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样根据容斥原理得到：</p>
+<script type="math/tex; mode=display">\phi(p^e)=p^e(1-\frac{1}{p})</script><h3 id="素数和以及素数数量"><a href="#素数和以及素数数量" class="headerlink" title="素数和以及素数数量"></a>素数和以及素数数量</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;根据$g(n)$函数的性质，我们可以得到一个亚线性复杂度下，求素数和以及素数数量的算法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;规定$f(p)=1$，显然这是一个积性函数，而且它在素数中的前缀和显然就是素数的数量。修改筛法模板，可以得到如下代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//计算1到n的素数个数</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">5000000</span> + <span class="number">5</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="type">long</span> <span class="type">long</span> ll;</span><br><span class="line"><span class="type">int</span> idx1[N], idx2[N], SQRT, mk[N], pr[N], tot, num;</span><br><span class="line">ll to[N], g[N], n, fs[N];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">ID</span><span class="params">(ll x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x &gt; SQRT ? idx2[n / x] : idx1[x];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">pre</span><span class="params">(<span class="type">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">2</span>; i &lt;= x; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!mk[i]) pr[++tot] = i;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= tot; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="number">1ll</span> * pr[j] * i &gt; x) <span class="keyword">break</span>;</span><br><span class="line">            mk[pr[j] * i] = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (i % pr[j] == <span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= tot; i++) fs[i] = fs[i - <span class="number">1</span>] + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%lld&quot;</span>, &amp;n), <span class="built_in">pre</span>(SQRT = <span class="built_in">round</span>(<span class="built_in">sqrt</span>(n)));</span><br><span class="line">    <span class="keyword">for</span> (ll l = <span class="number">1</span>, r, x; l &lt;= n; l = r + <span class="number">1</span>) &#123;</span><br><span class="line">        r = n / (n / l), x = n / l;</span><br><span class="line">        <span class="keyword">if</span> (x &gt; SQRT)</span><br><span class="line">            idx2[n / x] = ++num;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            idx1[x] = ++num;</span><br><span class="line">        to[num] = x, g[num] = x - <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= tot; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= num &amp;&amp; <span class="number">1ll</span> * pr[i] * pr[i] &lt;= to[j]; j++) &#123;</span><br><span class="line">            g[j] -= (g[<span class="built_in">ID</span>(to[j] / pr[i])] - fs[i - <span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lld&quot;</span>, g[<span class="built_in">ID</span>(n)]);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;同理，我们可以修改$f(x)=x$，进而得到素数和：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//求1到n的素数和</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">5000000</span> + <span class="number">5</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="type">long</span> <span class="type">long</span> ll;</span><br><span class="line"><span class="type">int</span> idx1[N], idx2[N], SQRT, mk[N], pr[N], tot, num;</span><br><span class="line">ll to[N], g[N], n, fs[N];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">ID</span><span class="params">(ll x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x &gt; SQRT ? idx2[n / x] : idx1[x];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">pre</span><span class="params">(<span class="type">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">2</span>; i &lt;= x; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!mk[i]) pr[++tot] = i;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= tot; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="number">1ll</span> * pr[j] * i &gt; x) <span class="keyword">break</span>;</span><br><span class="line">            mk[pr[j] * i] = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (i % pr[j] == <span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= tot; i++) fs[i] = fs[i - <span class="number">1</span>] + pr[i];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%lld&quot;</span>, &amp;n), <span class="built_in">pre</span>(SQRT = <span class="built_in">round</span>(<span class="built_in">sqrt</span>(n)));</span><br><span class="line">    <span class="keyword">for</span> (ll l = <span class="number">1</span>, r, x; l &lt;= n; l = r + <span class="number">1</span>) &#123;</span><br><span class="line">        r = n / (n / l), x = n / l;</span><br><span class="line">        <span class="keyword">if</span> (x &gt; SQRT)</span><br><span class="line">            idx2[n / x] = ++num;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            idx1[x] = ++num;</span><br><span class="line">        to[num] = x, g[num] = x * (x + <span class="number">1</span>) / <span class="number">2</span> - <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= tot; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= num &amp;&amp; <span class="number">1ll</span> * pr[i] * pr[i] &lt;= to[j]; j++) &#123;</span><br><span class="line">            g[j] -= <span class="number">1ll</span> * pr[i] * (g[<span class="built_in">ID</span>(to[j] / pr[i])] - fs[i - <span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lld&quot;</span>, g[<span class="built_in">ID</span>(n)]);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h3><h4 id="Loj6053简单的函数"><a href="#Loj6053简单的函数" class="headerlink" title="Loj6053简单的函数"></a><a target="_blank" rel="noopener" href="https://loj.ac/problem/6053">Loj6053简单的函数</a></h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;定义完全积性函数$f(p)=p\oplus 1$，这样对于$p&gt;2$时的质数其实就是$p-1$，拆成$p$和$1$两个积性函数就和模板题一样了。处理完$g$数组后，再修改其中的值，把$2$缺少的部分补回来。然后再求$S$。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">200000</span> + <span class="number">5</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> mod = <span class="number">1e9</span> + <span class="number">7</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="type">long</span> <span class="type">long</span> ll;</span><br><span class="line"><span class="type">int</span> idx1[N], idx2[N], SQRT, mk[N], pr[N], tot, fs1[N], fs2[N], num;</span><br><span class="line">ll to[N], g1[N], g2[N], n;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">F</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> </span>&#123; <span class="keyword">return</span> x ^ y; &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">ID</span><span class="params">(ll x)</span> </span>&#123; <span class="keyword">return</span> x &gt; SQRT ? idx2[n / x] : idx1[x]; &#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">pre</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">2</span>; i &lt;= x; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!mk[i])</span><br><span class="line">            pr[++tot] = i;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= tot; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="number">1ll</span> * pr[j] * i &gt; x)</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            mk[pr[j] * i] = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (i % pr[j] == <span class="number">0</span>)</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= tot; i++) &#123;</span><br><span class="line">        fs1[i] = (fs1[i - <span class="number">1</span>] + pr[i]) % mod;</span><br><span class="line">        fs2[i] = (fs2[i - <span class="number">1</span>] + <span class="number">1</span>) % mod;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">S</span><span class="params">(ll x, <span class="type">int</span> y)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (pr[y] &gt;= x)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> ans = ((g1[<span class="built_in">ID</span>(x)] - g2[<span class="built_in">ID</span>(x)]) % mod - (fs1[y] - fs2[y]) % mod) % mod;</span><br><span class="line">    <span class="keyword">if</span> (x &gt;= <span class="number">2</span> &amp;&amp; y &lt; <span class="number">1</span>)</span><br><span class="line">        ans += <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = y + <span class="number">1</span>; i &lt;= tot &amp;&amp; <span class="number">1ll</span> * pr[i] * pr[i] &lt;= x; i++) &#123;</span><br><span class="line">        ll pe = pr[i];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> e = <span class="number">1</span>; pe &lt;= x; e++, pe = pe * pr[i]) &#123;</span><br><span class="line">            ans = (ans + <span class="number">1ll</span> * <span class="built_in">F</span>(pr[i], e) * (<span class="built_in">S</span>(x / pe, i) + (e != <span class="number">1</span>))) % mod;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%lld&quot;</span>, &amp;n), <span class="built_in">pre</span>(SQRT = <span class="built_in">round</span>(<span class="built_in">sqrt</span>(n)));</span><br><span class="line">    <span class="keyword">for</span> (ll l = <span class="number">1</span>, r, x; l &lt;= n; l = r + <span class="number">1</span>) &#123;</span><br><span class="line">        r = n / (n / l), x = n / l;</span><br><span class="line">        <span class="keyword">if</span> (x &gt; SQRT)</span><br><span class="line">            idx2[n / x] = ++num;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            idx1[x] = ++num;</span><br><span class="line">        to[num] = x, x %= mod;</span><br><span class="line">        g1[num] = <span class="number">1ll</span> * x * (x + <span class="number">1</span>) % mod * <span class="number">500000004ll</span> % mod - <span class="number">1</span>;</span><br><span class="line">        g2[num] = (x - <span class="number">1</span>) % mod;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= tot; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= num &amp;&amp; <span class="number">1ll</span> * pr[i] * pr[i] &lt;= to[j]; j++) &#123;</span><br><span class="line">            g1[j] -= <span class="number">1ll</span> * pr[i] * ((g1[<span class="built_in">ID</span>(to[j] / pr[i])] - fs1[i - <span class="number">1</span>]) % mod) % mod;</span><br><span class="line">            g1[j] %= mod;</span><br><span class="line">            g2[j] -= ((g2[<span class="built_in">ID</span>(to[j] / pr[i])] - fs2[i - <span class="number">1</span>]) % mod) % mod;</span><br><span class="line">            g2[j] %= mod;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> ans = (<span class="built_in">S</span>(n, <span class="number">0</span>) + <span class="number">1</span>) % mod;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, (ans + mod) % mod);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="HDU6834-Yukikaze-and-Smooth-numbers"><a href="#HDU6834-Yukikaze-and-Smooth-numbers" class="headerlink" title="HDU6834-Yukikaze and Smooth numbers"></a><a target="_blank" rel="noopener" href="http://acm.hdu.edu.cn/showproblem.php?pid=6834">HDU6834-Yukikaze and Smooth numbers</a></h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;问题问的很清楚，求$1$到$n$中，质因子不大于$k$的数的数量。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考虑大于$k$但是不大于$n$的质数有$s$个，它们分别是$P_1,\cdots,P_s$。需要删去的数必然就是它们倍数的并集，这个并集的大小可以使用容斥原理去求。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于多个质数$P_i$来说，$1$到$n$中它们的倍数并集的数量就是$\lfloor\frac{n}{p}\rfloor$，其中$p=\prod_iP_i$。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样根据容斥原理得到：</p>
 <script type="math/tex; mode=display">\sum_{i=1}^s\lfloor\frac {n}{P_i}\rfloor-\sum_{1\leq l< r\leq n}\lfloor\frac {n}{P_lP_r}\rfloor\cdots+(-1)^{s+1}\lfloor\frac{n}{\prod_jP_j}\rfloor</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意到这里每一项前的$(-1)^i$可以用莫比乌斯函数来代替，因为对于形如若干互异质数的乘积的数，它的莫比乌斯函数恰好就是$(-1)^s$，其中$s$是质因子的数量。但是这样也需要枚举所有的乘积组合，没有多少优化的余地。考虑到对于含有两个及以上的相同质因子的数，莫比乌斯函数为$0$，这样可以把其它的数也加进来，乘上它们对应的莫比乌斯函数即可。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;综上我们需要枚举最小质因子大于$k$，不小于$n$的所有数，则整个题的答案就可以表示成：</p>
-<script type="math/tex; mode=display">n+\sum_{\min(i)>k}^{i\leq n}\mu(i)\lfloor\frac{n}{i}\rfloor</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样就可以进行整除分块，然后配合min25筛解决这个问题。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;具体来说，先考虑$k^2&gt;n$的情况，此时最小质因子大于$k$的必然都是质数，这样只需要求质数对应的前缀和，根本用不到$S$（见上文min25筛原理），只用$g$即可。将求和的范围设置成$[k+1,r]$，在这个区间整除分块，然后乘上对应的莫比乌斯函数和。注意到min25筛中需要给定$n$，并且所有的端点都需要是$\lfloor\frac{n}{x}\rfloor$的形式，这里的整除分块恰好满足这个要求（考虑到整除分块的右端点是$\frac{n}{n/l}$）。唯一可能不满足的就是$k+1$时，这里额外算一步即可。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当$k^2\leq n$时，情况就比较复杂了。此时既可能有质数，又可能有合数，需要用到$S$来求，但原理和上面相同。我们需要先找出最后一个不大于$k$的质数，然后把求和范围设置成$[1,n]$，整除分块然后利用$S$求最小质因子大于$k$的对应莫比乌斯函数和。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> N = <span class="number">500000</span> + <span class="number">5</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"><span class="keyword">int</span> idx1[N], idx2[N], SQRT, mk[N], pr[N], tot, fs[N], num, to[N], g[N], nn;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">F</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> y &gt; <span class="number">1</span> ? <span class="number">0</span> : <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">ID</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x &gt; SQRT ? idx2[nn / x] : idx1[x];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">pre</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= x; i++) mk[i] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= x; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!mk[i]) pr[++tot] = i;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= tot; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="number">1l</span>l * pr[j] * i &gt; x) <span class="keyword">break</span>;</span><br><span class="line">            mk[pr[j] * i] = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (i % pr[j] == <span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= tot; i++) fs[i] = fs[i - <span class="number">1</span>] + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">S</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (pr[y] &gt;= x) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> ans = -g[ID(x)] + fs[y];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = y + <span class="number">1</span>; i &lt;= tot &amp;&amp; <span class="number">1l</span>l * pr[i] * pr[i] &lt;= x; i++) ans -= S(x / pr[i], i);</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">solve_g</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    nn = x, num = tot = <span class="number">0</span>, pre(SQRT = <span class="built_in">sqrt</span>(x));</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> l = <span class="number">1</span>, r, x; l &lt;= nn; l = r + <span class="number">1</span>) &#123;</span><br><span class="line">        r = nn / (nn / l), x = nn / l;</span><br><span class="line">        <span class="keyword">if</span> (x &gt; SQRT)</span><br><span class="line">            idx2[nn / x] = ++num;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            idx1[x] = ++num;</span><br><span class="line">        to[num] = x, g[num] = x - <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= tot; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= num &amp;&amp; <span class="number">1l</span>l * pr[i] * pr[i] &lt;= to[j]; j++) &#123;</span><br><span class="line">            g[j] -= g[ID(to[j] / pr[i])] - fs[i - <span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// DEBUG;</span></span><br><span class="line">    <span class="keyword">int</span> t;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%lld"</span>, &amp;t);</span><br><span class="line">    <span class="keyword">while</span> (t--) &#123;</span><br><span class="line">        <span class="keyword">int</span> n, k, ans = <span class="number">0</span>, cnt = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">"%lld%lld"</span>, &amp;n, &amp;k);</span><br><span class="line">        <span class="keyword">if</span> (k &gt;= n) &#123;</span><br><span class="line">            ans = n;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="number">1l</span>l * k * k &gt; n) &#123;</span><br><span class="line">            <span class="keyword">int</span> l = k + <span class="number">1</span>, r = n / (n / l);</span><br><span class="line">            solve_g(k), cnt -= g[ID(k)];</span><br><span class="line">            solve_g(n), cnt += g[ID(r)];</span><br><span class="line">            ans -= (n / l) * cnt, l = r + <span class="number">1</span>, ans += n;</span><br><span class="line">            <span class="keyword">while</span> (l &lt;= n) r = n / (n / l), ans -= (g[ID(r)] - g[ID(l - <span class="number">1</span>)]) * (n / l), l = r + <span class="number">1</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            solve_g(n);</span><br><span class="line">            <span class="keyword">int</span> t = <span class="number">1</span>, l = <span class="number">1</span>, r;</span><br><span class="line">            <span class="keyword">while</span> (t &lt;= tot &amp;&amp; pr[t] &lt;= k) ++t;</span><br><span class="line">            --t, ans = n;</span><br><span class="line">            <span class="keyword">while</span> (l &lt;= n) &#123;</span><br><span class="line">                r = n / (n / l);</span><br><span class="line">                ans += (S(r, t) - S(l - <span class="number">1</span>, t)) * (n / l);</span><br><span class="line">                l = r + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, ans);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<script type="math/tex; mode=display">n+\sum_{\min(i)>k}^{i\leq n}\mu(i)\lfloor\frac{n}{i}\rfloor</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样就可以进行整除分块，然后配合min25筛解决这个问题。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;具体来说，先考虑$k^2&gt;n$的情况，此时最小质因子大于$k$的必然都是质数，这样只需要求质数对应的前缀和，根本用不到$S$（见上文min25筛原理），只用$g$即可。将求和的范围设置成$[k+1,r]$，在这个区间整除分块，然后乘上对应的莫比乌斯函数和。注意到min25筛中需要给定$n$，并且所有的端点都需要是$\lfloor\frac{n}{x}\rfloor$的形式，这里的整除分块恰好满足这个要求（考虑到整除分块的右端点是$\frac{n}{n/l}$）。唯一可能不满足的就是$k+1$时，这里额外算一步即可。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当$k^2\leq n$时，情况就比较复杂了。此时既可能有质数，又可能有合数，需要用到$S$来求，但原理和上面相同。我们需要先找出最后一个不大于$k$的质数，然后把求和范围设置成$[1,n]$，整除分块然后利用$S$求最小质因子大于$k$的对应莫比乌斯函数和。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">500000</span> + <span class="number">5</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="type">long</span> <span class="type">long</span> ll;</span><br><span class="line"><span class="type">int</span> idx1[N], idx2[N], SQRT, mk[N], pr[N], tot, fs[N], num, to[N], g[N], nn;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">F</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> y &gt; <span class="number">1</span> ? <span class="number">0</span> : <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">ID</span><span class="params">(<span class="type">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x &gt; SQRT ? idx2[nn / x] : idx1[x];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">pre</span><span class="params">(<span class="type">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">2</span>; i &lt;= x; i++) mk[i] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">2</span>; i &lt;= x; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!mk[i]) pr[++tot] = i;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= tot; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="number">1ll</span> * pr[j] * i &gt; x) <span class="keyword">break</span>;</span><br><span class="line">            mk[pr[j] * i] = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (i % pr[j] == <span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= tot; i++) fs[i] = fs[i - <span class="number">1</span>] + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">S</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (pr[y] &gt;= x) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> ans = -g[<span class="built_in">ID</span>(x)] + fs[y];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = y + <span class="number">1</span>; i &lt;= tot &amp;&amp; <span class="number">1ll</span> * pr[i] * pr[i] &lt;= x; i++) ans -= <span class="built_in">S</span>(x / pr[i], i);</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">solve_g</span><span class="params">(<span class="type">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    nn = x, num = tot = <span class="number">0</span>, <span class="built_in">pre</span>(SQRT = <span class="built_in">sqrt</span>(x));</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> l = <span class="number">1</span>, r, x; l &lt;= nn; l = r + <span class="number">1</span>) &#123;</span><br><span class="line">        r = nn / (nn / l), x = nn / l;</span><br><span class="line">        <span class="keyword">if</span> (x &gt; SQRT)</span><br><span class="line">            idx2[nn / x] = ++num;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            idx1[x] = ++num;</span><br><span class="line">        to[num] = x, g[num] = x - <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= tot; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= num &amp;&amp; <span class="number">1ll</span> * pr[i] * pr[i] &lt;= to[j]; j++) &#123;</span><br><span class="line">            g[j] -= g[<span class="built_in">ID</span>(to[j] / pr[i])] - fs[i - <span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// DEBUG;</span></span><br><span class="line">    <span class="type">int</span> t;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%lld&quot;</span>, &amp;t);</span><br><span class="line">    <span class="keyword">while</span> (t--) &#123;</span><br><span class="line">        <span class="type">int</span> n, k, ans = <span class="number">0</span>, cnt = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%lld%lld&quot;</span>, &amp;n, &amp;k);</span><br><span class="line">        <span class="keyword">if</span> (k &gt;= n) &#123;</span><br><span class="line">            ans = n;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="number">1ll</span> * k * k &gt; n) &#123;</span><br><span class="line">            <span class="type">int</span> l = k + <span class="number">1</span>, r = n / (n / l);</span><br><span class="line">            <span class="built_in">solve_g</span>(k), cnt -= g[<span class="built_in">ID</span>(k)];</span><br><span class="line">            <span class="built_in">solve_g</span>(n), cnt += g[<span class="built_in">ID</span>(r)];</span><br><span class="line">            ans -= (n / l) * cnt, l = r + <span class="number">1</span>, ans += n;</span><br><span class="line">            <span class="keyword">while</span> (l &lt;= n) r = n / (n / l), ans -= (g[<span class="built_in">ID</span>(r)] - g[<span class="built_in">ID</span>(l - <span class="number">1</span>)]) * (n / l), l = r + <span class="number">1</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">solve_g</span>(n);</span><br><span class="line">            <span class="type">int</span> t = <span class="number">1</span>, l = <span class="number">1</span>, r;</span><br><span class="line">            <span class="keyword">while</span> (t &lt;= tot &amp;&amp; pr[t] &lt;= k) ++t;</span><br><span class="line">            --t, ans = n;</span><br><span class="line">            <span class="keyword">while</span> (l &lt;= n) &#123;</span><br><span class="line">                r = n / (n / l);</span><br><span class="line">                ans += (<span class="built_in">S</span>(r, t) - <span class="built_in">S</span>(l - <span class="number">1</span>, t)) * (n / l);</span><br><span class="line">                l = r + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, ans);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
-      
     </div>
 
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/数学/" rel="tag"><i class="fa fa-tag"></i>数学</a>
-          
-            <a href="/tags/数论/" rel="tag"><i class="fa fa-tag"></i>数论</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2020/08/07/Educational-Codeforces-Round-91/" rel="next" title="Educational Codeforces Round 91">
-                <i class="fa fa-chevron-left"></i> Educational Codeforces Round 91
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/08/08/NowCoder5674B-Groundhog-and-Apple-Tree/" rel="prev" title="[NowCoder5674B]Groundhog and Apple Tree">
-                [NowCoder5674B]Groundhog and Apple Tree <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
+    <div>全文完。</div>
   </article>
-
-
-  </div>
-
-
-          </div>
-          
-
-  
-    <div class="comments" id="comments">
-    </div>
-
-  
-
-
-
-        </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
-
-  <aside id="sidebar" class="sidebar">
+  <div class="toc-container">
     
-    <div class="sidebar-inner">
-
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-            
-              <img class="site-author-image" itemprop="image" src="/images/header.jpg" alt="Author">
-            
-              <p class="site-author-name" itemprop="name">Author</p>
-              <p class="site-description motion-element" itemprop="description">弱鸡</p>
-          </div>
-
-          
-            <nav class="site-state motion-element">
-              
-                <div class="site-state-item site-state-posts">
-                
-                  <a href="/archives/">
-                
-                    <span class="site-state-item-count">211</span>
-                    <span class="site-state-item-name">日志</span>
-                  </a>
-                </div>
-              
-
-              
-                
-                
-                <div class="site-state-item site-state-categories">
-                  <a href="/categories/index.html">
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">4</span>
-                    <span class="site-state-item-name">分类</span>
-                  </a>
-                </div>
-              
-
-              
-                
-                
-                <div class="site-state-item site-state-tags">
-                  <a href="/tags/index.html">
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">76</span>
-                    <span class="site-state-item-name">标签</span>
-                  </a>
-                </div>
-              
-            </nav>
-          
-
-          
-
-          
-
-          
-
-          
-          
-
-          
-            
-          
-          
-
-        </div>
-      </div>
-
-      
-      <!--noindex-->
-        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-            
-            
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#min25筛"><span class="nav-number">1.</span> <span class="nav-text">min25筛</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#质数积性函数和求法"><span class="nav-number">2.</span> <span class="nav-text">质数积性函数和求法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码实现"><span class="nav-number">3.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#莫比乌斯函数与欧拉函数"><span class="nav-number">4.</span> <span class="nav-text">莫比乌斯函数与欧拉函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#素数和以及素数数量"><span class="nav-number">5.</span> <span class="nav-text">素数和以及素数数量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#例题"><span class="nav-number">6.</span> <span class="nav-text">例题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Loj6053简单的函数"><span class="nav-number">6.1.</span> <span class="nav-text">Loj6053简单的函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HDU6834-Yukikaze-and-Smooth-numbers"><span class="nav-number">6.2.</span> <span class="nav-text">HDU6834-Yukikaze and Smooth numbers</span></a></li></ol></li></ol></div>
-            
-
-          </div>
-        </div>
-      <!--/noindex-->
-      
-
-      
-
-    </div>
-  </aside>
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">Posts</strong>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#min25%E7%AD%9B"><span class="toc-text">min25筛</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B4%A8%E6%95%B0%E7%A7%AF%E6%80%A7%E5%87%BD%E6%95%B0%E5%92%8C%E6%B1%82%E6%B3%95"><span class="toc-text">质数积性函数和求法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-text">代码实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%AB%E6%AF%94%E4%B9%8C%E6%96%AF%E5%87%BD%E6%95%B0%E4%B8%8E%E6%AC%A7%E6%8B%89%E5%87%BD%E6%95%B0"><span class="toc-text">莫比乌斯函数与欧拉函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B4%A0%E6%95%B0%E5%92%8C%E4%BB%A5%E5%8F%8A%E7%B4%A0%E6%95%B0%E6%95%B0%E9%87%8F"><span class="toc-text">素数和以及素数数量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98"><span class="toc-text">例题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Loj6053%E7%AE%80%E5%8D%95%E7%9A%84%E5%87%BD%E6%95%B0"><span class="toc-text">Loj6053简单的函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HDU6834-Yukikaze-and-Smooth-numbers"><span class="toc-text">HDU6834-Yukikaze and Smooth numbers</span></a></li></ol></li></ol>
+  </div>
 
 
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
-  <span class="with-love" id="animate">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Author</span>
-
-  
-
-  
+  </div>
+</div>
+<div class="copyright">
+    <span>本作品采用</span>
+    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by/4.0/">知识共享署名 4.0 国际许可协议</a>
+    <span>进行许可。 转载时请注明原文链接。</span>
 </div>
 
-
-
-
-
-
-
-
-
+  
+    <div class="post-nav">
+      <div class="post-nav-item post-nav-next">
         
-
-
-
-
-
-
-
-
+          <span>〈 </span>
+          <a href="/2020/08/07/Educational-Codeforces-Round-91/" rel="next" title="Educational Codeforces Round 91">
+          Educational Codeforces Round 91
+          </a>
         
       </div>
-    </footer>
-
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-          <span id="scrollpercent"><span>0</span>%</span>
+  
+      <div class="post-nav-item post-nav-prev">
+          
+          <a href="/2020/08/08/NowCoder5674B-Groundhog-and-Apple-Tree/" rel="prev" title="[NowCoder5674B]Groundhog and Apple Tree">
+            [NowCoder5674B]Groundhog and Apple Tree
+          </a>
+          <span>〉</span>
         
       </div>
-    
+    </div>
+  
+
+
+    </div>
 
     
 
-    
-
-    
   </div>
-
+  <footer class="footer text-center">
+    <div id="bottom-inner">
+        <a class="bottom-item" href="https://twifor.github.io">首页</a> |
+        <a class="bottom-item" href="https://twifor.github.io/index_original.html" target="_blank">主站</a> |
+        <a class="bottom-item" href="https://github.com/Twifor" target="_blank">GitHub</a> |
+        <a class="bottom-item" href="https://hexo.io" target="_blank">Powered by hexo</a> |
+        <a class="bottom-item" href="https://github.com/KevinOfNeu/hexo-theme-xoxo" target="_blank">Theme xoxo</a>
+    </div>
+</footer>
   
 
 <script>
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-    
-    
-  
-  <script color="255,255,255" '="" opacity="0.85" zindex="-1" count="15" src="/lib/canvas-nest/canvas-nest.min.js"></script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  <script src="/lib/jquery/index.js?v=2.1.3"></script>
-
-  
-  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-
-  
-
-
-  <script src="/js/src/utils.js?v=6.7.0"></script>
-
-  <script src="/js/src/motion.js?v=6.7.0"></script>
-
-
-
-  
-  
-
-
-  <script src="/js/src/affix.js?v=6.7.0"></script>
-
-  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
-
-
-
-
-  
-  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
-<script src="/js/src/post-details.js?v=6.7.0"></script>
-
-
-
-  
-
-
-  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
-
-
-
-  
-  
-
-
-
-
-  
-
-<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
-
-
-
-<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
-
-<script>
-  var GUEST = ['nick', 'mail', 'link'];
-  var guest = 'nick,mail,link';
-  guest = guest.split(',').filter(function (item) {
-    return GUEST.indexOf(item) > -1;
-  });
-  new Valine({
-    el: '#comments',
-    verify: false,
-    notify: false,
-    appId: '2aSxA7Naxmi6lgfgVU1ulgcS-gzGzoHsz',
-    appKey: '6G9RDaS7lVtgyGKw8AxxkLyi',
-    placeholder: '写下评论吧~qwq',
-    avatar: 'mm',
-    meta: guest,
-    pageSize: '10' || 10,
-    visitor: false
-  });
-</script>
-
-
-
-  
-
-  <script>
-    // Popup Window;
-    var isfetched = false;
-    var isXml = true;
-    // Search DB path;
-    var search_path = "search.xml";
-    if (search_path.length === 0) {
-      search_path = "search.xml";
-    } else if (/json$/i.test(search_path)) {
-      isXml = false;
-    }
-    var path = "/" + search_path;
-    // monitor main search box;
-
-    var onPopupClose = function (e) {
-      $('.popup').hide();
-      $('#local-search-input').val('');
-      $('.search-result-list').remove();
-      $('#no-result').remove();
-      $(".local-search-pop-overlay").remove();
-      $('body').css('overflow', '');
-    }
-
-    function proceedsearch() {
-      $("body")
-        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
-        .css('overflow', 'hidden');
-      $('.search-popup-overlay').click(onPopupClose);
-      $('.popup').toggle();
-      var $localSearchInput = $('#local-search-input');
-      $localSearchInput.attr("autocapitalize", "none");
-      $localSearchInput.attr("autocorrect", "off");
-      $localSearchInput.focus();
-    }
-
-    // search function;
-    var searchFunc = function(path, search_id, content_id) {
-      'use strict';
-
-      // start loading animation
-      $("body")
-        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
-          '<div id="search-loading-icon">' +
-          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
-          '</div>' +
-          '</div>')
-        .css('overflow', 'hidden');
-      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
-
-      
-
-      $.ajax({
-        url: path,
-        dataType: isXml ? "xml" : "json",
-        async: true,
-        success: function(res) {
-          // get the contents from search data
-          isfetched = true;
-          $('.popup').detach().appendTo('.header-inner');
-          var datas = isXml ? $("entry", res).map(function() {
-            return {
-              title: $("title", this).text(),
-              content: $("content",this).text(),
-              url: $("url" , this).text()
-            };
-          }).get() : res;
-          var input = document.getElementById(search_id);
-          var resultContent = document.getElementById(content_id);
-          var inputEventFunction = function() {
-            var searchText = input.value.trim().toLowerCase();
-            var keywords = searchText.split(/[\s\-]+/);
-            if (keywords.length > 1) {
-              keywords.push(searchText);
-            }
-            var resultItems = [];
-            if (searchText.length > 0) {
-              // perform local searching
-              datas.forEach(function(data) {
-                var isMatch = false;
-                var hitCount = 0;
-                var searchTextCount = 0;
-                var title = data.title.trim();
-                var titleInLowerCase = title.toLowerCase();
-                var content = data.content.trim().replace(/<[^>]+>/g,"");
-                
-                var contentInLowerCase = content.toLowerCase();
-                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
-                var indexOfTitle = [];
-                var indexOfContent = [];
-                // only match articles with not empty titles
-                if(title != '') {
-                  keywords.forEach(function(keyword) {
-                    function getIndexByWord(word, text, caseSensitive) {
-                      var wordLen = word.length;
-                      if (wordLen === 0) {
-                        return [];
-                      }
-                      var startPosition = 0, position = [], index = [];
-                      if (!caseSensitive) {
-                        text = text.toLowerCase();
-                        word = word.toLowerCase();
-                      }
-                      while ((position = text.indexOf(word, startPosition)) > -1) {
-                        index.push({position: position, word: word});
-                        startPosition = position + wordLen;
-                      }
-                      return index;
-                    }
-
-                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
-                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
-                  });
-                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
-                    isMatch = true;
-                    hitCount = indexOfTitle.length + indexOfContent.length;
-                  }
-                }
-
-                // show search results
-
-                if (isMatch) {
-                  // sort index by position of keyword
-
-                  [indexOfTitle, indexOfContent].forEach(function (index) {
-                    index.sort(function (itemLeft, itemRight) {
-                      if (itemRight.position !== itemLeft.position) {
-                        return itemRight.position - itemLeft.position;
-                      } else {
-                        return itemLeft.word.length - itemRight.word.length;
-                      }
-                    });
-                  });
-
-                  // merge hits into slices
-
-                  function mergeIntoSlice(text, start, end, index) {
-                    var item = index[index.length - 1];
-                    var position = item.position;
-                    var word = item.word;
-                    var hits = [];
-                    var searchTextCountInSlice = 0;
-                    while (position + word.length <= end && index.length != 0) {
-                      if (word === searchText) {
-                        searchTextCountInSlice++;
-                      }
-                      hits.push({position: position, length: word.length});
-                      var wordEnd = position + word.length;
-
-                      // move to next position of hit
-
-                      index.pop();
-                      while (index.length != 0) {
-                        item = index[index.length - 1];
-                        position = item.position;
-                        word = item.word;
-                        if (wordEnd > position) {
-                          index.pop();
-                        } else {
-                          break;
-                        }
-                      }
-                    }
-                    searchTextCount += searchTextCountInSlice;
-                    return {
-                      hits: hits,
-                      start: start,
-                      end: end,
-                      searchTextCount: searchTextCountInSlice
-                    };
-                  }
-
-                  var slicesOfTitle = [];
-                  if (indexOfTitle.length != 0) {
-                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
-                  }
-
-                  var slicesOfContent = [];
-                  while (indexOfContent.length != 0) {
-                    var item = indexOfContent[indexOfContent.length - 1];
-                    var position = item.position;
-                    var word = item.word;
-                    // cut out 100 characters
-                    var start = position - 20;
-                    var end = position + 80;
-                    if(start < 0){
-                      start = 0;
-                    }
-                    if (end < position + word.length) {
-                      end = position + word.length;
-                    }
-                    if(end > content.length){
-                      end = content.length;
-                    }
-                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
-                  }
-
-                  // sort slices in content by search text's count and hits' count
-
-                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
-                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
-                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
-                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
-                      return sliceRight.hits.length - sliceLeft.hits.length;
-                    } else {
-                      return sliceLeft.start - sliceRight.start;
-                    }
-                  });
-
-                  // select top N slices in content
-
-                  var upperBound = parseInt('1');
-                  if (upperBound >= 0) {
-                    slicesOfContent = slicesOfContent.slice(0, upperBound);
-                  }
-
-                  // highlight title and content
-
-                  function highlightKeyword(text, slice) {
-                    var result = '';
-                    var prevEnd = slice.start;
-                    slice.hits.forEach(function (hit) {
-                      result += text.substring(prevEnd, hit.position);
-                      var end = hit.position + hit.length;
-                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
-                      prevEnd = end;
-                    });
-                    result += text.substring(prevEnd, slice.end);
-                    return result;
-                  }
-
-                  var resultItem = '';
-
-                  if (slicesOfTitle.length != 0) {
-                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
-                  } else {
-                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
-                  }
-
-                  slicesOfContent.forEach(function (slice) {
-                    resultItem += "<a href='" + articleUrl + "'>" +
-                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
-                      "...</p>" + "</a>";
-                  });
-
-                  resultItem += "</li>";
-                  resultItems.push({
-                    item: resultItem,
-                    searchTextCount: searchTextCount,
-                    hitCount: hitCount,
-                    id: resultItems.length
-                  });
-                }
-              })
-            };
-            if (keywords.length === 1 && keywords[0] === "") {
-              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
-            } else if (resultItems.length === 0) {
-              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
-            } else {
-              resultItems.sort(function (resultLeft, resultRight) {
-                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
-                  return resultRight.searchTextCount - resultLeft.searchTextCount;
-                } else if (resultLeft.hitCount !== resultRight.hitCount) {
-                  return resultRight.hitCount - resultLeft.hitCount;
-                } else {
-                  return resultRight.id - resultLeft.id;
-                }
-              });
-              var searchResultList = '<ul class=\"search-result-list\">';
-              resultItems.forEach(function (result) {
-                searchResultList += result.item;
-              })
-              searchResultList += "</ul>";
-              resultContent.innerHTML = searchResultList;
-            }
-          }
-
-          if ('auto' === 'auto') {
-            input.addEventListener('input', inputEventFunction);
-          } else {
-            $('.search-icon').click(inputEventFunction);
-            input.addEventListener('keypress', function (event) {
-              if (event.keyCode === 13) {
-                inputEventFunction();
-              }
-            });
-          }
-
-          // remove loading animation
-          $(".local-search-pop-overlay").remove();
-          $('body').css('overflow', '');
-
-          proceedsearch();
+  (function(window, document, undefined) {
+
+    var timer = null;
+
+    function returnTop() {
+      cancelAnimationFrame(timer);
+      timer = requestAnimationFrame(function fn() {
+        var oTop = document.body.scrollTop || document.documentElement.scrollTop;
+        if (oTop > 0) {
+          document.body.scrollTop = document.documentElement.scrollTop = oTop - 50;
+          timer = requestAnimationFrame(fn);
+        } else {
+          cancelAnimationFrame(timer);
         }
       });
     }
 
-    // handle and trigger popup window;
-    $('.popup-trigger').click(function(e) {
-      e.stopPropagation();
-      if (isfetched === false) {
-        searchFunc(path, 'local-search-input', 'local-search-result');
-      } else {
-        proceedsearch();
-      };
-    });
+    var hearts = [];
+    window.requestAnimationFrame = (function() {
+      return window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.oRequestAnimationFrame ||
+        window.msRequestAnimationFrame ||
+        function(callback) {
+          setTimeout(callback, 1000 / 60);
+        }
+    })();
+    init();
 
-    $('.popup-btn-close').click(onPopupClose);
-    $('.popup').click(function(e){
-      e.stopPropagation();
-    });
-    $(document).on('keyup', function (event) {
-      var shouldDismissSearchPopup = event.which === 27 &&
-        $('.search-popup').is(':visible');
-      if (shouldDismissSearchPopup) {
-        onPopupClose();
+    function init() {
+      css(".heart{z-index:9999;width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);}.heart:after,.heart:before{content: '';width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: absolute;}.heart:after{top: -5px;}.heart:before{left: -5px;}");
+      attachEvent();
+      gameloop();
+      addMenuEvent();
+    }
+
+    function gameloop() {
+      for (var i = 0; i < hearts.length; i++) {
+        if (hearts[i].alpha <= 0) {
+          document.body.removeChild(hearts[i].el);
+          hearts.splice(i, 1);
+          continue;
+        }
+        hearts[i].y--;
+        hearts[i].scale += 0.004;
+        hearts[i].alpha -= 0.013;
+        hearts[i].el.style.cssText = "left:" + hearts[i].x + "px;top:" + hearts[i].y + "px;opacity:" + hearts[i].alpha + ";transform:scale(" + hearts[i].scale + "," + hearts[i].scale + ") rotate(45deg);background:" + hearts[i].color;
       }
-    });
-  </script>
+      requestAnimationFrame(gameloop);
+    }
 
-
-
-
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-
-  
-  
-
-  
-    
-      <script type="text/x-mathjax-config">
-  
-
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-      processEscapes: true,
-      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-	  preview: 'none'
-    },
-	messageStyle: 'none',
-	"HTML-CSS": {
-      showMathMenu: false //关闭右击菜单显示
-    },
-    TeX: {
+    /**
+     * 给logo设置点击事件
+     * 
+     * - 回到顶部
+     * - 出现爱心
+     */
+    function attachEvent() {
+      var old = typeof window.onclick === "function" && window.onclick;
+      var logo = document.getElementById("logo");
+      if (logo) {
+        logo.onclick = function(event) {
+          returnTop();
+          old && old();
+          createHeart(event);
+        }
+      }
       
-      equationNumbers: {
-        autoNumber: "AMS"
+    }
+
+    function createHeart(event) {
+      var d = document.createElement("div");
+      d.className = "heart";
+      hearts.push({
+        el: d,
+        x: event.clientX - 5,
+        y: event.clientY - 5,
+        scale: 1,
+        alpha: 1,
+        color: randomColor()
+      });
+      document.body.appendChild(d);
+    }
+
+    function css(css) {
+      var style = document.createElement("style");
+      style.type = "text/css";
+      try {
+        style.appendChild(document.createTextNode(css));
+      } catch (ex) {
+        style.styleSheet.cssText = css;
+      }
+      document.getElementsByTagName('head')[0].appendChild(style);
+    }
+
+    function randomColor() {
+      // return "rgb(" + (~~(Math.random() * 255)) + "," + (~~(Math.random() * 255)) + "," + (~~(Math.random() * 255)) + ")";
+      return "#F44336";
+    }
+
+    function addMenuEvent() {
+      var menu = document.getElementById('menu-main-post');
+      if (menu) {
+        var toc = document.getElementById('toc');
+        if (toc) {
+          menu.onclick = function() {
+            if (toc) {
+              if (toc.style.display == 'block') {
+                toc.style.display = 'none';
+              } else {
+                toc.style.display = 'block';
+              }
+            }
+          };
+        } else {
+          menu.style.display = 'none';
+        }
       }
     }
-  });
+
+  })(window, document);
 </script>
+
+  
+
+
 
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-      for (i = 0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-      }
-  });
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        },
+        showMathMenu: false,
+        "HTML-CSS": {
+            preferredFont: "TeX", 
+            availableFonts: ["STIX","TeX"],
+            showMathMenuMSIE: false
+        },
+        showProcessingMessages: false,
+        messageStyle: "none"
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
 </script>
-<script src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-<style>
-.MathJax_Display {
-  overflow: auto hidden;
-}
-</style>
-
-    
-  
-
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-<script src="/js/src/snow.js"></script>
-<script src="/live2d-widget/autoload.js"></script>
-<style type="text/css">
-.snow-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:100001;}</style>
-<div class="snow-container"></div>
+<script src="//cdn.bootcss.com/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>
-
-<script type="text/javascript" src="/js/src/clicklove.js"></script>

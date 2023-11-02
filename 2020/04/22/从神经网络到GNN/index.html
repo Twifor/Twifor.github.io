@@ -1,524 +1,116 @@
+
 <!DOCTYPE html>
+<html lang="en">
 
 
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#202020" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
 
-
-
-
-
-
-
-
-
-
-  
-
-
-<html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.8.0">
-<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
-  <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<script>
-    (function () {
-        if ('') {
-            if (prompt('请输入文章密码') !== '') {
-                alert('密码错误！');
-                if (history.length === 1) {
-                    location.replace("http://twifor.github.io"); // 这里替换成你的首页
-                } else {
-                    history.back();
-                }
-            }
-        }
-    })();
-</script>
-
-
-
-
-  
-  
     
-    
-  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
-  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
-
-<link rel="stylesheet" href="/css/main.css?v=6.7.0">
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico?v=6.7.0">
-
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico?v=6.7.0">
-
-
-  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
-
-
-
-
-
-
-
-<script id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Gemini',
-    version: '6.7.0',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
-    fancybox: false,
-    fastclick: false,
-    lazyload: false,
-    tabs: true,
-    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
-
-
-  
-
-
-
-
-  <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;对神经网络算法，GNN及其应用的解说。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;注意：前5节是神经网络在数学上的大致原理，第6节是Pytorch神经网络的实现，之后是GNN部分。前5节是笔者（有意或无意）的自我理解。">
-<meta name="keywords" content="机器学习">
-<meta property="og:type" content="article">
-<meta property="og:title" content="从神经网络到GNN">
-<meta property="og:url" content="https://twifor.github.io/2020/04/22/从神经网络到GNN/index.html">
-<meta property="og:site_name" content="Twifor~Liyh">
-<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;对神经网络算法，GNN及其应用的解说。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;注意：前5节是神经网络在数学上的大致原理，第6节是Pytorch神经网络的实现，之后是GNN部分。前5节是笔者（有意或无意）的自我理解。">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://twifor.github.io/2020/04/22/从神经网络到GNN/1.png">
-<meta property="og:image" content="https://twifor.github.io/2020/04/22/从神经网络到GNN/2.jpg">
-<meta property="og:image" content="https://twifor.github.io/2020/04/22/从神经网络到GNN/2.png">
-<meta property="og:updated_time" content="2020-05-02T09:36:47.747Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="从神经网络到GNN">
-<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;对神经网络算法，GNN及其应用的解说。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;注意：前5节是神经网络在数学上的大致原理，第6节是Pytorch神经网络的实现，之后是GNN部分。前5节是笔者（有意或无意）的自我理解。">
-<meta name="twitter:image" content="https://twifor.github.io/2020/04/22/从神经网络到GNN/1.png">
-
-
-
-
-
-
-  <link rel="canonical" href="https://twifor.github.io/2020/04/22/从神经网络到GNN/">
-
-
-
-<script id="page.configurations">
-  CONFIG.page = {
-    sidebar: "",
-  };
-</script>
-
-  <title>从神经网络到GNN | Twifor~Liyh</title>
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <noscript>
-  <style>
-  .use-motion .motion-element,
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-title { opacity: initial; }
-
-  .use-motion .logo,
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
-</head>
-
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
-
-
-  
-  
-    
-  
-
-  <div class="container sidebar-position-left page-post-detail">
-    <div class="headband"></div>
-	<a href="https://github.com/Twifor" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta">
-    
-
-    <div class="custom-logo-site-title">
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Twifor~Liyh</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-    
-    
-  </div>
-
-  <div class="site-nav-toggle">
-    <button aria-label="切换导航栏">
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
-  </div>
-</div>
-
-
-
-<nav class="site-nav">
-  
-    <ul id="menu" class="menu">
+      <meta name="keywords" content="机器学习," />
       
-        
-        
-        
+
           
-          <li class="menu-item menu-item-home">
+              <meta name="description"
+                content="从神经网络到GNN" />
+              
 
-    
-    
+                <link rel="icon" type="image/x-icon" href="/logo.ico">
+                <title>
+                  从神经网络到GNNlyh&#39;s blog
+                </title>
+                
+                  <!-- stylesheets list from config.yml -->
+                  
+                    <link rel="stylesheet" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css">
+                    
+                    <link rel="stylesheet" href="/css/xoxo.css">
+                    
+                      
+  <meta name="generator" content="Hexo 7.0.0"></head>
+
+<body>
+  <div class="nav-container">
+    <nav class="home-menu pure-menu pure-menu-horizontal">
+  <a class="pure-menu-heading" href="/">
+    <span class="title">
+      lyh&#39;s blog
+    </span>
+  </a>
+
+  <ul class="pure-menu-list clearfix">
     
       
-    
-
-    
-
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-about">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-tags">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-categories">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-archives">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
-
-  </li>
-
-      
-      
-        <li class="menu-item menu-item-search">
-          
-            <a href="javascript:;" class="popup-trigger">
+          <li class="pure-menu-item"><a href="/" class="pure-menu-link">
+              Home
+            </a></li>
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
-        </li>
       
-    </ul>
-  
-
-  
-
-  
-    <div class="site-search">
+          <li class="pure-menu-item"><a href="/archives" class="pure-menu-link">
+              Archives
+            </a></li>
+          
+            
       
-  <div class="popup search-popup local-search-popup">
-  <div class="local-search-header clearfix">
-    <span class="search-icon">
-      <i class="fa fa-search"></i>
-    </span>
-    <span class="popup-btn-close">
-      <i class="fa fa-times-circle"></i>
-    </span>
-    <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
-    </div>
-  </div>
-  <div id="local-search-result"></div>
-</div>
+          <li class="pure-menu-item"><a href="/tags" class="pure-menu-link">
+              Tags
+            </a></li>
+          
+            
+      
+          <li class="pure-menu-item"><a href="/search" class="pure-menu-link">
+              Search
+            </a></li>
+          
+            
+      
+          <li class="pure-menu-item"><a href="/about" class="pure-menu-link">
+              About
+            </a></li>
+          
+            
+  </ul>
 
-
-
-    </div>
-  
 </nav>
+  </div>
 
-
-
-  
-
-
-
-</div>
+  <div class="container" id="content-outer">
+    <div class="inner" id="content-inner">
+      <div class="post-container">
+  <article class="post" id="post">
+    <header class="post-header text-center">
+      <h1 class="title">
+        从神经网络到GNN
+      </h1>
+      <span>
+        
+        <time class="time" datetime="2020-04-22T10:40:46.000Z">
+        2020-04-22
+      </time>
+        
+      </span>
+      <span class="slash">/</span>
+      <span class="post-meta">
+      <span class="post-tags">
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li></ul>
+      </span>
+    </span>
+      <span class="slash">/</span>
+      <span class="read">
+      <span id="busuanzi_value_page_pv"></span> 点击
+    </span>
+      <span class="slash">/</span>
+      <span class="read">阅读耗时 25 分钟</span>
     </header>
-    
 
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-            
-
-          
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://twifor.github.io/2020/04/22/从神经网络到GNN/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Author">
-      <meta itemprop="description" content="弱鸡">
-      <meta itemprop="image" content="/images/header.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Twifor~Liyh">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">从神经网络到GNN
-
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2020-04-22 18:40:46" itemprop="dateCreated datePublished" datetime="2020-04-22T18:40:46+08:00">2020-04-22</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-05-02 17:36:47" itemprop="dateModified" datetime="2020-05-02T17:36:47+08:00">2020-05-02</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/机器学习/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/04/22/从神经网络到GNN/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2020/04/22/从神经网络到GNN/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对神经网络算法，GNN及其应用的解说。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意：前5节是神经网络在数学上的大致原理，第6节是Pytorch神经网络的实现，之后是GNN部分。前5节是笔者（有意或无意）的自我理解。<br><a id="more"></a></p>
-<h3 id="感知机"><a href="#感知机" class="headerlink" title="感知机"></a>感知机</h3><h4 id="感知机的结构"><a href="#感知机的结构" class="headerlink" title="感知机的结构"></a>感知机的结构</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;感知机是神经网络算法最基本的一个计算单元。它的结构大致如下图所示：<br><img src="/2020/04/22/从神经网络到GNN/1.png"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从形式上，感知机是一个三元组$(W,b,F)$，其中$W$是一个$n$元行向量，$b$是一个数，$F$是一个函数，称为<strong>激活函数</strong>。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于一个感知机$P$，其能够接受一个$n$元列向量$X$，并输出一个值，我们用$P(X)$来表示这个值，那么有如下的公式：</p>
+    <div class="post-content">
+      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对神经网络算法，GNN及其应用的解说。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意：前5节是神经网络在数学上的大致原理，第6节是Pytorch神经网络的实现，之后是GNN部分。前5节是笔者（有意或无意）的自我理解。<br><span id="more"></span></p>
+<h3 id="感知机"><a href="#感知机" class="headerlink" title="感知机"></a>感知机</h3><h4 id="感知机的结构"><a href="#感知机的结构" class="headerlink" title="感知机的结构"></a>感知机的结构</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;感知机是神经网络算法最基本的一个计算单元。它的结构大致如下图所示：<br><img src="/2020/04/22/%E4%BB%8E%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%88%B0GNN/1.png" class=""><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从形式上，感知机是一个三元组$(W,b,F)$，其中$W$是一个$n$元行向量，$b$是一个数，$F$是一个函数，称为<strong>激活函数</strong>。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于一个感知机$P$，其能够接受一个$n$元列向量$X$，并输出一个值，我们用$P(X)$来表示这个值，那么有如下的公式：</p>
 <script type="math/tex; mode=display">P(X)=F(WX+b)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可见一个感知机实质上是一个$n$元列向量空间对一个数域（通常为实数域）的映射。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一个感知机$P$的输出可以作为下一个感知机$Q$的一个输入参数。假设$P_1,\cdots,p_m$是$n$元的感知机，它们分别接受$X_1,\cdots,X_m$，$Q$是$m$元感知机，那么经过$P$感知机得到的中间结果为：</p>
 <script type="math/tex; mode=display">T=\begin{bmatrix}
 F_{P_1}(W_{P_1}X_1+b_{P_1}),\cdots,F_{P_m}(W_{P_m}X_m+b_{p_m})
@@ -532,7 +124,7 @@ Q(T)=F_Q(W_QT+b_Q)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;�
 tanh(x)=\frac {e^x-e^{-x}}{e^x+e^{-x}}\\
 relu(x)=\max(0,x)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;softmax函数较特殊，它需要接受一个向量，然后计算各个分量的值，通常用于最后结果的处理。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假设输入的n元向量为$X$，那么各个分量的值为：</p>
 <script type="math/tex; mode=display">softmax(X)_i=\frac {e^{X_i}}{\sum_{j=1}^ne^{X_j}}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
-<h3 id="神经网络"><a href="#神经网络" class="headerlink" title="神经网络"></a>神经网络</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;有了感知机之后，便可以形成神经网络。神经网络由感知机的集合和它们的关系组成。<br><img src="/2020/04/22/从神经网络到GNN/2.jpg"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上图是一个神经网络结构的简图。可见，处于相同深度的感知机形成一个<strong>层</strong>。对于第一层，它们接受外界数据，称为<strong>输入层</strong>，最后一层感知机负责输出最终结果，称为<strong>输出层</strong>，中间参与运算的层称为<strong>隐藏层</strong>。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;神经网络通过其结构和感知机参数的控制，可以拟合几乎任何一种复杂的函数。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于上面这样单向多层结构的神经网络，称为<strong>前馈神经网络（FNN）</strong>，它是神经网络中最简单的一种。我们这里暂时只讨论FNN。</p>
+<h3 id="神经网络"><a href="#神经网络" class="headerlink" title="神经网络"></a>神经网络</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;有了感知机之后，便可以形成神经网络。神经网络由感知机的集合和它们的关系组成。<br><img src="/2020/04/22/%E4%BB%8E%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%88%B0GNN/2.jpg" class=""><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上图是一个神经网络结构的简图。可见，处于相同深度的感知机形成一个<strong>层</strong>。对于第一层，它们接受外界数据，称为<strong>输入层</strong>，最后一层感知机负责输出最终结果，称为<strong>输出层</strong>，中间参与运算的层称为<strong>隐藏层</strong>。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;神经网络通过其结构和感知机参数的控制，可以拟合几乎任何一种复杂的函数。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于上面这样单向多层结构的神经网络，称为<strong>前馈神经网络（FNN）</strong>，它是神经网络中最简单的一种。我们这里暂时只讨论FNN。</p>
 <h3 id="参数控制"><a href="#参数控制" class="headerlink" title="参数控制"></a>参数控制</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前文曾提到，神经网络在合理的结构和参数下能够拟合几乎任何一种复杂的函数。很多现实问题：图像分类，目标识别等等任务都可以看成求一个非常复杂的函数，因此可以用神经网络来拟合，这其中一个重要问题就是如何进行参数的控制。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在一个大型神经网络中，感知机数量很大，参数可能达到亿数量级（甚至更大），在其中进行人工调节是不可能的，我们需要一种自动调节参数的机制。</p>
 <h4 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;神经网络重点在于拟合，拟合的好坏是可以量化的，量化这一指标的方法就是使用<strong>损失函数</strong>。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;损失函数的函数值可以用神经网络输出的值和本应该输出的值进行对比计算得到，这里只说两个常用的函数。</p>
 <h5 id="均方差误差"><a href="#均方差误差" class="headerlink" title="均方差误差"></a>均方差误差</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;均方差使用输出值和正确的拟合值之间的欧氏距离来计算误差：</p>
@@ -541,7 +133,7 @@ relu(x)=\max(0,x)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sof
 <script type="math/tex; mode=display">loss=-\frac {1}{n}\sum_{i}ylna+(1-y)ln(1-a)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其中，$y\in\{0,1\}$是样本标签，$a$是其预测为正的概率。</p>
 <h3 id="梯度下降"><a href="#梯度下降" class="headerlink" title="梯度下降"></a>梯度下降</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先需要明确，在定义了损失函数后，学习的目标是尽可能降低损失函数的值。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;神经网络自动调参机制的一个重要方法是梯度下降法。需要调整的参数主要是感知机的权重$w$和偏移$b$，这些权重与偏移看成损失函数的自变量，这样损失函数便可以看成一个多元函数：</p>
 <script type="math/tex; mode=display">loss=L(\theta_1,\cdots,\theta_m)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;根据数学上的梯度定义，我们求出loss在给定的位置的<strong>梯度</strong>。</p>
-<script type="math/tex; mode=display">grad\ loss=(\frac{\partial L}{\partial\theta_1},\cdots,\frac {\partial L}{\theta_n})</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;根据数学上的推导，loss在$grad\ loss$的方向上是函数值增长最快的方向，那么其反方向是下降最快的方向。这样，我们得到了一种参数控制的方法：</p>
+<script type="math/tex; mode=display">grad\ loss=(\frac{\partial L}{\partial\theta_1},\cdots,\frac {\partial L}{\theta_n})</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;根据数学上的推导，loss在$grad loss$的方向上是函数值增长最快的方向，那么其反方向是下降最快的方向。这样，我们得到了一种参数控制的方法：</p>
 <script type="math/tex; mode=display">\theta_i:=\theta_i-\alpha\frac {\partial L}{\partial \theta_i}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其中$\alpha$称为学习率，它影响训练的效率。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在问题转化为求损失函数对于这些权重与偏移量的偏导数。其中一种优美的方法是使用<strong>反向传播算法</strong>。</p>
 <h3 id="BP算法"><a href="#BP算法" class="headerlink" title="BP算法"></a>BP算法</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在来看看反向传播算法（BP算法）。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们假设$l$层的权重矩阵为$W_l$，它传给激活函数的值矩阵为$Z_l$。根据链式法则：</p>
 <script type="math/tex; mode=display">\frac {\partial L}{\partial W_l}=\frac {\partial L}{\partial Z_l}\frac {\partial Z_l}{\partial W_l}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假定激活函数为$F$，定义$A_l=F(Z_l)$，那么再用一步链式法则：</p>
@@ -563,18 +155,9 @@ relu(x)=\max(0,x)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sof
 \vdots\\
 \frac {\partial l}{\partial y_m}
 \end{bmatrix}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pytorch便是通过维护计算图，并使用雅可比矩阵来完成反向传播的。</p>
-<h3 id="PyTorch神经网络实例"><a href="#PyTorch神经网络实例" class="headerlink" title="PyTorch神经网络实例"></a>PyTorch神经网络实例</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PyTorch是一个机器学习库，它其中内置了张量的设计，还自带反向传播进行权重调节，可以很方便地实现一个神经网络。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Net</span><span class="params">(nn.Module)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        super(Net, self).__init__()</span><br><span class="line">        self.fc1 = nn.Linear(<span class="number">2</span>, <span class="number">50</span>)</span><br><span class="line">        self.fc2 = nn.Linear(<span class="number">50</span>, <span class="number">100</span>)</span><br><span class="line">        self.fc3 = nn.Linear(<span class="number">100</span>, <span class="number">50</span>)</span><br><span class="line">        self.fc4 = nn.Linear(<span class="number">50</span>, <span class="number">25</span>)</span><br><span class="line">        self.fc5 = nn.Linear(<span class="number">25</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        x = torch.sigmoid(self.fc1(x))</span><br><span class="line">        x = F.relu(self.fc2(x))</span><br><span class="line">        x = torch.sigmoid(self.fc3(x))</span><br><span class="line">        x = F.relu(self.fc4(x))</span><br><span class="line">        x = self.fc5(x)</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">myF</span><span class="params">(x, y)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> x ** <span class="number">2</span> + torch.exp(x) / torch.exp(y) - y ** <span class="number">3</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">net = Net()</span><br><span class="line">train_input = torch.randn(<span class="number">1000</span>, <span class="number">2</span>)</span><br><span class="line">train_target = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> train_input:</span><br><span class="line">    train_target.append([myF(i[<span class="number">0</span>], i[<span class="number">1</span>])])</span><br><span class="line">train_target = torch.tensor(train_target)</span><br><span class="line">criterion = nn.MSELoss()</span><br><span class="line">test_input = torch.randn(<span class="number">10</span>, <span class="number">2</span>)</span><br><span class="line">test_target = []</span><br><span class="line"><span class="keyword">for</span> s <span class="keyword">in</span> test_input:</span><br><span class="line">    test_target.append([myF(s[<span class="number">0</span>], s[<span class="number">1</span>])])</span><br><span class="line">test_target = torch.tensor(test_target)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, <span class="number">10000</span>):</span><br><span class="line">    output = net(train_input)</span><br><span class="line">    loss = criterion(output, train_target)</span><br><span class="line">    net.zero_grad()</span><br><span class="line">    loss.backward()</span><br><span class="line">    print(<span class="string">"loss : "</span>, loss)</span><br><span class="line">    print(<span class="string">"test loss: "</span>, criterion(net(test_input), test_target))</span><br><span class="line">    print(<span class="string">"--------------------------"</span>)</span><br><span class="line">    learning_rate = <span class="number">0.005</span></span><br><span class="line">    <span class="keyword">for</span> f <span class="keyword">in</span> net.parameters():</span><br><span class="line">        f.data.sub_(f.grad.data * learning_rate)</span><br><span class="line">print(<span class="string">"last output: "</span>, net(test_input))</span><br><span class="line">print(<span class="string">"answer: "</span>, test_target)</span><br></pre></td></tr></table></figure></p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面是一个比较完整的神经网络拟合过程的代码，我们下面会一点一点地解读这个代码。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先第一步，当然是要导入所需的库。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br></pre></td></tr></table></figure></p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;torch包中包含了许多与张量（可以认为就是矩阵和向量）有关的函数，torch.nn中包含与神经网络有关的类，torch.nn.functional中包含着与神经网络有关的函数（激活函数等）。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接下来，我们定义一个神经网络的类。这个类需要继承自pytorch提供的torch.nn.Module类，换句话说：<strong>任何自定义的神经网络都需要是torch.nn.Module的子类</strong>。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们在这个类的构造函数中定义了<strong>“层”</strong>：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">    super(Net, self).__init__()</span><br><span class="line">    self.fc1 = nn.Linear(<span class="number">2</span>, <span class="number">50</span>)</span><br><span class="line">    self.fc2 = nn.Linear(<span class="number">50</span>, <span class="number">100</span>)</span><br><span class="line">    self.fc3 = nn.Linear(<span class="number">100</span>, <span class="number">50</span>)</span><br><span class="line">    self.fc4 = nn.Linear(<span class="number">50</span>, <span class="number">25</span>)</span><br><span class="line">    self.fc5 = nn.Linear(<span class="number">25</span>, <span class="number">1</span>)</span><br></pre></td></tr></table></figure></p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在这里，定义了5个<strong>全连接层</strong>，所谓全连接层就是前一个层的输出全部作为下一个层的输入。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nn.Linear类是一个进行<strong>线性变换</strong>的层，它可以看做一个扩展的感知机。一个Linear层接受一个二维张量（即矩阵），型为$a\times b$，输出一个二维张量，型为$a\times c$，其中$b$和$c$的取值就是Linear构造函数的第一和第二个参数。Linear还有第三个参数bias，其默认为True，表示引入偏移量（即在感知机中提到的$b$）。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Linear层经过定义后，会产生一个$c\times b$的权重矩阵$W$，如果有偏移量的话，还会产生$a\times c$的偏移矩阵$B$，Linear层的计算公式为：</p>
-<script type="math/tex; mode=display">Y=XW^T+B</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其中$X$是$a\times b$的输入矩阵，$Y$是$a\times c$的输出矩阵。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;神经网络类定义的另一个重要步骤就是规定运算顺序，这一步在forward函数中定义，我们需要重写这个函数。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x)</span>:</span></span><br><span class="line">    x = torch.sigmoid(self.fc1(x))</span><br><span class="line">    x = F.relu(self.fc2(x))</span><br><span class="line">    x = torch.sigmoid(self.fc3(x))</span><br><span class="line">    x = F.relu(self.fc4(x))</span><br><span class="line">    x = self.fc5(x)</span><br><span class="line">    <span class="keyword">return</span> x</span><br></pre></td></tr></table></figure></p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在这里，$x$是输入层接受的参数，对于定义好的5个层依次进行计算，其中还需要经过4个激活函数。我们在第一层和第三层使用了sigmod函数，第二层和第四层使用relu。返回值就是最终计算结果。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;定义这个神经网络的目的是用其来拟合一个二维函数：</p>
-<script type="math/tex; mode=display">f(x,y)=x^2+\frac {e^x}{e^y}-y^3</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将这个函数定义好：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">myF</span><span class="params">(x, y)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> x ** <span class="number">2</span> + torch.exp(x) / torch.exp(y) - y ** <span class="number">3</span></span><br></pre></td></tr></table></figure></p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;做一个简单的训练集，放1000对数据：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">net = Net() <span class="comment"># 产生神经网络的对象</span></span><br><span class="line">train_input = torch.randn(<span class="number">1000</span>, <span class="number">2</span>) <span class="comment"># 构造1000*2的矩阵，数据是服从正态分布的随机数</span></span><br><span class="line">train_target = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> train_input:</span><br><span class="line">    train_target.append([myF(i[<span class="number">0</span>], i[<span class="number">1</span>])]) <span class="comment"># 计算正确的结果</span></span><br><span class="line">train_target = torch.tensor(train_target) <span class="comment"># 转化为张量(1000*1)</span></span><br></pre></td></tr></table></figure></p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;再做一个简单的测试集，放入10对数据，仍然是随机生成的：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">test_input = torch.randn(<span class="number">10</span>, <span class="number">2</span>)</span><br><span class="line">test_target = []</span><br><span class="line"><span class="keyword">for</span> s <span class="keyword">in</span> test_input:</span><br><span class="line">    test_target.append([myF(s[<span class="number">0</span>], s[<span class="number">1</span>])])</span><br><span class="line">test_target = torch.tensor(test_target)</span><br></pre></td></tr></table></figure></p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为了更好地计算loss，可以使用pytorch自带的均方误差函数：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">criterion = nn.MSELoss()</span><br></pre></td></tr></table></figure></p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接下来就可以训练了，循环迭代10000次，进行更新，同时显示每一轮的loss和test_loss。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, <span class="number">10000</span>):</span><br><span class="line">    output = net(train_input) <span class="comment"># 传入训练集，计算最终结果</span></span><br><span class="line">    loss = criterion(output, train_target) <span class="comment"># 计算loss</span></span><br><span class="line">    net.zero_grad()  <span class="comment"># 清空原有的参数梯度</span></span><br><span class="line">    loss.backward() <span class="comment"># loss进行反向传播，将梯度加到每个参数的梯度变量上</span></span><br><span class="line">    print(<span class="string">"loss : "</span>, loss) </span><br><span class="line">    print(<span class="string">"test loss: "</span>, criterion(net(test_input), test_target))</span><br><span class="line">    print(<span class="string">"--------------------------"</span>)</span><br><span class="line">    learning_rate = <span class="number">0.005</span> <span class="comment"># 学习率</span></span><br><span class="line">    <span class="keyword">for</span> f <span class="keyword">in</span> net.parameters():</span><br><span class="line">        f.data.sub_(f.grad.data * learning_rate) <span class="comment"># 梯度下降法更新参数</span></span><br></pre></td></tr></table></figure></p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最后的loss=0.0944，test_loss=0.0417，拟合结果：</p>
+<h3 id="PyTorch神经网络实例"><a href="#PyTorch神经网络实例" class="headerlink" title="PyTorch神经网络实例"></a>PyTorch神经网络实例</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PyTorch是一个机器学习库，它其中内置了张量的设计，还自带反向传播进行权重调节，可以很方便地实现一个神经网络。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Net</span>(nn.Module):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">super</span>(Net, self).__init__()</span><br><span class="line">        self.fc1 = nn.Linear(<span class="number">2</span>, <span class="number">50</span>)</span><br><span class="line">        self.fc2 = nn.Linear(<span class="number">50</span>, <span class="number">100</span>)</span><br><span class="line">        self.fc3 = nn.Linear(<span class="number">100</span>, <span class="number">50</span>)</span><br><span class="line">        self.fc4 = nn.Linear(<span class="number">50</span>, <span class="number">25</span>)</span><br><span class="line">        self.fc5 = nn.Linear(<span class="number">25</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        x = torch.sigmoid(self.fc1(x))</span><br><span class="line">        x = F.relu(self.fc2(x))</span><br><span class="line">        x = torch.sigmoid(self.fc3(x))</span><br><span class="line">        x = F.relu(self.fc4(x))</span><br><span class="line">        x = self.fc5(x)</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">myF</span>(<span class="params">x, y</span>):</span><br><span class="line">    <span class="keyword">return</span> x ** <span class="number">2</span> + torch.exp(x) / torch.exp(y) - y ** <span class="number">3</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">net = Net()</span><br><span class="line">train_input = torch.randn(<span class="number">1000</span>, <span class="number">2</span>)</span><br><span class="line">train_target = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> train_input:</span><br><span class="line">    train_target.append([myF(i[<span class="number">0</span>], i[<span class="number">1</span>])])</span><br><span class="line">train_target = torch.tensor(train_target)</span><br><span class="line">criterion = nn.MSELoss()</span><br><span class="line">test_input = torch.randn(<span class="number">10</span>, <span class="number">2</span>)</span><br><span class="line">test_target = []</span><br><span class="line"><span class="keyword">for</span> s <span class="keyword">in</span> test_input:</span><br><span class="line">    test_target.append([myF(s[<span class="number">0</span>], s[<span class="number">1</span>])])</span><br><span class="line">test_target = torch.tensor(test_target)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="number">10000</span>):</span><br><span class="line">    output = net(train_input)</span><br><span class="line">    loss = criterion(output, train_target)</span><br><span class="line">    net.zero_grad()</span><br><span class="line">    loss.backward()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;loss : &quot;</span>, loss)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;test loss: &quot;</span>, criterion(net(test_input), test_target))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;--------------------------&quot;</span>)</span><br><span class="line">    learning_rate = <span class="number">0.005</span></span><br><span class="line">    <span class="keyword">for</span> f <span class="keyword">in</span> net.parameters():</span><br><span class="line">        f.data.sub_(f.grad.data * learning_rate)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;last output: &quot;</span>, net(test_input))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;answer: &quot;</span>, test_target)</span><br><span class="line"></span><br></pre></td></tr></table></figure><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面是一个比较完整的神经网络拟合过程的代码，我们下面会一点一点地解读这个代码。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先第一步，当然是要导入所需的库。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br></pre></td></tr></table></figure><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;torch包中包含了许多与张量（可以认为就是矩阵和向量）有关的函数，torch.nn中包含与神经网络有关的类，torch.nn.functional中包含着与神经网络有关的函数（激活函数等）。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接下来，我们定义一个神经网络的类。这个类需要继承自pytorch提供的torch.nn.Module类，换句话说：<strong>任何自定义的神经网络都需要是torch.nn.Module的子类</strong>。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们在这个类的构造函数中定义了<strong>“层”</strong>：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">    <span class="built_in">super</span>(Net, self).__init__()</span><br><span class="line">    self.fc1 = nn.Linear(<span class="number">2</span>, <span class="number">50</span>)</span><br><span class="line">    self.fc2 = nn.Linear(<span class="number">50</span>, <span class="number">100</span>)</span><br><span class="line">    self.fc3 = nn.Linear(<span class="number">100</span>, <span class="number">50</span>)</span><br><span class="line">    self.fc4 = nn.Linear(<span class="number">50</span>, <span class="number">25</span>)</span><br><span class="line">    self.fc5 = nn.Linear(<span class="number">25</span>, <span class="number">1</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在这里，定义了5个<strong>全连接层</strong>，所谓全连接层就是前一个层的输出全部作为下一个层的输入。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nn.Linear类是一个进行<strong>线性变换</strong>的层，它可以看做一个扩展的感知机。一个Linear层接受一个二维张量（即矩阵），型为$a\times b$，输出一个二维张量，型为$a\times c$，其中$b$和$c$的取值就是Linear构造函数的第一和第二个参数。Linear还有第三个参数bias，其默认为True，表示引入偏移量（即在感知机中提到的$b$）。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Linear层经过定义后，会产生一个$c\times b$的权重矩阵$W$，如果有偏移量的话，还会产生$a\times c$的偏移矩阵$B$，Linear层的计算公式为：</p>
+<script type="math/tex; mode=display">Y=XW^T+B</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其中$X$是$a\times b$的输入矩阵，$Y$是$a\times c$的输出矩阵。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;神经网络类定义的另一个重要步骤就是规定运算顺序，这一步在forward函数中定义，我们需要重写这个函数。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">    x = torch.sigmoid(self.fc1(x))</span><br><span class="line">    x = F.relu(self.fc2(x))</span><br><span class="line">    x = torch.sigmoid(self.fc3(x))</span><br><span class="line">    x = F.relu(self.fc4(x))</span><br><span class="line">    x = self.fc5(x)</span><br><span class="line">    <span class="keyword">return</span> x</span><br></pre></td></tr></table></figure><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在这里，$x$是输入层接受的参数，对于定义好的5个层依次进行计算，其中还需要经过4个激活函数。我们在第一层和第三层使用了sigmod函数，第二层和第四层使用relu。返回值就是最终计算结果。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;定义这个神经网络的目的是用其来拟合一个二维函数：</p>
+<script type="math/tex; mode=display">f(x,y)=x^2+\frac {e^x}{e^y}-y^3</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将这个函数定义好：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">myF</span>(<span class="params">x, y</span>):</span><br><span class="line">    <span class="keyword">return</span> x ** <span class="number">2</span> + torch.exp(x) / torch.exp(y) - y ** <span class="number">3</span></span><br><span class="line"></span><br></pre></td></tr></table></figure><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;做一个简单的训练集，放1000对数据：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">net = Net() <span class="comment"># 产生神经网络的对象</span></span><br><span class="line">train_input = torch.randn(<span class="number">1000</span>, <span class="number">2</span>) <span class="comment"># 构造1000*2的矩阵，数据是服从正态分布的随机数</span></span><br><span class="line">train_target = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> train_input:</span><br><span class="line">    train_target.append([myF(i[<span class="number">0</span>], i[<span class="number">1</span>])]) <span class="comment"># 计算正确的结果</span></span><br><span class="line">train_target = torch.tensor(train_target) <span class="comment"># 转化为张量(1000*1)</span></span><br><span class="line"></span><br></pre></td></tr></table></figure><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;再做一个简单的测试集，放入10对数据，仍然是随机生成的：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">test_input = torch.randn(<span class="number">10</span>, <span class="number">2</span>)</span><br><span class="line">test_target = []</span><br><span class="line"><span class="keyword">for</span> s <span class="keyword">in</span> test_input:</span><br><span class="line">    test_target.append([myF(s[<span class="number">0</span>], s[<span class="number">1</span>])])</span><br><span class="line">test_target = torch.tensor(test_target)</span><br></pre></td></tr></table></figure><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为了更好地计算loss，可以使用pytorch自带的均方误差函数：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">criterion = nn.MSELoss()</span><br></pre></td></tr></table></figure><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接下来就可以训练了，循环迭代10000次，进行更新，同时显示每一轮的loss和test_loss。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="number">10000</span>):</span><br><span class="line">    output = net(train_input) <span class="comment"># 传入训练集，计算最终结果</span></span><br><span class="line">    loss = criterion(output, train_target) <span class="comment"># 计算loss</span></span><br><span class="line">    net.zero_grad()  <span class="comment"># 清空原有的参数梯度</span></span><br><span class="line">    loss.backward() <span class="comment"># loss进行反向传播，将梯度加到每个参数的梯度变量上</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;loss : &quot;</span>, loss) </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;test loss: &quot;</span>, criterion(net(test_input), test_target))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;--------------------------&quot;</span>)</span><br><span class="line">    learning_rate = <span class="number">0.005</span> <span class="comment"># 学习率</span></span><br><span class="line">    <span class="keyword">for</span> f <span class="keyword">in</span> net.parameters():</span><br><span class="line">        f.data.sub_(f.grad.data * learning_rate) <span class="comment"># 梯度下降法更新参数</span></span><br><span class="line"></span><br></pre></td></tr></table></figure><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最后的loss=0.0944，test_loss=0.0417，拟合结果：</p>
 <div class="table-container">
 <table>
 <thead>
@@ -612,948 +195,220 @@ relu(x)=\max(0,x)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sof
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可见我们的神经网络确实学到了东西，能够在一定误差内预测最终结果。</p>
 <h3 id="图神经网络"><a href="#图神经网络" class="headerlink" title="图神经网络"></a>图神经网络</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;有了神经网络的基础，就可以来认识<strong>图神经网络（Graph Neural Network，GNN）</strong>。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;图神经网络的概念最早在2005年提出。它的出现契机因为许多学习任务都需要处理包含丰富元素间关系信息的<strong>图数据</strong>，比如物理系统的建模、分子指纹的学习、蛋白质界面的预测以及疾病的分类。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GNN离不开<strong>图（Graph）</strong>的概念。图是一个二元组，由<strong>顶点</strong>和<strong>边</strong>组成，这与图论中的概念相同。</p>
 <h4 id="欧几里得数据"><a href="#欧几里得数据" class="headerlink" title="欧几里得数据"></a>欧几里得数据</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;回想一下一般意义下的神经网络处理的数据：文本，图片，音频等等。这些都是“排列有序”的规则数据。这里的规则是，对于文本来说，每一个文字的前驱后继都是确定的，于是文本可以看成是一个一维的数据，每两个字之间的距离可以用一维的欧几里得公式计算得到。同样地，图片是一个二维数据，它的邻接点都是确定的，我们可以用<strong>卷积</strong>（于是有了卷积神经网络CNN）操作来提取其局部特征，它的两个像素点之间的距离可以用二维欧几里得公式计算：</p>
-<script type="math/tex; mode=display">\sqrt{(x_1-x_2)^2+(y_1-y_2)^2}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是这些数据称为<strong>欧几里得数据</strong>。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然而，并不是所有数据都是欧几里得数据，比如图就是一种非欧几里得数据。这是因为<strong>对于数据中的某个点，难以定义出其邻居节点出来，或者是不同节点的邻居节点的数量是不同的</strong>，很难定义出一个统一的卷积操作（或其它操作）来提取其特征。<br><img src="/2020/04/22/从神经网络到GNN/2.png"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上图来源于论文《Graph Neural Networks: A Review of Methods and Applications》，是图片（欧几里得数据）和图（非欧几里得数据）的对比。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;简单地说，GNN能够帮助我们提取图这一类非欧几里得数据的隐藏特征。</p>
+<script type="math/tex; mode=display">\sqrt{(x_1-x_2)^2+(y_1-y_2)^2}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;于是这些数据称为<strong>欧几里得数据</strong>。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然而，并不是所有数据都是欧几里得数据，比如图就是一种非欧几里得数据。这是因为<strong>对于数据中的某个点，难以定义出其邻居节点出来，或者是不同节点的邻居节点的数量是不同的</strong>，很难定义出一个统一的卷积操作（或其它操作）来提取其特征。<br><img src="/2020/04/22/%E4%BB%8E%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%88%B0GNN/2.png" class=""><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上图来源于论文《Graph Neural Networks: A Review of Methods and Applications》，是图片（欧几里得数据）和图（非欧几里得数据）的对比。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;简单地说，GNN能够帮助我们提取图这一类非欧几里得数据的隐藏特征。</p>
 <h4 id="GNN原理"><a href="#GNN原理" class="headerlink" title="GNN原理"></a>GNN原理</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在下文中，我们用$v$表示一个结点，用$h(v)$表示结点$v$的<strong>隐藏状态</strong>。图记为$G=(V,E)$，其中$V$是结点集合，$E$是边集。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GNN的目标是训练出函数$h(v)$，它包含了每一个结点的领域信息。<strong>对于每一个结点，它的隐藏状态包含了来自邻居节点的信息</strong>。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GNN通过迭代式的更新方式来完成$h(v)$的更新，它的更新函数如下：</p>
 <script type="math/tex; mode=display">h(v)=f(x(v),x(co(v)),h(ne(v)),x(ne(v))</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其中，$x(v)$是结点$v$的特征，$x(co(v))$是邻边的特征（$co(v)$是邻边），$h(ne(v))$是邻居结点的隐藏状态，$x(ne(v))$是邻居结点的特征。</p>
 
-      
     </div>
 
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/机器学习/" rel="tag"><i class="fa fa-tag"></i>机器学习</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2020/04/21/科大讯飞杯NewCoder5278/" rel="next" title="科大讯飞杯NowCoder5278">
-                <i class="fa fa-chevron-left"></i> 科大讯飞杯NowCoder5278
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/07/28/Codeforces-Round-654-Div-2/" rel="prev" title="Codeforces Round #654 (Div. 2)">
-                Codeforces Round #654 (Div. 2) <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
+    <div>全文完。</div>
   </article>
-
-
-  </div>
-
-
-          </div>
-          
-
-  
-    <div class="comments" id="comments">
-    </div>
-
-  
-
-
-
-        </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
-
-  <aside id="sidebar" class="sidebar">
+  <div class="toc-container">
     
-    <div class="sidebar-inner">
-
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-            
-              <img class="site-author-image" itemprop="image" src="/images/header.jpg" alt="Author">
-            
-              <p class="site-author-name" itemprop="name">Author</p>
-              <p class="site-description motion-element" itemprop="description">弱鸡</p>
-          </div>
-
-          
-            <nav class="site-state motion-element">
-              
-                <div class="site-state-item site-state-posts">
-                
-                  <a href="/archives/">
-                
-                    <span class="site-state-item-count">211</span>
-                    <span class="site-state-item-name">日志</span>
-                  </a>
-                </div>
-              
-
-              
-                
-                
-                <div class="site-state-item site-state-categories">
-                  <a href="/categories/index.html">
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">4</span>
-                    <span class="site-state-item-name">分类</span>
-                  </a>
-                </div>
-              
-
-              
-                
-                
-                <div class="site-state-item site-state-tags">
-                  <a href="/tags/index.html">
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">76</span>
-                    <span class="site-state-item-name">标签</span>
-                  </a>
-                </div>
-              
-            </nav>
-          
-
-          
-
-          
-
-          
-
-          
-          
-
-          
-            
-          
-          
-
-        </div>
-      </div>
-
-      
-      <!--noindex-->
-        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-            
-            
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#感知机"><span class="nav-number">1.</span> <span class="nav-text">感知机</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#感知机的结构"><span class="nav-number">1.1.</span> <span class="nav-text">感知机的结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#激活函数"><span class="nav-number">1.2.</span> <span class="nav-text">激活函数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#神经网络"><span class="nav-number">2.</span> <span class="nav-text">神经网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参数控制"><span class="nav-number">3.</span> <span class="nav-text">参数控制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#损失函数"><span class="nav-number">3.1.</span> <span class="nav-text">损失函数</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#均方差误差"><span class="nav-number">3.1.1.</span> <span class="nav-text">均方差误差</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#交叉熵误差"><span class="nav-number">3.1.2.</span> <span class="nav-text">交叉熵误差</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#梯度下降"><span class="nav-number">4.</span> <span class="nav-text">梯度下降</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BP算法"><span class="nav-number">5.</span> <span class="nav-text">BP算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PyTorch神经网络实例"><span class="nav-number">6.</span> <span class="nav-text">PyTorch神经网络实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#图神经网络"><span class="nav-number">7.</span> <span class="nav-text">图神经网络</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#欧几里得数据"><span class="nav-number">7.1.</span> <span class="nav-text">欧几里得数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GNN原理"><span class="nav-number">7.2.</span> <span class="nav-text">GNN原理</span></a></li></ol></li></ol></div>
-            
-
-          </div>
-        </div>
-      <!--/noindex-->
-      
-
-      
-
-    </div>
-  </aside>
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">Posts</strong>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%9F%E7%9F%A5%E6%9C%BA"><span class="toc-text">感知机</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%84%9F%E7%9F%A5%E6%9C%BA%E7%9A%84%E7%BB%93%E6%9E%84"><span class="toc-text">感知机的结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0"><span class="toc-text">激活函数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="toc-text">神经网络</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%E6%8E%A7%E5%88%B6"><span class="toc-text">参数控制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="toc-text">损失函数</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%9D%87%E6%96%B9%E5%B7%AE%E8%AF%AF%E5%B7%AE"><span class="toc-text">均方差误差</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BA%A4%E5%8F%89%E7%86%B5%E8%AF%AF%E5%B7%AE"><span class="toc-text">交叉熵误差</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="toc-text">梯度下降</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BP%E7%AE%97%E6%B3%95"><span class="toc-text">BP算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PyTorch%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%AE%9E%E4%BE%8B"><span class="toc-text">PyTorch神经网络实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="toc-text">图神经网络</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AC%A7%E5%87%A0%E9%87%8C%E5%BE%97%E6%95%B0%E6%8D%AE"><span class="toc-text">欧几里得数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#GNN%E5%8E%9F%E7%90%86"><span class="toc-text">GNN原理</span></a></li></ol></li></ol>
+  </div>
 
 
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
-  <span class="with-love" id="animate">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Author</span>
-
-  
-
-  
+  </div>
+</div>
+<div class="copyright">
+    <span>本作品采用</span>
+    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by/4.0/">知识共享署名 4.0 国际许可协议</a>
+    <span>进行许可。 转载时请注明原文链接。</span>
 </div>
 
-
-
-
-
-
-
-
-
+  
+    <div class="post-nav">
+      <div class="post-nav-item post-nav-next">
         
-
-
-
-
-
-
-
-
+          <span>〈 </span>
+          <a href="/2020/04/21/%E7%A7%91%E5%A4%A7%E8%AE%AF%E9%A3%9E%E6%9D%AFNewCoder5278/" rel="next" title="科大讯飞杯NowCoder5278">
+          科大讯飞杯NowCoder5278
+          </a>
         
       </div>
-    </footer>
-
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-          <span id="scrollpercent"><span>0</span>%</span>
+  
+      <div class="post-nav-item post-nav-prev">
+          
+          <a href="/2020/07/28/Codeforces-Round-654-Div-2/" rel="prev" title="Codeforces Round #654 (Div. 2)">
+            Codeforces Round #654 (Div. 2)
+          </a>
+          <span>〉</span>
         
       </div>
-    
+    </div>
+  
+
+
+    </div>
 
     
 
-    
-
-    
   </div>
-
+  <footer class="footer text-center">
+    <div id="bottom-inner">
+        <a class="bottom-item" href="https://twifor.github.io">首页</a> |
+        <a class="bottom-item" href="https://twifor.github.io/index_original.html" target="_blank">主站</a> |
+        <a class="bottom-item" href="https://github.com/Twifor" target="_blank">GitHub</a> |
+        <a class="bottom-item" href="https://hexo.io" target="_blank">Powered by hexo</a> |
+        <a class="bottom-item" href="https://github.com/KevinOfNeu/hexo-theme-xoxo" target="_blank">Theme xoxo</a>
+    </div>
+</footer>
   
 
 <script>
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-    
-    
-  
-  <script color="255,255,255" '="" opacity="0.85" zindex="-1" count="15" src="/lib/canvas-nest/canvas-nest.min.js"></script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  <script src="/lib/jquery/index.js?v=2.1.3"></script>
-
-  
-  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-
-  
-
-
-  <script src="/js/src/utils.js?v=6.7.0"></script>
-
-  <script src="/js/src/motion.js?v=6.7.0"></script>
-
-
-
-  
-  
-
-
-  <script src="/js/src/affix.js?v=6.7.0"></script>
-
-  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
-
-
-
-
-  
-  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
-<script src="/js/src/post-details.js?v=6.7.0"></script>
-
-
-
-  
-
-
-  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
-
-
-
-  
-  
-
-
-
-
-  
-
-<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
-
-
-
-<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
-
-<script>
-  var GUEST = ['nick', 'mail', 'link'];
-  var guest = 'nick,mail,link';
-  guest = guest.split(',').filter(function (item) {
-    return GUEST.indexOf(item) > -1;
-  });
-  new Valine({
-    el: '#comments',
-    verify: false,
-    notify: false,
-    appId: '2aSxA7Naxmi6lgfgVU1ulgcS-gzGzoHsz',
-    appKey: '6G9RDaS7lVtgyGKw8AxxkLyi',
-    placeholder: '写下评论吧~qwq',
-    avatar: 'mm',
-    meta: guest,
-    pageSize: '10' || 10,
-    visitor: false
-  });
-</script>
-
-
-
-  
-
-  <script>
-    // Popup Window;
-    var isfetched = false;
-    var isXml = true;
-    // Search DB path;
-    var search_path = "search.xml";
-    if (search_path.length === 0) {
-      search_path = "search.xml";
-    } else if (/json$/i.test(search_path)) {
-      isXml = false;
-    }
-    var path = "/" + search_path;
-    // monitor main search box;
-
-    var onPopupClose = function (e) {
-      $('.popup').hide();
-      $('#local-search-input').val('');
-      $('.search-result-list').remove();
-      $('#no-result').remove();
-      $(".local-search-pop-overlay").remove();
-      $('body').css('overflow', '');
-    }
-
-    function proceedsearch() {
-      $("body")
-        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
-        .css('overflow', 'hidden');
-      $('.search-popup-overlay').click(onPopupClose);
-      $('.popup').toggle();
-      var $localSearchInput = $('#local-search-input');
-      $localSearchInput.attr("autocapitalize", "none");
-      $localSearchInput.attr("autocorrect", "off");
-      $localSearchInput.focus();
-    }
-
-    // search function;
-    var searchFunc = function(path, search_id, content_id) {
-      'use strict';
-
-      // start loading animation
-      $("body")
-        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
-          '<div id="search-loading-icon">' +
-          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
-          '</div>' +
-          '</div>')
-        .css('overflow', 'hidden');
-      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
-
-      
-
-      $.ajax({
-        url: path,
-        dataType: isXml ? "xml" : "json",
-        async: true,
-        success: function(res) {
-          // get the contents from search data
-          isfetched = true;
-          $('.popup').detach().appendTo('.header-inner');
-          var datas = isXml ? $("entry", res).map(function() {
-            return {
-              title: $("title", this).text(),
-              content: $("content",this).text(),
-              url: $("url" , this).text()
-            };
-          }).get() : res;
-          var input = document.getElementById(search_id);
-          var resultContent = document.getElementById(content_id);
-          var inputEventFunction = function() {
-            var searchText = input.value.trim().toLowerCase();
-            var keywords = searchText.split(/[\s\-]+/);
-            if (keywords.length > 1) {
-              keywords.push(searchText);
-            }
-            var resultItems = [];
-            if (searchText.length > 0) {
-              // perform local searching
-              datas.forEach(function(data) {
-                var isMatch = false;
-                var hitCount = 0;
-                var searchTextCount = 0;
-                var title = data.title.trim();
-                var titleInLowerCase = title.toLowerCase();
-                var content = data.content.trim().replace(/<[^>]+>/g,"");
-                
-                var contentInLowerCase = content.toLowerCase();
-                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
-                var indexOfTitle = [];
-                var indexOfContent = [];
-                // only match articles with not empty titles
-                if(title != '') {
-                  keywords.forEach(function(keyword) {
-                    function getIndexByWord(word, text, caseSensitive) {
-                      var wordLen = word.length;
-                      if (wordLen === 0) {
-                        return [];
-                      }
-                      var startPosition = 0, position = [], index = [];
-                      if (!caseSensitive) {
-                        text = text.toLowerCase();
-                        word = word.toLowerCase();
-                      }
-                      while ((position = text.indexOf(word, startPosition)) > -1) {
-                        index.push({position: position, word: word});
-                        startPosition = position + wordLen;
-                      }
-                      return index;
-                    }
-
-                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
-                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
-                  });
-                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
-                    isMatch = true;
-                    hitCount = indexOfTitle.length + indexOfContent.length;
-                  }
-                }
-
-                // show search results
-
-                if (isMatch) {
-                  // sort index by position of keyword
-
-                  [indexOfTitle, indexOfContent].forEach(function (index) {
-                    index.sort(function (itemLeft, itemRight) {
-                      if (itemRight.position !== itemLeft.position) {
-                        return itemRight.position - itemLeft.position;
-                      } else {
-                        return itemLeft.word.length - itemRight.word.length;
-                      }
-                    });
-                  });
-
-                  // merge hits into slices
-
-                  function mergeIntoSlice(text, start, end, index) {
-                    var item = index[index.length - 1];
-                    var position = item.position;
-                    var word = item.word;
-                    var hits = [];
-                    var searchTextCountInSlice = 0;
-                    while (position + word.length <= end && index.length != 0) {
-                      if (word === searchText) {
-                        searchTextCountInSlice++;
-                      }
-                      hits.push({position: position, length: word.length});
-                      var wordEnd = position + word.length;
-
-                      // move to next position of hit
-
-                      index.pop();
-                      while (index.length != 0) {
-                        item = index[index.length - 1];
-                        position = item.position;
-                        word = item.word;
-                        if (wordEnd > position) {
-                          index.pop();
-                        } else {
-                          break;
-                        }
-                      }
-                    }
-                    searchTextCount += searchTextCountInSlice;
-                    return {
-                      hits: hits,
-                      start: start,
-                      end: end,
-                      searchTextCount: searchTextCountInSlice
-                    };
-                  }
-
-                  var slicesOfTitle = [];
-                  if (indexOfTitle.length != 0) {
-                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
-                  }
-
-                  var slicesOfContent = [];
-                  while (indexOfContent.length != 0) {
-                    var item = indexOfContent[indexOfContent.length - 1];
-                    var position = item.position;
-                    var word = item.word;
-                    // cut out 100 characters
-                    var start = position - 20;
-                    var end = position + 80;
-                    if(start < 0){
-                      start = 0;
-                    }
-                    if (end < position + word.length) {
-                      end = position + word.length;
-                    }
-                    if(end > content.length){
-                      end = content.length;
-                    }
-                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
-                  }
-
-                  // sort slices in content by search text's count and hits' count
-
-                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
-                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
-                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
-                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
-                      return sliceRight.hits.length - sliceLeft.hits.length;
-                    } else {
-                      return sliceLeft.start - sliceRight.start;
-                    }
-                  });
-
-                  // select top N slices in content
-
-                  var upperBound = parseInt('1');
-                  if (upperBound >= 0) {
-                    slicesOfContent = slicesOfContent.slice(0, upperBound);
-                  }
-
-                  // highlight title and content
-
-                  function highlightKeyword(text, slice) {
-                    var result = '';
-                    var prevEnd = slice.start;
-                    slice.hits.forEach(function (hit) {
-                      result += text.substring(prevEnd, hit.position);
-                      var end = hit.position + hit.length;
-                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
-                      prevEnd = end;
-                    });
-                    result += text.substring(prevEnd, slice.end);
-                    return result;
-                  }
-
-                  var resultItem = '';
-
-                  if (slicesOfTitle.length != 0) {
-                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
-                  } else {
-                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
-                  }
-
-                  slicesOfContent.forEach(function (slice) {
-                    resultItem += "<a href='" + articleUrl + "'>" +
-                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
-                      "...</p>" + "</a>";
-                  });
-
-                  resultItem += "</li>";
-                  resultItems.push({
-                    item: resultItem,
-                    searchTextCount: searchTextCount,
-                    hitCount: hitCount,
-                    id: resultItems.length
-                  });
-                }
-              })
-            };
-            if (keywords.length === 1 && keywords[0] === "") {
-              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
-            } else if (resultItems.length === 0) {
-              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
-            } else {
-              resultItems.sort(function (resultLeft, resultRight) {
-                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
-                  return resultRight.searchTextCount - resultLeft.searchTextCount;
-                } else if (resultLeft.hitCount !== resultRight.hitCount) {
-                  return resultRight.hitCount - resultLeft.hitCount;
-                } else {
-                  return resultRight.id - resultLeft.id;
-                }
-              });
-              var searchResultList = '<ul class=\"search-result-list\">';
-              resultItems.forEach(function (result) {
-                searchResultList += result.item;
-              })
-              searchResultList += "</ul>";
-              resultContent.innerHTML = searchResultList;
-            }
-          }
-
-          if ('auto' === 'auto') {
-            input.addEventListener('input', inputEventFunction);
-          } else {
-            $('.search-icon').click(inputEventFunction);
-            input.addEventListener('keypress', function (event) {
-              if (event.keyCode === 13) {
-                inputEventFunction();
-              }
-            });
-          }
-
-          // remove loading animation
-          $(".local-search-pop-overlay").remove();
-          $('body').css('overflow', '');
-
-          proceedsearch();
+  (function(window, document, undefined) {
+
+    var timer = null;
+
+    function returnTop() {
+      cancelAnimationFrame(timer);
+      timer = requestAnimationFrame(function fn() {
+        var oTop = document.body.scrollTop || document.documentElement.scrollTop;
+        if (oTop > 0) {
+          document.body.scrollTop = document.documentElement.scrollTop = oTop - 50;
+          timer = requestAnimationFrame(fn);
+        } else {
+          cancelAnimationFrame(timer);
         }
       });
     }
 
-    // handle and trigger popup window;
-    $('.popup-trigger').click(function(e) {
-      e.stopPropagation();
-      if (isfetched === false) {
-        searchFunc(path, 'local-search-input', 'local-search-result');
-      } else {
-        proceedsearch();
-      };
-    });
+    var hearts = [];
+    window.requestAnimationFrame = (function() {
+      return window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.oRequestAnimationFrame ||
+        window.msRequestAnimationFrame ||
+        function(callback) {
+          setTimeout(callback, 1000 / 60);
+        }
+    })();
+    init();
 
-    $('.popup-btn-close').click(onPopupClose);
-    $('.popup').click(function(e){
-      e.stopPropagation();
-    });
-    $(document).on('keyup', function (event) {
-      var shouldDismissSearchPopup = event.which === 27 &&
-        $('.search-popup').is(':visible');
-      if (shouldDismissSearchPopup) {
-        onPopupClose();
+    function init() {
+      css(".heart{z-index:9999;width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);}.heart:after,.heart:before{content: '';width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: absolute;}.heart:after{top: -5px;}.heart:before{left: -5px;}");
+      attachEvent();
+      gameloop();
+      addMenuEvent();
+    }
+
+    function gameloop() {
+      for (var i = 0; i < hearts.length; i++) {
+        if (hearts[i].alpha <= 0) {
+          document.body.removeChild(hearts[i].el);
+          hearts.splice(i, 1);
+          continue;
+        }
+        hearts[i].y--;
+        hearts[i].scale += 0.004;
+        hearts[i].alpha -= 0.013;
+        hearts[i].el.style.cssText = "left:" + hearts[i].x + "px;top:" + hearts[i].y + "px;opacity:" + hearts[i].alpha + ";transform:scale(" + hearts[i].scale + "," + hearts[i].scale + ") rotate(45deg);background:" + hearts[i].color;
       }
-    });
-  </script>
+      requestAnimationFrame(gameloop);
+    }
 
-
-
-
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-
-  
-  
-
-  
-    
-      <script type="text/x-mathjax-config">
-  
-
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-      processEscapes: true,
-      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-	  preview: 'none'
-    },
-	messageStyle: 'none',
-	"HTML-CSS": {
-      showMathMenu: false //关闭右击菜单显示
-    },
-    TeX: {
+    /**
+     * 给logo设置点击事件
+     * 
+     * - 回到顶部
+     * - 出现爱心
+     */
+    function attachEvent() {
+      var old = typeof window.onclick === "function" && window.onclick;
+      var logo = document.getElementById("logo");
+      if (logo) {
+        logo.onclick = function(event) {
+          returnTop();
+          old && old();
+          createHeart(event);
+        }
+      }
       
-      equationNumbers: {
-        autoNumber: "AMS"
+    }
+
+    function createHeart(event) {
+      var d = document.createElement("div");
+      d.className = "heart";
+      hearts.push({
+        el: d,
+        x: event.clientX - 5,
+        y: event.clientY - 5,
+        scale: 1,
+        alpha: 1,
+        color: randomColor()
+      });
+      document.body.appendChild(d);
+    }
+
+    function css(css) {
+      var style = document.createElement("style");
+      style.type = "text/css";
+      try {
+        style.appendChild(document.createTextNode(css));
+      } catch (ex) {
+        style.styleSheet.cssText = css;
+      }
+      document.getElementsByTagName('head')[0].appendChild(style);
+    }
+
+    function randomColor() {
+      // return "rgb(" + (~~(Math.random() * 255)) + "," + (~~(Math.random() * 255)) + "," + (~~(Math.random() * 255)) + ")";
+      return "#F44336";
+    }
+
+    function addMenuEvent() {
+      var menu = document.getElementById('menu-main-post');
+      if (menu) {
+        var toc = document.getElementById('toc');
+        if (toc) {
+          menu.onclick = function() {
+            if (toc) {
+              if (toc.style.display == 'block') {
+                toc.style.display = 'none';
+              } else {
+                toc.style.display = 'block';
+              }
+            }
+          };
+        } else {
+          menu.style.display = 'none';
+        }
       }
     }
-  });
+
+  })(window, document);
 </script>
+
+  
+
+
 
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-      for (i = 0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-      }
-  });
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        },
+        showMathMenu: false,
+        "HTML-CSS": {
+            preferredFont: "TeX", 
+            availableFonts: ["STIX","TeX"],
+            showMathMenuMSIE: false
+        },
+        showProcessingMessages: false,
+        messageStyle: "none"
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
 </script>
-<script src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-<style>
-.MathJax_Display {
-  overflow: auto hidden;
-}
-</style>
-
-    
-  
-
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-<script src="/js/src/snow.js"></script>
-<script src="/live2d-widget/autoload.js"></script>
-<style type="text/css">
-.snow-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:100001;}</style>
-<div class="snow-container"></div>
+<script src="//cdn.bootcss.com/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>
-
-<script type="text/javascript" src="/js/src/clicklove.js"></script>
